@@ -26,8 +26,13 @@ public class SecurityConfiguration {
                 .sessionManagement(sessionManagement -> sessionManagement.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .cors(Customizer.withDefaults())
                 .authorizeHttpRequests( auth -> auth
-                        .requestMatchers("/test").permitAll()
-                        .anyRequest().authenticated()
+                        .requestMatchers("/test")
+                            .permitAll()
+                        .requestMatchers("/api-docs/**", "api-docs.yaml")
+                            .permitAll()
+                        .requestMatchers("/swagger-ui-custom.html", "/swagger-ui/**", "/swagger-ui/")
+                            .permitAll()
+                        .anyRequest().permitAll()
                 )
                 .build();
     }
