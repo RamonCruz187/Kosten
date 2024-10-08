@@ -32,7 +32,7 @@ public class SecurityConfiguration {
                             .permitAll()
                         .requestMatchers("/swagger-ui-custom.html", "/swagger-ui/**", "/swagger-ui/")
                             .permitAll()
-                        .anyRequest().permitAll()
+                        .anyRequest().authenticated()
                 )
                 .build();
     }
