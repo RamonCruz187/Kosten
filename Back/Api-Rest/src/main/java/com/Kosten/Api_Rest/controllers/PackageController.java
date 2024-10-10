@@ -5,6 +5,8 @@ import com.Kosten.Api_Rest.dto.packageDTO.PackageRequestDTO;
 import com.Kosten.Api_Rest.dto.packageDTO.PackageResponseDTO;
 import com.Kosten.Api_Rest.service.PackageService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.Parameters;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -15,6 +17,8 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
@@ -65,7 +69,7 @@ public class PackageController {
     }
 
     @Operation(
-            summary = "Obtiene un Paquete ID.",
+            summary = "Obtiene un Paquete por su ID.",
             description = "Permite a un usuario logueado de la empresa obtener un paquete por su ID."
     )
     @ApiResponses(value = {
@@ -86,5 +90,32 @@ public class PackageController {
         return ResponseEntity
                 .status(200)
                 .body(packageService.getPackageById(id));
+    }
+
+    @Operation(
+            summary = "Obtener todos los Paquetes en una lista paginada y/o ordenada.",
+            description = "Permite a un usuario logueado de la empresa obtener todos los paquetes, en una lista paginada."
+    )
+    @ApiResponses(value = {
+            @ApiResponse(
+                    responseCode = "201", description = "Lista de Paquetes obtenidos exitosamente.",
+                    content = {
+                            @Content(mediaType = "application/json",
+                                    schema = @Schema(implementation = ExtendedBaseResponse.class))
+                    }),
+            @ApiResponse(responseCode = "403", description = "Forbidden access to this resource", content = {@Content}),
+            @ApiResponse(responseCode = "404", description = "Paquetes no encontrados", content = {@Content}),
+            @ApiResponse(responseCode = "500", description = "Internal Server Error", content = {@Content})
+    })
+    @Parameters({
+            @Parameter(name = "page", description = "Page number", required = false, example = "0"),
+            @Parameter(name = "size", description = "Size of the page", required = false, example = "10"),
+            @Parameter(name = "sort", description = "Sort the page", required = false, example = "id,desc")
+    })
+    @GetMapping
+    public ResponseEntity<ExtendedBaseResponse<Page<PackageResponseDTO>>> getAllPackages(Pageable pageable) {
+        return ResponseEntity
+                .status(200)
+                .body(packageService.getAllPackages(pageable));
     }
 }

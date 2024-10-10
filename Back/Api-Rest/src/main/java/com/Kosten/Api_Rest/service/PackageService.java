@@ -9,6 +9,8 @@ import com.Kosten.Api_Rest.mapper.PackageMapper;
 import com.Kosten.Api_Rest.model.Package;
 import com.Kosten.Api_Rest.repository.PackageRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -39,5 +41,17 @@ public class PackageService {
                 BaseResponse.ok("Paquete encontrado exitosamente."),
                 packageResponseDTO
         );
+    }
+
+    public ExtendedBaseResponse<Page<PackageResponseDTO>> getAllPackages(Pageable pageable) {
+
+            Page<Package> packages = packageRepository.findAll(pageable);
+
+            Page<PackageResponseDTO> packageResponseDTOPage = packages.map(packageMapper::packageToPackageResponseDTO);
+
+            return ExtendedBaseResponse.of(
+                    BaseResponse.ok("Paquetes encontrados exitosamente."),
+                    packageResponseDTOPage
+            );
     }
 }
