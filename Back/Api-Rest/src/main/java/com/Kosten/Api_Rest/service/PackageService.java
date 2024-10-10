@@ -5,6 +5,7 @@ import com.Kosten.Api_Rest.dto.BaseResponse;
 import com.Kosten.Api_Rest.dto.ExtendedBaseResponse;
 import com.Kosten.Api_Rest.dto.packageDTO.PackageRequestDTO;
 import com.Kosten.Api_Rest.dto.packageDTO.PackageResponseDTO;
+import com.Kosten.Api_Rest.dto.packageDTO.PackageToUpdateDTO;
 import com.Kosten.Api_Rest.mapper.PackageMapper;
 import com.Kosten.Api_Rest.model.Package;
 import com.Kosten.Api_Rest.repository.PackageRepository;
@@ -33,7 +34,11 @@ public class PackageService {
 
     public ExtendedBaseResponse<PackageResponseDTO> getPackageById(Long id) {
 
-        Package packageEntity = packageRepository.findById(id).orElseThrow(() -> new PackageNotFoundException("Paquete no encontrado."));
+        Package packageEntity = packageRepository.findByIdAndActiveIsTrue(id);
+
+        if (packageEntity == null) {
+            throw new PackageNotFoundException("Paquete no encontrado.");
+        }
 
         PackageResponseDTO packageResponseDTO = packageMapper.packageToPackageResponseDTO(packageEntity);
 
@@ -45,7 +50,14 @@ public class PackageService {
 
     public ExtendedBaseResponse<Page<PackageResponseDTO>> getAllPackages(Pageable pageable) {
 
-            Page<Package> packages = packageRepository.findAll(pageable);
+            Page<Package> packages = packageRepository.findAllByActiveIsTrue(pageable);
+
+            if (packages.isEmpty()) {
+                return ExtendedBaseResponse.of(
+                        BaseResponse.ok("No se encontraron paquetes."),
+                        Page.empty()
+                );
+            }
 
             Page<PackageResponseDTO> packageResponseDTOPage = packages.map(packageMapper::packageToPackageResponseDTO);
 
@@ -53,5 +65,34 @@ public class PackageService {
                     BaseResponse.ok("Paquetes encontrados exitosamente."),
                     packageResponseDTOPage
             );
+    }
+
+    public ExtendedBaseResponse<PackageResponseDTO> update(PackageToUpdateDTO packageToUpdateDTO) {
+
+        Package packageEntity = packageRepository.findByIdAndActiveIsTrue(packageToUpdateDTO.id());
+
+        if (packageEntity == null) {
+            throw new PackageNotFoundException("Paquete no encontrado.");
+        }
+
+        PackageResponseDTO packageResponseDTO = packageMapper.packageToPackageResponseDTO(packageEntity.update(packageToUpdateDTO));
+
+        return ExtendedBaseResponse.of(
+                BaseResponse.ok("Paquete actualizado exitosamente."),
+                packageResponseDTO
+        );
+    }
+
+    public BaseResponse delete(Long id) {
+
+        Package packageEntity = packageRepository.findByIdAndActiveIsTrue( id );
+
+        if (packageEntity == null) {
+            throw new PackageNotFoundException("Paquete no encontrado.");
+        }
+
+        packageEntity.delete();
+
+        return BaseResponse.ok("Paquete eliminado exitosamente.");
     }
 }

@@ -1,5 +1,6 @@
 package com.Kosten.Api_Rest.model;
 
+import com.Kosten.Api_Rest.dto.packageDTO.PackageToUpdateDTO;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -54,6 +55,22 @@ public class Package {
                 '}';
     }
 
+    public Package update(PackageToUpdateDTO packageToUpdateDTO) {
+        if (packageToUpdateDTO.name() != null)
+            this.name = packageToUpdateDTO.name();
+
+        if (packageToUpdateDTO.description() != null)
+            this.description = packageToUpdateDTO.description();
+
+        if (packageToUpdateDTO.punctuation() != 0)
+            this.punctuation = packageToUpdateDTO.punctuation();
+
+        if (packageToUpdateDTO.duration() != 0)
+            this.duration = packageToUpdateDTO.duration();
+
+        return this;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -65,5 +82,9 @@ public class Package {
     @Override
     public int hashCode() {
         return Objects.hash(id, name, description, punctuation, duration, active);
+    }
+
+    public void delete() {
+        this.active = false;
     }
 }

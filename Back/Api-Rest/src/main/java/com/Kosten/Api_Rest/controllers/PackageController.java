@@ -1,8 +1,10 @@
 package com.Kosten.Api_Rest.controllers;
 
+import com.Kosten.Api_Rest.dto.BaseResponse;
 import com.Kosten.Api_Rest.dto.ExtendedBaseResponse;
 import com.Kosten.Api_Rest.dto.packageDTO.PackageRequestDTO;
 import com.Kosten.Api_Rest.dto.packageDTO.PackageResponseDTO;
+import com.Kosten.Api_Rest.dto.packageDTO.PackageToUpdateDTO;
 import com.Kosten.Api_Rest.service.PackageService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -117,5 +119,57 @@ public class PackageController {
         return ResponseEntity
                 .status(200)
                 .body(packageService.getAllPackages(pageable));
+    }
+
+    @Operation(
+            summary = "Actualizar un Paquete.",
+            description = "Permite a un usuario logueado de la empresa actualizar un paquete enviando sus datos y ID por el Body."
+    )
+    @ApiResponses(value = {
+            @ApiResponse(
+                    responseCode = "200", description = "Paquete actualizado exitosamente.",
+                    content = {
+                            @Content(mediaType = "application/json",
+                                    schema = @Schema(implementation = ExtendedBaseResponse.class))
+                    }),
+            @ApiResponse(responseCode = "400", description = "Bad request.", content = {@Content}),
+            @ApiResponse(responseCode = "401", description = "Unauthorized.", content = {@Content}),
+            @ApiResponse(responseCode = "403", description = "Forbidden.", content = {@Content}),
+            @ApiResponse(responseCode = "404", description = "Paquete no encontrado.", content = {@Content}),
+            @ApiResponse(responseCode = "500", description = "Server error.", content = {@Content})
+    })
+    @PutMapping
+    @Transactional
+    public ResponseEntity<ExtendedBaseResponse<PackageResponseDTO>> updateNote(
+            @RequestBody @Valid PackageToUpdateDTO packageToUpdateDTO
+    ) {
+        return ResponseEntity
+                .status(200)
+                .body(packageService.update( packageToUpdateDTO ));
+    }
+
+    @Operation(
+            summary = "Eliminar un paquete.",
+            description = "Permite a un usuario logueado de la empresa eliminar un paquete."
+    )
+    @ApiResponses(value = {
+            @ApiResponse(
+                    responseCode = "200", description = "Paquete eliminado exitosamente.",
+                    content = {
+                            @Content(mediaType = "application/json",
+                                    schema = @Schema(implementation = BaseResponse.class))
+                    }),
+            @ApiResponse(responseCode = "400", description = "Bad request.", content = {@Content}),
+            @ApiResponse(responseCode = "401", description = "Unauthorized.", content = {@Content}),
+            @ApiResponse(responseCode = "403", description = "Forbidden.", content = {@Content}),
+            @ApiResponse(responseCode = "404", description = "Paquete no encontrado.", content = {@Content}),
+            @ApiResponse(responseCode = "500", description = "Server error.", content = {@Content})
+    })
+    @DeleteMapping("/{id}")
+    @Transactional
+    public ResponseEntity<BaseResponse> deleteNote( @PathVariable Long id ) {
+        return ResponseEntity
+                .status(200)
+                .body(packageService.delete( id ));
     }
 }

@@ -2,6 +2,7 @@ package com.Kosten.Api_Rest.mapper;
 
 import com.Kosten.Api_Rest.dto.packageDTO.PackageRequestDTO;
 import com.Kosten.Api_Rest.dto.packageDTO.PackageResponseDTO;
+import com.Kosten.Api_Rest.dto.packageDTO.PackageToUpdateDTO;
 import com.Kosten.Api_Rest.model.Package;
 import org.mapstruct.*;
 
@@ -14,5 +15,9 @@ public interface PackageMapper {
     Package toEntity(PackageResponseDTO packageResponseDTO);
 
     PackageResponseDTO packageToPackageResponseDTO(Package package_);
+
+    Package toEntity(PackageToUpdateDTO packageToUpdateDTO);
+
+    PackageToUpdateDTO packageToPackageToUpdateDTO(Package package_);
 
 }
