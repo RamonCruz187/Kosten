@@ -1,5 +1,6 @@
 package com.Kosten.Api_Rest.service;
 
+import com.Kosten.Api_Rest.Exception.packagesExc.PackageNotFoundException;
 import com.Kosten.Api_Rest.dto.BaseResponse;
 import com.Kosten.Api_Rest.dto.ExtendedBaseResponse;
 import com.Kosten.Api_Rest.dto.packageDTO.PackageRequestDTO;
@@ -26,5 +27,17 @@ public class PackageService {
                 packageResponseDTO
         );
 
+    }
+
+    public ExtendedBaseResponse<PackageResponseDTO> getPackageById(Long id) {
+
+        Package packageEntity = packageRepository.findById(id).orElseThrow(() -> new PackageNotFoundException("Paquete no encontrado."));
+
+        PackageResponseDTO packageResponseDTO = packageMapper.packageToPackageResponseDTO(packageEntity);
+
+        return ExtendedBaseResponse.of(
+                BaseResponse.ok("Paquete encontrado exitosamente."),
+                packageResponseDTO
+        );
     }
 }
