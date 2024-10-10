@@ -27,12 +27,4 @@ public record BaseResponse(
     public static BaseResponse ok(String message) {
         return new BaseResponse(false, HttpStatus.OK, message);
     }
-
-    public static BaseResponse badRequest(String message) {
-        return new BaseResponse(true, HttpStatus.BAD_REQUEST, message);
-    }
-
-    public static BaseResponse notFound(String message) {
-        return new BaseResponse(true, HttpStatus.NOT_FOUND, message);
-    }
 }
