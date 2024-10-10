@@ -10,8 +10,8 @@ public record ExtendedBaseResponse<T>(
     public static <T> ExtendedBaseResponse<T> of(BaseResponse baseResponse, T data) {
         return new ExtendedBaseResponse<>(
                 baseResponse.isError(),
-                baseResponse.code(),
-                baseResponse.status(),
+                baseResponse.getStatusCode(),
+                baseResponse.getStatusName(),
                 baseResponse.message(),
                 data
         );

@@ -19,14 +19,12 @@ public class PackageService {
 
     public ExtendedBaseResponse<PackageResponseDTO> createPackage(PackageRequestDTO packageRequestDTO) {
         Package packageEntity = packageMapper.toEntity(packageRequestDTO);
-        var packageResponseDTO =  packageMapper.packageToPackageResponseDTO(packageRepository.save(packageEntity));
+        PackageResponseDTO packageResponseDTO =  packageMapper.packageToPackageResponseDTO(packageRepository.save(packageEntity));
 
-        ExtendedBaseResponse<PackageResponseDTO> response = ExtendedBaseResponse.of(
-                new BaseResponse(false, 201, "Created", "Paquete creado exitosamente"),
+        return ExtendedBaseResponse.of(
+                BaseResponse.created("Paquete creado exitosamente."),
                 packageResponseDTO
         );
-
-        return response;
 
     }
 }
