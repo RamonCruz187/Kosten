@@ -1,5 +1,6 @@
 package com.Kosten.Api_Rest.controllers;
 
+import com.Kosten.Api_Rest.dto.ExtendedBaseResponse;
 import com.Kosten.Api_Rest.dto.packageDTO.PackageRequestDTO;
 import com.Kosten.Api_Rest.dto.packageDTO.PackageResponseDTO;
 import com.Kosten.Api_Rest.service.PackageService;
@@ -24,16 +25,16 @@ public class PackageController {
 
     @PostMapping
     @Transactional
-    public ResponseEntity<PackageResponseDTO> createPackage(
+    public ResponseEntity<ExtendedBaseResponse<PackageResponseDTO>> createPackage(
             @RequestBody @Valid PackageRequestDTO packageRequestDTO,
             UriComponentsBuilder uriComponentsBuilder
     ) {
 
-        PackageResponseDTO packageResponseDTO = packageService.createPackage(packageRequestDTO);
+        ExtendedBaseResponse<PackageResponseDTO> packageResponseDTO = packageService.createPackage(packageRequestDTO);
 
         URI location = uriComponentsBuilder
                 .path("/packages/{id}")
-                .buildAndExpand(packageResponseDTO.id())
+                .buildAndExpand(packageResponseDTO.data().id())
                 .toUri();
 
         return ResponseEntity

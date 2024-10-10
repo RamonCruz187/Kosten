@@ -1,5 +1,7 @@
 package com.Kosten.Api_Rest.service;
 
+import com.Kosten.Api_Rest.dto.BaseResponse;
+import com.Kosten.Api_Rest.dto.ExtendedBaseResponse;
 import com.Kosten.Api_Rest.dto.packageDTO.PackageRequestDTO;
 import com.Kosten.Api_Rest.dto.packageDTO.PackageResponseDTO;
 import com.Kosten.Api_Rest.mapper.PackageMapper;
@@ -15,8 +17,16 @@ public class PackageService {
     private final PackageRepository packageRepository;
     private final PackageMapper packageMapper;
 
-    public PackageResponseDTO createPackage(PackageRequestDTO packageRequestDTO) {
+    public ExtendedBaseResponse<PackageResponseDTO> createPackage(PackageRequestDTO packageRequestDTO) {
         Package packageEntity = packageMapper.toEntity(packageRequestDTO);
-        return packageMapper.packageToPackageResponseDTO(packageRepository.save(packageEntity));
+        var packageResponseDTO =  packageMapper.packageToPackageResponseDTO(packageRepository.save(packageEntity));
+
+        ExtendedBaseResponse<PackageResponseDTO> response = ExtendedBaseResponse.of(
+                new BaseResponse(false, 201, "Created", "Paquete creado exitosamente"),
+                packageResponseDTO
+        );
+
+        return response;
+
     }
 }
