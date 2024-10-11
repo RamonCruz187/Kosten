@@ -7,8 +7,11 @@ import com.Kosten.Api_Rest.dto.packageDTO.PackageRequestDTO;
 import com.Kosten.Api_Rest.dto.packageDTO.PackageResponseDTO;
 import com.Kosten.Api_Rest.dto.packageDTO.PackageToUpdateDTO;
 import com.Kosten.Api_Rest.mapper.PackageMapper;
+import com.Kosten.Api_Rest.model.Image;
 import com.Kosten.Api_Rest.model.Package;
+import com.Kosten.Api_Rest.repository.ImageRepository;
 import com.Kosten.Api_Rest.repository.PackageRepository;
+import com.Kosten.Api_Rest.service.ImageService;
 import com.Kosten.Api_Rest.service.PackageService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -21,10 +24,31 @@ public class PackageServiceImpl implements PackageService {
 
     private final PackageRepository packageRepository;
     private final PackageMapper packageMapper;
+    private final ImageRepository imageRepository;
+    private final ImageService imageService;
 
     public ExtendedBaseResponse<PackageResponseDTO> createPackage(PackageRequestDTO packageRequestDTO) {
+
         Package packageEntity = packageMapper.toEntity(packageRequestDTO);
-        PackageResponseDTO packageResponseDTO =  packageMapper.packageToPackageResponseDTO(packageRepository.save(packageEntity));
+
+        var packageDB = packageRepository.save(packageEntity);
+
+        if( !packageRequestDTO.filesImages().isEmpty() ) {
+            packageRequestDTO.filesImages().forEach( file -> {
+                try {
+                    Image image = imageService.createNewImage(file);
+
+                    packageDB.addImage( image );
+
+                    imageRepository.save(image);
+
+                } catch (Exception e) {
+                    throw new RuntimeException(e.getMessage());
+                }
+            });
+        }
+
+        PackageResponseDTO packageResponseDTO =  packageMapper.packageToPackageResponseDTO(packageDB);
 
         return ExtendedBaseResponse.of(
                 BaseResponse.created("Paquete creado exitosamente."),
