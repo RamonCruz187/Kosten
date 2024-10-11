@@ -14,6 +14,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.FileNotFoundException;
 import java.util.Map;
 
 @Service
@@ -27,18 +28,28 @@ public class ImageServiceImpl implements ImageService {
     @Override
     public ExtendedBaseResponse<ImageResponseDTO> uploadImage(MultipartFile file) throws Exception {
 
-        Map uploadResult = cloudinary
-                .uploader()
-                .upload(file.getBytes(), ObjectUtils.emptyMap());
+        if (file.isEmpty()) {
+            throw new FileNotFoundException("No se ha encontrado la imagen");
+        }
 
-        ImageRequestDTO imageRequestDTO = new ImageRequestDTO(uploadResult.get("url").toString());
-        Image image = imageMapper.toEntity(imageRequestDTO);
-        ImageResponseDTO imageResponseDTO = imageMapper.imageToImageResponseDTO(imageRepository.save(image));
+        try {
 
-        return ExtendedBaseResponse.of(
-                BaseResponse.created("Imagen guardada exitosamente."),
-                imageResponseDTO
-        );
+            Map uploadResult = cloudinary
+                    .uploader()
+                    .upload(file.getBytes(), ObjectUtils.emptyMap());
+
+            ImageRequestDTO imageRequestDTO = new ImageRequestDTO(uploadResult.get("url").toString());
+            Image image = imageMapper.toEntity(imageRequestDTO);
+            ImageResponseDTO imageResponseDTO = imageMapper.imageToImageResponseDTO(imageRepository.save(image));
+
+            return ExtendedBaseResponse.of(
+                    BaseResponse.created("Imagen guardada exitosamente."),
+                    imageResponseDTO
+            );
+
+        } catch (Exception e) {
+            throw new RuntimeException("No se ha podido subir la imagen");
+        }
     }
 
 }
