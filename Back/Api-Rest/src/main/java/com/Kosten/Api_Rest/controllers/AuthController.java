@@ -1,5 +1,6 @@
 package com.Kosten.Api_Rest.controllers;
 
+import com.Kosten.Api_Rest.dto.ExtendedBaseResponse;
 import com.Kosten.Api_Rest.service.AuthService;
 import com.Kosten.Api_Rest.dto.BaseResponse;
 import com.Kosten.Api_Rest.dto.user.AuthResponseDto;
@@ -21,33 +22,21 @@ public class AuthController {
     private final AuthService authService;
 
     @PostMapping(value = "login")
-    public ResponseEntity<BaseResponse> login(@RequestBody LoginRequestDto request) {
-        AuthResponseDto authResponse = authService.login(request);
+    public ResponseEntity<ExtendedBaseResponse<AuthResponseDto>> login(@RequestBody LoginRequestDto request) {
+        var authResponse = authService.login(request);
 
-        BaseResponse response = new BaseResponse(
-                false,
-                200,
-                "Success",
-                "Login exitoso");
+        return ResponseEntity.ok( authResponse);
 
-        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     @PostMapping(value = "register")
-    public ResponseEntity<BaseResponse> register(@RequestBody RegisterRequestDto request) {
-        AuthResponseDto authResponse = authService.register(request);
+    public ResponseEntity<ExtendedBaseResponse<AuthResponseDto>> register(@RequestBody RegisterRequestDto request) {
+        ExtendedBaseResponse<AuthResponseDto> authResponse = authService.register(request);
 
-        boolean isError = authResponse.username().equals("El usuario ya se encuentra registrado") ||
-                authResponse.username().equals("El email ya se encuentra registrado");
+        boolean isError = authResponse.data().username().equals("El usuario ya se encuentra registrado") ||
+                authResponse.data().username().equals("El email ya se encuentra registrado");
 
-        BaseResponse response = new BaseResponse(
-                isError,
-                isError ? 400 : 200,
-                isError ? "Error" : "Success",
-                isError ? authResponse.username() : "Registro exitoso"
-        );
-
-        return new ResponseEntity<>(response, HttpStatus.OK);
+        return ResponseEntity.ok( authResponse );
     }
 
 }
