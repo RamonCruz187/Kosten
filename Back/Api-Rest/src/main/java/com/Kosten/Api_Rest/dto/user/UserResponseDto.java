@@ -1,9 +1,9 @@
-package com.Kosten.Api_Rest.dto.tourist;
+package com.Kosten.Api_Rest.dto.user;
 
 import lombok.Builder;
 
 @Builder
-public record TouristResponseDto(
+public record UserResponseDto(
         Long id,
         String username,
         String email

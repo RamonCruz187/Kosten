@@ -1,5 +1,7 @@
 package com.Kosten.Api_Rest.model;
 
+import com.Kosten.Api_Rest.dto.user.UpdateUserRequestDto;
+import com.Kosten.Api_Rest.dto.user.UserResponseDto;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -63,4 +65,13 @@ public class User implements UserDetails {
         return UserDetails.super.isEnabled();
     }
 
+    public User update(UpdateUserRequestDto updateUserRequestDto) {
+        if (updateUserRequestDto.email() != null)
+            this.email = updateUserRequestDto.email();
+
+        if (updateUserRequestDto.username() != null)
+            this.username = updateUserRequestDto.username();
+
+        return this;
+    }
 }

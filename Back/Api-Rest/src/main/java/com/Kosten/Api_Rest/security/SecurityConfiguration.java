@@ -29,8 +29,6 @@ public class SecurityConfiguration {
                 .authorizeHttpRequests( auth -> auth
                         .requestMatchers("/test")
                             .permitAll()
-                        .requestMatchers("/tourist/**")
-                        .permitAll()
                         .requestMatchers("/auth/**")
                         .permitAll()
                         .requestMatchers("/api-docs/**", "api-docs.yaml")
