@@ -1,4 +1,4 @@
-package com.Kosten.Api_Rest.exception;
+package com.Kosten.Api_Rest.Exception;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;

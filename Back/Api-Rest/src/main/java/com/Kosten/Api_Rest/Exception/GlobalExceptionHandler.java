@@ -1,4 +1,4 @@
-package com.Kosten.Api_Rest.exception;
+package com.Kosten.Api_Rest.Exception;
 
 import com.Kosten.Api_Rest.dto.BaseResponse;
 import org.springframework.http.HttpStatus;

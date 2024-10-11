@@ -1,7 +1,9 @@
 package com.Kosten.Api_Rest.controllers;
 
 import com.Kosten.Api_Rest.dto.CommentDto;
-import com.Kosten.Api_Rest.exception.CommentNotFoundException;
+import com.Kosten.Api_Rest.dto.BaseResponse;
+import com.Kosten.Api_Rest.dto.ExtendedBaseResponse;
+import com.Kosten.Api_Rest.Exception.CommentNotFoundException;
 import com.Kosten.Api_Rest.service.CommentService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -18,37 +20,44 @@ public class CommentController {
     private final CommentService commentService;
 
     @PostMapping("/save")
-    public ResponseEntity<CommentDto> createComment(@RequestBody CommentDto commentDto) {
-        CommentDto saveComment = commentService.createComment(commentDto);
-        return new ResponseEntity<>(saveComment, HttpStatus.CREATED);
+    public ResponseEntity<ExtendedBaseResponse<CommentDto>> createComment(@RequestBody CommentDto commentDto) {
+        CommentDto savedComment = commentService.createComment(commentDto);
+        BaseResponse response = BaseResponse.created("Comment created successfully.");
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(ExtendedBaseResponse.of(response, savedComment));
     }
 
     @GetMapping("/search/{id}")
-    public ResponseEntity<?> findCommentById(@PathVariable("id") Long id) {
+    public ResponseEntity<ExtendedBaseResponse<CommentDto>> findCommentById(@PathVariable("id") Long id) {
         try {
             CommentDto commentDto = commentService.findCommentById(id);
-            return ResponseEntity.ok(commentDto);
+            BaseResponse response = BaseResponse.ok("Comment retrieved successfully.");
+            return ResponseEntity.ok(ExtendedBaseResponse.of(response, commentDto));
         } catch (CommentNotFoundException ex) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
+            BaseResponse response = new BaseResponse(true, HttpStatus.NOT_FOUND, ex.getMessage());
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ExtendedBaseResponse.of(response, null));
         }
     }
 
     @GetMapping("/list")
-    public ResponseEntity<List<CommentDto>> listComment() {
+    public ResponseEntity<ExtendedBaseResponse<List<CommentDto>>> listComment() {
         List<CommentDto> commentDtoList = commentService.commentlist();
-        return ResponseEntity.ok(commentDtoList);
+        BaseResponse response = BaseResponse.ok("Comments retrieved successfully.");
+        return ResponseEntity.ok(ExtendedBaseResponse.of(response, commentDtoList));
     }
 
     @PutMapping("/update/{id}")
-    public ResponseEntity<CommentDto> updateComment(@PathVariable("id") Long id, @RequestBody CommentDto updateComment) {
-        CommentDto commentDto = commentService.updateComment(id, updateComment);
-        return ResponseEntity.ok(commentDto);
+    public ResponseEntity<ExtendedBaseResponse<CommentDto>> updateComment(@PathVariable("id") Long id, @RequestBody CommentDto updateComment) {
+        CommentDto updatedComment = commentService.updateComment(id, updateComment);
+        BaseResponse response = BaseResponse.ok("Comment updated successfully.");
+        return ResponseEntity.ok(ExtendedBaseResponse.of(response, updatedComment));
     }
 
     @DeleteMapping("/delete/{id}")
-    public ResponseEntity<String> deleteComment(@PathVariable("id") Long id) {
+    public ResponseEntity<ExtendedBaseResponse<String>> deleteComment(@PathVariable("id") Long id) {
         commentService.deleteComment(id);
-        return ResponseEntity.ok("The Recipe was eliminated");
+        BaseResponse response = BaseResponse.ok("Comment deleted successfully.");
+        return ResponseEntity.ok(ExtendedBaseResponse.of(response, "The Comment was eliminated."));
     }
-
 }
+
