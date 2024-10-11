@@ -1,12 +1,13 @@
 package com.Kosten.Api_Rest.controllers;
 
-import com.Kosten.Api_Rest.dto.BaseResponse;
+import com.Kosten.Api_Rest.dto.ExtendedBaseResponse;
 import com.Kosten.Api_Rest.dto.user.UpdateUserRequestDto;
 import com.Kosten.Api_Rest.dto.user.UserResponseDto;
+import com.Kosten.Api_Rest.dto.user.UserRoleUpdateRequestDto;
 import com.Kosten.Api_Rest.service.UserService;
 import jakarta.transaction.Transactional;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -19,17 +20,24 @@ public class UserController {
 
     @PutMapping("/update")
     @Transactional
-    public ResponseEntity<BaseResponse> createTourist(@PathVariable Integer id, @RequestBody UpdateUserRequestDto updateUser){
+    public ResponseEntity<ExtendedBaseResponse<UserResponseDto>> updateUser(@RequestBody @Valid UpdateUserRequestDto updateUser){
 
-        UserResponseDto userResponseDto = userService.update(id, updateUser);
+        return ResponseEntity.status(200).body(userService.update(updateUser));
+    }
 
-        BaseResponse response = new BaseResponse(
-                false,
-                200,
-                "Success",
-                "Los datos del usuario fueron modificados con exito");
+    @GetMapping("/{id}")
+    @Transactional
+    public ResponseEntity<ExtendedBaseResponse<UserResponseDto>> findUserById(@PathVariable Integer id){
 
-        return new ResponseEntity<>(response, HttpStatus.OK);
+        return ResponseEntity.status(200).body(userService.getUserById(id));
+    }
 
+    @PutMapping("/{id}/role")
+    @Transactional
+    public ResponseEntity<ExtendedBaseResponse<?>> updateUserRole(
+            @PathVariable Integer id,
+            @RequestBody UserRoleUpdateRequestDto requestDto){
+
+        return ResponseEntity.status(200).body(userService.updateUserRole(id, requestDto));
     }
 }

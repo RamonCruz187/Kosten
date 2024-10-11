@@ -2,6 +2,7 @@ package com.Kosten.Api_Rest.model;
 
 import com.Kosten.Api_Rest.dto.user.UpdateUserRequestDto;
 import com.Kosten.Api_Rest.dto.user.UserResponseDto;
+import com.Kosten.Api_Rest.dto.user.UserRoleUpdateRequestDto;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -73,5 +74,11 @@ public class User implements UserDetails {
             this.username = updateUserRequestDto.username();
 
         return this;
+    }
+
+    public boolean isChangedRole(UserRoleUpdateRequestDto changeUserRole){
+        if(changeUserRole != null)
+            this.role = Role.valueOf(changeUserRole.role());
+        return true;
     }
 }
