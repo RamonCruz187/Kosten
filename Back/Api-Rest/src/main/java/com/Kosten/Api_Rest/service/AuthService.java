@@ -1,6 +1,8 @@
 package com.Kosten.Api_Rest.service;
 
 import com.Kosten.Api_Rest.Jwt.JwtService;
+import com.Kosten.Api_Rest.dto.BaseResponse;
+import com.Kosten.Api_Rest.dto.ExtendedBaseResponse;
 import com.Kosten.Api_Rest.dto.user.AuthResponseDto;
 import com.Kosten.Api_Rest.dto.user.LoginRequestDto;
 import com.Kosten.Api_Rest.dto.user.RegisterRequestDto;
@@ -22,7 +24,7 @@ public class AuthService {
     private final AuthenticationManager authenticationManager;
     private final PasswordEncoder passwordEncoder;
 
-    public AuthResponseDto login(LoginRequestDto request) {
+    public ExtendedBaseResponse<AuthResponseDto> login(LoginRequestDto request) {
         String username = request.username();
         String password = request.password();
 
@@ -39,14 +41,19 @@ public class AuthService {
 
         String token = jwtService.getToken(user);
 
-        return new AuthResponseDto(
+        var response = new AuthResponseDto(
                 user.getId(),
                 user.getUsername(),
                 token
         );
+
+        return ExtendedBaseResponse.of(
+                BaseResponse.ok("Login exitoso."),
+                response
+        );
     }
 
-    public AuthResponseDto register(RegisterRequestDto request) {
+    public ExtendedBaseResponse<AuthResponseDto> register(RegisterRequestDto request) {
         if (userRepository.existsByUsername(request.username())) {
             throw new IllegalArgumentException("El usuario ya se encuentra registrado");
         }
@@ -67,10 +74,15 @@ public class AuthService {
 
         String token = jwtService.getToken(user);
 
-        return new AuthResponseDto(
+        var response = new AuthResponseDto(
                 user.getId(),
                 user.getUsername(),
                 token
+        );
+
+        return ExtendedBaseResponse.of(
+                BaseResponse.created("Usuario creado exitosamente."),
+                response
         );
     }
 }
