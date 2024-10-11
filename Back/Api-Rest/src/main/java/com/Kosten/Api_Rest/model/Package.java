@@ -4,6 +4,7 @@ import com.Kosten.Api_Rest.dto.packageDTO.PackageToUpdateDTO;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.List;
 import java.util.Objects;
 
 @Entity
@@ -25,6 +26,20 @@ public class Package {
     private int duration;
     private boolean active;
 
+    @OneToMany( mappedBy = "package_" )
+    private List<Image> images;
+
+    //Helper Methods: Keep Both Sides of the Association in SYNC
+    public void addImage(Image image) {
+        this.images.add(image);
+        image.setPackage_(this);
+    }
+
+    public void deleteImage(Image image) {
+        this.images.remove(image);
+        image.setPackage_(null);
+    }
+
     /* Relations with others Entities */
     /*@ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "category_id", referencedColumnName = "id")
@@ -35,9 +50,6 @@ public class Package {
 
     @OneToMany(mappedBy = "comments", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Comment> comments;
-
-    @OneToMany(mappedBy = "image", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Image> images;
 
     @OneToMany(mappedBy = "months", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Month> months;

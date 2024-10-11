@@ -6,9 +6,11 @@ import com.Kosten.Api_Rest.dto.ExtendedBaseResponse;
 import com.Kosten.Api_Rest.dto.packageDTO.PackageRequestDTO;
 import com.Kosten.Api_Rest.dto.packageDTO.PackageResponseDTO;
 import com.Kosten.Api_Rest.dto.packageDTO.PackageToUpdateDTO;
+import com.Kosten.Api_Rest.mapper.ImageMapper;
 import com.Kosten.Api_Rest.mapper.PackageMapper;
 import com.Kosten.Api_Rest.model.Package;
 import com.Kosten.Api_Rest.repository.PackageRepository;
+import com.Kosten.Api_Rest.service.ImageService;
 import com.Kosten.Api_Rest.service.PackageService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -21,9 +23,24 @@ public class PackageServiceImpl implements PackageService {
 
     private final PackageRepository packageRepository;
     private final PackageMapper packageMapper;
+    private final ImageService imageService;
+    private final ImageMapper imageMapper;
 
     public ExtendedBaseResponse<PackageResponseDTO> createPackage(PackageRequestDTO packageRequestDTO) {
+
         Package packageEntity = packageMapper.toEntity(packageRequestDTO);
+
+        if( !packageRequestDTO.filesImages().isEmpty() ) {
+            packageRequestDTO.filesImages().forEach(file -> {
+                try {
+                    var res = imageService.uploadImage(file);
+                    packageEntity.addImage( imageMapper.toEntity( res.data() ) );
+                } catch (Exception e) {
+                    throw new RuntimeException(e.getMessage());
+                }
+            });
+        }
+
         PackageResponseDTO packageResponseDTO =  packageMapper.packageToPackageResponseDTO(packageRepository.save(packageEntity));
 
         return ExtendedBaseResponse.of(

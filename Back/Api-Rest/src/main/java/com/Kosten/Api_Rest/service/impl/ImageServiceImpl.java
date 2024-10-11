@@ -48,7 +48,7 @@ public class ImageServiceImpl implements ImageService {
             );
 
         } catch (Exception e) {
-            throw new RuntimeException("No se ha podido subir la imagen");
+            throw new RuntimeException("No se ha podido subir la imagen " + file.getName());
         }
     }
 
