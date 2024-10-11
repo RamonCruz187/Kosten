@@ -1,5 +1,6 @@
 package com.Kosten.Api_Rest.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -20,21 +21,25 @@ public class Image {
 
     private String url;
 
+    @Column(name = "public_id")
+    private String publicId;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "package_id", referencedColumnName = "id")
-    private Package package_;
+    @JsonBackReference(value = "packageRef")
+    private Package packageRef;
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Image image = (Image) o;
-        return Objects.equals(id, image.id) && Objects.equals(url, image.url) && Objects.equals(package_, image.package_);
+        return Objects.equals(id, image.id) && Objects.equals(url, image.url) && Objects.equals(packageRef, image.packageRef);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, url, package_);
+        return Objects.hash(id, url, packageRef);
     }
 
     @Override
@@ -42,7 +47,7 @@ public class Image {
         return "Image{" +
                 "id=" + id +
                 ", url='" + url + '\'' +
-                ", package_=" + package_ +
+                ", package=" + packageRef +
                 '}';
     }
 }

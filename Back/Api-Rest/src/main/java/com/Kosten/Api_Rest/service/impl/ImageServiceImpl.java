@@ -32,21 +32,26 @@ public class ImageServiceImpl implements ImageService {
             throw new FileNotFoundException("No se ha encontrado la imagen");
         }
 
-        try {
+            var image = createNewImage(file);
 
-            Map uploadResult = cloudinary
-                    .uploader()
-                    .upload(file.getBytes(), ObjectUtils.emptyMap());
-
-            ImageRequestDTO imageRequestDTO = new ImageRequestDTO(uploadResult.get("url").toString());
-            Image image = imageMapper.toEntity(imageRequestDTO);
-            ImageResponseDTO imageResponseDTO = imageMapper.imageToImageResponseDTO(imageRepository.save(image));
+            ImageResponseDTO imageResponseDTO = imageMapper.imageToImageResponseDTO( imageRepository.save(image) );
 
             return ExtendedBaseResponse.of(
                     BaseResponse.created("Imagen guardada exitosamente."),
                     imageResponseDTO
             );
+    }
 
+    public Image createNewImage(MultipartFile file) {
+
+        try {
+            Map uploadResult = cloudinary
+                    .uploader()
+                    .upload(file.getBytes(), ObjectUtils.emptyMap());
+
+            ImageRequestDTO imageRequestDTO = new ImageRequestDTO(uploadResult.get("url").toString(), uploadResult.get("public_id").toString());
+
+            return imageMapper.toEntity(imageRequestDTO);
         } catch (Exception e) {
             throw new RuntimeException("No se ha podido subir la imagen " + file.getName());
         }

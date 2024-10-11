@@ -10,7 +10,9 @@ import java.io.Serializable;
 public record ImageRequestDTO(
 
         @NotBlank(message = "La URL de la imagen es requerida")
-        String url
+        String url,
+
+        String publicId
 
 ) implements Serializable {
 }

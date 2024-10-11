@@ -1,9 +1,11 @@
 package com.Kosten.Api_Rest.model;
 
 import com.Kosten.Api_Rest.dto.packageDTO.PackageToUpdateDTO;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -26,18 +28,19 @@ public class Package {
     private int duration;
     private boolean active;
 
-    @OneToMany( mappedBy = "package_" )
-    private List<Image> images;
+    @OneToMany( mappedBy = "packageRef", orphanRemoval = true )
+    @JsonManagedReference(value = "packageRef")
+    private List<Image> images = new ArrayList<>();
 
     //Helper Methods: Keep Both Sides of the Association in SYNC
     public void addImage(Image image) {
         this.images.add(image);
-        image.setPackage_(this);
+        image.setPackageRef(this);
     }
 
     public void deleteImage(Image image) {
         this.images.remove(image);
-        image.setPackage_(null);
+        image.setPackageRef(null);
     }
 
     /* Relations with others Entities */

@@ -6,9 +6,10 @@ import com.Kosten.Api_Rest.dto.ExtendedBaseResponse;
 import com.Kosten.Api_Rest.dto.packageDTO.PackageRequestDTO;
 import com.Kosten.Api_Rest.dto.packageDTO.PackageResponseDTO;
 import com.Kosten.Api_Rest.dto.packageDTO.PackageToUpdateDTO;
-import com.Kosten.Api_Rest.mapper.ImageMapper;
 import com.Kosten.Api_Rest.mapper.PackageMapper;
+import com.Kosten.Api_Rest.model.Image;
 import com.Kosten.Api_Rest.model.Package;
+import com.Kosten.Api_Rest.repository.ImageRepository;
 import com.Kosten.Api_Rest.repository.PackageRepository;
 import com.Kosten.Api_Rest.service.ImageService;
 import com.Kosten.Api_Rest.service.PackageService;
@@ -23,25 +24,31 @@ public class PackageServiceImpl implements PackageService {
 
     private final PackageRepository packageRepository;
     private final PackageMapper packageMapper;
+    private final ImageRepository imageRepository;
     private final ImageService imageService;
-    private final ImageMapper imageMapper;
 
     public ExtendedBaseResponse<PackageResponseDTO> createPackage(PackageRequestDTO packageRequestDTO) {
 
         Package packageEntity = packageMapper.toEntity(packageRequestDTO);
 
+        var packageDB = packageRepository.save(packageEntity);
+
         if( !packageRequestDTO.filesImages().isEmpty() ) {
-            packageRequestDTO.filesImages().forEach(file -> {
+            packageRequestDTO.filesImages().forEach( file -> {
                 try {
-                    var res = imageService.uploadImage(file);
-                    packageEntity.addImage( imageMapper.toEntity( res.data() ) );
+                    Image image = imageService.createNewImage(file);
+
+                    packageDB.addImage( image );
+
+                    imageRepository.save(image);
+
                 } catch (Exception e) {
                     throw new RuntimeException(e.getMessage());
                 }
             });
         }
 
-        PackageResponseDTO packageResponseDTO =  packageMapper.packageToPackageResponseDTO(packageRepository.save(packageEntity));
+        PackageResponseDTO packageResponseDTO =  packageMapper.packageToPackageResponseDTO(packageDB);
 
         return ExtendedBaseResponse.of(
                 BaseResponse.created("Paquete creado exitosamente."),
