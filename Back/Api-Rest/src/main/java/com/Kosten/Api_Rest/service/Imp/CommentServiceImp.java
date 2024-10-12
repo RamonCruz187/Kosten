@@ -62,4 +62,13 @@ public class CommentServiceImp implements CommentService {
         Comment comment = commentRepository.findById(Math.toIntExact(id)).orElseThrow(() -> new CommentNotFoundException("Comment not found with ID: " + id));
         commentRepository.delete(comment);
     }
+
+    @Override
+    @Transactional
+    public CommentDto updateCommentVisibility(Long id, boolean visible) {
+        Comment comment = commentRepository.findById(Math.toIntExact(id)).orElseThrow(() -> new CommentNotFoundException("Comment not found with ID: " + id));
+        comment.setIsVisible(visible);
+        Comment commentSaved = commentRepository.save(comment);
+        return commentMapper.toDto(commentSaved);
+    }
 }

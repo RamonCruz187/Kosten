@@ -126,4 +126,25 @@ public class CommentController {
         BaseResponse response = BaseResponse.ok("Comment deleted successfully.");
         return ResponseEntity.ok(ExtendedBaseResponse.of(response, "The Comment was eliminated."));
     }
+
+    @Operation(summary = "Actualizar la visibilidad de un comentario",
+            description = "Permite a un usuario actualizar la visibilidad de un comentario.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200",
+                    description = "Visibilidad del comentario actualizada exitosamente.",
+                    content = {
+                            @Content(mediaType = "application/json",
+                                    schema = @Schema(implementation = ExtendedBaseResponse.class))
+                    }),
+            @ApiResponse(responseCode = "404", description = "Comentario no encontrado.", content = {@Content}),
+            @ApiResponse(responseCode = "400", description = "Solicitud no válida.", content = {@Content}),
+            @ApiResponse(responseCode = "500", description = "Error del servidor.", content = {@Content})
+    })
+    @PutMapping("/update-visibility/{id}")
+    public ResponseEntity<ExtendedBaseResponse<CommentDto>> updateCommentVisibility(@PathVariable("id") Long id, @RequestParam boolean visible) {
+        CommentDto updatedComment = commentService.updateCommentVisibility(id, visible);
+        BaseResponse response = BaseResponse.ok("Comment visibility updated successfully.");
+        return ResponseEntity.ok(ExtendedBaseResponse.of(response, updatedComment));
+    }
+
 }

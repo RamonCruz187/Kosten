@@ -16,4 +16,6 @@ public interface CommentService {
 
     void deleteComment(Long id);
 
+    CommentDto updateCommentVisibility(Long id, boolean visible);
+
 }
