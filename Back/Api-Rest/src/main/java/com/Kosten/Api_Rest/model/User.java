@@ -31,6 +31,7 @@ public class User implements UserDetails {
     private String username;
     private String password;
     private String email;
+    private String contact;
     @Enumerated(EnumType.STRING)
     Role role;
     private Boolean isActive;
@@ -72,6 +73,9 @@ public class User implements UserDetails {
 
         if (updateUserRequestDto.username() != null)
             this.username = updateUserRequestDto.username();
+
+        if (updateUserRequestDto.contact() != null)
+            this.contact = updateUserRequestDto.contact();
 
         return this;
     }

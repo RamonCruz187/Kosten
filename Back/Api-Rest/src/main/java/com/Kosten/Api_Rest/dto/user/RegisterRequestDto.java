@@ -14,7 +14,11 @@ public record RegisterRequestDto(
         String email,
 
         @NotBlank(message = "Password cannot be blank")
-        String password
+        String password,
+
+        @NotBlank(message = "Contact cannot be blank")
+        String contact
+
 ) implements Serializable {
 }
 

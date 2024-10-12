@@ -35,6 +35,8 @@ public class SecurityConfiguration {
                 .authorizeHttpRequests( auth -> auth
                         .requestMatchers("/test")
                             .permitAll()
+                        /*.requestMatchers("/user/**")
+                        .permitAll()*/
                         /*.requestMatchers("/packages")
                             .permitAll()
                         .requestMatchers("/packages/**")

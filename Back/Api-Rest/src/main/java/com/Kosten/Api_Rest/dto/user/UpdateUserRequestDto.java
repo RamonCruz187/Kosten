@@ -2,15 +2,16 @@ package com.Kosten.Api_Rest.dto.user;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
 @Builder
 public record UpdateUserRequestDto(
 
-        @NotBlank(message = "El username es requerido")
-        String username,
+        @NotNull(message = "El id no puede ser nulo")
+        Integer id,
 
-        @NotBlank(message = "El correo electrónico es obligatorio")
-        @Email(message = "El correo electrónico no es válido")
+        String username,
+        String contact,
         String email
 ) {}
