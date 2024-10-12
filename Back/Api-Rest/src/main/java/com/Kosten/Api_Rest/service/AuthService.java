@@ -8,7 +8,7 @@ import com.Kosten.Api_Rest.dto.user.LoginRequestDto;
 import com.Kosten.Api_Rest.dto.user.RegisterRequestDto;
 import com.Kosten.Api_Rest.model.Role;
 import com.Kosten.Api_Rest.model.User;
-import com.Kosten.Api_Rest.repositoy.UserRepository;
+import com.Kosten.Api_Rest.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -25,18 +25,18 @@ public class AuthService {
     private final PasswordEncoder passwordEncoder;
 
     public ExtendedBaseResponse<AuthResponseDto> login(LoginRequestDto request) {
-        String username = request.username();
+        String email = request.email();
         String password = request.password();
 
-        User user = userRepository.findByUsername(username)
-                .orElseThrow(() -> new IllegalArgumentException("El usuario no existe."));
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new IllegalArgumentException("El usuario con ese email no existe."));
 
         if (!passwordEncoder.matches(password, user.getPassword())) {
             throw new IllegalArgumentException("La contraseña es incorrecta");
         }
 
         authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(username, password)
+                new UsernamePasswordAuthenticationToken(email, password)
         );
 
         String token = jwtService.getToken(user);

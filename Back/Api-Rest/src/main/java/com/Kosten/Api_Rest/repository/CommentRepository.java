@@ -1,4 +1,4 @@
-package com.Kosten.Api_Rest.repositoy;
+package com.Kosten.Api_Rest.repository;
 
 import com.Kosten.Api_Rest.model.Comment;
 import org.springframework.data.jpa.repository.JpaRepository;
