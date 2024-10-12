@@ -13,8 +13,8 @@ import java.util.List;
 public interface UserService {
 
     ExtendedBaseResponse<UserResponseDto> update(UpdateUserRequestDto updateUser);
-    ExtendedBaseResponse<UserResponseDto> getUserById(Integer id);
-    ExtendedBaseResponse<UserResponseDto> updateUserRole(Integer id, UserRoleUpdateRequestDto userRoleUpdate);
+    ExtendedBaseResponse<UserResponseDto> getUserById(Long id);
+    ExtendedBaseResponse<UserResponseDto> updateUserRole(Long id, UserRoleUpdateRequestDto userRoleUpdate);
     ExtendedBaseResponse<List<UserResponseDto>> getAllUsers();
-    BaseResponse delete(Integer id);
+    BaseResponse delete(Long id);
 }

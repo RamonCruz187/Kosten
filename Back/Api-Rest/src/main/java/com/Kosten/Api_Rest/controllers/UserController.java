@@ -31,7 +31,7 @@ public class UserController {
 
     @GetMapping("/{id}")
     @Transactional
-    public ResponseEntity<ExtendedBaseResponse<UserResponseDto>> findUserById(@PathVariable Integer id){
+    public ResponseEntity<ExtendedBaseResponse<UserResponseDto>> findUserById(@PathVariable Long id){
 
         return ResponseEntity.status(200).body(userService.getUserById(id));
     }
@@ -39,7 +39,7 @@ public class UserController {
     @PutMapping("/{id}/role")
     @Transactional
     public ResponseEntity<ExtendedBaseResponse<UserResponseDto>> updateUserRole(
-            @PathVariable Integer id,
+            @PathVariable Long id,
             @RequestBody UserRoleUpdateRequestDto requestDto){
 
         return ResponseEntity.status(200).body(userService.updateUserRole(id, requestDto));
@@ -53,7 +53,7 @@ public class UserController {
 
     @DeleteMapping("/{id}")
     @Transactional
-    public ResponseEntity<BaseResponse> deleteUser(@PathVariable Integer id){
+    public ResponseEntity<BaseResponse> deleteUser(@PathVariable Long id){
         return ResponseEntity
                 .status(200)
                 .body(userService.delete(id));

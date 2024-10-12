@@ -36,7 +36,7 @@ public class UserServiceImpl implements UserService {
         );
     }
 
-    public ExtendedBaseResponse<UserResponseDto> getUserById(Integer id){
+    public ExtendedBaseResponse<UserResponseDto> getUserById(Long id){
 
         var userToGet = userRepository.findById(id).orElseThrow(() ->
                 new IllegalArgumentException("Usuario con el id: " + id + " no fue encontrado"));
@@ -49,7 +49,7 @@ public class UserServiceImpl implements UserService {
         );
     }
 
-    public ExtendedBaseResponse<UserResponseDto> updateUserRole(Integer id, UserRoleUpdateRequestDto userRoleUpdate){
+    public ExtendedBaseResponse<UserResponseDto> updateUserRole(Long id, UserRoleUpdateRequestDto userRoleUpdate){
 
         var userToChangeRole = userRepository.findById(id).orElseThrow(() ->
                 new IllegalArgumentException("Usuario con el id: " + id + " no fue encontrado"));
@@ -76,7 +76,7 @@ public class UserServiceImpl implements UserService {
         );
     }
 
-    public BaseResponse delete(Integer id){
+    public BaseResponse delete(Long id){
 
         Optional<User> oUser = userRepository.findById(id);
 
