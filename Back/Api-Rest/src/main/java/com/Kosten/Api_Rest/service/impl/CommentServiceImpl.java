@@ -1,6 +1,6 @@
 package com.Kosten.Api_Rest.service.impl;
 
-import com.Kosten.Api_Rest.dto.CommentDto;
+import com.Kosten.Api_Rest.dto.comment.CommentDto;
 import com.Kosten.Api_Rest.Exception.commentExc.CommentNotFoundException;
 import com.Kosten.Api_Rest.Exception.userExc.UserNotFoundException;
 import com.Kosten.Api_Rest.mapper.CommentMapper;
