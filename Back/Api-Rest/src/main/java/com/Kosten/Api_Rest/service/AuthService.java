@@ -6,9 +6,8 @@ import com.Kosten.Api_Rest.dto.user.LoginRequestDto;
 import com.Kosten.Api_Rest.dto.user.RegisterRequestDto;
 
 public interface AuthService {
+    ExtendedBaseResponse<AuthResponseDto> login(LoginRequestDto request);
 
-    public ExtendedBaseResponse<AuthResponseDto> login(LoginRequestDto request);
-
-    public ExtendedBaseResponse<AuthResponseDto> register(RegisterRequestDto request);
+    ExtendedBaseResponse<AuthResponseDto> register(RegisterRequestDto request);
 
 }

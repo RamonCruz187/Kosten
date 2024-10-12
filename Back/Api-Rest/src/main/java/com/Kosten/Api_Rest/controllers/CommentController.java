@@ -3,7 +3,7 @@ package com.Kosten.Api_Rest.controllers;
 import com.Kosten.Api_Rest.dto.CommentDto;
 import com.Kosten.Api_Rest.dto.BaseResponse;
 import com.Kosten.Api_Rest.dto.ExtendedBaseResponse;
-import com.Kosten.Api_Rest.Exception.CommentNotFoundException;
+import com.Kosten.Api_Rest.Exception.commentExc.CommentNotFoundException;
 import com.Kosten.Api_Rest.service.CommentService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
