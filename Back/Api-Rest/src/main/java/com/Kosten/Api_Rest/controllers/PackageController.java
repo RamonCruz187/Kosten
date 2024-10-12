@@ -21,9 +21,12 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import java.net.URI;
+import java.util.ArrayList;
+import java.util.List;
 
 @Tag(name = "Paquetes", description = "Maneja todos los endpoints de los Paquetes que se ofrecen.")
 @RestController
@@ -49,12 +52,23 @@ public class PackageController {
             @ApiResponse(responseCode = "403", description = "Forbidden access to this resource", content = {@Content}),
             @ApiResponse(responseCode = "500", description = "Internal Server Error", content = {@Content})
     })
-    @PostMapping
+    @PostMapping(consumes = { "multipart/form-data" })
     @Transactional
     public ResponseEntity<ExtendedBaseResponse<PackageResponseDTO>> createPackage(
-            @RequestBody @Valid PackageRequestDTO packageRequestDTO,
+            @RequestPart("packageData") @Valid PackageRequestDTO packageRequestDTO,
+            @RequestPart("filesImages") List<MultipartFile> filesImages,
             UriComponentsBuilder uriComponentsBuilder
     ) {
+
+        packageRequestDTO = new PackageRequestDTO(
+                packageRequestDTO.name(),
+                packageRequestDTO.description(),
+                packageRequestDTO.punctuation(),
+                packageRequestDTO.duration(),
+                new ArrayList<>(),
+                filesImages,
+                packageRequestDTO.active()
+        );
 
         ExtendedBaseResponse<PackageResponseDTO> packageResponseDTO = packageService.createPackage(packageRequestDTO);
 

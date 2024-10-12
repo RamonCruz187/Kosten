@@ -1,11 +1,14 @@
 package com.Kosten.Api_Rest.dto.packageDTO;
 
+import com.Kosten.Api_Rest.dto.images.ImageResponseDTO;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Positive;
 import jakarta.validation.constraints.PositiveOrZero;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.io.Serializable;
+import java.util.List;
 
 /**
  * DTO for {@link com.Kosten.Api_Rest.model.Package}
@@ -24,6 +27,10 @@ public record PackageRequestDTO(
 
         @PositiveOrZero(message = "La duración debe ser 0 o mayor")
         int duration,
+
+        List<ImageResponseDTO> images,
+
+        List<MultipartFile> filesImages,
 
         boolean active
 
