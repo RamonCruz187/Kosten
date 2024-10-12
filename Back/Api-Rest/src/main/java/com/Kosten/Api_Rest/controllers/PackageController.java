@@ -5,7 +5,7 @@ import com.Kosten.Api_Rest.dto.ExtendedBaseResponse;
 import com.Kosten.Api_Rest.dto.packageDTO.PackageRequestDTO;
 import com.Kosten.Api_Rest.dto.packageDTO.PackageResponseDTO;
 import com.Kosten.Api_Rest.dto.packageDTO.PackageToUpdateDTO;
-import com.Kosten.Api_Rest.service.PackageService;
+import com.Kosten.Api_Rest.service.impl.PackageServiceImpl;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.Parameters;
@@ -13,7 +13,6 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
-import io.swagger.v3.oas.annotations.security.SecurityRequirements;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
@@ -22,9 +21,12 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import java.net.URI;
+import java.util.ArrayList;
+import java.util.List;
 
 @Tag(name = "Paquetes", description = "Maneja todos los endpoints de los Paquetes que se ofrecen.")
 @RestController
@@ -32,7 +34,7 @@ import java.net.URI;
 @RequiredArgsConstructor
 public class PackageController {
 
-    private final PackageService packageService;
+    private final PackageServiceImpl packageService;
 
     @Operation(
             summary = "Crear un nuevo Paquete.",
@@ -50,12 +52,23 @@ public class PackageController {
             @ApiResponse(responseCode = "403", description = "Forbidden access to this resource", content = {@Content}),
             @ApiResponse(responseCode = "500", description = "Internal Server Error", content = {@Content})
     })
-    @PostMapping
+    @PostMapping(consumes = { "multipart/form-data" })
     @Transactional
     public ResponseEntity<ExtendedBaseResponse<PackageResponseDTO>> createPackage(
-            @RequestBody @Valid PackageRequestDTO packageRequestDTO,
+            @RequestPart("packageData") @Valid PackageRequestDTO packageRequestDTO,
+            @RequestPart("filesImages") List<MultipartFile> filesImages,
             UriComponentsBuilder uriComponentsBuilder
     ) {
+
+        packageRequestDTO = new PackageRequestDTO(
+                packageRequestDTO.name(),
+                packageRequestDTO.description(),
+                packageRequestDTO.punctuation(),
+                packageRequestDTO.duration(),
+                new ArrayList<>(),
+                filesImages,
+                packageRequestDTO.active()
+        );
 
         ExtendedBaseResponse<PackageResponseDTO> packageResponseDTO = packageService.createPackage(packageRequestDTO);
 
