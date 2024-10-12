@@ -1,6 +1,6 @@
 package com.Kosten.Api_Rest.config;
 
-import com.Kosten.Api_Rest.repositoy.UserRepository;
+import com.Kosten.Api_Rest.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

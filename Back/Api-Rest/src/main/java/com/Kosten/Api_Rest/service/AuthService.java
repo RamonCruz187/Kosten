@@ -8,7 +8,7 @@ import com.Kosten.Api_Rest.dto.user.LoginRequestDto;
 import com.Kosten.Api_Rest.dto.user.RegisterRequestDto;
 import com.Kosten.Api_Rest.model.Role;
 import com.Kosten.Api_Rest.model.User;
-import com.Kosten.Api_Rest.repositoy.UserRepository;
+import com.Kosten.Api_Rest.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
