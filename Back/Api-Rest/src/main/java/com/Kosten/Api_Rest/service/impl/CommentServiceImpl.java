@@ -1,4 +1,4 @@
-package com.Kosten.Api_Rest.service.Imp;
+package com.Kosten.Api_Rest.service.impl;
 
 import com.Kosten.Api_Rest.dto.CommentDto;
 import com.Kosten.Api_Rest.Exception.CommentNotFoundException;
@@ -17,7 +17,7 @@ import java.util.List;
 
 @RequiredArgsConstructor
 @Service
-public class CommentServiceImp implements CommentService {
+public class CommentServiceImpl implements CommentService {
 
     private final CommentRepository commentRepository;
     private final CommentMapper commentMapper;
