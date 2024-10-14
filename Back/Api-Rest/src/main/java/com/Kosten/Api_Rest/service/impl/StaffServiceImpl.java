@@ -30,10 +30,11 @@ public class StaffServiceImpl implements StaffService {
     @Override
     public ExtendedBaseResponse<StaffResponseDto> newStaff(StaffRequestDto staffRequestDto, MultipartFile file) {
         StaffMapper staffMapper = Mappers.getMapper(StaffMapper.class);
-        Staff staff = staffMapper.toEntity(staffRequestDto);
+
         Image image = imageService.createNewImage(file);
         imageRepository.save(image);
-        staff.setPhoto(image.getUrl());
+        Staff staff = staffMapper.toEntity(staffRequestDto, image);
+        staff.setPhoto(image);
         return ExtendedBaseResponse.of(
                 BaseResponse.ok("Staff creado exitosamente"), staffMapper.toDto(staffRepository.save(staff))
         );
@@ -41,16 +42,17 @@ public class StaffServiceImpl implements StaffService {
 
     @Override
     public ExtendedBaseResponse<StaffResponseDto> updateStaff(StaffToUpdateDto staffToUpdateDto) {
-        Staff staff = staffRepository.findById(staffToUpdateDto.id()).orElseThrow(() -> new IllegalArgumentException("Staff not found"));
-        StaffMapper staffMapper = Mappers.getMapper(StaffMapper.class);
-        staff.setName(staffToUpdateDto.name());
-        staff.setLastName(staffToUpdateDto.lastName());
-        staff.setRol(staffToUpdateDto.rol());
-        staff.setContact(staffToUpdateDto.contact());
-        staff.setPhoto(staffToUpdateDto.photo());
-        return ExtendedBaseResponse.of(
-                BaseResponse.ok("Staff actualizado exitosamente"), staffMapper.toDto(staffRepository.save(staff))
-        );
+//        Staff staff = staffRepository.findById(staffToUpdateDto.id()).orElseThrow(() -> new IllegalArgumentException("Staff not found"));
+//        StaffMapper staffMapper = Mappers.getMapper(StaffMapper.class);
+//        staff.setName(staffToUpdateDto.name());
+//        staff.setLastName(staffToUpdateDto.lastName());
+//        staff.setRol(staffToUpdateDto.rol());
+//        staff.setContact(staffToUpdateDto.contact());
+//        //staff.setPhoto(staffToUpdateDto.photo());
+//        return ExtendedBaseResponse.of(
+//                BaseResponse.ok("Staff actualizado exitosamente"), staffMapper.toDto(staffRepository.save(staff))
+//        );
+        return null;
     }
 
     @Override
