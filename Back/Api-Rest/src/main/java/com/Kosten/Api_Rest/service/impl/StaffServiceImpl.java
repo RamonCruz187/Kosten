@@ -6,12 +6,16 @@ import com.Kosten.Api_Rest.dto.staff.StaffResponseDto;
 import com.Kosten.Api_Rest.dto.staff.StaffToUpdateDto;
 import com.Kosten.Api_Rest.mapper.StaffMapper;
 import com.Kosten.Api_Rest.dto.staff.StaffRequestDto;
+import com.Kosten.Api_Rest.model.Image;
 import com.Kosten.Api_Rest.model.Staff;
+import com.Kosten.Api_Rest.repository.ImageRepository;
 import com.Kosten.Api_Rest.repository.StaffRepository;
+import com.Kosten.Api_Rest.service.ImageService;
 import com.Kosten.Api_Rest.service.StaffService;
 import lombok.RequiredArgsConstructor;
 import org.mapstruct.factory.Mappers;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -20,11 +24,16 @@ import java.util.List;
 public class StaffServiceImpl implements StaffService {
 
     private final StaffRepository staffRepository;
+    private final ImageService imageService;
+    private final ImageRepository imageRepository;
 
     @Override
-    public ExtendedBaseResponse<StaffResponseDto> newStaff(StaffRequestDto staffRequestDto) {
+    public ExtendedBaseResponse<StaffResponseDto> newStaff(StaffRequestDto staffRequestDto, MultipartFile file) {
         StaffMapper staffMapper = Mappers.getMapper(StaffMapper.class);
         Staff staff = staffMapper.toEntity(staffRequestDto);
+        Image image = imageService.createNewImage(file);
+        imageRepository.save(image);
+        staff.setPhoto(image.getUrl());
         return ExtendedBaseResponse.of(
                 BaseResponse.ok("Staff creado exitosamente"), staffMapper.toDto(staffRepository.save(staff))
         );

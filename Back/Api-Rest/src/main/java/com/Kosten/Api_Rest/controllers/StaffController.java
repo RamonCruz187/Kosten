@@ -5,13 +5,13 @@ import com.Kosten.Api_Rest.dto.ExtendedBaseResponse;
 import com.Kosten.Api_Rest.dto.staff.StaffRequestDto;
 import com.Kosten.Api_Rest.dto.staff.StaffResponseDto;
 import com.Kosten.Api_Rest.dto.staff.StaffToUpdateDto;
-import com.Kosten.Api_Rest.model.Staff;
 import com.Kosten.Api_Rest.service.StaffService;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -22,10 +22,17 @@ public class StaffController {
 
     private final StaffService staffService;
 
-    @PostMapping("/new")
+    @PostMapping(consumes = {"multipart/form-data"})
     @Transactional
-    public ResponseEntity<ExtendedBaseResponse<StaffResponseDto>> newStaff(@RequestBody @Valid StaffRequestDto staffRequestDto) {
-        return ResponseEntity.status(201).body(staffService.newStaff(staffRequestDto));
+    public ResponseEntity<ExtendedBaseResponse<StaffResponseDto>> newStaff(
+            @ModelAttribute @Valid StaffRequestDto staff,
+            @RequestParam("file") @Valid MultipartFile file) {
+
+        try {
+            return ResponseEntity.status(201).body(staffService.newStaff(staff, file));
+        } catch (Exception e) {
+            throw new RuntimeException("No se ha podido subir la imagen");
+        }
     }
 
 
@@ -46,6 +53,7 @@ public class StaffController {
     @GetMapping("/all")
     @Transactional
     public ResponseEntity<ExtendedBaseResponse<List<StaffResponseDto>>> getAllStaff() {
+
         return ResponseEntity.status(200).body(staffService.getAllStaff());
     }
 
