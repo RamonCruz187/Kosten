@@ -53,7 +53,7 @@ public class ImageServiceImpl implements ImageService {
 
             return imageMapper.toEntity(imageRequestDTO);
         } catch (Exception e) {
-            throw new RuntimeException("No se ha podido subir la imagen " + file.getName());
+            throw new RuntimeException("No se ha podido subir la imagen: " + e.getMessage());
         }
     }
 
