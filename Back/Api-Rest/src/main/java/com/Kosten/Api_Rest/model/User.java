@@ -27,6 +27,7 @@ public class User implements UserDetails {
     @Column(name = "username", unique = true, nullable = false)
     private String username;
     private String password;
+    @Column(name = "email", nullable = false, unique = true)
     private String email;
     @Enumerated(EnumType.STRING)
     Role role;
@@ -54,13 +55,9 @@ public class User implements UserDetails {
     }
 
     @Override
-    public boolean isCredentialsNonExpired() {
-        return UserDetails.super.isCredentialsNonExpired();
-    }
+    public boolean isCredentialsNonExpired() { return UserDetails.super.isCredentialsNonExpired(); }
 
     @Override
-    public boolean isEnabled() {
-        return UserDetails.super.isEnabled();
-    }
+    public boolean isEnabled() { return UserDetails.super.isEnabled(); }
 
 }
