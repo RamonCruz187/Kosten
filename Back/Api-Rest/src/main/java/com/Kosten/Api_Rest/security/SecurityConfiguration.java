@@ -35,6 +35,8 @@ public class SecurityConfiguration {
                             .permitAll()
                         .requestMatchers("/swagger-ui-custom.html", "/swagger-ui/**", "/swagger-ui/")
                             .permitAll()
+                        .requestMatchers("/departures/**")
+                        .permitAll()
                         .anyRequest().authenticated()
                 )
                 .build();
