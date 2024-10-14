@@ -1,6 +1,6 @@
 package com.Kosten.Api_Rest.service;
 
-import com.Kosten.Api_Rest.dto.CommentDto;
+import com.Kosten.Api_Rest.dto.comment.CommentDto;
 
 import java.util.List;
 

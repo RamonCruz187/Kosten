@@ -1,5 +1,6 @@
 package com.Kosten.Api_Rest.config;
 
+import com.Kosten.Api_Rest.Exception.userExc.EmailNotFoundException;
 import com.Kosten.Api_Rest.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -42,8 +43,9 @@ public class ApplicationConfig {
     @Bean
     public UserDetailsService userDetailService() {
         return email -> userRepository.findByEmail(email)
-                .orElseThrow(() -> new UsernameNotFoundException("User not found with email: " + email));
+                .orElseThrow(() -> new EmailNotFoundException("Usuario no encontrado con el email: " + email));
     }
+
 
 
 }

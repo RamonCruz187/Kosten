@@ -1,6 +1,6 @@
 package com.Kosten.Api_Rest.controllers;
 
-import com.Kosten.Api_Rest.dto.CommentDto;
+import com.Kosten.Api_Rest.dto.comment.CommentDto;
 import com.Kosten.Api_Rest.dto.BaseResponse;
 import com.Kosten.Api_Rest.dto.ExtendedBaseResponse;
 import com.Kosten.Api_Rest.Exception.commentExc.CommentNotFoundException;

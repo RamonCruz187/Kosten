@@ -1,6 +1,6 @@
 package com.Kosten.Api_Rest.service.impl;
 
-import com.Kosten.Api_Rest.dto.CommentDto;
+import com.Kosten.Api_Rest.dto.comment.CommentDto;
 import com.Kosten.Api_Rest.Exception.commentExc.CommentNotFoundException;
 import com.Kosten.Api_Rest.Exception.userExc.UserNotFoundException;
 import com.Kosten.Api_Rest.mapper.CommentMapper;
@@ -26,7 +26,7 @@ public class CommentServiceImpl implements CommentService {
     @Override
     @Transactional
     public CommentDto createComment(CommentDto commentDto) {
-        User user = userRepository.findById(Math.toIntExact(commentDto.userId())).orElseThrow(() -> new UserNotFoundException("User not found with ID: " + commentDto.userId()));
+        User user = userRepository.findById(commentDto.userId()).orElseThrow(() -> new UserNotFoundException("User not found with ID: " + commentDto.userId()));
         Comment comment = commentMapper.toEntity(commentDto);
         comment.setUser(user);
         comment.setIsVisible(false);
@@ -37,7 +37,7 @@ public class CommentServiceImpl implements CommentService {
     @Override
     @Transactional(readOnly = true)
     public CommentDto findCommentById(Long id) {
-        Comment comment = commentRepository.findById(Math.toIntExact(id)).orElseThrow(() -> new CommentNotFoundException("Comment not found with ID: " + id));
+        Comment comment = commentRepository.findById(id).orElseThrow(() -> new CommentNotFoundException("Comment not found with ID: " + id));
         return commentMapper.toDto(comment);
     }
 
@@ -51,7 +51,7 @@ public class CommentServiceImpl implements CommentService {
     @Override
     @Transactional
     public CommentDto updateComment(Long id, CommentDto commentUpDate) {
-        Comment comment = commentRepository.findById(Math.toIntExact(id)).orElseThrow(() -> new CommentNotFoundException("Comment not found with ID: " + id));
+        Comment comment = commentRepository.findById(id).orElseThrow(() -> new CommentNotFoundException("Comment not found with ID: " + id));
         comment.setContent(commentUpDate.content());
         return commentMapper.toDto(commentRepository.save(comment));
     }
@@ -59,14 +59,14 @@ public class CommentServiceImpl implements CommentService {
     @Override
     @Transactional
     public void deleteComment(Long id) {
-        Comment comment = commentRepository.findById(Math.toIntExact(id)).orElseThrow(() -> new CommentNotFoundException("Comment not found with ID: " + id));
+        Comment comment = commentRepository.findById(id).orElseThrow(() -> new CommentNotFoundException("Comment not found with ID: " + id));
         commentRepository.delete(comment);
     }
 
     @Override
     @Transactional
     public CommentDto updateCommentVisibility(Long id, boolean visible) {
-        Comment comment = commentRepository.findById(Math.toIntExact(id)).orElseThrow(() -> new CommentNotFoundException("Comment not found with ID: " + id));
+        Comment comment = commentRepository.findById(id).orElseThrow(() -> new CommentNotFoundException("Comment not found with ID: " + id));
         comment.setIsVisible(visible);
         Comment commentSaved = commentRepository.save(comment);
         return commentMapper.toDto(commentSaved);

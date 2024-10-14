@@ -1,6 +1,6 @@
 package com.Kosten.Api_Rest.mapper;
 
-import com.Kosten.Api_Rest.dto.CommentDto;
+import com.Kosten.Api_Rest.dto.comment.CommentDto;
 import com.Kosten.Api_Rest.model.Comment;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
