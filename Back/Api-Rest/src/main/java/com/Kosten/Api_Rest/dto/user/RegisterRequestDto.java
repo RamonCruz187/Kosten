@@ -7,20 +7,20 @@ import jakarta.validation.constraints.Pattern;
 import java.io.Serializable;
 
 public record RegisterRequestDto(
-        @NotBlank(message = "Username cannot be blank")
+        @NotBlank(message = "El nombre de usuario no puede estar en blanco")
         String username,
 
-        @Email(message = "Email should be valid")
-        @NotBlank(message = "Email cannot be blank")
+        @Email(message = "El correo electrónico debe ser valido, utilizando ´@´")
+        @NotBlank(message = "El correo electrónico no puede estar en blanco")
         String email,
 
-        @NotBlank(message = "Password cannot be blank")
+        @NotBlank(message = "La contraseña no puede estar en blanco")
         @Pattern(
                 regexp = "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=])(?=\\S+$).{8,}$",
                 message = """
-                        Password must be at least 8 characters long,
-                        contain at least one digit, one lowercase letter, one uppercase letter,
-                        and one special character (@#$%^&+=), and have no spaces."""
+                        La contraseña debe tener al menos 8 caracteres,
+                        contener al menos un dígito, una letra minúscula, una letra mayúscula,
+                        un carácter especial (@#$%^&+=) y no debe tener espacios."""
         )
         String password
 ) implements Serializable {

@@ -6,6 +6,7 @@ public record AuthResponseDto(
         Long userId,
         String username,
         String token
+
 ) implements Serializable {
 }
 

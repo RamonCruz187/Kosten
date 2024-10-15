@@ -31,6 +31,7 @@ public class User implements UserDetails {
     private String email;
     @Enumerated(EnumType.STRING)
     Role role;
+    @Column(name = "is_active")
     private Boolean isActive;
 
     @Override

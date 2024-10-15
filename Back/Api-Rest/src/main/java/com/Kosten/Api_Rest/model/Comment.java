@@ -23,13 +23,11 @@ public class Comment {
     private String content;
     private int report;
     @CreationTimestamp
-    @Column(nullable = false, updatable = false)
+    @Column(name = "`dateCreation`", nullable = false, updatable = false)
     private LocalDateTime dateCreation;
-
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
-
     private Boolean isVisible;
 
 }
