@@ -2,16 +2,23 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import { TextField, Button } from '@mui/material';
 import Box from "@mui/material/Box";
+import {login, register} from "../../api/authApi.js";
+import {NotificationService} from "../../shared/services/notistack.service.jsx";
+import {useAuthLogin} from "../../shared/hooks/useAuthLogin.jsx";
 
 const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
+    const { handleLogin } = useAuthLogin();
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post('/api/login', { email, password });
-      console.log(response.data);
+        const { data } = await login({ email, password });
+        NotificationService.success(`Bienvenido nuevamente`, 3000);
+        handleLogin(data.data);
+      console.log(data.data);
     } catch (error) {
       console.error(error);
     }

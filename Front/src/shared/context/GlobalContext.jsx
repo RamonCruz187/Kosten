@@ -1,4 +1,4 @@
-import { createContext, useMemo, useReducer } from 'react';
+import {createContext, useCallback, useEffect, useMemo, useReducer} from 'react';
 import { initialState, reducer } from "./GlobalStoreReducer.jsx";
 
 export const GlobalContext = createContext(null);
@@ -11,6 +11,16 @@ export const GlobalContextProvider = ({ children }) => {
         state,
         dispatch,
     }), [ state, dispatch ]);
+
+    useEffect(() => {
+        const userAuth = JSON.parse(localStorage.getItem("userAuth"));
+        if( userAuth ) {
+            dispatch({
+                type: "AUTH_LOGIN",
+                payload: userAuth
+            });
+        }
+    }, []);
 
     return (
         <GlobalContext.Provider value={ contextValue }>

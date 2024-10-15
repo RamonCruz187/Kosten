@@ -11,14 +11,23 @@ import { ThemeProvider } from "@mui/material";
 import theme from "../theme.js";
 import Muestras from "./components/muestras.jsx";
 import Box from "@mui/material/Box";
+import {NotificationProvider} from "./shared/services/notistack.service.jsx";
+import {GlobalContextProvider} from "./shared/context/GlobalContext.jsx";
+import {GlobalThemeContextProvider} from "./shared/theme/GlobalThemeContext.jsx";
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>
-    <ThemeProvider theme={theme}>
-        <Box sx={{ px: 2 }}>
-            <App />
-            <Muestras />
-        </Box>
-    </ThemeProvider>
+      <NotificationProvider>
+          <GlobalContextProvider>
+              <GlobalThemeContextProvider>
+                  <ThemeProvider theme={theme}>
+                      <Box sx={{ px: 2 }}>
+                          <App />
+                          <Muestras />
+                      </Box>
+                  </ThemeProvider>
+              </GlobalThemeContextProvider>
+            </GlobalContextProvider>
+      </NotificationProvider>
   </StrictMode>
 );

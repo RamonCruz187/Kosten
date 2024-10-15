@@ -15,9 +15,13 @@ import {AccountPopover} from "./account-popover.jsx";
 import Sitemark from "./SitemarkIcon.jsx";
 import {PopoverLogin} from "./PopoverLogin.jsx";
 import {PopoverRegister} from "./PopoverRegister.jsx";
+import {useAuthLogin} from "../hooks/useAuthLogin.jsx";
+import {PopoverLogout} from "./PopoverLogout.jsx";
 
 export default function AppAppBar( ) {
   const [open, setOpen] = useState(false);
+
+  const { userAuth } = useAuthLogin();
 
   const toggleDrawer = ( newOpen ) => () => {
     setOpen(newOpen);
@@ -118,14 +122,13 @@ export default function AppAppBar( ) {
               alignItems: 'center',
             }}
           >
-            <PopoverLogin />
-            <PopoverRegister />
-            {/*<Button color="primary" variant="text" size="small">
-              Entrar
-            </Button>*/}
-            {/*<Button color="primary" variant="contained" size="small">
-              Registro
-            </Button>*/}
+            {
+              !userAuth.token ? (<>
+                <PopoverLogin />
+                <PopoverRegister />
+              </>) : (<PopoverLogout />)
+            }
+
             <AccountPopover />
           </Box>
           <Box sx={{ display: { sm: 'flex', md: 'none' } }}>

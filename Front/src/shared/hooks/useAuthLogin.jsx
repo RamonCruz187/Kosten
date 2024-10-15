@@ -1,4 +1,4 @@
-import {useContext} from "react";
+import {useCallback, useContext} from "react";
 import {GlobalContext} from "../context/GlobalContext.jsx";
 
 export const useAuthLogin = () => {
@@ -8,21 +8,26 @@ export const useAuthLogin = () => {
     if(!context)
         return null;
 
-    const handleLogin = (user_auth) => {
+    const handleLogin = useCallback( ( userAuth ) => {
+        localStorage.setItem("userAuth", JSON.stringify( userAuth ));
+
         context.dispatch({
             type: "AUTH_LOGIN",
-            payload: user_auth
+            payload: userAuth
         });
-    }
+    }, [context]);
 
-    const handleLogout = () => {
+    const handleLogout = useCallback( () => {
+
+        localStorage.removeItem("userAuth");
+
         context.dispatch({
             type: "AUTH_LOGOUT"
         });
-    }
+    }, [context]);
 
     return {
-        user_auth: context.state.user_auth,
+        userAuth: context.state.user_auth,
         handleLogin,
         handleLogout
     }
