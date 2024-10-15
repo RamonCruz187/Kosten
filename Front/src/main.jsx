@@ -23,7 +23,6 @@ createRoot(document.getElementById("root")).render(
                   <ThemeProvider theme={theme}>
                       <Box sx={{ px: 2 }}>
                           <App />
-                          <Muestras />
                       </Box>
                   </ThemeProvider>
               </GlobalThemeContextProvider>

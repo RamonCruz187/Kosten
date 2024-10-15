@@ -35,6 +35,7 @@ const theme = createTheme({
     brownButton: {
       main: customPalette.secondary.main,
       dark: customPalette.secondary.dark,
+      contrastText: customPalette.accent.light,
     },
     grayButton: {
       main: customPalette.terciary.main,
@@ -70,11 +71,6 @@ const theme = createTheme({
       fontSize: "0.875rem", // 14px
     },
     // buttons
-    brownButtonText: {
-      ...defaultParagraph,
-      letterSpacing: customFonts.letter.wide,
-      color: customPalette.accent.light,
-    },
     buttonMini: {
       ...defaultParagraph,
       letterSpacing: customFonts.letter.wide,

@@ -3,13 +3,9 @@ import { Button, Stack, Typography } from "@mui/material";
 export default function Muestras() {
   return (
     <>
-      <Stack spacing={2}
-       
-      >
+      <Stack spacing={2}>
         <Button color="yellowButton"> boton primario </Button>
-        <Button color="brownButton">
-          <Typography variant="brownButtonText"> secondary button text</Typography>
-        </Button>
+        <Button color="brownButton">secondary button text</Button>
         <Button color="grayButton"> boton terciario </Button>
         <Button>
           <Typography variant="buttonMini"> botton mini</Typography>
