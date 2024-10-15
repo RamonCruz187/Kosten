@@ -16,4 +16,6 @@ public record ExtendedBaseResponse<T>(
                 data
         );
     }
+
 }
+

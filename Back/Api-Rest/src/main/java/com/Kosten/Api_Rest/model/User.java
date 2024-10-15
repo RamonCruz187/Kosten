@@ -1,5 +1,8 @@
 package com.Kosten.Api_Rest.model;
 
+import com.Kosten.Api_Rest.dto.user.UpdateUserRequestDto;
+import com.Kosten.Api_Rest.dto.user.UserResponseDto;
+import com.Kosten.Api_Rest.dto.user.UserRoleUpdateRequestDto;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -27,7 +30,9 @@ public class User implements UserDetails {
     @Column(name = "username", unique = true, nullable = false)
     private String username;
     private String password;
+    @Column(name = "email", nullable = false, unique = true)
     private String email;
+    private String contact;
     @Enumerated(EnumType.STRING)
     Role role;
     private Boolean isActive;
@@ -40,7 +45,7 @@ public class User implements UserDetails {
 
     @Override
     public String getUsername() {
-        return this.username;
+        return email;
     }
 
     @Override
@@ -54,13 +59,27 @@ public class User implements UserDetails {
     }
 
     @Override
-    public boolean isCredentialsNonExpired() {
-        return UserDetails.super.isCredentialsNonExpired();
-    }
+    public boolean isCredentialsNonExpired() { return UserDetails.super.isCredentialsNonExpired(); }
 
     @Override
-    public boolean isEnabled() {
-        return UserDetails.super.isEnabled();
+    public boolean isEnabled() { return UserDetails.super.isEnabled(); }
+
+    public User update(UpdateUserRequestDto updateUserRequestDto) {
+        if (updateUserRequestDto.email() != null)
+            this.email = updateUserRequestDto.email();
+
+        if (updateUserRequestDto.username() != null)
+            this.username = updateUserRequestDto.username();
+
+        if (updateUserRequestDto.contact() != null)
+            this.contact = updateUserRequestDto.contact();
+
+        return this;
     }
 
+    public boolean isChangedRole(UserRoleUpdateRequestDto changeUserRole){
+        if(changeUserRole != null)
+            this.role = Role.valueOf(changeUserRole.role());
+        return true;
+    }
 }

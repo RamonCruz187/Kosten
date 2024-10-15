@@ -1,4 +1,4 @@
-package com.Kosten.Api_Rest.exception;
+package com.Kosten.Api_Rest.Exception;
 
 public class DepartureNotFountException extends RuntimeException{
 

@@ -67,6 +67,6 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             return authHeader.substring(7);
 
         }
-        return null;
+        return authHeader;
     }
 }
