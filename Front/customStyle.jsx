@@ -11,9 +11,11 @@ export const customPalette = {
     accent: { // green
         main: "#00BD7E", // acent 500 figma
         dark: "#00A971", // acent 600 figma
+        darkest: "#005538", // accent 900 figma
+        darkest2: "#00422B", // accent 1000 figma
         light: "#F2F9F5", // acent 50 figma
     },
-    terciary: { // gray
+    tertiary: { // gray
         main: "#C9C9C9", // gray 300 figma
         dark: "#9E9E9E", // gray 500 figma
     },

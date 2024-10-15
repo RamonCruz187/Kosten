@@ -38,9 +38,14 @@ const theme = createTheme({
       contrastText: customPalette.accent.light,
     },
     grayButton: {
-      main: customPalette.terciary.main,
-      dark: customPalette.terciary.dark,
+      main: customPalette.tertiary.main,
+      dark: customPalette.tertiary.dark,
     },
+    greenButton: {
+      main: customPalette.accent.darkest,
+      dark: customPalette.accent.darkest2,
+      contrastText: customPalette.accent.light,
+    }
   },
   typography: {
     htmlFontSize: 16, // Asigna 16px a 1rem por defecto
@@ -114,3 +119,4 @@ const theme = createTheme({
 });
 
 export default theme;
+
