@@ -13,6 +13,8 @@ import CloseRoundedIcon from '@mui/icons-material/CloseRounded';
 import {useState} from "react";
 import {AccountPopover} from "./account-popover.jsx";
 import Sitemark from "./SitemarkIcon.jsx";
+import {PopoverLogin} from "./PopoverLogin.jsx";
+import {PopoverRegister} from "./PopoverRegister.jsx";
 
 export default function AppAppBar( ) {
   const [open, setOpen] = useState(false);
@@ -116,12 +118,14 @@ export default function AppAppBar( ) {
               alignItems: 'center',
             }}
           >
-            <Button color="primary" variant="text" size="small">
+            <PopoverLogin />
+            <PopoverRegister />
+            {/*<Button color="primary" variant="text" size="small">
               Entrar
-            </Button>
-            <Button color="primary" variant="contained" size="small">
+            </Button>*/}
+            {/*<Button color="primary" variant="contained" size="small">
               Registro
-            </Button>
+            </Button>*/}
             <AccountPopover />
           </Box>
           <Box sx={{ display: { sm: 'flex', md: 'none' } }}>
