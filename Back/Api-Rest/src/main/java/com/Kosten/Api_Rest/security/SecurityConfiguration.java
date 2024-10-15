@@ -35,6 +35,8 @@ public class SecurityConfiguration {
                 .authorizeHttpRequests( auth -> auth
                         .requestMatchers("/test")
                             .permitAll()
+                        .requestMatchers("/user/**")
+                        .permitAll()
                         /*.requestMatchers("/packages")
                             .permitAll()
                         .requestMatchers("/packages/**")
@@ -47,6 +49,8 @@ public class SecurityConfiguration {
                             .permitAll()
                         .requestMatchers("/swagger-ui-custom.html", "/swagger-ui/**", "/swagger-ui/")
                             .permitAll()
+                        .requestMatchers("/departures/**")
+                        .permitAll()
                         .anyRequest().authenticated()
                 )
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
