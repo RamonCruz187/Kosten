@@ -25,14 +25,13 @@ export const customPalette = {
 
 export const customFonts = {
     letter: {
-        wide: 2.3,
+        wide: 1.3,
         normal: 0.3,
     },
     family: {
         oswald: "Oswald, impact, arial, calibri, sans-serif",
         catamaran: "Catamaran, open-sans, arial, calibri, sans-serif",
     },
-    weightTitle: "semi-bold",
 };
 
 export const defaultParagraph = {
@@ -45,7 +44,6 @@ export const defaultParagraph = {
 
 export const defaultTitle = {
     fontFamily: customFonts.family.oswald,
-    fontWeight: customFonts.weightTitle,
+    fontWeight: 600,
     color: customPalette.text.main,
-
 }
