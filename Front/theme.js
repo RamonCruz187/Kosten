@@ -1,129 +1,110 @@
-import createTheme from '@mui/material/styles/createTheme'
-import customPalette from './customPalette'
-// import { Colors } from './src/utils/Colors'
+import createTheme from "@mui/material/styles/createTheme";
+import { customPalette, customFonts, defaultParagraph, defaultTitle } from "./customStyle";
 
 const theme = createTheme({
-	breakpoints: {
-		values: {
-			xs: 0,
-			sm: 750,
-			md: 900,
-			lg: 1200,
-			xl: 1536,
-		},
-	},
-	palette: {
-		primary: {
-			main: customPalette.primary.main,		
-		},
-		secondary: {
-			main: customPalette.secondary.main,			
-		},
-		accent: {
-			main: customPalette.acent.main,
-		},
-        yellowButtonBG: {
-            main: customPalette.primary.main,
+  breakpoints: {
+    values: {
+      xs: 0,
+      sm: 750,
+      md: 900,
+      lg: 1200,
+      xl: 1536,
+    },
+  },
+  palette: {
+    // generales
+    primary: {
+      main: customPalette.primary.main,
+    },
+    secondary: {
+      main: customPalette.secondary.main,
+    },
+    accent: {
+      main: customPalette.accent.main,
+    },
+    // botones
+    yellowButton: {
+      main: customPalette.primary.main,
+      dark: customPalette.primary.dark,
+    },
+    brownButton: {
+      main: customPalette.secondary.main,
+      dark: customPalette.secondary.dark,
+    },
+    grayButton: {
+      main: customPalette.terciary.main,
+      dark: customPalette.terciary.dark,
+    },
+  },
+  typography: {
+    htmlFontSize: 16, // Asigna px a 1rem
+    // titulos
+    titleH1: {
+...defaultTitle,
+      fontSize: "1.5rem", // 24px
+    },
+    titleH2: {
+        ...defaultTitle,
+      fontSize: "1.25rem", // 20px
+    },
+    titleH3: {
+        ...defaultTitle,
+        fontWeight: "normal",
+      fontSize: "1rem", // 16px
+    },
+    subtitleBold: {
+        ...defaultParagraph,
+      fontWeight: customFonts.weightTitle,
+      fontSize: "0.875rem", // 14px
+    },
+    subtitle: {
+      ...defaultParagraph,
+      fontSize: "0.875rem", // 14px
+    },
+    // buttons
+    brownButtonText: {
+        ...defaultParagraph,
+        color: customPalette.accent.light,
+    },
+    buttonMini: {
+        ...defaultParagraph,
+        fontSize: "0.687rem", // 11px
+    },
+    // párrafos
+    p: {
+      ...defaultParagraph,
+    },
+    paragraphLight: {
+      ...defaultParagraph,
+      color: customPalette.text.light,
+    },
+    paragraphDetails: {
+        ...defaultParagraph,
+        fontSize: "0.625rem", // 10px
+    },
+    textBox: {
+        ...defaultParagraph,
+        fontSize: "0.812rem", // 13px
+    },
+  },
+  components: {
+    MuiButton: {
+      defaultProps: {
+        // Establece el estilo predeterminado del botón
+        variant: "contained",
+        size: "small",
+      },
+      styleOverrides: {
+        // sobreescribe estilos de botones
+        root: {
+          borderRadius: 8,
+          padding: ".5rem 1rem",
+          letterSpacing: customFonts.letter.wide,
+          width: "fit-content",
         },
-		brownButtonText: {
-			main: customPalette.acent.main,
-        },
-        brownButtonBG: {
-            main: customPalette.secondary.main,
-            dark: customPalette.secondary.dark,
-        },
-        grayButtonBG: {
-            main: customPalette.terciary.main,
-            dark: customPalette.terciary.dark,
-        },
-        grayButtonText: {
-            main: customPalette.text.main,
-        },
-        text: {
-            main: customPalette.text.main,
-            light: customPalette.text.light,
-        },
-	},
-	typography: {
-		p: {
-			fontSize: '0.8rem',
-		},
-	},
-	components: {
-		MuiTypography: {
-			defaultProps: {
-				fontFamily: 'Montserrat',
-				fontWeight: 600,
-			},
-		},
-		MuiSkeleton: {
-			defaultProps: {
-				animation: 'wave',
-			},
-			styleOverrides: {
-				root: {
-					'-webkit-transform': 'scale(1)',
-				},
-			},
-		},
-		MuiInputLabel: {
-			styleOverrides: {
-				root: {
-					fontWeight: 600,
-				},
-			},
-		},
-		MuiTextField: {
-			styleOverrides: {
-				root: {
-					'& .MuiOutlinedInput-root': {
-						fontWeight: 600,
-						color: '#5c5c5c',
-						'&.Mui-disabled': {
-							backgroundColor: '#6e6e6e42',
-						},
-					},
-				},
-			},
-		},
-		MuiLoadingButton: {
-			defaultProps: {
-				variant: 'contained',
-			},
-		},
-		MuiSelect: {
-			styleOverrides: {
-				root: {
-					color: '#5c5c5c',
-					fontWeight: 600,
-					minWidth: 223,
-				},
-				filled: {
-					fontWeight: 600,
-					color: '#5c5c5c',
-				},
-			},
-		},
-		MuiAutocomplete: {
-			styleOverrides: {
-				root: {
-					minWidth: 223,
-				},
-			},
-		},
-		MuiButton: {
-			defaultProps: {
-				variant: 'contained',
-			},
-			styleOverrides: {
-				root: {
-					fontWeight: 400,
-					borderRadius: 5,
-					textTransform: 'none',
-				},
-			},
-		},
-	},
-})
+      },
+    },
+  },
+});
 
-export default theme
+export default theme;
