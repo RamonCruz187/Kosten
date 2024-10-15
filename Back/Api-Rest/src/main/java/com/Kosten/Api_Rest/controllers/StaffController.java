@@ -31,7 +31,7 @@ public class StaffController {
         try {
             return ResponseEntity.status(201).body(staffService.newStaff(staff, file));
         } catch (Exception e) {
-            throw new RuntimeException("No se ha podido subir la imagen");
+            throw new RuntimeException("No se ha podido crear el Staff");
         }
     }
 
