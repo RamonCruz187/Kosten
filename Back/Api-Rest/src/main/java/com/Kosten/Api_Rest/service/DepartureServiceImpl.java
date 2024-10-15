@@ -5,7 +5,7 @@ import com.Kosten.Api_Rest.dto.Departure.DepartureRequestDto;
 import com.Kosten.Api_Rest.dto.Departure.DepartureResponseDto;
 import com.Kosten.Api_Rest.dto.Departure.DepartureToUpdateDto;
 import com.Kosten.Api_Rest.dto.ExtendedBaseResponse;
-import com.Kosten.Api_Rest.exception.DepartureNotFountException;
+import com.Kosten.Api_Rest.Exception.DepartureNotFountException;
 import com.Kosten.Api_Rest.mapper.DepartureMapper;
 import com.Kosten.Api_Rest.model.Departure;
 import com.Kosten.Api_Rest.repositoy.IDepartureRepository;
