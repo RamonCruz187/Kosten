@@ -1,9 +1,12 @@
 package com.Kosten.Api_Rest.model;
 
 import com.Kosten.Api_Rest.dto.packageDTO.PackageToUpdateDTO;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 @Entity
@@ -25,6 +28,21 @@ public class Package {
     private int duration;
     private boolean active;
 
+    @OneToMany( mappedBy = "packageRef", orphanRemoval = true )
+    @JsonManagedReference(value = "packageRef")
+    private List<Image> images = new ArrayList<>();
+
+    //Helper Methods: Keep Both Sides of the Association in SYNC
+    public void addImage(Image image) {
+        this.images.add(image);
+        image.setPackageRef(this);
+    }
+
+    public void deleteImage(Image image) {
+        this.images.remove(image);
+        image.setPackageRef(null);
+    }
+
     /* Relations with others Entities */
     /*@ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "category_id", referencedColumnName = "id")
@@ -35,9 +53,6 @@ public class Package {
 
     @OneToMany(mappedBy = "comments", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Comment> comments;
-
-    @OneToMany(mappedBy = "image", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Image> images;
 
     @OneToMany(mappedBy = "months", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Month> months;
