@@ -18,12 +18,16 @@ public class Departure {
     @GeneratedValue(strategy= GenerationType.IDENTITY)
     private Integer id;
 
-    //@ManyToOne
-    //@JoinColumn(name = "package_id", nullable = false)
-    //private Package package;
+    @ManyToOne
+    @JoinColumn(name = "package_id", nullable = false)
+    private Package package;
 
-    @OneToMany
-    @JoinColumn(name = "user_id", nullable = false)
+    @ManyToMany
+    @JoinTable(
+            name = "departure_user",
+            joinColumns = @JoinColumn(name = "departure_id"),
+            inverseJoinColumns = @JoinColumn(name = "user_id")
+    )
     private Set<User> usersList;
 
     private LocalDateTime startDate;

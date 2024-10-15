@@ -5,7 +5,7 @@ import com.Kosten.Api_Rest.dto.Departure.DepartureRequestDto;
 import com.Kosten.Api_Rest.dto.Departure.DepartureResponseDto;
 import com.Kosten.Api_Rest.dto.Departure.DepartureToUpdateDto;
 import com.Kosten.Api_Rest.dto.ExtendedBaseResponse;
-import com.Kosten.Api_Rest.exception.DepartureNotFountException;
+import com.Kosten.Api_Rest.Exception.DepartureNotFountException;
 import com.Kosten.Api_Rest.mapper.DepartureMapper;
 import com.Kosten.Api_Rest.model.Departure;
 import com.Kosten.Api_Rest.repositoy.IDepartureRepository;
@@ -32,7 +32,7 @@ public class DepartureServiceImpl implements IDepartureService{
         DepartureMapper departureMapper = Mappers.getMapper(DepartureMapper.class);
         List<DepartureResponseDto> departureResponseDto = departuresList.stream().map(departureMapper::departureToDepartureResponseDto).collect(Collectors.toList());
         return ExtendedBaseResponse.of(
-                BaseResponse.ok("Departure list obtained successfully."), departureResponseDto
+                BaseResponse.ok("Lista de salidas obtenida."), departureResponseDto
         );
     }
 
@@ -44,7 +44,7 @@ public class DepartureServiceImpl implements IDepartureService{
         );
         DepartureResponseDto departureResponseDto = departureMapper.departureToDepartureResponseDto(departure);
         return ExtendedBaseResponse.of(
-                BaseResponse.ok("Departure founded."),
+                BaseResponse.ok("Salida encontrada."),
                 departureResponseDto
         );
     }
@@ -55,7 +55,7 @@ public class DepartureServiceImpl implements IDepartureService{
         departureRepository.save(departure);
         DepartureResponseDto departureResponseDto = departureMapper.departureToDepartureResponseDto(departure);
         return ExtendedBaseResponse.of(
-                BaseResponse.created("Departure created."),
+                BaseResponse.created("Salida creada."),
                 departureResponseDto
         );
     }
@@ -74,10 +74,10 @@ public class DepartureServiceImpl implements IDepartureService{
         departure.setStartDate(departureToUpdateDto.startDate());
         departure.setStartTime(departureToUpdateDto.startTime());
         departure.setMeetingPlace(departureToUpdateDto.meetingPlace());
-        //departure.setUsersList();
+        departure.setUsersList(departureToUpdateDto.usersList());
         departureRepository.save(departure);
         return ExtendedBaseResponse.of(
-                BaseResponse.ok("Departure updated."),
+                BaseResponse.ok("Salida actualizada."),
                 departureMapper.departureToDepartureResponseDto(departure)
         );
     }
@@ -88,7 +88,7 @@ public class DepartureServiceImpl implements IDepartureService{
                 () -> new DepartureNotFountException(id, Departure.class.getSimpleName())
         );
         departureRepository.delete(departure);
-        return BaseResponse.ok("Departure deleted");
+        return BaseResponse.ok("Salida eliminada.");
 
     }
 
