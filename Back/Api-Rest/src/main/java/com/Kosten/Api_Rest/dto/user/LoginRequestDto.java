@@ -6,11 +6,11 @@ import java.io.Serializable;
 
 public record LoginRequestDto(
 
-        @Email(message = "Email should be valid")
-        @NotBlank(message = "Email cannot be blank")
+        @Email(message = "El correo electrónico debe ser valido, utilizando ´@´")
+        @NotBlank(message = "El correo electrónico no puede estar en blanco")
         String email,
 
-        @NotBlank(message = "Password cannot be blank")
+        @NotBlank(message = "La contraseña no puede estar en blanco")
         String password
 
 ) implements Serializable {

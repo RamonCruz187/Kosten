@@ -35,6 +35,7 @@ public class User implements UserDetails {
     private String contact;
     @Enumerated(EnumType.STRING)
     Role role;
+    @Column(name = "is_active")
     private Boolean isActive;
 
     @Override

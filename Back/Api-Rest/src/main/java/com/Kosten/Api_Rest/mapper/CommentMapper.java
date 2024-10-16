@@ -1,6 +1,7 @@
 package com.Kosten.Api_Rest.mapper;
 
 import com.Kosten.Api_Rest.dto.comment.CommentDto;
+import com.Kosten.Api_Rest.dto.comment.CommentRequestDto;
 import com.Kosten.Api_Rest.model.Comment;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -13,6 +14,9 @@ public interface CommentMapper {
 
     @Mapping(target = "user", ignore = true)
     Comment toEntity(CommentDto commentDto);
+
+    @Mapping(target = "user", ignore = true)
+    Comment toEntity(CommentRequestDto commentRequestDto);
 
     @Mapping(source = "user.id", target = "userId")
     CommentDto toDto(Comment comment);

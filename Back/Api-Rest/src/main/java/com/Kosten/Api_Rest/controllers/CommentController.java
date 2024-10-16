@@ -4,6 +4,8 @@ import com.Kosten.Api_Rest.dto.comment.CommentDto;
 import com.Kosten.Api_Rest.dto.BaseResponse;
 import com.Kosten.Api_Rest.dto.ExtendedBaseResponse;
 import com.Kosten.Api_Rest.Exception.commentExc.CommentNotFoundException;
+import com.Kosten.Api_Rest.dto.comment.CommentRequestDto;
+import com.Kosten.Api_Rest.dto.comment.UpdateCommentDto;
 import com.Kosten.Api_Rest.service.CommentService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -11,6 +13,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -39,9 +42,9 @@ public class CommentController {
             @ApiResponse(responseCode = "500", description = "Error del servidor.", content = {@Content})
     })
     @PostMapping("/save")
-    public ResponseEntity<ExtendedBaseResponse<CommentDto>> createComment(@RequestBody CommentDto commentDto) {
-        CommentDto savedComment = commentService.createComment(commentDto);
-        BaseResponse response = BaseResponse.created("Comment created successfully.");
+    public ResponseEntity<ExtendedBaseResponse<CommentDto>> createComment(@Valid @RequestBody CommentRequestDto commentRequestDto) {
+        CommentDto savedComment = commentService.createComment(commentRequestDto);
+        BaseResponse response = BaseResponse.created("Comentario creado exitosamente.");
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(ExtendedBaseResponse.of(response, savedComment));
     }
@@ -62,7 +65,7 @@ public class CommentController {
     public ResponseEntity<ExtendedBaseResponse<CommentDto>> findCommentById(@PathVariable("id") Long id) {
         try {
             CommentDto commentDto = commentService.findCommentById(id);
-            BaseResponse response = BaseResponse.ok("Comment retrieved successfully.");
+            BaseResponse response = BaseResponse.ok("Comentario recuperado exitosamente.");
             return ResponseEntity.ok(ExtendedBaseResponse.of(response, commentDto));
         } catch (CommentNotFoundException ex) {
             BaseResponse response = new BaseResponse(true, HttpStatus.NOT_FOUND, ex.getMessage());
@@ -84,7 +87,7 @@ public class CommentController {
     @GetMapping("/list")
     public ResponseEntity<ExtendedBaseResponse<List<CommentDto>>> listComment() {
         List<CommentDto> commentDtoList = commentService.commentlist();
-        BaseResponse response = BaseResponse.ok("Comments retrieved successfully.");
+        BaseResponse response = BaseResponse.ok("Comentarios recuperados exitosamente.");
         return ResponseEntity.ok(ExtendedBaseResponse.of(response, commentDtoList));
     }
 
@@ -102,9 +105,9 @@ public class CommentController {
             @ApiResponse(responseCode = "500", description = "Error del servidor.", content = {@Content})
     })
     @PutMapping("/update/{id}")
-    public ResponseEntity<ExtendedBaseResponse<CommentDto>> updateComment(@PathVariable("id") Long id, @RequestBody CommentDto updateComment) {
+    public ResponseEntity<ExtendedBaseResponse<CommentDto>> updateComment(@Valid @PathVariable("id") Long id, @RequestBody UpdateCommentDto updateComment) {
         CommentDto updatedComment = commentService.updateComment(id, updateComment);
-        BaseResponse response = BaseResponse.ok("Comment updated successfully.");
+        BaseResponse response = BaseResponse.ok("Comentario actualizado exitosamente.");
         return ResponseEntity.ok(ExtendedBaseResponse.of(response, updatedComment));
     }
 
@@ -123,8 +126,8 @@ public class CommentController {
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<ExtendedBaseResponse<String>> deleteComment(@PathVariable("id") Long id) {
         commentService.deleteComment(id);
-        BaseResponse response = BaseResponse.ok("Comment deleted successfully.");
-        return ResponseEntity.ok(ExtendedBaseResponse.of(response, "The Comment was eliminated."));
+        BaseResponse response = BaseResponse.ok("Comentario eliminado exitosamente.");
+        return ResponseEntity.ok(ExtendedBaseResponse.of(response, "El comentario fue eliminado."));
     }
 
     @Operation(summary = "Actualizar la visibilidad de un comentario",
@@ -143,8 +146,28 @@ public class CommentController {
     @PutMapping("/update-visibility/{id}")
     public ResponseEntity<ExtendedBaseResponse<CommentDto>> updateCommentVisibility(@PathVariable("id") Long id, @RequestParam boolean visible) {
         CommentDto updatedComment = commentService.updateCommentVisibility(id, visible);
-        BaseResponse response = BaseResponse.ok("Comment visibility updated successfully.");
+        BaseResponse response = BaseResponse.ok("La visibilidad de los comentarios se actualizó correctamente.");
         return ResponseEntity.ok(ExtendedBaseResponse.of(response, updatedComment));
     }
+
+//    @Operation(summary = "Reportar un comentario",
+//            description = "Permite a un usuario reportar un comentario, incrementando el contador de reportes.")
+//    @ApiResponses(value = {
+//            @ApiResponse(responseCode = "200",
+//                    description = "Comentario reportado exitosamente.",
+//                    content = {
+//                            @Content(mediaType = "application/json",
+//                                    schema = @Schema(implementation = ExtendedBaseResponse.class))
+//                    }),
+//            @ApiResponse(responseCode = "404", description = "Comentario no encontrado.", content = {@Content}),
+//            @ApiResponse(responseCode = "500", description = "Error del servidor.", content = {@Content})
+//    })
+//    @PutMapping("/report/{id}")
+//    public ResponseEntity<ExtendedBaseResponse<CommentDto>> reportComment(@PathVariable("id") Long commentId) {
+//        CommentDto reportedComment = commentService.reportComment(commentId);
+//        BaseResponse response = BaseResponse.ok("Comentario reportado exitosamente.");
+//        return ResponseEntity.ok(ExtendedBaseResponse.of(response, reportedComment));
+//    }
+
 
 }
