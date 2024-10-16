@@ -10,10 +10,10 @@ const theme = createTheme({
   breakpoints: {
     values: {
       xs: 0,
-      sm: 750,
+      sm: 600,
       md: 900,
       lg: 1200,
-      xl: 1536,
+      xl: 1440,
     },
   },
   palette: {
@@ -35,6 +35,7 @@ const theme = createTheme({
     brownButton: {
       main: customPalette.secondary.main,
       dark: customPalette.secondary.dark,
+      contrastText: customPalette.accent.light,
     },
     grayButton: {
       main: customPalette.terciary.main,
@@ -70,11 +71,6 @@ const theme = createTheme({
       fontSize: "0.875rem", // 14px
     },
     // buttons
-    brownButtonText: {
-      ...defaultParagraph,
-      letterSpacing: customFonts.letter.wide,
-      color: customPalette.accent.light,
-    },
     buttonMini: {
       ...defaultParagraph,
       letterSpacing: customFonts.letter.wide,
