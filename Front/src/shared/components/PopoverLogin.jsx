@@ -21,8 +21,8 @@ export const PopoverLogin = () => {
 
     return (
         <Box >
-            <Button color="primary" variant="text" size="small" onClick={handleClick}>
-                Ingresar
+            <Button color="grayButton" onClick={handleClick}>
+                Login
             </Button>
             <Popover
                 id={id}
