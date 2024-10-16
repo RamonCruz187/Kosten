@@ -14,7 +14,7 @@ public record RegisterRequestDto(
         @NotBlank(message = "El correo electrónico no puede estar en blanco")
         String email,
 
-        @NotBlank(message = "Contact cannot be blank")
+        @NotBlank(message = "El contacto no puede estar en blanco")
         String contact,
         @NotBlank(message = "La contraseña no puede estar en blanco")
         @Pattern(
