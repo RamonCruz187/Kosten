@@ -1,16 +1,27 @@
-import React, { useState } from 'react';
-import axios from 'axios';
-import { TextField, Button } from '@mui/material';
+import { useState } from "react";
+import { TextField, Button, Typography, Stack, InputAdornment, IconButton } from "@mui/material";
+import { login } from "../../api/authApi.js";
+import { NotificationService } from "../../shared/services/notistack.service.jsx";
+import { useAuthLogin } from "../../shared/hooks/useAuthLogin.jsx";
+import { Visibility, VisibilityOff } from "@mui/icons-material";
 
 const Login = () => {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+
+  const [showPassword, setShowPassword] = useState(false);
+
+  const handleClickShowPassword = () => setShowPassword((show) => !show);
+
+  const { handleLogin } = useAuthLogin();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post('/api/login', { email, password });
-      console.log(response.data);
+      const { data } = await login({ email, password });
+      NotificationService.success(`Bienvenido nuevamente`, 3000);
+      handleLogin(data.data);
+      console.log(data.data);
     } catch (error) {
       console.error(error);
     }
@@ -18,9 +29,54 @@ const Login = () => {
 
   return (
     <form onSubmit={handleSubmit}>
-      <TextField label="Email" value={email} onChange={(e) => setEmail(e.target.value)} />
-      <TextField label="Password" type="password" value={password} onChange={(e) => setPassword(e.target.value)} />
-      <Button type="submit">Login</Button>
+      <Stack
+        spacing={2}
+        sx={{
+          justifyContent: "center",
+          alignItems: "center",
+          width: 400,
+          padding: "1rem 2rem",
+        }}
+      >
+        <Typography variant="titleH2">LOGIN</Typography>
+        <TextField
+          sx={{ width: "100%" }}
+          variant="outlined"
+          color="palette.grayButton.main"
+          label="Email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          required
+        />
+        <TextField
+          variant="outlined"
+          color="palette.grayButton.main"
+          sx={{ width: "100%" }}
+          label="Contraseña"
+          type={showPassword ? "text" : "password"}
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+          required
+          slotProps={{
+            input: {
+              endAdornment: (
+                <InputAdornment position="end">
+                  <IconButton
+                    aria-label="toggle password visibility"
+                    onClick={handleClickShowPassword}
+                    edge="end"
+                  >
+                    {showPassword ? <VisibilityOff /> : <Visibility />}
+                  </IconButton>
+                </InputAdornment>
+              ),
+            },
+          }}
+        />
+        <Button color="greenButton" type="submit" sx={{ width: "50%" }}>
+          Login
+        </Button>
+      </Stack>
     </form>
   );
 };
