@@ -8,7 +8,7 @@ import com.Kosten.Api_Rest.dto.user.UserRoleUpdateRequestDto;
 import com.Kosten.Api_Rest.exception.UserException.NotFoundUser;
 import com.Kosten.Api_Rest.mapper.UserMapper;
 import com.Kosten.Api_Rest.model.User;
-import com.Kosten.Api_Rest.repositoy.UserRepository;
+import com.Kosten.Api_Rest.repository.UserRepository;
 import com.Kosten.Api_Rest.service.UserService;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
