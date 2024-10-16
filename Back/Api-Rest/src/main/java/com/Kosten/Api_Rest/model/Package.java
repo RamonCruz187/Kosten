@@ -28,6 +28,9 @@ public class Package {
     private int duration;
     private boolean active;
 
+    /****************************************
+     *  Relations with Image Entity
+     ****************************************/
     @OneToMany( mappedBy = "packageRef", orphanRemoval = true )
     @JsonManagedReference(value = "packageRef")
     private List<Image> images = new ArrayList<>();
@@ -42,14 +45,32 @@ public class Package {
         this.images.remove(image);
         image.setPackageRef(null);
     }
+    /********End of Relations with Image Entity********/
+
+    /****************************************
+     *  Relations with Departure Entity
+     ****************************************/
+    @OneToMany(mappedBy = "packageRef", orphanRemoval = true)
+    @JsonManagedReference(value = "packageRef")
+    private List<Departure> departures;
+
+    //Helper Methods: Keep Both Sides of the Association in SYNC
+    public void addDeparture(Departure departure) {
+        this.departures.add(departure);
+        departure.setPackageRef(this);
+    }
+
+    public void deleteDeparture(Departure departure) {
+        this.departures.remove(departure);
+        departure.setPackageRef(null);
+    }
+
+    /****************End of Relations with Departure Entity********/
 
     /* Relations with others Entities */
     /*@ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "category_id", referencedColumnName = "id")
     private Category category;
-
-    @OneToMany(mappedBy = "departure", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Departure> departures;
 
     @OneToMany(mappedBy = "comments", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Comment> comments;

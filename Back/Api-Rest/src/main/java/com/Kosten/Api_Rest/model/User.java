@@ -1,5 +1,8 @@
 package com.Kosten.Api_Rest.model;
 
+import com.Kosten.Api_Rest.dto.user.UpdateUserRequestDto;
+import com.Kosten.Api_Rest.dto.user.UserResponseDto;
+import com.Kosten.Api_Rest.dto.user.UserRoleUpdateRequestDto;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -29,6 +32,7 @@ public class User implements UserDetails {
     private String password;
     @Column(name = "email", nullable = false, unique = true)
     private String email;
+    private String contact;
     @Enumerated(EnumType.STRING)
     Role role;
     @Column(name = "is_active")
@@ -61,4 +65,22 @@ public class User implements UserDetails {
     @Override
     public boolean isEnabled() { return UserDetails.super.isEnabled(); }
 
+    public User update(UpdateUserRequestDto updateUserRequestDto) {
+        if (updateUserRequestDto.email() != null)
+            this.email = updateUserRequestDto.email();
+
+        if (updateUserRequestDto.username() != null)
+            this.username = updateUserRequestDto.username();
+
+        if (updateUserRequestDto.contact() != null)
+            this.contact = updateUserRequestDto.contact();
+
+        return this;
+    }
+
+    public boolean isChangedRole(UserRoleUpdateRequestDto changeUserRole){
+        if(changeUserRole != null)
+            this.role = Role.valueOf(changeUserRole.role());
+        return true;
+    }
 }

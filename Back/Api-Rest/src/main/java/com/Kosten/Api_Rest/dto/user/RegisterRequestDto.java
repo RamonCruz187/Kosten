@@ -14,6 +14,8 @@ public record RegisterRequestDto(
         @NotBlank(message = "El correo electrónico no puede estar en blanco")
         String email,
 
+        @NotBlank(message = "Contact cannot be blank")
+        String contact,
         @NotBlank(message = "La contraseña no puede estar en blanco")
         @Pattern(
                 regexp = "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=])(?=\\S+$).{8,}$",
@@ -23,6 +25,7 @@ public record RegisterRequestDto(
                         un carácter especial (@#$%^&+=) y no debe tener espacios."""
         )
         String password
+
 ) implements Serializable {
 }
 
