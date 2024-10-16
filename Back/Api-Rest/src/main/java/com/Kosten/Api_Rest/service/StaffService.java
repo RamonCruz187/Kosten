@@ -6,12 +6,13 @@ import com.Kosten.Api_Rest.dto.staff.StaffRequestDto;
 import com.Kosten.Api_Rest.dto.staff.StaffResponseDto;
 import com.Kosten.Api_Rest.dto.staff.StaffToUpdateDto;
 import com.Kosten.Api_Rest.model.Staff;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
 public interface StaffService {
 
-    ExtendedBaseResponse<StaffResponseDto> newStaff(StaffRequestDto staffRequestDto);
+    ExtendedBaseResponse<StaffResponseDto> newStaff(StaffRequestDto staffRequestDto, MultipartFile file);
 
     ExtendedBaseResponse<StaffResponseDto> updateStaff(StaffToUpdateDto staffToUpdateDto);
 

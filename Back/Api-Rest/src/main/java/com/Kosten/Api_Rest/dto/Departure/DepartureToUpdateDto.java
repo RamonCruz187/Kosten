@@ -12,6 +12,7 @@ public record DepartureToUpdateDto(
         @NotNull(message = "El ID es requerido")
     int id,
         Set<User> usersList,
+        Double price,
         LocalDateTime startDate,
         LocalDateTime endDate,
         String startTime,

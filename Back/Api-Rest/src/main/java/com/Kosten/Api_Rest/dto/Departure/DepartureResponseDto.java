@@ -23,6 +23,7 @@ public class DepartureResponseDto {
     private Integer id;
     private Long packageId;
     private Set<User> usersList;
+    private Double price;
 
     private LocalDateTime startDate;
 

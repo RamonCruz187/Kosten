@@ -19,7 +19,7 @@ import java.util.Set;
 public class DepartureRequestDto {
     private Long packageId;
     private Set<User> usersList;
-
+    private Double price;
     @NotNull(message = "startDate  no puede ser 'null'")
     private LocalDateTime startDate;
 

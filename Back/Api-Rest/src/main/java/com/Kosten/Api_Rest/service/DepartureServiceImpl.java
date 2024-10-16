@@ -68,6 +68,7 @@ public class DepartureServiceImpl implements IDepartureService{
                 () -> new DepartureNotFountException()
         );
         DepartureMapper departureMapper = Mappers.getMapper(DepartureMapper.class);
+        departure.setPrice(departureToUpdateDto.price());
         departure.setEndDate(departureToUpdateDto.endDate());
         departure.setEndTime(departureToUpdateDto.endTime());
         departure.setFinishPlace(departureToUpdateDto.finishPlace());
