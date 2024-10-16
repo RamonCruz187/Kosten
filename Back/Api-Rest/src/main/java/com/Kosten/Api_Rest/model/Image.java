@@ -29,6 +29,10 @@ public class Image {
     @JsonBackReference(value = "packageRef")
     private Package packageRef;
 
+    @OneToOne(mappedBy = "photo")
+    private Staff staffRef;
+
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
