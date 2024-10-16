@@ -120,6 +120,7 @@ const users0 = [
 ];
 
 const AdminDashboard = () => {
+  //  const [users, setUsers] = useState([]); // endpoint data
   const [users, setUsers] = useState(users0); // Mock data
   const [userForm, setUserForm] = useState({
     id: null,
@@ -154,9 +155,21 @@ const AdminDashboard = () => {
   };
 
   // Close modal
+
   const handleClose = () => {
     setOpen(false);
   };
+
+  // Fetch users based on pagination
+  // const fetchUsers = async () => {
+  //   try {
+  //     const response = await axios.get(`/api/users?page=${page}&size=${rowsPerPage}`);
+  //     setUsers(response.data.users); // Assuming the API returns a "users" array
+  //     setTotalUsers(response.data.totalCount); // Assuming the API returns a "totalCount"
+  //   } catch (error) {
+  //     console.error('Error fetching users:', error);
+  //   }
+  // };
 
   // Handle form input changes
   const handleInputChange = (e) => {
@@ -218,9 +231,8 @@ const AdminDashboard = () => {
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
   };
-
   const handleChangeRowsPerPage = (event) => {
-    setRowsPerPage(parseInt(event.target.value, 10));
+    setRowsPerPage(parseInt(event.target.value, 5));
     setPage(0); // Reset to the first page whenever rows per page is changed
   };
 
