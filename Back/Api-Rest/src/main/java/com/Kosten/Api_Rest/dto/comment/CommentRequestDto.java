@@ -4,15 +4,13 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
 import java.io.Serializable;
-import java.time.LocalDateTime;
 
-public record CommentDto(
-        Long id,
+public record CommentRequestDto(
+
+        @NotBlank(message = "El comentario no puede estar en blanco")
         String content,
-        int report,
-        Boolean isVisible,
-        LocalDateTime dateCreation,
+        @NotNull(message = "El 'id_Usuario' no puede estar vacío.")
         Long userId
+
 ) implements Serializable {
 }
-
