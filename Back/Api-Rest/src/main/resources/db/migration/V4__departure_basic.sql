@@ -1,4 +1,4 @@
-CREATE TABLE Departure (
+CREATE TABLE departure (
     id INT AUTO_INCREMENT PRIMARY KEY,
     startDate DATETIME NOT NULL,
     endDate DATETIME NOT NULL,
