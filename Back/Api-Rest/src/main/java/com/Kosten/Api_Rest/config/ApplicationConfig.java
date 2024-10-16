@@ -45,7 +45,4 @@ public class ApplicationConfig {
         return email -> userRepository.findByEmail(email)
                 .orElseThrow(() -> new EmailNotFoundException("Usuario no encontrado con el email: " + email));
     }
-
-
-
 }
