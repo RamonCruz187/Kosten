@@ -71,7 +71,6 @@ public class AuthServiceImpl implements AuthService {
                 .role(Role.USER)
                 .build();
 
-        System.out.println(user);
         userRepository.save(user);
 
         String token = jwtService.getToken(user);
