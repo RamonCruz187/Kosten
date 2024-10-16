@@ -36,7 +36,7 @@ public class StaffServiceImpl implements StaffService {
         Staff staff = staffMapper.toEntity(staffRequestDto, image);
         staff.setPhoto(image);
         return ExtendedBaseResponse.of(
-                BaseResponse.ok("Staff creado exitosamente"), staffMapper.toDto(staffRepository.save(staff))
+                BaseResponse.created("Staff creado exitosamente"), staffMapper.toDto(staffRepository.save(staff))
         );
     }
 
