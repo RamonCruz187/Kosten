@@ -44,6 +44,14 @@ export const defaultParagraph = {
     color: customPalette.text.main,
 }
 
+export const defaultCTA = {
+    fontFamily: customFonts.family.catamaran,
+    fontWeight: "normal",
+    letterSpacing: customFonts.letter.wide,
+    color: customPalette.text.main,
+    textTransform: "uppercase",
+}
+
 export const defaultTitle = {
     fontFamily: customFonts.family.oswald,
     fontWeight: 600,

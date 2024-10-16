@@ -4,6 +4,7 @@ import {
   customFonts,
   defaultParagraph,
   defaultTitle,
+  defaultCTA,
 } from "./customStyle";
 
 const theme = createTheme({
@@ -45,7 +46,7 @@ const theme = createTheme({
       main: customPalette.accent.darkest,
       dark: customPalette.accent.darkest2,
       contrastText: customPalette.accent.light,
-    }
+    },
   },
   typography: {
     htmlFontSize: 16, // Asigna 16px a 1rem por defecto
@@ -66,6 +67,15 @@ const theme = createTheme({
       fontWeight: "normal",
       fontSize: "1rem", // 16px
     },
+
+    // CTA
+    callToAction: {
+      ...defaultCTA,
+      fontSize: "1.25rem", // 20px
+      fontWeight: "600",
+    },
+
+    // subtitulos
     subtitleBold: {
       ...defaultParagraph,
       fontWeight: "600",
@@ -75,12 +85,12 @@ const theme = createTheme({
       ...defaultParagraph,
       fontSize: "0.875rem", // 14px
     },
+
     // buttons
     buttonMini: {
-      ...defaultParagraph,
-      letterSpacing: customFonts.letter.wide,
       fontSize: "0.687rem", // 11px
     },
+
     // párrafos
     p: {
       ...defaultParagraph,
@@ -112,6 +122,9 @@ const theme = createTheme({
           padding: ".5rem 1rem",
           letterSpacing: customFonts.letter.wide,
           width: "fit-content",
+          fontFamily: customFonts.family.catamaran,
+          fontWeight: "normal",
+          textTransform: "uppercase",
         },
       },
     },
@@ -119,4 +132,3 @@ const theme = createTheme({
 });
 
 export default theme;
-
