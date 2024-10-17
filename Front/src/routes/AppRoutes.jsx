@@ -4,7 +4,8 @@ import Register from '../components/Auth/Register';
 import LandingPage from '../components/Home/LandingPage';
 import AdminDashboard from '../components/Dashboard/AdminDashboard';
 import Muestras from '../components/muestras';
-import {PackagePage} from "../modules/package/pages/Package.page.jsx";
+import {PackageFull} from "../modules/package/pages/PackageFull.jsx";
+import {PackageView} from "../modules/package/pages/PackageView.jsx";
 
 const AppRoutes = () => (
   <Router>
@@ -14,7 +15,8 @@ const AppRoutes = () => (
       <Route path="/register" element={<Register />} />
       <Route path="/admin" element={<AdminDashboard />} />
       <Route path="/muestras" element={<Muestras />} />
-        <Route path="/paquetes/:id" element={<PackagePage />} />
+        <Route path="/salidas" element={<PackageView />} />
+        <Route path="/paquetes/:id" element={<PackageFull />} />
     </Routes>
   </Router>
 );
