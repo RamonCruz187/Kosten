@@ -1,4 +1,5 @@
-ALTER TABLE Departure ADD COLUMN package_id BIGINT NOT NULL;
+ALTER table departure ADD COLUMN package_id BIGINT NOT NULL,
+ADD CONSTRAINT fk_package_id FOREIGN KEY (package_id) REFERENCES packages(id);
 
 CREATE TABLE departure_user (
     departure_id INT,
@@ -7,7 +8,3 @@ CREATE TABLE departure_user (
     FOREIGN KEY (departure_id) REFERENCES Departure(id),
     FOREIGN KEY (user_id) REFERENCES app_user(id)
 );
-
-ALTER TABLE Departure
-ADD CONSTRAINT fk_departure_package
-FOREIGN KEY (package_id) REFERENCES packages(id);
