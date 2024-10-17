@@ -8,8 +8,8 @@ import InputNormal from "./InputNormal.jsx";
 import InputPassword from "./InputPassword.jsx";
 
 const Register = () => {
-  const [name, setName] = useState("");
   const [username, setUsername] = useState("");
+  const [contact, setContact] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
@@ -21,7 +21,7 @@ const Register = () => {
   const handleClickShowPassword = () => setShowPassword((show) => !show);
 
   const validatePassword = (password) => {
-    const regex = /^(?=.*\d).{6,}$/;
+    const regex =/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=])(?=\S+$).{8,}$/;
     return regex.test(password);
   };
 
@@ -40,9 +40,14 @@ const Register = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-//      console.log(name, username, email, password);
-      
-      const response = await register({ name, username, email, password });
+     
+      const response = await register({
+        username,
+        email,
+        password,
+        contact,
+      });
+
       NotificationService.success(
         " Usuario registrado exitosamente. Inicie sesión. ",
         2000
@@ -63,10 +68,21 @@ const Register = () => {
       </Box>
 
       <form onSubmit={handleSubmit} style={{ width: "100%" }}>
-        <Stack sx={{padding:'20%', gap: '1.25rem', alignItems: 'center'}}>
-        <Typography variant="titleH2">REGISTRO</Typography>
+        <Stack sx={{ padding: "20%", gap: "1.25rem", alignItems: "center" }}>
+          <Typography variant="titleH2">REGISTRO</Typography>
 
-          <InputNormal type="text" value={name} label="Nombre y apellido" fx={setName} />
+          <InputNormal
+            type="text"
+            value={username}
+            label="Nombre y apellido"
+            fx={setUsername}
+          />
+          <InputNormal
+            type="text"
+            value={contact}
+            label="Teléfono"
+            fx={setContact}
+          />
           <InputNormal type="email" value={email} label="Email" fx={setEmail} />
           <InputPassword
             label="Contraseña"
@@ -77,7 +93,8 @@ const Register = () => {
           />
           {advicePassword && (
             <Typography variant="inputAdvice">
-              Debe contener al menos 1 número y tener un mínimo de 6 caracteres.
+              Debe tener 8 caracteres, sin espacios, uno o más números, minúsculas,
+              mayúsculas, y carácteres especiales (@#$%^&+=)
             </Typography>
           )}
           <InputPassword
@@ -87,10 +104,18 @@ const Register = () => {
             toggleVar={showPassword}
             fxIcon={handleClickShowPassword}
           />
-          
-            <Typography variant="inputAdvice">{adviceConfirmPassword ? "Las contraseñas coinciden" : "No coinciden"}</Typography>
-          
-          <Button color="greenButton" type="submit" sx={{padding: '.75rem 3rem', marginTop:'1rem'}}>REGISTRARME</Button>
+
+          <Typography variant="inputAdvice">
+            {adviceConfirmPassword ? "Las contraseñas coinciden" : "No coinciden"}
+          </Typography>
+
+          <Button
+            color="greenButton"
+            type="submit"
+            sx={{ padding: ".75rem 3rem", marginTop: "1rem" }}
+          >
+            REGISTRARME
+          </Button>
         </Stack>
       </form>
     </Stack>
