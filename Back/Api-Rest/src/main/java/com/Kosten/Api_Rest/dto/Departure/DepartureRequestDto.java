@@ -1,7 +1,6 @@
 package com.Kosten.Api_Rest.dto.Departure;
 
 import com.Kosten.Api_Rest.model.User;
-import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
@@ -18,24 +17,24 @@ import java.util.Set;
 @AllArgsConstructor
 @NoArgsConstructor
 public class DepartureRequestDto {
-    //private Long packageId;
+    private Long packageId;
     private Set<User> usersList;
-
-    @NotNull(message = "startDate  can't be null")
+    private Double price;
+    @NotNull(message = "startDate  no puede ser 'null'")
     private LocalDateTime startDate;
 
-    @NotNull(message = "endtDate  can't be null")
+    @NotNull(message = "endtDate  no puede ser 'null'")
     private LocalDateTime endDate;
-    @NotBlank(message = "startTime  can't be empty, it must contain between 3 and 20 characters")
+    @NotBlank(message = "startTime no debe estar vacío, y debe contener entre 3 y 20 caracteres")
     @Size(min = 3, max = 20)
     private String startTime;
-    @NotBlank(message = "endTime  can't be empty, it must contain between 3 and 20 characters")
+    @NotBlank(message = "endTime no debe estar vacío, y debe contener entre 3 y 20 caracteres")
     @Size(min = 3, max = 20)
     private String endTime;
-    @NotBlank(message = "meetingPlace  can't be empty, it must contain between 4 and 45 characters")
+    @NotBlank(message = "meetingPlace no debe estar vacío, y debe contener entre 4 y 45 caracteres")
     @Size(min = 4, max = 45)
     private String meetingPlace;
-    @NotBlank(message = "meetingPlace  can't be empty, it must contain between 4 and 45 characters")
+    @NotBlank(message = "meetingPlace no debe estar vacío, y debe contener entre 4 y 45 caracteres")
     @Size(min = 4, max = 45)
     private String finishPlace;
 

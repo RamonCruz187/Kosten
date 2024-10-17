@@ -32,7 +32,7 @@ public class DepartureServiceImpl implements IDepartureService{
         DepartureMapper departureMapper = Mappers.getMapper(DepartureMapper.class);
         List<DepartureResponseDto> departureResponseDto = departuresList.stream().map(departureMapper::departureToDepartureResponseDto).collect(Collectors.toList());
         return ExtendedBaseResponse.of(
-                BaseResponse.ok("Departure list obtained successfully."), departureResponseDto
+                BaseResponse.ok("Lista de salidas obtenida."), departureResponseDto
         );
     }
 
@@ -44,7 +44,7 @@ public class DepartureServiceImpl implements IDepartureService{
         );
         DepartureResponseDto departureResponseDto = departureMapper.departureToDepartureResponseDto(departure);
         return ExtendedBaseResponse.of(
-                BaseResponse.ok("Departure founded."),
+                BaseResponse.ok("Salida encontrada."),
                 departureResponseDto
         );
     }
@@ -55,7 +55,7 @@ public class DepartureServiceImpl implements IDepartureService{
         departureRepository.save(departure);
         DepartureResponseDto departureResponseDto = departureMapper.departureToDepartureResponseDto(departure);
         return ExtendedBaseResponse.of(
-                BaseResponse.created("Departure created."),
+                BaseResponse.created("Salida creada."),
                 departureResponseDto
         );
     }
@@ -68,16 +68,17 @@ public class DepartureServiceImpl implements IDepartureService{
                 () -> new DepartureNotFountException()
         );
         DepartureMapper departureMapper = Mappers.getMapper(DepartureMapper.class);
+        departure.setPrice(departureToUpdateDto.price());
         departure.setEndDate(departureToUpdateDto.endDate());
         departure.setEndTime(departureToUpdateDto.endTime());
         departure.setFinishPlace(departureToUpdateDto.finishPlace());
         departure.setStartDate(departureToUpdateDto.startDate());
         departure.setStartTime(departureToUpdateDto.startTime());
         departure.setMeetingPlace(departureToUpdateDto.meetingPlace());
-        //departure.setUsersList();
+        departure.setUsersList(departureToUpdateDto.usersList());
         departureRepository.save(departure);
         return ExtendedBaseResponse.of(
-                BaseResponse.ok("Departure updated."),
+                BaseResponse.ok("Salida actualizada."),
                 departureMapper.departureToDepartureResponseDto(departure)
         );
     }
@@ -88,7 +89,7 @@ public class DepartureServiceImpl implements IDepartureService{
                 () -> new DepartureNotFountException(id, Departure.class.getSimpleName())
         );
         departureRepository.delete(departure);
-        return BaseResponse.ok("Departure deleted");
+        return BaseResponse.ok("Salida eliminada.");
 
     }
 

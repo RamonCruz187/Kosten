@@ -18,15 +18,17 @@ public class Departure {
     @GeneratedValue(strategy= GenerationType.IDENTITY)
     private Integer id;
 
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "package_id", referencedColumnName = "id", nullable = false)
     private Package packageRef;
 
-    /*TODO: Revisar la relacion con User por que al crear un usuario, pide el campo user_id
-    @OneToMany
-    @JoinColumn(name = "user_id", nullable = false)
-    private Set<User> usersList;*/
 
+    @OneToMany
+    @JoinColumn(name = "user_id", referencedColumnName = "id", nullable = false)
+    private Set<User> usersList;
+
+    private Double price;
     private LocalDateTime startDate;
     private LocalDateTime endDate;
     @Column(length = 20)

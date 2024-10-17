@@ -21,8 +21,9 @@ public class DepartureResponseDto {
     @NotNull
     @Min(1)
     private Integer id;
-
+    private Long packageId;
     private Set<User> usersList;
+    private Double price;
 
     private LocalDateTime startDate;
 
