@@ -1,4 +1,3 @@
-import React from 'react';
 import { Box, Typography, Button, Link } from '@mui/material';
 import NavBar from './NavBar';
 import imgfondo from '../../assets/Image-hero.jpg';
@@ -117,6 +116,8 @@ const LandingPage = () => {
               }}
             />
           </Link>
+
+         
         </Box>
       </Box>
     </>
