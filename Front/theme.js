@@ -47,6 +47,12 @@ const theme = createTheme({
       dark: customPalette.accent.darkest2,
       contrastText: customPalette.accent.light,
     },
+    transparentButton: {
+      main: "rgba(0, 0, 0, 0)",
+      dark: "rgba(100, 100, 100, 0.1)",
+      light: "rgba(200, 200, 200, 0.25)",
+      contrastText: customPalette.accent.darkest
+    },
   },
   typography: {
     htmlFontSize: 16, // Asigna 16px a 1rem por defecto
@@ -89,6 +95,8 @@ const theme = createTheme({
     // buttons
     buttonMini: {
       fontSize: "0.687rem", // 11px
+      color: customPalette.tertiary.darkest,
+      textTransform: "uppercase",
     },
 
     // párrafos
@@ -125,6 +133,14 @@ const theme = createTheme({
           fontFamily: customFonts.family.catamaran,
           fontWeight: "normal",
           textTransform: "uppercase",
+        },
+      },
+    },
+    MuiTextField: {
+      styleOverrides: {
+        root: {
+          fontFamily: "Roboto, sans-serif",
+          fontSize: "1rem", // 16px
         },
       },
     },
