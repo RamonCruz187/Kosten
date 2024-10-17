@@ -5,6 +5,7 @@ import {
   defaultParagraph,
   defaultTitle,
   defaultCTA,
+  inputAdvice,
 } from "./customStyle";
 
 const theme = createTheme({
@@ -115,6 +116,9 @@ const theme = createTheme({
       ...defaultParagraph,
       fontSize: "0.812rem", // 13px
     },
+    inputAdvice: {
+      ...inputAdvice,
+    },
   },
   components: {
     MuiButton: {
@@ -131,8 +135,9 @@ const theme = createTheme({
           letterSpacing: customFonts.letter.wide,
           width: "fit-content",
           fontFamily: customFonts.family.catamaran,
-          fontWeight: "normal",
+          fontWeight: 500,
           textTransform: "uppercase",
+          fontSize: "0.875rem", // 14px
         },
       },
     },

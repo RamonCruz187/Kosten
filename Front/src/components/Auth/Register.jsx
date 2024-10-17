@@ -32,7 +32,7 @@ const Register = () => {
   }, [password]);
 
   useEffect(() => {
-    confirmPassword.length !== 0 && password === confirmPassword
+    confirmPassword.length >= 5 && password === confirmPassword
       ? setAdviceConfirmPassword(true)
       : setAdviceConfirmPassword(false);
   }, [confirmPassword, password]);
@@ -40,6 +40,8 @@ const Register = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
+//      console.log(name, username, email, password);
+      
       const response = await register({ name, username, email, password });
       NotificationService.success(
         " Usuario registrado exitosamente. Inicie sesión. ",
@@ -55,23 +57,16 @@ const Register = () => {
   };
 
   return (
-    <Stack direction="row" spacing={0} sx={{ background: "", minWidth: "100%" }}>
-      <Box sx={{ objectFit: "cover", background: "aqua",  }}>
-        <img src={imageReg} alt="register" height={"100%"} />
+    <Stack direction="row">
+      <Box sx={{ objectFit: "cover", width: "100%" }}>
+        <img src={imageReg} alt="register" width="100%" />
       </Box>
 
-      <form onSubmit={handleSubmit}>
-        <Stack
-          spacing={2}
-          sx={{
-            justifyContent: "center",
-            alignItems: "center",
-            width: "100%",
-            padding: "20%",
-          }}
-        >
-          <InputNormal type="text" value={name} label="Name" fx={setName} />
-          <InputNormal type="text" value={username} label="Username" fx={setUsername} />
+      <form onSubmit={handleSubmit} style={{ width: "100%" }}>
+        <Stack sx={{padding:'20%', gap: '1.25rem', alignItems: 'center'}}>
+        <Typography variant="titleH2">REGISTRO</Typography>
+
+          <InputNormal type="text" value={name} label="Nombre y apellido" fx={setName} />
           <InputNormal type="email" value={email} label="Email" fx={setEmail} />
           <InputPassword
             label="Contraseña"
@@ -80,13 +75,11 @@ const Register = () => {
             toggleVar={showPassword}
             fxIcon={handleClickShowPassword}
           />
-
           {advicePassword && (
             <Typography variant="inputAdvice">
               Debe contener al menos 1 número y tener un mínimo de 6 caracteres.
             </Typography>
           )}
-
           <InputPassword
             label="Confirme contraseña"
             value={confirmPassword}
@@ -94,11 +87,10 @@ const Register = () => {
             toggleVar={showPassword}
             fxIcon={handleClickShowPassword}
           />
-          {adviceConfirmPassword && (
-            <Typography variant="inputAdvice">Las contraseñas coinciden</Typography>
-          )}
-
-          <Button type="submit">Register</Button>
+          
+            <Typography variant="inputAdvice">{adviceConfirmPassword ? "Las contraseñas coinciden" : "No coinciden"}</Typography>
+          
+          <Button color="greenButton" type="submit" sx={{padding: '.75rem 3rem', marginTop:'1rem'}}>REGISTRARME</Button>
         </Stack>
       </form>
     </Stack>
