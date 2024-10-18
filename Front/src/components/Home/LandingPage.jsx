@@ -41,7 +41,7 @@ const LandingPage = () => {
               height: '100%',
               objectFit: 'cover',
               filter: 'grayscale(50%)',
-              animation: 'zoom 15s',
+              animation: 'zoom 20s',
               animationIterationCount: '1',
             }}
           />
@@ -56,29 +56,39 @@ const LandingPage = () => {
               alignItems: 'center',
             }}
           >
-            <Typography
-              variant="paragraphLight"
-              sx={{
-                fontWeight: '600',
-                fontSize: '3rem',
-                fontFamily: 'Oswald',
-                zIndex: 1,
-                position: 'relative',
-              }}
-            >
-              SOMOS AVENTURA
-            </Typography>
-            <img
-              src={kosten}
-              alt="Kosten"
-              style={{
-                height: '10rem',
-                margin: '16px',
-                opacity: '0.6',
-                zIndex: 0,
-                position: 'relative',
-              }}
-            />
+            <Box
+  sx={{
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+    justifyContent: 'center',
+    position: 'relative',
+  }}
+>
+  <Typography
+    variant="paragraphLight"
+    sx={{
+      fontWeight: '600',
+      fontSize: '3rem',
+      fontFamily: 'Oswald',
+      zIndex: 1, 
+      position: 'relative',
+    }}
+  >
+    SOMOS AVENTURA
+  </Typography>
+  <img
+    src={kosten}
+    alt="Kosten"
+    style={{
+      height: '10rem',
+      margin: '16px',
+      opacity: '0.6',
+      zIndex: 0, 
+      position: 'relative',
+    }}
+  />
+</Box>
             <Button
               variant="contained"
               color="primary"
