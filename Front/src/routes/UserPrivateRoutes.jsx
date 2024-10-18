@@ -5,11 +5,11 @@
  */
 
 import { Navigate, Outlet } from 'react-router-dom';
-import {useAuthLogin} from "../shared/hooks/useAuthLogin.jsx";
+import {useAuth} from "../shared/hooks/useAuth.jsx";
 
 export function UserPrivateRoutes() {
 
-    const { isAuthenticated } = useAuthLogin();
+    const { isAuthenticated } = useAuth();
 
     return isAuthenticated ? <Outlet /> : <Navigate to={`/login`}/>;
 }

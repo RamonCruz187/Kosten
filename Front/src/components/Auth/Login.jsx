@@ -2,10 +2,12 @@ import { useState } from "react";
 import { Button, Typography, Stack } from "@mui/material";
 import { login } from "../../api/authApi.js";
 import { NotificationService } from "../../shared/services/notistack.service.jsx";
-import { useAuthLogin } from "../../shared/hooks/useAuthLogin.jsx";
+import { useAuth } from "../../shared/hooks/useAuth.jsx";
 import { Link } from "react-router-dom";
 import InputNormal from "./InputNormal.jsx";
 import InputPassword from "./InputPassword.jsx";
+import {getData} from "../../api/userApi.js";
+import {useUserData} from "../../shared/hooks/useUserData.jsx";
 
 const Login = () => {
   const [email, setEmail] = useState("");
@@ -15,16 +17,32 @@ const Login = () => {
 
   const handleClickShowPassword = () => setShowPassword((show) => !show);
 
-  const { handleLogin } = useAuthLogin();
+  const { handleLogin } = useAuth();
+  const{ setUserData } = useUserData();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const { data } = await login({ email, password });
+      const { data: dataAuth } = await login({ email, password });
       NotificationService.success(`Bienvenido nuevamente`, 3000);
-      handleLogin(data.data);
-      console.log(data.data);
+
+      if( dataAuth.isError ) {
+        NotificationService.error(dataAuth.message, 3000);
+        return
+      }
+
+      handleLogin(dataAuth.data);
+
+      const { data: dataUser } = await getData(dataAuth.data.id);
+
+      if( dataAuth.isError ) {
+        return
+      }
+
+      setUserData(dataUser.data);
+
     } catch (error) {
+      NotificationService.error('Hubo un error en el servidor.', 3000);
       console.error(error);
     }
   };

@@ -1,18 +1,17 @@
-import { AppBar, Toolbar, Button, Box } from "@mui/material";
+import {AppBar, Toolbar, Button, Box, Typography} from "@mui/material";
 import logo from "../../assets/logo.svg";
 import NavLink from "./NavLink";
 import { Link } from "react-router-dom";
-import {useAuthLogin} from "../../shared/hooks/useAuthLogin.jsx";
+import {useAuth} from "../../shared/hooks/useAuth.jsx";
 import {NotificationService} from "../../shared/services/notistack.service.jsx";
+import IconButton from "@mui/material/IconButton";
+import {AccountCircle, AdminPanelSettings} from "@mui/icons-material";
+import {SettingsPopover} from "../../shared/components/SettingsPopover.jsx";
+import {UserPopover} from "../../shared/components/UserPopover.jsx";
 
 const NavBar = () => {
 
-    const {isAuthenticated, handleLogout} = useAuthLogin();
-
-    const handleClick = () => {
-        NotificationService.info('Vuelve pronto!');
-        handleLogout();
-    };
+    const {isAuthenticated, handleLogout} = useAuth();
 
     return <AppBar
         position="static"
@@ -30,7 +29,7 @@ const NavBar = () => {
             }}
         >
             <Box>
-                <Link href="">
+                <Link to="/">
                     <img src={logo} alt="KOSTEN"/>
                 </Link>
             </Box>
@@ -56,9 +55,10 @@ const NavBar = () => {
                     </Button>
                 </Link> :
 
-                <Box >
-                    <Button color="primary" variant="text" size="small" onClick={handleClick}>
-                        Cerrar sesión
+                <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+
+                    <Button variant="contained" >
+                        <UserPopover />
                     </Button>
                 </Box>
             }
