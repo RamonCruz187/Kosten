@@ -8,7 +8,7 @@ export const PackageGrid = ({ title }) => {
 
     return (
         <Box>
-            <Typography variant='h6' gutterBottom sx={{ textAlign: 'center', mb: 2 }}>
+            <Typography variant='h6' gutterBottom sx={{ textAlign: 'center', mb: '2rem', color: '#F3F3F3', fontFamily: 'Oswald', fontWeight: 'regular', fontSize: '16px' }}>
                 { title }
             </Typography>
             <Grid container spacing={3}>

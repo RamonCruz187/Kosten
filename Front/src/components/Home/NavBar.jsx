@@ -20,7 +20,7 @@ const NavBar = () => (
       }}
     >
       <Box>
-        <Link href="">
+        <Link href="/src/components/Home/LandingPage.jsx">
           <img src={logo} alt="KOSTEN" />
         </Link>
       </Box>
