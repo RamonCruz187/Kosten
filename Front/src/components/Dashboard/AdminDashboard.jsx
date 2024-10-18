@@ -239,7 +239,6 @@ const AdminDashboard = () => {
 
   return (
     <div>
-      <NavBar />
       <h1>Admin Dashboard</h1>
       <p>Manage your application here.</p>
 

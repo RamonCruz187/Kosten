@@ -27,6 +27,7 @@ export default function Muestras() {
           adicional
         </p>
         <br />
+        <Typography variant="titleXL">title xl</Typography>
         <Typography variant="titleH1">title h1</Typography>
         <Typography variant="titleH2">title h2</Typography>
         <Typography variant="titleH3">title h3</Typography>

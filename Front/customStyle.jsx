@@ -55,6 +55,7 @@ export const defaultCTA = {
 
 export const defaultTitle = {
     fontFamily: customFonts.family.oswald,
+    letterSpacing: customFonts.letter.normal,
     fontWeight: 600,
     color: customPalette.text.main,
 }
