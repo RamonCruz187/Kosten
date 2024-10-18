@@ -1,9 +1,11 @@
 import { useState } from "react";
-import { TextField, Button, Typography, Stack, InputAdornment, IconButton } from "@mui/material";
+import { Button, Typography, Stack } from "@mui/material";
 import { login } from "../../api/authApi.js";
 import { NotificationService } from "../../shared/services/notistack.service.jsx";
 import { useAuthLogin } from "../../shared/hooks/useAuthLogin.jsx";
-import { Visibility, VisibilityOff } from "@mui/icons-material";
+import { Link } from "react-router-dom";
+import InputNormal from "./InputNormal.jsx";
+import InputPassword from "./InputPassword.jsx";
 
 const Login = () => {
   const [email, setEmail] = useState("");
@@ -39,43 +41,29 @@ const Login = () => {
         }}
       >
         <Typography variant="titleH2">LOGIN</Typography>
-        <TextField
-          sx={{ width: "100%" }}
-          variant="outlined"
-          color="palette.grayButton.main"
-          label="Email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          required
-        />
-        <TextField
-          variant="outlined"
-          color="palette.grayButton.main"
-          sx={{ width: "100%" }}
+
+        <InputNormal value={email} label="Email" type='email' fx={setEmail} />
+        <InputPassword
           label="Contraseña"
-          type={showPassword ? "text" : "password"}
           value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          required
-          slotProps={{
-            input: {
-              endAdornment: (
-                <InputAdornment position="end">
-                  <IconButton
-                    aria-label="toggle password visibility"
-                    onClick={handleClickShowPassword}
-                    edge="end"
-                  >
-                    {showPassword ? <VisibilityOff /> : <Visibility />}
-                  </IconButton>
-                </InputAdornment>
-              ),
-            },
-          }}
+          fx={setPassword}
+          toggleVar={showPassword}
+          fxIcon={handleClickShowPassword} 
+        
         />
+
+        <Typography variant="buttonMini">
+          olvidé mi contraseña
+        </Typography>
+        
         <Button color="greenButton" type="submit" sx={{ width: "50%" }}>
           Login
         </Button>
+        <Link to="/register" style={{width:'50%'}}>
+        <Button color="transparentButton" disableElevation sx={{width:"100%"}}>
+          Registrarse
+        </Button>
+        </Link>
       </Stack>
     </form>
   );

@@ -1,13 +1,13 @@
-import React from 'react';
 import PropTypes from 'prop-types';
-import { Link, Typography } from '@mui/material';
+import { Typography } from '@mui/material';
+import {Link} from "react-router-dom";
 
 const NavLink = ({ href, children }) => (
   <Link
-    href={href}
+    to={href}
     color="inherit"
-    underline="none"
-   
+    // Corregido el underline de los links
+    style={{textDecoration: 'none'}}
   >
     <Typography
       variant="paragraphLight"

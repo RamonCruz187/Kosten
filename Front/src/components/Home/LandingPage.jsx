@@ -1,9 +1,22 @@
-import React from 'react';
 import { Box, Typography, Button, Link } from '@mui/material';
 import NavBar from './NavBar';
 import imgfondo from '../../assets/Image-hero.jpg';
 import kosten from '../../assets/kosten.svg';
 import bot from '../../assets/bot.svg';
+/*<<<<<<< HEAD
+import AppAppBar from "../../shared/components/AppAppBar.jsx";
+import Box from "@mui/material/Box";
+import {PackageGrid} from "../../modules/package/components/PackageGrid.jsx";
+
+const LandingPage = () => {
+  return (
+    <Box sx={{ mt: 15 }}>
+        <AppAppBar />
+        <PackageGrid title="PRÓXIMAS SALIDAS" />
+      <h1>Welcome to the App</h1>
+      <p>This is the landing page.</p>
+    </Box>
+=======*/
 
 const LandingPage = () => {
   return (
@@ -113,6 +126,8 @@ const LandingPage = () => {
               }}
             />
           </Link>
+
+         
         </Box>
       </Box>
     </>

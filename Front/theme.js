@@ -5,6 +5,7 @@ import {
   defaultParagraph,
   defaultTitle,
   defaultCTA,
+  inputAdvice,
 } from "./customStyle";
 
 const theme = createTheme({
@@ -46,6 +47,12 @@ const theme = createTheme({
       main: customPalette.accent.darkest,
       dark: customPalette.accent.darkest2,
       contrastText: customPalette.accent.light,
+    },
+    transparentButton: {
+      main: "rgba(0, 0, 0, 0)",
+      dark: "rgba(100, 100, 100, 0.1)",
+      light: "rgba(200, 200, 200, 0.25)",
+      contrastText: customPalette.accent.darkest
     },
   },
   typography: {
@@ -89,6 +96,8 @@ const theme = createTheme({
     // buttons
     buttonMini: {
       fontSize: "0.687rem", // 11px
+      color: customPalette.tertiary.darkest,
+      textTransform: "uppercase",
     },
 
     // párrafos
@@ -107,6 +116,9 @@ const theme = createTheme({
       ...defaultParagraph,
       fontSize: "0.812rem", // 13px
     },
+    inputAdvice: {
+      ...inputAdvice,
+    },
   },
   components: {
     MuiButton: {
@@ -123,8 +135,17 @@ const theme = createTheme({
           letterSpacing: customFonts.letter.wide,
           width: "fit-content",
           fontFamily: customFonts.family.catamaran,
-          fontWeight: "normal",
+          fontWeight: 500,
           textTransform: "uppercase",
+          fontSize: "0.875rem", // 14px
+        },
+      },
+    },
+    MuiTextField: {
+      styleOverrides: {
+        root: {
+          fontFamily: "Roboto, sans-serif",
+          fontSize: "1rem", // 16px
         },
       },
     },
