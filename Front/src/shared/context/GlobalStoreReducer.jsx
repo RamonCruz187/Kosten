@@ -6,8 +6,17 @@ export const USER_AUTH = {
     token: null
 }
 
+export const USER_DATA = {
+    id: NaN,
+    username: undefined,
+    email: undefined,
+    contact: undefined,
+    role: undefined
+}
+
 const initialState = {
     user_auth: USER_AUTH,
+    user_data: USER_DATA
 };
 
 const reducer = (state, action) => {
@@ -21,6 +30,12 @@ const reducer = (state, action) => {
             return {
                 ...state,
                 user_auth: USER_AUTH,
+                user_data: USER_DATA
+            };
+        case types_reducer.SET_USER_DATA:
+            return {
+                ...state,
+                user_data: action.payload,
             };
         default:
             return state;

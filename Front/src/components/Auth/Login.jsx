@@ -1,9 +1,13 @@
 import { useState } from "react";
-import { TextField, Button, Typography, Stack, InputAdornment, IconButton } from "@mui/material";
+import { Button, Typography, Stack } from "@mui/material";
 import { login } from "../../api/authApi.js";
 import { NotificationService } from "../../shared/services/notistack.service.jsx";
-import { useAuthLogin } from "../../shared/hooks/useAuthLogin.jsx";
-import { Visibility, VisibilityOff } from "@mui/icons-material";
+import { useAuth } from "../../shared/hooks/useAuth.jsx";
+import { Link } from "react-router-dom";
+import InputNormal from "./InputNormal.jsx";
+import InputPassword from "./InputPassword.jsx";
+import {getData} from "../../api/userApi.js";
+import {useUserData} from "../../shared/hooks/useUserData.jsx";
 
 const Login = () => {
   const [email, setEmail] = useState("");
@@ -13,16 +17,32 @@ const Login = () => {
 
   const handleClickShowPassword = () => setShowPassword((show) => !show);
 
-  const { handleLogin } = useAuthLogin();
+  const { handleLogin } = useAuth();
+  const{ setUserData } = useUserData();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const { data } = await login({ email, password });
+      const { data: dataAuth } = await login({ email, password });
       NotificationService.success(`Bienvenido nuevamente`, 3000);
-      handleLogin(data.data);
-      console.log(data.data);
+
+      if( dataAuth.isError ) {
+        NotificationService.error(dataAuth.message, 3000);
+        return
+      }
+
+      handleLogin(dataAuth.data);
+
+      const { data: dataUser } = await getData(dataAuth.data.id);
+
+      if( dataAuth.isError ) {
+        return
+      }
+
+      setUserData(dataUser.data);
+
     } catch (error) {
+      NotificationService.error('Hubo un error en el servidor.', 3000);
       console.error(error);
     }
   };
@@ -39,43 +59,29 @@ const Login = () => {
         }}
       >
         <Typography variant="titleH2">LOGIN</Typography>
-        <TextField
-          sx={{ width: "100%" }}
-          variant="outlined"
-          color="palette.grayButton.main"
-          label="Email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          required
-        />
-        <TextField
-          variant="outlined"
-          color="palette.grayButton.main"
-          sx={{ width: "100%" }}
+
+        <InputNormal value={email} label="Email" type='email' fx={setEmail} />
+        <InputPassword
           label="Contraseña"
-          type={showPassword ? "text" : "password"}
           value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          required
-          slotProps={{
-            input: {
-              endAdornment: (
-                <InputAdornment position="end">
-                  <IconButton
-                    aria-label="toggle password visibility"
-                    onClick={handleClickShowPassword}
-                    edge="end"
-                  >
-                    {showPassword ? <VisibilityOff /> : <Visibility />}
-                  </IconButton>
-                </InputAdornment>
-              ),
-            },
-          }}
+          fx={setPassword}
+          toggleVar={showPassword}
+          fxIcon={handleClickShowPassword} 
+        
         />
+
+        <Typography variant="buttonMini">
+          olvidé mi contraseña
+        </Typography>
+        
         <Button color="greenButton" type="submit" sx={{ width: "50%" }}>
           Login
         </Button>
+        <Link to="/register" style={{width:'50%'}}>
+        <Button color="transparentButton" disableElevation sx={{width:"100%"}}>
+          Registrarse
+        </Button>
+        </Link>
       </Stack>
     </form>
   );

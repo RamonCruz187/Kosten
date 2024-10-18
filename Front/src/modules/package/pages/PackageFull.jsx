@@ -55,7 +55,7 @@ export const PackageFull = () => {
                 flexDirection: {xs: 'column', lg: 'row'},
                 justifyContent: {xs: 'flex-end', lg: 'center'},
                 // alignItems: {lg: 'center'},
-                width: '150dvh',
+                width: '100%',
                 height: {
                     xs: 390, //phones 300
                     sm: 400, //tablets 600

@@ -1,7 +1,7 @@
-import {useCallback, useContext} from "react";
+import {useCallback, useContext, useMemo} from "react";
 import {GlobalContext} from "../context/GlobalContext.jsx";
 
-export const useAuthLogin = () => {
+export const useAuth = (factory, deps) => {
 
     const context = useContext(GlobalContext);
 
@@ -20,16 +20,19 @@ export const useAuthLogin = () => {
     const handleLogout = useCallback( () => {
 
         localStorage.removeItem("userAuth");
+        localStorage.removeItem("userData");
 
         context.dispatch({
             type: "AUTH_LOGOUT"
         });
     }, [context]);
 
-    return {
-        userAuth: context.state.user_auth,
+    const isAuthenticated = useMemo(() => context.state.user_auth.token !== null, deps);
+
+    return useMemo(() => ({
+        isAuthenticated,
         handleLogin,
         handleLogout
-    }
+    }), [isAuthenticated, handleLogin, handleLogout]);
 
 }
