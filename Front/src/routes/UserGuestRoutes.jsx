@@ -4,11 +4,11 @@
  */
 
 import { Navigate, Outlet } from 'react-router-dom';
-import { useAuthLogin } from "../shared/hooks/useAuthLogin.jsx";
+import { useAuth } from "../shared/hooks/useAuth.jsx";
 
 export function UserGuestRoutes() {
 
-    const { isAuthenticated } = useAuthLogin();
+    const { isAuthenticated } = useAuth();
 
     return isAuthenticated ? <Navigate to={'/admin'}/> : <Outlet />;
 }

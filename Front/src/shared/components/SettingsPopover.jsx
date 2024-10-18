@@ -8,7 +8,7 @@ import ToggleColorMode from "../theme/ToggleColorMode.jsx";
 import {useGlobalTheme} from "../hooks/useGlobalTheme.jsx";
 import {SettingsSuggest} from "@mui/icons-material";
 
-export function AccountPopover() {
+export function SettingsPopover() {
 
     const { mode, toggleColorMode } = useGlobalTheme();
 
@@ -33,6 +33,7 @@ export function AccountPopover() {
   return (
     <>
       <IconButton
+          color='inherit'
         onClick={handleOpenPopover}
         sx={{
           p: 0,

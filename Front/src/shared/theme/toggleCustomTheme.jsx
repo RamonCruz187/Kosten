@@ -34,7 +34,7 @@ export function ToggleCustomTheme() {
                     <AutoAwesomeRounded sx={{ fontSize: '14px', mr: 1 }} />
 
                     <Typography sx={{ display: { xs: "none", md: "block" } }}>
-                        Custom theme
+                        Personalizado
                     </Typography>
 
                 </ToggleButton>
@@ -42,7 +42,7 @@ export function ToggleCustomTheme() {
                     <Flare sx={{ fontSize: '14px', mr: 1 }} />
 
                     <Typography sx={{ display: { xs: "none", md: "block" } }}>
-                        Material Design 2
+                        Material 2
                     </Typography>
 
                 </ToggleButton>

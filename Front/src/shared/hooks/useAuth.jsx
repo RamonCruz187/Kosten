@@ -1,7 +1,7 @@
 import {useCallback, useContext, useMemo} from "react";
 import {GlobalContext} from "../context/GlobalContext.jsx";
 
-export const useAuthLogin = (factory, deps) => {
+export const useAuth = (factory, deps) => {
 
     const context = useContext(GlobalContext);
 
@@ -20,6 +20,7 @@ export const useAuthLogin = (factory, deps) => {
     const handleLogout = useCallback( () => {
 
         localStorage.removeItem("userAuth");
+        localStorage.removeItem("userData");
 
         context.dispatch({
             type: "AUTH_LOGOUT"

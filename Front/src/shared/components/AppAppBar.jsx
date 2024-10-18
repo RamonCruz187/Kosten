@@ -11,17 +11,17 @@ import MenuIcon from '@mui/icons-material/Menu';
 import CloseRoundedIcon from '@mui/icons-material/CloseRounded';
 
 import {useState} from "react";
-import {AccountPopover} from "./account-popover.jsx";
+import {SettingsPopover} from "./SettingsPopover.jsx";
 import Sitemark from "./SitemarkIcon.jsx";
 import {PopoverLogin} from "./PopoverLogin.jsx";
 import {PopoverRegister} from "./PopoverRegister.jsx";
-import {useAuthLogin} from "../hooks/useAuthLogin.jsx";
+import {useAuth} from "../hooks/useAuth.jsx";
 import {PopoverLogout} from "./PopoverLogout.jsx";
 
 export default function AppAppBar( ) {
   const [open, setOpen] = useState(false);
 
-  const { userAuth } = useAuthLogin();
+  const { userAuth } = useAuth();
 
   const toggleDrawer = ( newOpen ) => () => {
     setOpen(newOpen);
@@ -129,7 +129,7 @@ export default function AppAppBar( ) {
               </>) : (<PopoverLogout />)
             }
 
-            <AccountPopover />
+            <SettingsPopover />
           </Box>
           <Box sx={{ display: { sm: 'flex', md: 'none' } }}>
             <IconButton aria-label="Menu button" onClick={toggleDrawer(true)}>
@@ -147,7 +147,7 @@ export default function AppAppBar( ) {
                   <IconButton onClick={toggleDrawer(false)}>
                     <CloseRoundedIcon  />
                   </IconButton>
-                  <AccountPopover />
+                  <SettingsPopover />
                 </Box>
                 <Divider sx={{ my: 3 }} />
                 <MenuItem onClick={() => scrollToSection('whoweare')}>

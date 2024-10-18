@@ -1,4 +1,4 @@
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import {BrowserRouter as Router, Navigate, Route, Routes} from 'react-router-dom';
 import Login from '../components/Auth/Login';
 import Register from '../components/Auth/Register';
 import LandingPage from '../components/Home/LandingPage';
@@ -8,6 +8,8 @@ import {PackageFull} from "../modules/package/pages/PackageFull.jsx";
 import {PackageView} from "../modules/package/pages/PackageView.jsx";
 import {UserGuestRoutes} from "./UserGuestRoutes.jsx";
 import {UserPrivateRoutes} from "./UserPrivateRoutes.jsx";
+import {AdminLayout} from "../modules/admin/layout/AdminLayout.jsx";
+import {AdminPackages} from "../modules/admin/pages/AdminPackages.jsx";
 
 const AppRoutes = () => (
   <Router>
@@ -26,9 +28,24 @@ const AppRoutes = () => (
             path="/"
             element={<UserPrivateRoutes />}
         >
-            <Route path="/admin" element={<AdminDashboard />} />
+            <Route path="/admin" element={<AdminLayout />} >
+
+                <Route
+                    index
+                    element={<Navigate to="/admin/usuarios" replace />} />
+
+                <Route
+                    path="/admin/usuarios"
+                    element={<AdminDashboard />}
+                />
+
+                <Route
+                    path="/admin/paquetes"
+                    element={<AdminPackages />}
+                />
+
+            </Route>
         </Route>
-      {/*<Route path="/admin" element={<AdminDashboard />} />*/}
 
       <Route path="/muestras" element={<Muestras />} />
         <Route path="/salidas" element={<PackageView />} />
