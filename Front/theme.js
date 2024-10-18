@@ -61,6 +61,10 @@ const theme = createTheme({
       htmlFontSize: 14, // Asigna 14px a 1rem para pantallas xs
     },
     // titulos
+    titleXL: {
+      ...defaultTitle,
+      fontSize: "2.25rem", // 36px
+    },
     titleH1: {
       ...defaultTitle,
       fontSize: "1.5rem", // 24px
