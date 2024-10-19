@@ -16,8 +16,6 @@ public record StaffToUpdateDto(
 
         String rol,
 
-        int contact,
-
-        String photo
+        int contact
 ) {
 }

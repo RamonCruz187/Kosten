@@ -5,7 +5,7 @@ import com.Kosten.Api_Rest.dto.ExtendedBaseResponse;
 import com.Kosten.Api_Rest.dto.user.UpdateUserRequestDto;
 import com.Kosten.Api_Rest.dto.user.UserResponseDto;
 import com.Kosten.Api_Rest.dto.user.UserRoleUpdateRequestDto;
-import com.Kosten.Api_Rest.exception.UserException.NotFoundUser;
+import com.Kosten.Api_Rest.Exception.UserException.NotFoundUser;
 import com.Kosten.Api_Rest.mapper.UserMapper;
 import com.Kosten.Api_Rest.model.User;
 import com.Kosten.Api_Rest.repository.UserRepository;

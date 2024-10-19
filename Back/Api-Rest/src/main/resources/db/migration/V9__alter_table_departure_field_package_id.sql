@@ -1,0 +1,1 @@
+ALTER TABLE departure MODIFY COLUMN package_id BIGINT NULL;
