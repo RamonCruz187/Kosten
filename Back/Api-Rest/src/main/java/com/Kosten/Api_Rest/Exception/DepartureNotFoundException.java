@@ -1,11 +1,11 @@
 package com.Kosten.Api_Rest.Exception;
 
-public class DepartureNotFountException extends RuntimeException{
+public class DepartureNotFoundException extends RuntimeException{
 
-    public DepartureNotFountException(){
+    public DepartureNotFoundException(){
         super("The departure was not found.");
     }
-    public DepartureNotFountException(Integer id, String nameModel){
+    public DepartureNotFoundException(Integer id, String nameModel){
         super(String.format("The object was not found - id not found: %d - Name model: %s",
                 id, nameModel));
     }
