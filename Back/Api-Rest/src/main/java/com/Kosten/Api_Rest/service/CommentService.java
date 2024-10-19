@@ -20,6 +20,6 @@ public interface CommentService {
 
     CommentDto updateCommentVisibility(Long commentId, boolean visible);
 
-//    CommentDto reportComment(Long commentId);
+    int getReportCommentCount(Long commentId);
 
 }
