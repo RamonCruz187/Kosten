@@ -8,9 +8,8 @@ import {PackageFull} from "../modules/package/pages/PackageFull.jsx";
 import {PackageView} from "../modules/package/pages/PackageView.jsx";
 import {UserGuestRoutes} from "./UserGuestRoutes.jsx";
 import {UserPrivateRoutes} from "./UserPrivateRoutes.jsx";
-import {AdminLayout} from "../modules/admin/layout/AdminLayout.jsx";
 import {AdminPackages} from "../modules/admin/pages/AdminPackages.jsx";
-import {MenuAdmin} from "../modules/admin/components/MenuAdmin.jsx";
+import PageNotFound from "../shared/pages/error/PageNotFound.jsx";
 
 const AppRoutes = () => (
   <Router>
@@ -33,6 +32,11 @@ const AppRoutes = () => (
             <Route path="usuarios" element={<AdminDashboard />} />
             <Route path="paquetes" element={<AdminPackages />} />
         </Route>
+
+        <Route path="/404" element={<PageNotFound />} />
+
+        {/*Not found or error*/}
+        <Route path="*" element={ <Navigate to="/404" replace /> } />
 
     </Routes>
   </Router>
