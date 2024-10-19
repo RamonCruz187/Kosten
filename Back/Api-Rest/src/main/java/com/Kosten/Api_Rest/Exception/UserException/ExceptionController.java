@@ -1,4 +1,4 @@
-package com.Kosten.Api_Rest.exception.UserException;
+package com.Kosten.Api_Rest.Exception.UserException;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ProblemDetail;

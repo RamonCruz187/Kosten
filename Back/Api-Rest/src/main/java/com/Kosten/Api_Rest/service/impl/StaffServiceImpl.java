@@ -29,50 +29,68 @@ public class StaffServiceImpl implements StaffService {
 
     @Override
     public ExtendedBaseResponse<StaffResponseDto> newStaff(StaffRequestDto staffRequestDto, MultipartFile file) {
-        StaffMapper staffMapper = Mappers.getMapper(StaffMapper.class);
-
-        Image image = imageService.createNewImage(file);
-        imageRepository.save(image);
-        Staff staff = staffMapper.toEntity(staffRequestDto, image);
-        staff.setPhoto(image);
-        return ExtendedBaseResponse.of(
-                BaseResponse.created("Staff creado exitosamente"), staffMapper.toDto(staffRepository.save(staff))
-        );
+        try {
+            StaffMapper staffMapper = Mappers.getMapper(StaffMapper.class);
+            Image image = imageService.createNewImage(file);
+            imageRepository.save(image);
+            Staff staff = staffMapper.toEntity(staffRequestDto, image);
+            staff.setPhoto(image);
+            return ExtendedBaseResponse.of(
+                    BaseResponse.created("Staff creado exitosamente"), staffMapper.toDto(staffRepository.save(staff))
+            );
+        } catch (Exception e) {
+            throw new RuntimeException("Error al crear el Staff");
+        }
     }
 
     @Override
-    public ExtendedBaseResponse<StaffResponseDto> updateStaff(StaffToUpdateDto staffToUpdateDto) {
-//        Staff staff = staffRepository.findById(staffToUpdateDto.id()).orElseThrow(() -> new IllegalArgumentException("Staff not found"));
-//        StaffMapper staffMapper = Mappers.getMapper(StaffMapper.class);
-//        staff.setName(staffToUpdateDto.name());
-//        staff.setLastName(staffToUpdateDto.lastName());
-//        staff.setRol(staffToUpdateDto.rol());
-//        staff.setContact(staffToUpdateDto.contact());
-//        //staff.setPhoto(staffToUpdateDto.photo());
-//        return ExtendedBaseResponse.of(
-//                BaseResponse.ok("Staff actualizado exitosamente"), staffMapper.toDto(staffRepository.save(staff))
-//        );
-        return null;
+    public ExtendedBaseResponse<StaffResponseDto> updateStaff(StaffToUpdateDto staffToUpdateDto, MultipartFile file) {
+        Staff staff = staffRepository.findById(staffToUpdateDto.id()).orElseThrow(() -> new IllegalArgumentException("Staff not found"));
+
+        try {
+            Image image = imageService.createNewImage(file);
+            imageRepository.save(image);
+            StaffMapper staffMapper = Mappers.getMapper(StaffMapper.class);
+            staff.setName(staffToUpdateDto.name());
+            staff.setLastName(staffToUpdateDto.lastName());
+            staff.setRol(staffToUpdateDto.rol());
+            staff.setContact(staffToUpdateDto.contact());
+            staff.setPhoto(image);
+            return ExtendedBaseResponse.of(
+                    BaseResponse.ok("Staff actualizado exitosamente"), staffMapper.toDto(staffRepository.save(staff))
+            );
+        } catch (Exception e) {
+            throw new RuntimeException("Error al actualizar el Staff");
+        }
     }
 
     @Override
     public ExtendedBaseResponse<StaffResponseDto> getStaff(Long id) {
         Staff staff = staffRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("Staff not found"));
-        StaffMapper staffMapper = Mappers.getMapper(StaffMapper.class);
-        StaffResponseDto staffResponseDto = staffMapper.toDto(staff);
-        return ExtendedBaseResponse.of(
-                BaseResponse.ok("Staff encontrado exitosamente"), staffResponseDto
-        );
+
+        try {
+            StaffMapper staffMapper = Mappers.getMapper(StaffMapper.class);
+            StaffResponseDto staffResponseDto = staffMapper.toDto(staff);
+            return ExtendedBaseResponse.of(
+                    BaseResponse.ok("Staff encontrado exitosamente"), staffResponseDto
+            );
+        } catch (Exception e) {
+            throw new RuntimeException("Error al obtener el Staff");
+        }
     }
 
     @Override
     public ExtendedBaseResponse<List<StaffResponseDto>> getAllStaff() {
-        List<Staff> staff = staffRepository.findAll();
-        StaffMapper staffMapper = Mappers.getMapper(StaffMapper.class);
-        List<StaffResponseDto> staffResponseDto = staff.stream().map(staffMapper::toDto).toList();
-        return ExtendedBaseResponse.of(
-                BaseResponse.ok("Staff listado exitosamente"), staffResponseDto
-        );
+        try {
+            List<Staff> staff = staffRepository.findAll();
+            StaffMapper staffMapper = Mappers.getMapper(StaffMapper.class);
+            List<StaffResponseDto> staffResponseDto = staff.stream().map(staffMapper::toDto).toList();
+            return ExtendedBaseResponse.of(
+                    BaseResponse.ok("Staff listado exitosamente"), staffResponseDto
+            );
+        } catch (Exception e) {
+            throw new RuntimeException("Error al obtener los miembros del Staff");
+        }
     }
 
     @Override
