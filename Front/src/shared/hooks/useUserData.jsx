@@ -9,6 +9,16 @@ export const useUserData = () => {
         return null;
 
     const getUserData = useCallback( () => {
+
+        if(!context.state.user_data) {
+            const userData = localStorage.getItem('userData');
+            if(userData)
+                context.dispatch({
+                    type: "SET_USER_DATA",
+                    payload: JSON.parse(userData)
+                });
+        }
+
         return context.state.user_data;
     }, [context]);
 
