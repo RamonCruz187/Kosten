@@ -6,10 +6,16 @@
 
 import { Navigate, Outlet } from 'react-router-dom';
 import {useAuth} from "../shared/hooks/useAuth.jsx";
+import {AdminLayout} from "../modules/admin/layout/AdminLayout.jsx";
 
 export function UserPrivateRoutes() {
 
     const { isAuthenticated } = useAuth();
 
-    return isAuthenticated ? <Outlet /> : <Navigate to={`/login`}/>;
+    if (!isAuthenticated) {
+        return <Navigate to="/login" replace />;
+    }
+
+    return <AdminLayout />;
+
 }
