@@ -1,14 +1,15 @@
-package com.Kosten.Api_Rest.service;
+package com.Kosten.Api_Rest.service.impl;
 
 import com.Kosten.Api_Rest.dto.BaseResponse;
 import com.Kosten.Api_Rest.dto.Departure.DepartureRequestDto;
 import com.Kosten.Api_Rest.dto.Departure.DepartureResponseDto;
 import com.Kosten.Api_Rest.dto.Departure.DepartureToUpdateDto;
 import com.Kosten.Api_Rest.dto.ExtendedBaseResponse;
-import com.Kosten.Api_Rest.Exception.DepartureNotFountException;
+import com.Kosten.Api_Rest.Exception.DepartureNotFoundException;
 import com.Kosten.Api_Rest.mapper.DepartureMapper;
 import com.Kosten.Api_Rest.model.Departure;
 import com.Kosten.Api_Rest.repositoy.IDepartureRepository;
+import com.Kosten.Api_Rest.service.IDepartureService;
 import org.mapstruct.factory.Mappers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -18,7 +19,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
-public class DepartureServiceImpl implements IDepartureService{
+public class DepartureServiceImpl implements IDepartureService {
 
     @Autowired
     private IDepartureRepository departureRepository;
@@ -40,7 +41,7 @@ public class DepartureServiceImpl implements IDepartureService{
     @Transactional(readOnly = true)
     public ExtendedBaseResponse<DepartureResponseDto> findById(Integer id) {
         Departure departure = departureRepository.findById(id).orElseThrow(
-                () -> new DepartureNotFountException(id, Departure.class.getSimpleName())
+                () -> new DepartureNotFoundException(id, Departure.class.getSimpleName())
         );
         DepartureResponseDto departureResponseDto = departureMapper.departureToDepartureResponseDto(departure);
         return ExtendedBaseResponse.of(
@@ -65,7 +66,7 @@ public class DepartureServiceImpl implements IDepartureService{
     @Override
     public ExtendedBaseResponse<DepartureResponseDto> update(DepartureToUpdateDto departureToUpdateDto) {
         Departure departure = departureRepository.findById(departureToUpdateDto.id()).orElseThrow(
-                () -> new DepartureNotFountException()
+                () -> new DepartureNotFoundException()
         );
         DepartureMapper departureMapper = Mappers.getMapper(DepartureMapper.class);
         departure.setPrice(departureToUpdateDto.price());
@@ -75,7 +76,7 @@ public class DepartureServiceImpl implements IDepartureService{
         departure.setStartDate(departureToUpdateDto.startDate());
         departure.setStartTime(departureToUpdateDto.startTime());
         departure.setMeetingPlace(departureToUpdateDto.meetingPlace());
-        departure.setUsersList(departureToUpdateDto.usersList());
+        /*departure.setUsersList(departureToUpdateDto.usersList());*/
         departureRepository.save(departure);
         return ExtendedBaseResponse.of(
                 BaseResponse.ok("Salida actualizada."),
@@ -86,7 +87,7 @@ public class DepartureServiceImpl implements IDepartureService{
     @Override
     public BaseResponse delete(Integer id) {
         Departure departure = departureRepository.findById(id).orElseThrow(
-                () -> new DepartureNotFountException(id, Departure.class.getSimpleName())
+                () -> new DepartureNotFoundException(id, Departure.class.getSimpleName())
         );
         departureRepository.delete(departure);
         return BaseResponse.ok("Salida eliminada.");

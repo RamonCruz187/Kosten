@@ -50,12 +50,12 @@ public class Package {
     /****************************************
      *  Relations with Departure Entity
      ****************************************/
-    @OneToMany(mappedBy = "packageRef", orphanRemoval = true)
+    /*@OneToMany(mappedBy = "packageRef", orphanRemoval = true)
     @JsonManagedReference(value = "packageRef")
     private List<Departure> departures;
-
+*/
     //Helper Methods: Keep Both Sides of the Association in SYNC
-    public void addDeparture(Departure departure) {
+   /* public void addDeparture(Departure departure) {
         this.departures.add(departure);
         departure.setPackageRef(this);
     }
@@ -63,7 +63,7 @@ public class Package {
     public void deleteDeparture(Departure departure) {
         this.departures.remove(departure);
         departure.setPackageRef(null);
-    }
+    }*/
 
     /****************End of Relations with Departure Entity********/
 

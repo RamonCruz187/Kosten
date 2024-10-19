@@ -19,14 +19,14 @@ public class Departure {
     private Integer id;
 
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    /*@ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "package_id", referencedColumnName = "id", nullable = false)
     private Package packageRef;
 
 
     @OneToMany
     @JoinColumn(name = "user_id", referencedColumnName = "id", nullable = false)
-    private Set<User> usersList;
+    private Set<User> usersList;*/
 
     private Double price;
     private LocalDateTime startDate;

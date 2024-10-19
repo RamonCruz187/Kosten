@@ -5,7 +5,7 @@ import com.Kosten.Api_Rest.dto.Departure.DepartureRequestDto;
 import com.Kosten.Api_Rest.dto.Departure.DepartureResponseDto;
 import com.Kosten.Api_Rest.dto.Departure.DepartureToUpdateDto;
 import com.Kosten.Api_Rest.dto.ExtendedBaseResponse;
-import com.Kosten.Api_Rest.service.DepartureServiceImpl;
+import com.Kosten.Api_Rest.service.impl.DepartureServiceImpl;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
