@@ -3,11 +3,11 @@ import Box from "@mui/material/Box";
 import {Button, Card, Stack, Typography} from "@mui/material";
 import {fCurrency} from "../../../shared/utils/formatNumber.js";
 import {Link} from "react-router-dom";
-import {iconsCardDepartures} from "../../Departures/utils/utils.jsx";
+import {iconsCardDepartures} from "../utils/utils.jsx";
 
-export const PackageCard = ({ package_ }) => {
+export const DepartureCard = ({ departure_ }) => {
 
-    const { status } = package_
+    const { status } = departure_
 
     const renderStatus = (
         <Label
@@ -21,15 +21,15 @@ export const PackageCard = ({ package_ }) => {
                 textTransform: 'uppercase',
             }}
         >
-            {package_.status}
+            {departure_.status}
         </Label>
     );
 
     const renderImg = (
         <Box
             component="img"
-            alt={package_.name}
-            src={package_.coverUrl}
+            alt={departure_.name}
+            src={departure_.coverUrl}
             sx={{
                 top: 0,
                 width: 1,
@@ -50,25 +50,25 @@ export const PackageCard = ({ package_ }) => {
                     textDecoration: 'line-through',
                 }}
             >
-                {package_.priceSale && fCurrency(package_.priceSale)}
+                {departure_.priceSale && fCurrency(departure_.priceSale)}
             </Typography>
             &nbsp;
-            {fCurrency(package_.price)}
+            {fCurrency(departure_.price)}
         </Typography>
     );
 
     return (
         <Card>
             <Box sx={{ pt: '100%', position: 'relative' }}>
-                {package_.status && renderStatus}
+                {departure_.status && renderStatus}
 
                 {renderImg}
             </Box>
 
             <Stack spacing={2} sx={{ p: 3 }}>
-                <Link to={`/paquetes/${package_.id}`} style={{ textDecoration: 'none', color: 'inherit' }}>
+                <Link to={`/salidas/${departure_.id}`} style={{ textDecoration: 'none', color: 'inherit' }}>
                     <Typography variant="subtitle2" noWrap style={{ color: 'inherit' }}>
-                        {package_.name}
+                        {departure_.name}
                     </Typography>
                 </Link>
 
@@ -80,7 +80,7 @@ export const PackageCard = ({ package_ }) => {
                                 { iconsCardDepartures[0] }
                             </Box>
                             <Typography variant="caption" >
-                                {package_.info.date}
+                                {departure_.info.date}
                             </Typography>
                         </Box>
 
@@ -89,7 +89,7 @@ export const PackageCard = ({ package_ }) => {
                                 { iconsCardDepartures[1] }
                             </Box>
                             <Typography variant="caption" >
-                                {package_.info.days}
+                                {departure_.info.days}
                             </Typography>
                         </Box>
 
@@ -98,7 +98,7 @@ export const PackageCard = ({ package_ }) => {
                                 { iconsCardDepartures[2] }
                             </Box>
                             <Typography variant="caption" >
-                                {package_.info.physicLvl}
+                                {departure_.info.physicLvl}
                             </Typography>
                         </Box>
 
@@ -107,7 +107,7 @@ export const PackageCard = ({ package_ }) => {
                                 { iconsCardDepartures[3] }
                             </Box>
                             <Typography variant="caption" >
-                                {package_.info.technicalLvl}
+                                {departure_.info.technicalLvl}
                             </Typography>
                         </Box>
 

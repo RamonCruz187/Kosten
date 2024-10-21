@@ -13,7 +13,7 @@ import {
     Chip,
     Typography
 } from '@mui/material';
-import {createPackage, getAllPackages} from "../../../api/packageApi.js";
+import {createPackage, getAllPackages, getPackageById} from "../../../api/packageApi.js";
 import Container from "@mui/material/Container";
 
 const meses = [
@@ -36,12 +36,12 @@ export const CreateEditPackage = (props) => {
 
     const { setOpenTransitionMessage, setMessageTransitionMessage, setSeverityTransitionMessage } = props;
 
-    const getPackages = useCallback(async () => {
+    const getPackById = useCallback(async ( id ) => {
         try {
-            const { data: dataPackages } = await getAllPackages();
+            const { data: dataPackages } = await getPackageById( id );
             console.log('Respuesta del backend: ', dataPackages);
         } catch (error) {
-            console.error('Error al obtener los paquetes: ', error);
+            console.error('Error al obtener los departures: ', error);
         }
     }, []);
 
