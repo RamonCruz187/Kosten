@@ -5,7 +5,7 @@ import com.Kosten.Api_Rest.dto.Departure.DepartureRequestDto;
 import com.Kosten.Api_Rest.dto.Departure.DepartureResponseDto;
 import com.Kosten.Api_Rest.dto.Departure.DepartureToUpdateDto;
 import com.Kosten.Api_Rest.dto.ExtendedBaseResponse;
-import com.Kosten.Api_Rest.service.DepartureServiceImpl;
+import com.Kosten.Api_Rest.service.impl.DepartureServiceImpl;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -24,18 +24,18 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/departures")
-@Tag(name="departures", description="manages the departures offered for each package.")
+@Tag(name="departures", description="Administra las salidas ofrecidas por cada paquete.")
 public class DepartureController {
     @Autowired
     DepartureServiceImpl departureService;
 
     @Operation(
-            summary = "Creates a new Departure",
-            description = "Allows a logged in company user to create an Departure corresponding to a package."
+            summary = "Crea una nueva salida.",
+            description = "Permite que un usuario de la empresa con sesión iniciada cree una Salida correspondiente a un Paquete."
     )
     @ApiResponses(value = {
             @ApiResponse(
-                    responseCode = "201", description = "Departure created successfully",
+                    responseCode = "201", description = "Salida creada exitosamente.",
                     content = {
                             @Content(mediaType = "application/json",
                                     schema = @Schema(implementation = ExtendedBaseResponse.class))
@@ -60,12 +60,12 @@ public class DepartureController {
     }
 
     @Operation(
-            summary = "Get a Departure by its ID.",
-            description = "Allows a user to get a Departure by its ID."
+            summary = "Obtiene una Salida por su id.",
+            description = "Permite a un usuario obtener una salida mediante su id."
     )
     @ApiResponses(value = {
             @ApiResponse(
-                    responseCode = "200", description = "Departure obtained successfully.",
+                    responseCode = "200", description = "Salida obtenida exitosamente..",
                     content = {
                             @Content(mediaType = "application/json",
                                     schema = @Schema(implementation = ExtendedBaseResponse.class))
@@ -84,12 +84,12 @@ public class DepartureController {
     }
 
     @Operation(
-            summary = "Obtains all Departures.",
-            description = "Allows to obtain all Departures from all Packages."
+            summary = "Obtiene todas las salidas.",
+            description = "Permite obtener todas las Salidas existentes de todos los Paquetes."
     )
     @ApiResponses(value = {
             @ApiResponse(
-                    responseCode = "201", description = "Departures obtained successfully.",
+                    responseCode = "201", description = "Salidas obtenidas exitosamente.",
                     content = {
                             @Content(mediaType = "application/json",
                                     schema = @Schema(implementation = ExtendedBaseResponse.class))
@@ -106,12 +106,12 @@ public class DepartureController {
     }
 
     @Operation(
-            summary = "Update a Departure",
-            description = "Allows a logged in company user to update an output by sending the Departure data through the Body."
+            summary = "Actualizar Salida.",
+            description = "Permite que un usuario de la empresa que haya iniciado sesión (admin) actualice una salida enviando los datos de la misma a través del cuerpo de la solicitud."
     )
     @ApiResponses(value = {
             @ApiResponse(
-                    responseCode = "200", description = "Departure updated successfully",
+                    responseCode = "200", description = "Salida actualizada exitosamente.",
                     content = {
                             @Content(mediaType = "application/json",
                                     schema = @Schema(implementation = ExtendedBaseResponse.class))
@@ -133,12 +133,12 @@ public class DepartureController {
     }
 
     @Operation(
-            summary = "Delete a Departure",
-            description = "Allows a logged in company user to delete a Departure."
+            summary = "Elimina una Salida.",
+            description = "Permite que un usuario de la empresa que haya iniciado sesión (admin) elimine una salida."
     )
     @ApiResponses(value = {
             @ApiResponse(
-                    responseCode = "200", description = "Departure deleted successfully.",
+                    responseCode = "200", description = "Salida eliminada correctamente.",
                     content = {
                             @Content(mediaType = "application/json",
                                     schema = @Schema(implementation = BaseResponse.class))

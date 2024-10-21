@@ -1,4 +1,4 @@
-package com.Kosten.Api_Rest.exception.UserException;
+package com.Kosten.Api_Rest.Exception.UserException;
 
 public class NotFoundUser extends RuntimeException {
     public NotFoundUser() {

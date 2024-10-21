@@ -65,8 +65,14 @@ public class PackageController {
                 packageRequestDTO.description(),
                 packageRequestDTO.punctuation(),
                 packageRequestDTO.duration(),
+                packageRequestDTO.itinerary(),
+                packageRequestDTO.physical_level(),
+                packageRequestDTO.technical_level(),
+                packageRequestDTO.included_services(),
                 new ArrayList<>(),
                 filesImages,
+                new ArrayList<>(),
+                packageRequestDTO.all_months(),
                 packageRequestDTO.active()
         );
 

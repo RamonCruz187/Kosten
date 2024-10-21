@@ -150,24 +150,25 @@ public class CommentController {
         return ResponseEntity.ok(ExtendedBaseResponse.of(response, updatedComment));
     }
 
-//    @Operation(summary = "Reportar un comentario",
-//            description = "Permite a un usuario reportar un comentario, incrementando el contador de reportes.")
-//    @ApiResponses(value = {
-//            @ApiResponse(responseCode = "200",
-//                    description = "Comentario reportado exitosamente.",
-//                    content = {
-//                            @Content(mediaType = "application/json",
-//                                    schema = @Schema(implementation = ExtendedBaseResponse.class))
-//                    }),
-//            @ApiResponse(responseCode = "404", description = "Comentario no encontrado.", content = {@Content}),
-//            @ApiResponse(responseCode = "500", description = "Error del servidor.", content = {@Content})
-//    })
-//    @PutMapping("/report/{id}")
-//    public ResponseEntity<ExtendedBaseResponse<CommentDto>> reportComment(@PathVariable("id") Long commentId) {
-//        CommentDto reportedComment = commentService.reportComment(commentId);
-//        BaseResponse response = BaseResponse.ok("Comentario reportado exitosamente.");
-//        return ResponseEntity.ok(ExtendedBaseResponse.of(response, reportedComment));
-//    }
+    @Operation(summary = "Obtener el número de reportes de un comentario",
+            description = "Devuelve la cantidad de reportes asociados a un comentario específico.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200",
+                    description = "Cantidad de reportes obtenida exitosamente.",
+                    content = {
+                            @Content(mediaType = "application/json",
+                                    schema = @Schema(implementation = ExtendedBaseResponse.class))
+                    }),
+            @ApiResponse(responseCode = "404", description = "Comentario no encontrado.", content = {@Content}),
+            @ApiResponse(responseCode = "500", description = "Error del servidor.", content = {@Content})
+    })
+    @GetMapping("/reports/count/{commentId}")
+    public ResponseEntity<ExtendedBaseResponse<Integer>> getReportCommentCount(@PathVariable("commentId") Long commentId) {
+        int reportCount = commentService.getReportCommentCount(commentId);
+        String message = "Cantidad de reportes: " + reportCount;
+        BaseResponse response = BaseResponse.ok(message);
+        return ResponseEntity.ok(ExtendedBaseResponse.of(response, reportCount));
+    }
 
 
 }

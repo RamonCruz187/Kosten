@@ -14,7 +14,7 @@ public interface StaffService {
 
     ExtendedBaseResponse<StaffResponseDto> newStaff(StaffRequestDto staffRequestDto, MultipartFile file);
 
-    ExtendedBaseResponse<StaffResponseDto> updateStaff(StaffToUpdateDto staffToUpdateDto);
+    ExtendedBaseResponse<StaffResponseDto> updateStaff(StaffToUpdateDto staffToUpdateDto, MultipartFile file);
 
     ExtendedBaseResponse<StaffResponseDto> getStaff(Long id);
 
