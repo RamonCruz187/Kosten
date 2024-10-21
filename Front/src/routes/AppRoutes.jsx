@@ -10,6 +10,7 @@ import {UserGuestRoutes} from "./UserGuestRoutes.jsx";
 import {UserPrivateRoutes} from "./UserPrivateRoutes.jsx";
 import {AdminPackages} from "../modules/admin/pages/AdminPackages.jsx";
 import PageNotFound from "../shared/pages/error/PageNotFound.jsx";
+import {CreateEditPackage} from "../modules/admin/components/CreateEditPackage.jsx";
 
 const AppRoutes = () => (
   <Router>
@@ -31,6 +32,8 @@ const AppRoutes = () => (
             <Route index element={<Navigate to="usuarios" replace />} />
             <Route path="usuarios" element={<AdminDashboard />} />
             <Route path="paquetes" element={<AdminPackages />} />
+            <Route path="paquetes/nuevo" element={<CreateEditPackage />} />
+            <Route path="paquetes/editar/:id" element={<CreateEditPackage />} />
         </Route>
 
         <Route path="/404" element={<PageNotFound />} />

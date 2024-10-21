@@ -1,6 +1,7 @@
 package com.Kosten.Api_Rest.security;
 
 import com.Kosten.Api_Rest.Jwt.JwtAuthenticationFilter;
+import com.Kosten.Api_Rest.model.Role;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -33,16 +34,14 @@ public class SecurityConfiguration {
                 .sessionManagement(sessionManagement -> sessionManagement.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .cors(Customizer.withDefaults())
                 .authorizeHttpRequests( auth -> auth
+                        .requestMatchers(HttpMethod.OPTIONS, "/**")
+                            .permitAll()  // Permitir todas las solicitudes OPTIONS
                         .requestMatchers("/test")
                             .permitAll()
-                        /*.requestMatchers("/packages")
-                            .permitAll()
-                        .requestMatchers("/packages/**")
-                            .permitAll()*/
                         .requestMatchers("/auth/**")
-                        .permitAll()
+                            .permitAll()
                         .requestMatchers("/comment/**")
-                        .permitAll()
+                            .permitAll()
                         .requestMatchers("/api-docs/**", "api-docs.yaml")
                             .permitAll()
                         .requestMatchers("/swagger-ui-custom.html", "/swagger-ui/**", "/swagger-ui/")
