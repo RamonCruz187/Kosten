@@ -130,8 +130,6 @@ public class Package {
     private List<Comment> comments;
     */
 
-
-
     public Package update(PackageToUpdateDTO packageToUpdateDTO) {
         if (packageToUpdateDTO.name() != null)
             this.name = packageToUpdateDTO.name();
