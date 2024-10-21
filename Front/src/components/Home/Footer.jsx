@@ -8,7 +8,7 @@ export default function Footer() {
     return (
         <>
          <footer >
-            <Box position="static"L x={12}
+            <Box position="static" x={12}
         sx={{
             height: "150px",
             width: "100%",

@@ -83,9 +83,10 @@ const LandingPage = () => {
   <Typography
     variant="paragraphLight"
     sx={{
-      fontWeight: '600',
+      fontWeight: 'bold',
       fontSize: '3rem',
       fontFamily: 'Oswald',
+      opacity: '100%',
       zIndex: 1, 
       position: 'absolute ',
     }}
@@ -98,7 +99,7 @@ const LandingPage = () => {
     style={{
       height: '10rem',
       margin: '16px',
-      opacity: '0.6',
+      opacity: '0.5',
       zIndex: 0, 
       position: 'relative',
     }}
