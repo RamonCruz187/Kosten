@@ -1,4 +1,4 @@
-package com.Kosten.Api_Rest.exception.TouristException;
+package com.Kosten.Api_Rest.Exception.TouristException;
 
 public class NotFoundTourist extends RuntimeException {
     public NotFoundTourist() {

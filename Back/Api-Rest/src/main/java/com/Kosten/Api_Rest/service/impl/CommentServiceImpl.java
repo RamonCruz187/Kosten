@@ -7,10 +7,13 @@ import com.Kosten.Api_Rest.dto.comment.CommentRequestDto;
 import com.Kosten.Api_Rest.dto.comment.UpdateCommentDto;
 import com.Kosten.Api_Rest.mapper.CommentMapper;
 import com.Kosten.Api_Rest.model.Comment;
+import com.Kosten.Api_Rest.model.ReportComment;
 import com.Kosten.Api_Rest.model.User;
 import com.Kosten.Api_Rest.repository.CommentRepository;
+import com.Kosten.Api_Rest.repository.ReportCommentRepository;
 import com.Kosten.Api_Rest.repository.UserRepository;
 import com.Kosten.Api_Rest.service.CommentService;
+import com.Kosten.Api_Rest.service.ReportCommentService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -24,6 +27,7 @@ public class CommentServiceImpl implements CommentService {
     private final CommentRepository commentRepository;
     private final CommentMapper commentMapper;
     private final UserRepository userRepository;
+    private final ReportCommentRepository reportCommentRepository;
 
     @Override
     @Transactional
@@ -33,7 +37,6 @@ public class CommentServiceImpl implements CommentService {
         Comment comment = commentMapper.toEntity(commentRequestDto);
         comment.setUser(user);
         comment.setIsVisible(false);
-        comment.setReport(0);
         Comment commentSaved = commentRepository.save(comment);
         return commentMapper.toDto(commentSaved);
     }
@@ -80,14 +83,14 @@ public class CommentServiceImpl implements CommentService {
         return commentMapper.toDto(commentSaved);
     }
 
-//    @Override
-//    @Transactional
-//    public CommentDto reportComment(Long commentId) {
-//        Comment comment = commentRepository.findById(commentId)
-//                .orElseThrow(() -> new CommentNotFoundException("Comentario no encontrado con ID: " + commentId));
-//        comment.setReport(comment.getReport() + 1);
-//        Comment updatedComment = commentRepository.save(comment);
-//        return commentMapper.toDto(updatedComment);
-//    }
+    @Override
+    @Transactional(readOnly = true)
+    public int getReportCommentCount(Long commentId) {
+        Comment comment = commentRepository.findById(commentId)
+                .orElseThrow(() -> new CommentNotFoundException("Comentario no encontrado con ID: " + commentId));
+        List<ReportComment> reportCommentList = reportCommentRepository.findAllByCommentId(comment.getId());
+        return reportCommentList.size();
+    }
+
 
 }

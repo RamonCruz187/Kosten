@@ -16,12 +16,10 @@ import java.util.List;
 @NoArgsConstructor
 @Builder
 public class Comment {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String content;
-    private int report;
     @CreationTimestamp
     @Column(name = "`dateCreation`", nullable = false, updatable = false)
     private LocalDateTime dateCreation;
@@ -29,6 +27,7 @@ public class Comment {
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
     private Boolean isVisible;
-
+    @OneToMany(mappedBy = "comment", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<ReportComment> reportComments = new ArrayList<>();
 }
 

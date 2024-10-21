@@ -1,4 +1,4 @@
-package com.Kosten.Api_Rest.exception.TouristException;
+package com.Kosten.Api_Rest.Exception.TouristException;
 
 public class TouristAlreadyExistsException extends RuntimeException{
     public TouristAlreadyExistsException() {
