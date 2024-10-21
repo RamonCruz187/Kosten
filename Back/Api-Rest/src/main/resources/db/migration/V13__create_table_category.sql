@@ -5,3 +5,5 @@ create table category (
                        PRIMARY KEY (id),
                        FOREIGN KEY (package_id)
                            REFERENCES packages (id));
+
+ALTER TABLE packages ADD COLUMN category_id BIGINT;

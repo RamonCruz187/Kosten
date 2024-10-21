@@ -67,6 +67,7 @@ public class AuthServiceImpl implements AuthService {
                 .username(request.username())
                 .password(passwordEncoder.encode(request.password()))
                 .email(request.email())
+                .contact(request.contact())
                 .isActive(true)
                 .role(Role.USER)
                 .build();

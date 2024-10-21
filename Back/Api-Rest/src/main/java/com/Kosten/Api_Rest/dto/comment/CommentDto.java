@@ -1,15 +1,14 @@
 package com.Kosten.Api_Rest.dto.comment;
 
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
+import com.Kosten.Api_Rest.dto.ReportComment.ReportCommentDto;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.util.List;
 
 public record CommentDto(
         Long id,
         String content,
-        int report,
         Boolean isVisible,
         LocalDateTime dateCreation,
         Long userId
