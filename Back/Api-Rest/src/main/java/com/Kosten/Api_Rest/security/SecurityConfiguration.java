@@ -1,6 +1,7 @@
 package com.Kosten.Api_Rest.security;
 
 import com.Kosten.Api_Rest.Jwt.JwtAuthenticationFilter;
+import com.Kosten.Api_Rest.model.Role;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -38,6 +39,10 @@ public class SecurityConfiguration {
                             .permitAll()
                         .requestMatchers("/user/**")
                             .permitAll()
+                        .requestMatchers(HttpMethod.POST, "/packages")
+                            .hasAnyAuthority(Role.ADMIN.name(), Role.USER.name())
+                        .requestMatchers(HttpMethod.GET, "/packages")
+                            .hasAnyAuthority(Role.ADMIN.name(), Role.USER.name())
                         .requestMatchers("/auth/**")
                             .permitAll()
                         .requestMatchers("/comment/**")
