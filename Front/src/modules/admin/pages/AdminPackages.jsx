@@ -1,6 +1,8 @@
 import Box from "@mui/material/Box";
 import {Button, Typography} from "@mui/material";
-import {useNavigate} from "react-router-dom";
+import {Outlet, useNavigate} from "react-router-dom";
+import Container from "@mui/material/Container";
+import {PackageGrid} from "../../package/components/PackageGrid.jsx";
 
 export const AdminPackages = () => {
 
@@ -11,19 +13,23 @@ export const AdminPackages = () => {
     const navigate = useNavigate();
 
     return (
-        <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
-            <Typography variant="h4">Paquetes</Typography>
+        <Container component="main" sx={{ display: 'flex', flexDirection: 'column', gap: 2 }} >
+            <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
+                <Typography variant="h4">Paquetes</Typography>
 
-            {/*Boton Nuevo Paquete*/}
-            <Box>
-                <Button
-                    variant="contained"
-                    color="primary"
-                    onClick={handleNewPackage}
-                >
-                    Nuevo Paquete
-                </Button>
+                <Box>
+                    <Button
+                        variant="contained"
+                        color="primary"
+                        onClick={handleNewPackage}
+                    >
+                        Nuevo Paquete
+                    </Button>
+                </Box>
             </Box>
-        </Box>
+            <Box>
+                <PackageGrid />
+            </Box>
+        </Container>
     );
 }
