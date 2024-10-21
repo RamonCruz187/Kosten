@@ -7,4 +7,5 @@ export const ROLES = {
 export const types_reducer = {
     AUTH_LOGIN: 'AUTH_LOGIN',
     AUTH_LOGOUT: 'AUTH_LOGOUT',
+    SET_USER_DATA: 'SET_USER_DATA',
 };

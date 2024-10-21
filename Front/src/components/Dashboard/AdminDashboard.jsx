@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { TextField, Button, Select, MenuItem, FormControl, InputLabel, Switch, Table, TableBody, TableCell, TableHead, TableRow, Paper, TablePagination, Dialog, DialogActions, DialogContent, DialogTitle } from '@mui/material';
 import axios from 'axios';
+import NavBar from "../Home/NavBar.jsx";
 
 const users0 = [
   // Mock users data

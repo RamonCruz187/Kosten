@@ -1,10 +1,10 @@
 import { Box, Button } from "@mui/material";
-import {useAuthLogin} from "../hooks/useAuthLogin.jsx";
+import {useAuth} from "../hooks/useAuth.jsx";
 import {NotificationService} from "../services/notistack.service.jsx";
 
 export const PopoverLogout = () => {
 
-    const { handleLogout } = useAuthLogin();
+    const { handleLogout } = useAuth();
 
     const handleClick = () => {
         NotificationService.info('Vuelve pronto!');

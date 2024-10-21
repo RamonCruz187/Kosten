@@ -1,9 +1,15 @@
 import { Button, Stack, Typography } from "@mui/material";
+import { Link } from "react-router-dom";
 
 export default function Muestras() {
   return (
     <>
       <Stack spacing={2}>
+      <Link to="/login">
+      <Button variant="contained" color="grayButton">
+      prueba 
+      </Button>
+      </Link> 
         <Button color="greenButton"> boton primario </Button>
         <Button color="yellowButton"> boton primario </Button>
         <Button color="brownButton">secondary button text</Button>
@@ -21,6 +27,7 @@ export default function Muestras() {
           adicional
         </p>
         <br />
+        <Typography variant="titleXL">title xl</Typography>
         <Typography variant="titleH1">title h1</Typography>
         <Typography variant="titleH2">title h2</Typography>
         <Typography variant="titleH3">title h3</Typography>

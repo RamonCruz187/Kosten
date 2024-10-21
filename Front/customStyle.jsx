@@ -1,4 +1,3 @@
-
 export const customPalette = {
     primary: { // yellow
         main: "#FCBA5B", // prim 500 figma
@@ -18,9 +17,11 @@ export const customPalette = {
     tertiary: { // gray
         main: "#C9C9C9", // gray 300 figma
         dark: "#9E9E9E", // gray 500 figma
+        darkest: "#494949", // gray 850 figma
     },
     text: {
         main: "#080808", // gray 950 figma
+        mid: "#5C5C5C", // gray 800 figma
         light: "#F3F3F3" // gray 50 figma
     },
 };
@@ -54,6 +55,21 @@ export const defaultCTA = {
 
 export const defaultTitle = {
     fontFamily: customFonts.family.oswald,
+    letterSpacing: customFonts.letter.normal,
     fontWeight: 600,
     color: customPalette.text.main,
+}
+
+export const inputText = {
+    fontFamily: 'Roboto, sans-serif',
+    fontWeight: 400,
+    fontSize: "1rem", // 16px
+    color: customPalette.text.main,
+}
+
+export const inputAdvice = {
+    fontFamily: 'Roboto, sans-serif',
+    fontWeight: 400,
+    fontSize: "0.875rem", // 12px
+    color: customPalette.text.mid,
 }
