@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Button, Typography, Stack } from "@mui/material";
+import {Button, Typography, Stack, CircularProgress} from "@mui/material";
 import { login } from "../../api/authApi.js";
 import { NotificationService } from "../../shared/services/notistack.service.jsx";
 import { useAuth } from "../../shared/hooks/useAuth.jsx";
@@ -8,10 +8,12 @@ import InputNormal from "./InputNormal.jsx";
 import InputPassword from "./InputPassword.jsx";
 import {getData} from "../../api/userApi.js";
 import {useUserData} from "../../shared/hooks/useUserData.jsx";
+import Box from "@mui/material/Box";
 
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [isFetching, setIsFetching] = useState(false);
 
   const [showPassword, setShowPassword] = useState(false);
 
@@ -23,6 +25,7 @@ const Login = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
+        setIsFetching(true);
       const { data: dataAuth } = await login({ email, password });
       NotificationService.success(`Bienvenido nuevamente`, 3000);
 
@@ -42,8 +45,10 @@ const Login = () => {
       setUserData(dataUser.data);
 
     } catch (error) {
-      NotificationService.error('Hubo un error en el servidor.', 3000);
+      NotificationService.error('Error al intentar iniciar sesión.', 3000);
       console.error(error);
+    } finally {
+        setIsFetching(false);
     }
   };
 
@@ -73,10 +78,22 @@ const Login = () => {
         <Typography variant="buttonMini">
           olvidé mi contraseña
         </Typography>
-        
-        <Button color="greenButton" type="submit" sx={{ width: "50%" }}>
-          Login
-        </Button>
+
+        {
+          isFetching ? (
+              <Box sx={{ display: 'flex', flexDirection: 'column', width: "50%", textAlign: 'center', alignItems: 'center', p: 1, gap: 1 }}>
+                <CircularProgress
+                    size={20}
+                />
+                <Typography variant="caption">Cargando...</Typography>
+              </Box>
+          ) : (
+              <Button color="greenButton" type="submit" sx={{ width: "50%" }}>
+                Login
+              </Button>
+          )
+        }
+
         <Link to="/register" style={{width:'50%'}}>
         <Button color="transparentButton" disableElevation sx={{width:"100%"}}>
           Registrarse

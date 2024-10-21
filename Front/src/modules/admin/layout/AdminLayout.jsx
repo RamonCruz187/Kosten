@@ -3,6 +3,7 @@ import Container from "@mui/material/Container";
 import {Outlet} from "react-router-dom";
 import NavBar from "../../../components/Home/NavBar.jsx";
 import {css} from "@emotion/react";
+import {MenuAdmin} from "../components/MenuAdmin.jsx";
 
 const styles = {
     container: css`
@@ -32,12 +33,9 @@ export const AdminLayout = () => {
                         width: '100%'
                     }}
                 >
-                    <NavBar />
+                    <MenuAdmin />
                 </Box>
             </Container>
-            <div>
-                <Outlet />
-            </div>
         </Box>
     )
 }
