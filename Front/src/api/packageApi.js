@@ -18,3 +18,18 @@ export const createPackage = ( body ) => {
       }
   );
 };
+
+export const getAllPackages = () => {
+
+    const authLS = localStorage.getItem('userAuth');
+    const auth = JSON.parse(authLS);
+
+    return axios.get(
+        `${API_URL_PROD}/packages`,
+        {
+            headers: {
+                'Authorization': `Bearer ${auth.token}`
+            }
+        }
+    );
+};

@@ -13,7 +13,7 @@ import {
     Chip,
     Typography
 } from '@mui/material';
-import {createPackage} from "../../../api/packageApi.js";
+import {createPackage, getAllPackages} from "../../../api/packageApi.js";
 
 const meses = [
     'Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio',
@@ -34,6 +34,15 @@ export const CreateEditPackage = (props) => {
     const [imagenes, setImagenes] = useState([]);
 
     const { setOpenTransitionMessage, setMessageTransitionMessage, setSeverityTransitionMessage } = props;
+
+    const getPackages = useCallback(async () => {
+        try {
+            const { data: dataPackages } = await getAllPackages();
+            console.log('Respuesta del backend: ', dataPackages);
+        } catch (error) {
+            console.error('Error al obtener los paquetes: ', error);
+        }
+    }, []);
 
     const requestPackage = useCallback(async (values) => {
         setDisabledButton(true);
@@ -89,7 +98,8 @@ export const CreateEditPackage = (props) => {
         },
         validationSchema: paqueteSchema,
         onSubmit: (values) => {
-            requestPackage(values);
+            // requestPackage(values);
+            getPackages();
         },
     });
 
