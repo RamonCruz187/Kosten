@@ -18,6 +18,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+
 @Service
 @RequiredArgsConstructor
 public class PackageServiceImpl implements PackageService {
@@ -32,6 +34,7 @@ public class PackageServiceImpl implements PackageService {
         Package packageEntity = packageMapper.toEntity(packageRequestDTO);
 
         var packageDB = packageRepository.save(packageEntity);
+        packageDB.setMonths(packageRequestDTO.all_months());
 
         if( !packageRequestDTO.filesImages().isEmpty() ) {
             packageRequestDTO.filesImages().forEach( file -> {
@@ -77,10 +80,10 @@ public class PackageServiceImpl implements PackageService {
 
             Page<Package> packages = packageRepository.findAllByActiveIsTrue(pageable);
 
-            if (packages.isEmpty()) {
+            if (packages.getContent().isEmpty()) {
                 return ExtendedBaseResponse.of(
                         BaseResponse.ok("No se encontraron paquetes."),
-                        Page.empty()
+                        null
                 );
             }
 
