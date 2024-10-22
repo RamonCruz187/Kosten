@@ -16,7 +16,6 @@ public interface DepartureMapper {
     Departure toEntity(DepartureRequestDto departureRequestDto);
     DepartureRequestDto departureToDepartureRequestDto(Departure departure_);
 
-    Departure toEntity(DepartureResponseDto departureResponseDTO);
 
     DepartureResponseDto departureToDepartureResponseDto(Departure departure_);
 

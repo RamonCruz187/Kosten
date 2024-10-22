@@ -3,7 +3,6 @@ package com.Kosten.Api_Rest.service.impl;
 import com.Kosten.Api_Rest.Exception.DepartureNotFoundException;
 import com.Kosten.Api_Rest.Exception.packagesExc.PackageNotFoundException;
 import com.Kosten.Api_Rest.dto.BaseResponse;
-import com.Kosten.Api_Rest.dto.Departure.DepartureRequestDto;
 import com.Kosten.Api_Rest.dto.ExtendedBaseResponse;
 import com.Kosten.Api_Rest.dto.packageDTO.PackageRequestDTO;
 import com.Kosten.Api_Rest.dto.packageDTO.PackageResponseDTO;
@@ -21,7 +20,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-import com.Kosten.Api_Rest.repositoy.IDepartureRepository;
+import com.Kosten.Api_Rest.repository.IDepartureRepository;
 
 
 import java.util.ArrayList;

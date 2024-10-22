@@ -35,6 +35,7 @@ public class DepartureRequestDto implements Serializable {
     @Size(min = 4, max = 45)
     private String finishPlace;
     @NotNull
-    Boolean isActive;
+    private Boolean isActive;
+    @NotNull
     private int quota;
 }

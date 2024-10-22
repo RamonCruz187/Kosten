@@ -26,9 +26,9 @@ public class DepartureResponseDto implements Serializable {
    /*
     private Set<User> usersList;*/
     private Double price;
-
+    @NotNull
     private LocalDateTime startDate;
-
+    @NotNull
     private LocalDateTime endDate;
 
     @NotBlank
@@ -36,6 +36,7 @@ public class DepartureResponseDto implements Serializable {
     @NotBlank
     private String finishPlace;
     @NotNull
-    Boolean isActive;
+    private Boolean isActive;
+    @NotNull
     private int quota;
 }

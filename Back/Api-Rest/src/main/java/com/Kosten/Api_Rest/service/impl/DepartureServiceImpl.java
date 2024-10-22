@@ -11,7 +11,7 @@ import com.Kosten.Api_Rest.mapper.DepartureMapper;
 import com.Kosten.Api_Rest.model.Departure;
 import com.Kosten.Api_Rest.model.Package;
 import com.Kosten.Api_Rest.repository.PackageRepository;
-import com.Kosten.Api_Rest.repositoy.IDepartureRepository;
+import com.Kosten.Api_Rest.repository.IDepartureRepository;
 import com.Kosten.Api_Rest.service.IDepartureService;
 import org.mapstruct.factory.Mappers;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -87,11 +87,11 @@ public class DepartureServiceImpl implements IDepartureService {
         DepartureMapper departureMapper = Mappers.getMapper(DepartureMapper.class);
         departure.setPrice(departureToUpdateDto.price());
         departure.setEndDate(departureToUpdateDto.endDate());
-        departure.setEndTime(departureToUpdateDto.endTime());
         departure.setFinishPlace(departureToUpdateDto.finishPlace());
         departure.setStartDate(departureToUpdateDto.startDate());
-        departure.setStartTime(departureToUpdateDto.startTime());
         departure.setMeetingPlace(departureToUpdateDto.meetingPlace());
+        departure.setQuota(departureToUpdateDto.quota());
+        departure.setIsActive(departureToUpdateDto.isActive());
         /*departure.setUsersList(departureToUpdateDto.usersList());*/
         departureRepository.save(departure);
         return ExtendedBaseResponse.of(
