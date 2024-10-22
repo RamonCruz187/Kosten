@@ -1,19 +1,21 @@
 import {Delete, Edit, Label} from "@mui/icons-material";
 import Box from "@mui/material/Box";
 import {Avatar, Button, Card, Paper, Stack, Tooltip, Typography} from "@mui/material";
-import {Link} from "react-router-dom";
+import {Link, useNavigate} from "react-router-dom";
 import {iconsCardPackages} from "../../Departures/utils/utils.jsx";
 import {deepOrange} from "@mui/material/colors";
 import IconButton from "@mui/material/IconButton";
 
 export const PackageCard = ({ package_ }) => {
 
+    const navigate = useNavigate();
+
     const handleDelete = ( id ) => {
         console.log('Eliminar paquete', id);
     }
 
     const handleEdit = ( id ) => {
-        console.log('Editar paquete', id);
+        navigate(`/admin/paquetes/editar/${id}`);
     }
 
     const renderPunctuation = (

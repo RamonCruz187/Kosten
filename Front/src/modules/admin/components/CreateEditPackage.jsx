@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from 'react';
+import React, {useState, useCallback, useEffect} from 'react';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import {
@@ -15,6 +15,7 @@ import {
 } from '@mui/material';
 import {createPackage, getAllPackages, getPackageById} from "../../../api/packageApi.js";
 import Container from "@mui/material/Container";
+import {useParams} from "react-router-dom";
 
 const meses = [
     'Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio',
@@ -31,14 +32,21 @@ const paqueteSchema = Yup.object().shape({
 });
 
 export const CreateEditPackage = (props) => {
+
     const [disabledButton, setDisabledButton] = useState(false);
     const [imagenes, setImagenes] = useState([]);
+    const [package_, setPackage] = useState(null);
+
+    const params = useParams();
 
     const { setOpenTransitionMessage, setMessageTransitionMessage, setSeverityTransitionMessage } = props;
 
     const getPackById = useCallback(async ( id ) => {
         try {
             const { data: dataPackages } = await getPackageById( id );
+            setPackage( dataPackages.data );
+            console.log('Months: ', dataPackages.data.months.map(month => month.name));
+
             console.log('Respuesta del backend: ', dataPackages);
         } catch (error) {
             console.error('Error al obtener los departures: ', error);
@@ -46,6 +54,7 @@ export const CreateEditPackage = (props) => {
     }, []);
 
     const requestPackage = useCallback(async (values) => {
+        console.log('Valores del formulario: ', values);
         setDisabledButton(true);
 
         const formData = new FormData();
@@ -59,14 +68,14 @@ export const CreateEditPackage = (props) => {
             console.log(key, value);
         }
 
-        try {
+        /*try {
             // Aquí iría la lógica para enviar formData al backend
             const { data: dataPackage } = await createPackage(formData);
             console.log('Respuesta del backend: ', dataPackage);
             // const data = await response.json();
 
             // Simulamos una respuesta exitosa
-            /*const data = { error: false, message: 'Paquete creado con éxito' };
+            /!*const data = { error: false, message: 'Paquete creado con éxito' };
 
             if (!data.error) {
                 setSeverityTransitionMessage('success');
@@ -74,7 +83,7 @@ export const CreateEditPackage = (props) => {
             } else {
                 setSeverityTransitionMessage('error');
                 setMessageTransitionMessage(data.message);
-            }*/
+            }*!/
         } catch (error) {
             console.error('Error al crear el paquete: ', error);
             // setSeverityTransitionMessage('error');
@@ -82,7 +91,7 @@ export const CreateEditPackage = (props) => {
         } finally {
             // setOpenTransitionMessage(true);
             setDisabledButton(false);
-        }
+        }*/
     }, [imagenes, setOpenTransitionMessage, setMessageTransitionMessage, setSeverityTransitionMessage]);
 
     const formik = useFormik({
@@ -113,6 +122,12 @@ export const CreateEditPackage = (props) => {
         setImagenes([]);
     };
 
+    useEffect(() => {
+        if (params.id) {
+            getPackById(params.id);
+        }
+    }, [ params.id, getPackById ]);
+
     return (
         <Container component="main" sx={{ display: 'flex', flexDirection: 'column', gap: 2 }} >
             <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
@@ -127,7 +142,7 @@ export const CreateEditPackage = (props) => {
                             id="name"
                             name="name"
                             label="Nombre"
-                            value={formik.values.name}
+                            value={ package_ ? package_.name : formik.values.name }
                             onChange={formik.handleChange}
                             onBlur={formik.handleBlur}
                             error={formik.touched.name && Boolean(formik.errors.name)}
@@ -142,7 +157,7 @@ export const CreateEditPackage = (props) => {
                             label="Descripción"
                             multiline
                             rows={4}
-                            value={formik.values.description}
+                            value={ package_ ? package_.description : formik.values.description }
                             onChange={formik.handleChange}
                             onBlur={formik.handleBlur}
                             error={formik.touched.description && Boolean(formik.errors.description)}
@@ -156,7 +171,7 @@ export const CreateEditPackage = (props) => {
                             name="punctuation"
                             label="Puntuación"
                             type="number"
-                            value={formik.values.punctuation}
+                            value={ package_ ? package_.punctuation : formik.values.punctuation }
                             onChange={formik.handleChange}
                             onBlur={formik.handleBlur}
                             error={formik.touched.punctuation && Boolean(formik.errors.punctuation)}
@@ -169,7 +184,7 @@ export const CreateEditPackage = (props) => {
                             id="duration"
                             name="duration"
                             label="Duración"
-                            value={formik.values.duration}
+                            value={ package_ ? package_.duration : formik.values.duration }
                             onChange={formik.handleChange}
                             onBlur={formik.handleBlur}
                             error={formik.touched.duration && Boolean(formik.errors.duration)}
@@ -184,7 +199,7 @@ export const CreateEditPackage = (props) => {
                             label="Itinerario"
                             multiline
                             rows={4}
-                            value={formik.values.itinerary}
+                            value={ package_ ? package_.itinerary : formik.values.itinerary }
                             onChange={formik.handleChange}
                             onBlur={formik.handleBlur}
                             error={formik.touched.itinerary && Boolean(formik.errors.itinerary)}
@@ -198,7 +213,7 @@ export const CreateEditPackage = (props) => {
                                 labelId="physical-level-label"
                                 id="physical_level"
                                 name="physical_level"
-                                value={formik.values.physical_level}
+                                value={ package_ ? package_.physical_level : formik.values.physical_level }
                                 onChange={formik.handleChange}
                                 onBlur={formik.handleBlur}
                                 variant="standard"
@@ -219,7 +234,7 @@ export const CreateEditPackage = (props) => {
                                 labelId="technical-level-label"
                                 id="technical_level"
                                 name="technical_level"
-                                value={formik.values.technical_level}
+                                value={ package_ ? package_.technical_level : formik.values.technical_level }
                                 onChange={formik.handleChange}
                                 onBlur={formik.handleBlur}
                                 variant="standard"
@@ -241,7 +256,7 @@ export const CreateEditPackage = (props) => {
                                 id="all_months"
                                 name="all_months"
                                 multiple
-                                value={formik.values.all_months}
+                                value={ package_ ? package_.months.map(month => month.name) : formik.values.all_months }
                                 onChange={formik.handleChange}
                                 onBlur={formik.handleBlur}
                                 variant="standard"
@@ -272,7 +287,7 @@ export const CreateEditPackage = (props) => {
                             label="Servicios incluidos"
                             multiline
                             rows={4}
-                            value={formik.values.included_services}
+                            value={ package_ ? package_.included_services : formik.values.included_services }
                             onChange={formik.handleChange}
                             onBlur={formik.handleBlur}
                             error={formik.touched.included_services && Boolean(formik.errors.included_services)}
@@ -323,7 +338,9 @@ export const CreateEditPackage = (props) => {
                         variant="contained"
                         disabled={disabledButton}
                     >
-                        Crear Paquete
+                        {
+                            params.id ? 'Actualizar' : 'Crear Paquete'
+                        }
                     </Button>
                 </Box>
             </Box>
