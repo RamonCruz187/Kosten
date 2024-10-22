@@ -38,7 +38,7 @@ export const PackageGrid = ({ title }) => {
             fetchPackages();
         }
 
-    }, [ fetchPackages ]);
+    }, [ fetchPackages, isFetching ]);
 
     if( isFetching ) {
         return (
@@ -57,7 +57,7 @@ export const PackageGrid = ({ title }) => {
                 {
                     packages.map( ( item ) => (
                         <Grid key={item.id} size={{ xs: 12, sm: 4 }} >
-                            <PackageCard package_={ item } />
+                            <PackageCard package_={ item } setIsFetching={ setIsFetching } />
                         </Grid>
                     ))
                 }

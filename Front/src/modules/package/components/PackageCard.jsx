@@ -1,17 +1,36 @@
+import { useState } from "react";
 import {Delete, Edit, Label} from "@mui/icons-material";
 import Box from "@mui/material/Box";
-import {Avatar, Button, Card, Paper, Stack, Tooltip, Typography} from "@mui/material";
+import {Avatar, Card, Paper, Stack, Tooltip, Typography} from "@mui/material";
 import {Link, useNavigate} from "react-router-dom";
 import {iconsCardPackages} from "../../Departures/utils/utils.jsx";
 import {deepOrange} from "@mui/material/colors";
 import IconButton from "@mui/material/IconButton";
+import {DialogDelete} from "../../../shared/components/DialogDelete.jsx";
+import {deletePackage} from "../../../api/packageApi.js";
+import {NotificationService} from "../../../shared/services/notistack.service.jsx";
 
-export const PackageCard = ({ package_ }) => {
+export const PackageCard = ({ package_, setIsFetching }) => {
+    const [open, setOpen] = useState(false);
 
+    const handleOpenDialog = () => {
+        setOpen(true);
+    };
+
+    const handleCloseDialog = () => {
+        setOpen(false);
+    };
     const navigate = useNavigate();
 
-    const handleDelete = ( id ) => {
-        console.log('Eliminar paquete', id);
+    const handleDelete = async ( id ) => {
+        try {
+            const res = await deletePackage( id );
+            NotificationService.success('Paquete eliminado correctamente', 1200);
+            setIsFetching(true);
+        } catch (error) {
+            console.error(error);
+            NotificationService.error('Error al eliminar el paquete', 2500);
+        }
     }
 
     const handleEdit = ( id ) => {
@@ -35,7 +54,7 @@ export const PackageCard = ({ package_ }) => {
                     {
                         package_.active ?
                             <Tooltip title={"Disponible"} placement="top">
-                                <Label color="success" sx={{ fontSize: '1rem' }} />
+                                <Label color="primary" sx={{ fontSize: '1rem' }} />
                             </Tooltip>
                             :
                             <Tooltip title={"No Disponible"} placement="top">
@@ -76,7 +95,7 @@ export const PackageCard = ({ package_ }) => {
             </Box>
 
             <Stack spacing={2} sx={{ p: 3 }}>
-                <Link to={`/paquetes/${package_.id}`} style={{ textDecoration: 'none', color: 'inherit' }}>
+                <Link to={`/admin/paquetes/${package_.id}`} style={{ textDecoration: 'none', color: 'inherit' }}>
                     <Tooltip title={package_.name} placement="top">
                         <Typography variant="subtitle2" noWrap style={{ color: 'inherit' }}>
                             {package_.name}
@@ -162,19 +181,26 @@ export const PackageCard = ({ package_ }) => {
 
                     <Box sx={{ display: 'flex', gap: 1 }}>
                         <Tooltip title="Eliminar paquete" placement="top">
-                            <IconButton size="small" variant="contained" color="error" onClick={ () => handleDelete(package_.id) }>
+                            <IconButton size="small" variant="contained" color="error" onClick={ handleOpenDialog }>
                                 <Delete />
                             </IconButton>
                         </Tooltip>
 
                         <Tooltip title="Editar paquete" placement="top">
-                            <IconButton size="small" variant="contained" color="success" onClick={ () => handleEdit(package_.id) }>
+                            <IconButton size="small" variant="contained" color="success" onClick={ () => handleEdit( package_.id ) }>
                                 <Edit />
                             </IconButton>
                         </Tooltip>
                     </Box>
                 </Box>
             </Stack>
+
+            <DialogDelete
+                open={open}
+                handleClose={handleCloseDialog}
+                handleDelete={handleDelete}
+                id={package_.id}
+            />
         </Card>
     );
 }
