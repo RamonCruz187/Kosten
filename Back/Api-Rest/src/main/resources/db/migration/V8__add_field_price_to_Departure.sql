@@ -1,1 +1,1 @@
-ALTER TABLE Departure ADD COLUMN price DOUBLE;
+ALTER TABLE departure ADD COLUMN price DOUBLE;
