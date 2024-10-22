@@ -2,6 +2,7 @@ package com.Kosten.Api_Rest.dto.packageDTO;
 
 import com.Kosten.Api_Rest.dto.Departure.DepartureResponseDto;
 import com.Kosten.Api_Rest.dto.images.ImageResponseDTO;
+import com.Kosten.Api_Rest.model.MonthNames;
 
 import java.io.Serializable;
 import java.util.List;
@@ -16,9 +17,19 @@ public record PackageResponseDTO(
         String name,
         String description,
         int punctuation,
-        int duration,
+        String duration,
+
+        String itinerary,
+        String physical_level,
+        String technical_level,
+        String included_services,
         List<ImageResponseDTO> images,
-        Set<DepartureResponseDto> departures
+        Set<DepartureResponseDto> departures,
+
+        List<MonthNames> months,
+
+        boolean active
+
 
 ) implements Serializable {
 }

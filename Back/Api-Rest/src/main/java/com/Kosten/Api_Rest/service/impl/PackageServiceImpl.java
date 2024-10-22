@@ -24,6 +24,8 @@ import org.springframework.stereotype.Service;
 import com.Kosten.Api_Rest.repositoy.IDepartureRepository;
 
 
+import java.util.ArrayList;
+
 @Service
 @RequiredArgsConstructor
 public class PackageServiceImpl implements PackageService {
@@ -40,6 +42,7 @@ public class PackageServiceImpl implements PackageService {
         Package packageEntity = packageMapper.toEntity(packageRequestDTO);
 
         var packageDB = packageRepository.save(packageEntity);
+        packageDB.setMonths(packageRequestDTO.all_months());
 
         if( !packageRequestDTO.filesImages().isEmpty() ) {
             packageRequestDTO.filesImages().forEach( file -> {

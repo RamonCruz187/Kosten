@@ -44,6 +44,8 @@ public class SecurityConfiguration {
                         .permitAll()
                         .requestMatchers("/comment/**")
                         .permitAll()
+                        .requestMatchers("/report-comment/**")
+                        .permitAll()
                         .requestMatchers("/api-docs/**", "api-docs.yaml")
                             .permitAll()
                         .requestMatchers("/swagger-ui-custom.html", "/swagger-ui/**", "/swagger-ui/")

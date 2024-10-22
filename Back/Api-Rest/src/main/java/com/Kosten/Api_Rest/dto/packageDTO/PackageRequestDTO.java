@@ -2,6 +2,7 @@ package com.Kosten.Api_Rest.dto.packageDTO;
 
 import com.Kosten.Api_Rest.dto.Departure.DepartureResponseDto;
 import com.Kosten.Api_Rest.dto.images.ImageResponseDTO;
+import com.Kosten.Api_Rest.model.MonthNames;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Positive;
@@ -27,13 +28,19 @@ public record PackageRequestDTO(
         @PositiveOrZero(message = "La puntuación debe ser 0 o mayor")
         int punctuation,
 
-        @PositiveOrZero(message = "La duración debe ser 0 o mayor")
-        int duration,
+        String duration,
+        String itinerary,
+        String physical_level,
+        String technical_level,
+        String included_services,
 
         List<ImageResponseDTO> images,
 
         List<MultipartFile> filesImages,
         Set<DepartureResponseDto> departures,
+
+        List<MonthNames> months,
+        List<Integer> all_months,
 
         boolean active
 
