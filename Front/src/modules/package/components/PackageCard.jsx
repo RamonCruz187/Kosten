@@ -24,9 +24,7 @@ export const PackageCard = ({ package_, setIsFetching }) => {
 
     const handleDelete = async ( id ) => {
         try {
-            console.log('Eliminar paquete', id);
             const res = await deletePackage( id );
-            console.log( res );
             NotificationService.success('Paquete eliminado correctamente', 1200);
             setIsFetching(true);
         } catch (error) {
@@ -97,7 +95,7 @@ export const PackageCard = ({ package_, setIsFetching }) => {
             </Box>
 
             <Stack spacing={2} sx={{ p: 3 }}>
-                <Link to={`/paquetes/${package_.id}`} style={{ textDecoration: 'none', color: 'inherit' }}>
+                <Link to={`/admin/paquetes/${package_.id}`} style={{ textDecoration: 'none', color: 'inherit' }}>
                     <Tooltip title={package_.name} placement="top">
                         <Typography variant="subtitle2" noWrap style={{ color: 'inherit' }}>
                             {package_.name}

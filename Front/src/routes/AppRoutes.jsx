@@ -11,6 +11,7 @@ import PageNotFound from "../shared/pages/error/PageNotFound.jsx";
 import {CreateEditPackage} from "../modules/admin/components/CreateEditPackage.jsx";
 import {DepartureView} from "../modules/Departures/pages/DepartureView.jsx";
 import {DepartureFull} from "../modules/Departures/pages/DepartureFull.jsx";
+import {PackageFullView} from "../modules/admin/pages/PackageFullView.jsx";
 
 const AppRoutes = () => (
   <Router>
@@ -32,6 +33,7 @@ const AppRoutes = () => (
             <Route index element={<Navigate to="usuarios" replace />} />
             <Route path="usuarios" element={<AdminDashboard />} />
             <Route path="paquetes" element={<AdminPackages />} />
+            <Route path="paquetes/:id" element={<PackageFullView />} />
             <Route path="paquetes/nuevo" element={<CreateEditPackage />} />
             <Route path="paquetes/editar/:id" element={<CreateEditPackage />} />
         </Route>
