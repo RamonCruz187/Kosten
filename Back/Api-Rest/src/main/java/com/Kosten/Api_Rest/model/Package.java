@@ -65,6 +65,17 @@ public class Package {
     /**********************************************************************************/
 
     /****************************************
+     *  Relations with Category Entity
+     ****************************************/
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "category_id",referencedColumnName = "id", nullable = false)
+    private Category category;
+
+    /********End of Relations with Category Entity********/
+
+
+    /****************************************
      *  Relations with Image Entity
      ****************************************/
     @OneToMany( mappedBy = "packageRef", orphanRemoval = true )
