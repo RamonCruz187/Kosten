@@ -3,6 +3,9 @@ import NavBar from './NavBar';
 import imgfondo from '../../assets/Image-hero.jpg';
 import kosten from '../../assets/kosten.svg';
 import bot from '../../assets/bot.svg';
+import {PackageGrid} from "../../modules/package/components/PackageGrid.jsx";
+import Footer from './Footer.jsx';
+import {DepartureGrid} from "../../modules/Departures/components/DepartureGrid.jsx";
 /*<<<<<<< HEAD
 import AppAppBar from "../../shared/components/AppAppBar.jsx";
 import Box from "@mui/material/Box";
@@ -54,7 +57,7 @@ const LandingPage = () => {
               height: '100%',
               objectFit: 'cover',
               filter: 'grayscale(50%)',
-              animation: 'zoom 15s',
+              animation: 'zoom 20s',
               animationIterationCount: '1',
             }}
           />
@@ -69,29 +72,40 @@ const LandingPage = () => {
               alignItems: 'center',
             }}
           >
-            <Typography
-              variant="paragraphLight"
-              sx={{
-                fontWeight: '600',
-                fontSize: '3rem',
-                fontFamily: 'Oswald',
-                zIndex: 1,
-                position: 'relative',
-              }}
-            >
-              SOMOS AVENTURA
-            </Typography>
-            <img
-              src={kosten}
-              alt="Kosten"
-              style={{
-                height: '10rem',
-                margin: '16px',
-                opacity: '0.6',
-                zIndex: 0,
-                position: 'relative',
-              }}
-            />
+            <Box
+  sx={{
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+    justifyContent: 'center',
+    position: 'relative',
+  }}
+>
+  <Typography
+    variant="paragraphLight"
+    sx={{
+      fontWeight: 'bold',
+      fontSize: '3rem',
+      fontFamily: 'Oswald',
+      opacity: '100%',
+      zIndex: 1, 
+      position: 'absolute ',
+    }}
+  >
+    SOMOS AVENTURA
+  </Typography>
+  <img
+    src={kosten}
+    alt="Kosten"
+    style={{
+      height: '10rem',
+      margin: '16px',
+      opacity: '0.5',
+      zIndex: 0, 
+      position: 'relative',
+    }}
+  />
+</Box>
             <Button
               variant="contained"
               color="primary"
@@ -102,7 +116,7 @@ const LandingPage = () => {
                 fontSize: '20px',
               }}
             >
-              PAQUETES DE SALIDAS
+              VER NUESTRAS SALIDAS
             </Button>
           </Box>
           <Link href="#bot">
@@ -113,12 +127,27 @@ const LandingPage = () => {
                 position: 'fixed',
                 right: '60px',
                 bottom: '60px',
+                zIndex: 100,
               }}
             />
           </Link>
 
          
         </Box>
+        <Box
+          sx={{
+            display: 'flex',
+            backgroundColor: '#494949',
+            flexDirection: 'column',
+            alignItems: 'center',
+            gap: '1rem',
+            padding: '60px',
+          
+          }}
+        >
+          <DepartureGrid title="PRÓXIMAS SALIDAS" />
+        </Box>
+        <Footer/>
       </Box>
     </>
   );

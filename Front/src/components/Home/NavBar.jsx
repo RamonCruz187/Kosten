@@ -50,7 +50,7 @@ const NavBar = () => {
 
             {
                 !isAuthenticated ? <Link to="/login">
-                    <Button variant="contained" color="grayButton">
+                    <Button variant="contained" color="grayButton" sx= {{color: 'black'}} >
                         LOGIN
                     </Button>
                 </Link> :

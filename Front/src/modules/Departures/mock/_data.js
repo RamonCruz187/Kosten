@@ -16,7 +16,7 @@ const COLORS = [
     '#FFC107',
 ];
 
-export const _productNames = ( index ) =>
+export const _departureNames = (index ) =>
     [
         'Trekking en Cerro Tres Picos',
         'Trekking en Cerro Champaquí',
@@ -26,7 +26,7 @@ export const _productNames = ( index ) =>
         'Trekking en Volcán Lanín',
     ][index];
 
-export const _productInfo = ( index ) =>
+export const _departureInfo = (index ) =>
     [
         {
             date:  '1 y 2 de Noviembre',
@@ -66,15 +66,15 @@ export const _productInfo = ( index ) =>
         }
     ][index];
 
-export const _products = [...Array(6)].map((_, index) => {
+export const _departures = [...Array(6)].map((_, index) => {
     const setIndex = index + 1;
 
     return {
         id: _id(index),
         price: _price(index),
-        name: _productNames(index),
-        info: _productInfo(index),
-        coverUrl: `/images/paquetes/paquete-${setIndex}.jpg`,
+        name: _departureNames(index),
+        info: _departureInfo(index),
+        coverUrl: `/images/departures/departure-${setIndex}.jpg`,
         colors:
             (setIndex === 1 && COLORS.slice(0, 2)) ||
             (setIndex === 2 && COLORS.slice(1, 3)) ||
