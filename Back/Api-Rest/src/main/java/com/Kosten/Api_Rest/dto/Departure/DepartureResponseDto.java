@@ -10,6 +10,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.Set;
 
@@ -17,23 +18,24 @@ import java.util.Set;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class DepartureResponseDto {
+public class DepartureResponseDto implements Serializable {
     @NotNull
     @Min(1)
     private Integer id;
-   /* private Long packageId;
+
+   /*
     private Set<User> usersList;*/
     private Double price;
 
     private LocalDateTime startDate;
 
     private LocalDateTime endDate;
-    @NotBlank
-    private String startTime;
-    @NotBlank
-    private String endTime;
+
     @NotBlank
     private String meetingPlace;
     @NotBlank
     private String finishPlace;
+    @NotNull
+    Boolean isActive;
+    private int quota;
 }

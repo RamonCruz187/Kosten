@@ -1,5 +1,6 @@
 package com.Kosten.Api_Rest.dto.packageDTO;
 
+import com.Kosten.Api_Rest.dto.Departure.DepartureResponseDto;
 import com.Kosten.Api_Rest.dto.images.ImageResponseDTO;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.NotBlank;
@@ -9,6 +10,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.Serializable;
 import java.util.List;
+import java.util.Set;
 
 /**
  * DTO for {@link com.Kosten.Api_Rest.model.Package}
@@ -31,6 +33,7 @@ public record PackageRequestDTO(
         List<ImageResponseDTO> images,
 
         List<MultipartFile> filesImages,
+        Set<DepartureResponseDto> departures,
 
         boolean active
 

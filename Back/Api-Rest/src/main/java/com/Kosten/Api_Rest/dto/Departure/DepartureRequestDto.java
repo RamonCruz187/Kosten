@@ -9,6 +9,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.Set;
 
@@ -16,8 +17,9 @@ import java.util.Set;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class DepartureRequestDto {
-    /*private Long packageId;
+public class DepartureRequestDto implements Serializable {
+    private Long packageId;
+    /*
     private Set<User> usersList;*/
     private Double price;
     @NotNull(message = "startDate  no puede ser 'null'")
@@ -25,17 +27,14 @@ public class DepartureRequestDto {
 
     @NotNull(message = "endtDate  no puede ser 'null'")
     private LocalDateTime endDate;
-    @NotBlank(message = "startTime no debe estar vacío, y debe contener entre 3 y 20 caracteres")
-    @Size(min = 3, max = 20)
-    private String startTime;
-    @NotBlank(message = "endTime no debe estar vacío, y debe contener entre 3 y 20 caracteres")
-    @Size(min = 3, max = 20)
-    private String endTime;
+
     @NotBlank(message = "meetingPlace no debe estar vacío, y debe contener entre 4 y 45 caracteres")
     @Size(min = 4, max = 45)
     private String meetingPlace;
     @NotBlank(message = "meetingPlace no debe estar vacío, y debe contener entre 4 y 45 caracteres")
     @Size(min = 4, max = 45)
     private String finishPlace;
-
+    @NotNull
+    Boolean isActive;
+    private int quota;
 }

@@ -15,9 +15,9 @@ public record DepartureToUpdateDto(
         Double price,
         LocalDateTime startDate,
         LocalDateTime endDate,
-        String startTime,
-        String endTime,
         String meetingPlace,
-        String finishPlace
+        String finishPlace,
+        int quota,
+        Boolean isActive
 
     ){}
