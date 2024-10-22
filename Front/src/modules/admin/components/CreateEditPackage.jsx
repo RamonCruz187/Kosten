@@ -11,11 +11,12 @@ import {
     Select,
     MenuItem,
     Chip,
-    Typography
+    Typography, CardMedia, Card
 } from '@mui/material';
-import {createPackage, getAllPackages, getPackageById} from "../../../api/packageApi.js";
+import {createPackage, getPackageById, updatePackage} from "../../../api/packageApi.js";
 import Container from "@mui/material/Container";
-import {useParams} from "react-router-dom";
+import {useNavigate, useParams} from "react-router-dom";
+import {NotificationService} from "../../../shared/services/notistack.service.jsx";
 
 const meses = [
     'Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio',
@@ -31,71 +32,13 @@ const paqueteSchema = Yup.object().shape({
     all_months: Yup.array().of(Yup.number()).min(1, 'Selecciona al menos un mes'),
 });
 
-export const CreateEditPackage = (props) => {
+export const CreateEditPackage = () => {
 
     const [disabledButton, setDisabledButton] = useState(false);
     const [imagenes, setImagenes] = useState([]);
     const [package_, setPackage] = useState(null);
-
-    const params = useParams();
-
-    const { setOpenTransitionMessage, setMessageTransitionMessage, setSeverityTransitionMessage } = props;
-
-    const getPackById = useCallback(async ( id ) => {
-        try {
-            const { data: dataPackages } = await getPackageById( id );
-            setPackage( dataPackages.data );
-            console.log('Months: ', dataPackages.data.months.map(month => month.name));
-
-            console.log('Respuesta del backend: ', dataPackages);
-        } catch (error) {
-            console.error('Error al obtener los departures: ', error);
-        }
-    }, []);
-
-    const requestPackage = useCallback(async (values) => {
-        console.log('Valores del formulario: ', values);
-        setDisabledButton(true);
-
-        const formData = new FormData();
-        formData.append('packageData', new Blob([JSON.stringify(values)], { type: 'application/json' }));
-        imagenes.forEach((imagen) => {
-            formData.append('filesImages', imagen, imagen.name);
-        });
-
-        console.log('Contenido de formData:');
-        for (let [key, value] of formData.entries()) {
-            console.log(key, value);
-        }
-
-        /*try {
-            // Aquí iría la lógica para enviar formData al backend
-            const { data: dataPackage } = await createPackage(formData);
-            console.log('Respuesta del backend: ', dataPackage);
-            // const data = await response.json();
-
-            // Simulamos una respuesta exitosa
-            /!*const data = { error: false, message: 'Paquete creado con éxito' };
-
-            if (!data.error) {
-                setSeverityTransitionMessage('success');
-                setMessageTransitionMessage('Paquete creado exitosamente');
-            } else {
-                setSeverityTransitionMessage('error');
-                setMessageTransitionMessage(data.message);
-            }*!/
-        } catch (error) {
-            console.error('Error al crear el paquete: ', error);
-            // setSeverityTransitionMessage('error');
-            // setMessageTransitionMessage('Error al crear el paquete');
-        } finally {
-            // setOpenTransitionMessage(true);
-            setDisabledButton(false);
-        }*/
-    }, [imagenes, setOpenTransitionMessage, setMessageTransitionMessage, setSeverityTransitionMessage]);
-
-    const formik = useFormik({
-        initialValues: {
+    const [packageValues, setPackageValues] = useState(
+        {
             name: '',
             description: '',
             punctuation: '',
@@ -105,11 +48,80 @@ export const CreateEditPackage = (props) => {
             technical_level: '',
             included_services: '',
             all_months: [],
+        }
+    );
+
+    const params = useParams();
+    const navigate = useNavigate();
+
+    const getPackById = useCallback(async ( id ) => {
+        try {
+            const { data: dataPackages } = await getPackageById( id );
+            setPackage( dataPackages.data );
+            setPackageValues({
+                name: dataPackages.data.name,
+                description: dataPackages.data.description,
+                punctuation: dataPackages.data.punctuation,
+                duration: dataPackages.data.duration,
+                itinerary: dataPackages.data.itinerary,
+                physical_level: dataPackages.data.physical_level,
+                technical_level: dataPackages.data.technical_level,
+                included_services: dataPackages.data.included_services,
+                all_months: dataPackages.data.months.map(month => month.name),
+            });
+        } catch (error) {
+            console.error('Error al obtener los departures: ', error);
+        }
+    }, [setPackage, setPackageValues]);
+
+    const requestPackages = useCallback(async (values) => {
+        console.log('Valores del formulario: ', values);
+        setDisabledButton(true);
+
+        const formData = new FormData();
+        formData.append('packageData', new Blob([JSON.stringify(values)], { type: 'application/json' }));
+        imagenes.forEach((imagen) => {
+            formData.append('filesImages', imagen, imagen.name);
+        });
+
+        if( imagenes.length === 0 )
+            formData.append('filesImages', new Blob([JSON.stringify([])], { type: 'application/json' }), '[]');
+
+        for (let [key, value] of formData.entries()) {
+            console.log(key, value);
+        }
+
+        try {
+            const { data: dataPackage } = params.id ? await updatePackage(formData) : await createPackage(formData);
+
+            console.log('Respuesta del backend: ', dataPackage);
+            NotificationService.success(params.id ? 'Paquete actualizado exitosamente' : 'Paquete creado exitosamente', 1000);
+            navigate('/admin/paquetes');
+
+        } catch (error) {
+            console.error(params.id ? 'Error al actualizar el paquete' : 'Error al crear el paquete', error.response);
+            NotificationService.error(params.id ? 'Error al actualizar el paquete' : 'Error al crear el paquete', 2200);
+        } finally {
+            setDisabledButton(false);
+        }
+    }, [ imagenes ]);
+
+    const formik = useFormik({
+        initialValues: {
+            name: packageValues.name,
+            description: packageValues.description,
+            punctuation: packageValues.punctuation,
+            duration: packageValues.duration,
+            itinerary: packageValues.itinerary,
+            physical_level: packageValues.physical_level,
+            technical_level: packageValues.technical_level,
+            included_services: packageValues.included_services,
+            all_months: packageValues.all_months.map(mes => meses.indexOf(mes)),
         },
+        enableReinitialize: true,
         validationSchema: paqueteSchema,
         onSubmit: (values) => {
-            requestPackage(values);
-            // getPackages();
+            requestPackages(values);
         },
     });
 
@@ -131,7 +143,9 @@ export const CreateEditPackage = (props) => {
     return (
         <Container component="main" sx={{ display: 'flex', flexDirection: 'column', gap: 2 }} >
             <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
-                <Typography variant="h4">Nuevo Paquete</Typography>
+                <Typography variant="h4">{
+                    params.id ? 'Editar Paquete' : 'Nuevo Paquete'
+                }</Typography>
             </Box>
 
             <Box component="form" onSubmit={formik.handleSubmit} noValidate sx={{ mt: 2 }}>
@@ -142,7 +156,7 @@ export const CreateEditPackage = (props) => {
                             id="name"
                             name="name"
                             label="Nombre"
-                            value={ package_ ? package_.name : formik.values.name }
+                            value={ formik.values.name }
                             onChange={formik.handleChange}
                             onBlur={formik.handleBlur}
                             error={formik.touched.name && Boolean(formik.errors.name)}
@@ -157,7 +171,7 @@ export const CreateEditPackage = (props) => {
                             label="Descripción"
                             multiline
                             rows={4}
-                            value={ package_ ? package_.description : formik.values.description }
+                            value={ formik.values.description }
                             onChange={formik.handleChange}
                             onBlur={formik.handleBlur}
                             error={formik.touched.description && Boolean(formik.errors.description)}
@@ -171,7 +185,7 @@ export const CreateEditPackage = (props) => {
                             name="punctuation"
                             label="Puntuación"
                             type="number"
-                            value={ package_ ? package_.punctuation : formik.values.punctuation }
+                            value={ formik.values.punctuation }
                             onChange={formik.handleChange}
                             onBlur={formik.handleBlur}
                             error={formik.touched.punctuation && Boolean(formik.errors.punctuation)}
@@ -184,7 +198,7 @@ export const CreateEditPackage = (props) => {
                             id="duration"
                             name="duration"
                             label="Duración"
-                            value={ package_ ? package_.duration : formik.values.duration }
+                            value={ formik.values.duration }
                             onChange={formik.handleChange}
                             onBlur={formik.handleBlur}
                             error={formik.touched.duration && Boolean(formik.errors.duration)}
@@ -199,7 +213,7 @@ export const CreateEditPackage = (props) => {
                             label="Itinerario"
                             multiline
                             rows={4}
-                            value={ package_ ? package_.itinerary : formik.values.itinerary }
+                            value={ formik.values.itinerary }
                             onChange={formik.handleChange}
                             onBlur={formik.handleBlur}
                             error={formik.touched.itinerary && Boolean(formik.errors.itinerary)}
@@ -213,7 +227,7 @@ export const CreateEditPackage = (props) => {
                                 labelId="physical-level-label"
                                 id="physical_level"
                                 name="physical_level"
-                                value={ package_ ? package_.physical_level : formik.values.physical_level }
+                                value={ formik.values.physical_level }
                                 onChange={formik.handleChange}
                                 onBlur={formik.handleBlur}
                                 variant="standard"
@@ -234,7 +248,7 @@ export const CreateEditPackage = (props) => {
                                 labelId="technical-level-label"
                                 id="technical_level"
                                 name="technical_level"
-                                value={ package_ ? package_.technical_level : formik.values.technical_level }
+                                value={ formik.values.technical_level }
                                 onChange={formik.handleChange}
                                 onBlur={formik.handleBlur}
                                 variant="standard"
@@ -256,20 +270,20 @@ export const CreateEditPackage = (props) => {
                                 id="all_months"
                                 name="all_months"
                                 multiple
-                                value={ package_ ? package_.months.map(month => month.name) : formik.values.all_months }
+                                value={ formik.values.all_months }
                                 onChange={formik.handleChange}
                                 onBlur={formik.handleBlur}
                                 variant="standard"
                                 renderValue={(selected) => (
                                     <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
                                         {selected.map((value) => (
-                                            <Chip key={value} label={meses[value - 1]} />
+                                            <Chip key={value} label={meses[value]} />
                                         ))}
                                     </Box>
                                 )}
                             >
                                 {meses.map((mes, index) => (
-                                    <MenuItem key={mes} value={index + 1}>
+                                    <MenuItem key={mes} value={index}>
                                         {mes}
                                     </MenuItem>
                                 ))}
@@ -287,43 +301,61 @@ export const CreateEditPackage = (props) => {
                             label="Servicios incluidos"
                             multiline
                             rows={4}
-                            value={ package_ ? package_.included_services : formik.values.included_services }
+                            value={ formik.values.included_services }
                             onChange={formik.handleChange}
                             onBlur={formik.handleBlur}
                             error={formik.touched.included_services && Boolean(formik.errors.included_services)}
                             helperText={formik.touched.included_services && formik.errors.included_services}
                         />
                     </Grid>
-                    <Grid item xs={12}>
-                        <input
-                            accept="image/*"
-                            style={{ display: 'none' }}
-                            id="raised-button-file"
-                            multiple
-                            type="file"
-                            onChange={handleImageChange}
-                        />
-                        <label htmlFor="raised-button-file">
-                            <Button variant="contained" component="span">
-                                Subir imágenes
-                            </Button>
-                        </label>
-                        <Box mt={2} sx={{ display: 'flex', gap: 2, minHeight: '40px' }}>
-                            {imagenes.map((imagen, index) => (
-                                <Chip
-                                    key={index}
-                                    label={imagen.name}
-                                    onDelete={() => {
-                                        const newImagenes = [...imagenes];
-                                        newImagenes.splice(index, 1);
-                                        setImagenes(newImagenes);
-                                    }}
-                                />
-                            ))}
+                    <Grid item xs={12} sx={{ display: 'flex', }}>
+                        <Box sx={{ minWidth: '40%', }}>
+                            <input
+                                accept="image/*"
+                                style={{ display: 'none' }}
+                                id="raised-button-file"
+                                multiple
+                                type="file"
+                                onChange={handleImageChange}
+                            />
+                            <label htmlFor="raised-button-file">
+                                <Button variant="contained" component="span">
+                                    Subir imágenes
+                                </Button>
+                            </label>
+                            <Box mt={2} sx={{ display: 'flex', flexWrap: 'wrap', gap: 2, minHeight: '40px', overflow: 'hidden', overflowY: 'auto' }}>
+                                {imagenes.map((imagen, index) => (
+                                    <Chip
+                                        key={index}
+                                        label={imagen.name}
+                                        onDelete={() => {
+                                            const newImagenes = [...imagenes];
+                                            newImagenes.splice(index, 1);
+                                            setImagenes(newImagenes);
+                                        }}
+                                    />
+                                ))}
+                            </Box>
+                        </Box>
+                        <Box sx={{ minWidth: '60%', display: 'flex', flexWrap: 'wrap', gap: 2, minHeight: '40px', overflow: 'hidden', overflowY: 'auto' }}>
+                            {
+                                package_ && package_.images.length > 0 && (
+                                    package_.images.map(( img ) => (
+                                        <Card sx={{ maxWidth: 150 }} key={img.id}>
+                                            <CardMedia
+                                                component="img"
+                                                height="auto"
+                                                image={img.url}
+                                                alt={img.url}
+                                            />
+                                        </Card>
+                                    ))
+                                )
+                            }
                         </Box>
                     </Grid>
                 </Grid>
-                <Box mt={3} display="flex" justifyContent="space-between">
+                <Box mt={5} display="flex" justifyContent="space-between">
                     <Button
                         type="button"
                         variant="outlined"
