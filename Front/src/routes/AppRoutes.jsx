@@ -4,13 +4,14 @@ import Register from '../components/Auth/Register';
 import LandingPage from '../components/Home/LandingPage';
 import AdminDashboard from '../components/Dashboard/AdminDashboard';
 import Muestras from '../components/muestras';
-import {PackageFull} from "../modules/package/pages/PackageFull.jsx";
-import {PackageView} from "../modules/package/pages/PackageView.jsx";
 import {UserGuestRoutes} from "./UserGuestRoutes.jsx";
 import {UserPrivateRoutes} from "./UserPrivateRoutes.jsx";
 import {AdminPackages} from "../modules/admin/pages/AdminPackages.jsx";
 import PageNotFound from "../shared/pages/error/PageNotFound.jsx";
 import {CreateEditPackage} from "../modules/admin/components/CreateEditPackage.jsx";
+import {DepartureView} from "../modules/Departures/pages/DepartureView.jsx";
+import {DepartureFull} from "../modules/Departures/pages/DepartureFull.jsx";
+import {PackageFullView} from "../modules/admin/pages/PackageFullView.jsx";
 
 const AppRoutes = () => (
   <Router>
@@ -24,14 +25,15 @@ const AppRoutes = () => (
         </Route>
 
         <Route path="/muestras" element={<Muestras />} />
-        <Route path="/salidas" element={<PackageView />} />
-        <Route path="/paquetes/:id" element={<PackageFull />} />
+        <Route path="/salidas" element={<DepartureView />} />
+        <Route path="/salidas/:id" element={<DepartureFull />} />
 
 
         <Route path="/admin" element={<UserPrivateRoutes />}>
             <Route index element={<Navigate to="usuarios" replace />} />
             <Route path="usuarios" element={<AdminDashboard />} />
             <Route path="paquetes" element={<AdminPackages />} />
+            <Route path="paquetes/:id" element={<PackageFullView />} />
             <Route path="paquetes/nuevo" element={<CreateEditPackage />} />
             <Route path="paquetes/editar/:id" element={<CreateEditPackage />} />
         </Route>

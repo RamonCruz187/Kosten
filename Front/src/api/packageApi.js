@@ -33,3 +33,49 @@ export const getAllPackages = () => {
         }
     );
 };
+
+export const getPackageById = ( id ) => {
+
+    const authLS = localStorage.getItem('userAuth');
+    const auth = JSON.parse(authLS);
+
+    return axios.get(
+        `${API_URL_PROD}/packages/${ id }`,
+        {
+            headers: {
+                'Authorization': `Bearer ${auth.token}`
+            }
+        }
+    );
+};
+
+export const updatePackage = ( body ) => {
+
+    const authLS = localStorage.getItem('userAuth');
+    const auth = JSON.parse(authLS);
+
+    return axios.put(
+        `${API_URL_PROD}/packages`,
+        body,
+        {
+            headers: {
+                'Authorization': `Bearer ${auth.token}`
+            }
+        }
+    );
+};
+
+export const deletePackage = ( id ) => {
+
+    const authLS = localStorage.getItem('userAuth');
+    const auth = JSON.parse(authLS);
+
+    return axios.delete(
+        `${API_URL_PROD}/packages/${ id }`,
+        {
+            headers: {
+                'Authorization': `Bearer ${auth.token}`
+            }
+        }
+    );
+};

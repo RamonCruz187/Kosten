@@ -2,21 +2,20 @@ import React, {useEffect, useState} from "react";
 import {useParams} from "react-router-dom";
 import Box from "@mui/material/Box";
 import {Button, Typography} from "@mui/material";
-import {_price, _departureInfo, _departureNames} from "../../Departures/mock/_data.js";
+import {_price, _departureInfo, _departureNames} from "../mock/_data.js";
 import Divider from "@mui/material/Divider";
-import AppAppBar from "../../../shared/components/AppAppBar.jsx";
-import {iconsCardDepartures} from "../../Departures/utils/utils.jsx";
+import {iconsCardDepartures} from "../utils/utils.jsx";
 import {fCurrency} from "../../../shared/utils/formatNumber.js";
 import NavBar from "../../../components/Home/NavBar.jsx";
 
-export const PackageFull = () => {
+export const DepartureFull = () => {
 
     const [id, setId] = useState(null);
     const [img, setImg] = useState(null);
 
     const params = useParams();
 
-    const renderPrice =(package_) => (
+    const renderPrice =(departure_) => (
         <Typography variant="subtitle1" sx={{ fontWeight: 'bold'}}>
             <Typography
                 component="span"
@@ -26,10 +25,10 @@ export const PackageFull = () => {
                     textDecoration: 'line-through',
                 }}
             >
-                {package_.priceSale && fCurrency(package_.priceSale)}
+                {departure_.priceSale && fCurrency(departure_.priceSale)}
             </Typography>
             &nbsp;
-            {fCurrency(package_.price)}
+            {fCurrency(departure_.price)}
         </Typography>
     );
 
@@ -40,7 +39,7 @@ export const PackageFull = () => {
     useEffect(() => {
 
         if(id) {
-            const img = `/images/paquetes/paquete-${Number(id) + 1}.jpg`;
+            const img = `/images/departures/departure-${Number(id) + 1}.jpg`;
             setImg(img);
         }
 
