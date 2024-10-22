@@ -3,7 +3,7 @@ import Box from "@mui/material/Box";
 import {Button, Card, Stack, Typography} from "@mui/material";
 import {fCurrency} from "../../../shared/utils/formatNumber.js";
 import {Link} from "react-router-dom";
-import {iconsCardDepartures} from "../utils/utils.jsx";
+import {iconsCardDepartures, iconsCardPackages} from "../utils/utils.jsx";
 
 export const DepartureCard = ({ departure_ }) => {
 
@@ -77,7 +77,7 @@ export const DepartureCard = ({ departure_ }) => {
 
                         <Box sx={{ display: 'flex', justifyContent: 'flex-start', alignItems: 'center', gap: 1 }}>
                             <Box sx={{ display: 'flex' }}>
-                                { iconsCardDepartures[0] }
+                                { iconsCardPackages[0] }
                             </Box>
                             <Typography variant="caption" >
                                 {departure_.info.date}
@@ -86,7 +86,7 @@ export const DepartureCard = ({ departure_ }) => {
 
                         <Box sx={{ display: 'flex', justifyContent: 'flex-start', alignItems: 'center', gap: 1 }}>
                             <Box sx={{ display: 'flex' }}>
-                                { iconsCardDepartures[1] }
+                                { iconsCardPackages[1] }
                             </Box>
                             <Typography variant="caption" >
                                 {departure_.info.days}
@@ -95,7 +95,7 @@ export const DepartureCard = ({ departure_ }) => {
 
                         <Box sx={{ display: 'flex', justifyContent: 'flex-start', alignItems: 'center', gap: 1 }}>
                             <Box sx={{ display: 'flex' }}>
-                                { iconsCardDepartures[2] }
+                                { iconsCardPackages[2] }
                             </Box>
                             <Typography variant="caption" >
                                 {departure_.info.physicLvl}
@@ -104,10 +104,19 @@ export const DepartureCard = ({ departure_ }) => {
 
                         <Box sx={{ display: 'flex', justifyContent: 'flex-start', alignItems: 'center', gap: 1 }}>
                             <Box sx={{ display: 'flex' }}>
-                                { iconsCardDepartures[3] }
+                                { iconsCardPackages[3] }
                             </Box>
                             <Typography variant="caption" >
                                 {departure_.info.technicalLvl}
+                            </Typography>
+                        </Box>
+
+                        <Box sx={{ display: 'flex', justifyContent: 'flex-start', alignItems: 'center', gap: 1 }}>
+                            <Box sx={{ display: 'flex' }}>
+                                { iconsCardPackages[4] }
+                            </Box>
+                            <Typography variant="caption" >
+                                {departure_.included_services}
                             </Typography>
                         </Box>
 
