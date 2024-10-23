@@ -3,6 +3,7 @@ package com.Kosten.Api_Rest.model;
 import com.Kosten.Api_Rest.dto.user.UpdateUserRequestDto;
 import com.Kosten.Api_Rest.dto.user.UserResponseDto;
 import com.Kosten.Api_Rest.dto.user.UserRoleUpdateRequestDto;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -15,7 +16,9 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import java.time.LocalDateTime;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Builder
 @AllArgsConstructor
@@ -37,6 +40,14 @@ public class User implements UserDetails {
     Role role;
     @Column(name = "is_active")
     private Boolean isActive;
+
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(
+            name = "user_package",
+            joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(name = "package_id", referencedColumnName = "id")
+    )
+    private Set<Departure> departures = new HashSet<>();
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
