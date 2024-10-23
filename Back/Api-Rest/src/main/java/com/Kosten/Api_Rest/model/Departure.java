@@ -5,6 +5,8 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Set;
 
 @Entity
@@ -37,6 +39,9 @@ public class Departure {
     @OneToMany
     @JoinColumn(name = "user_id", referencedColumnName = "id", nullable = false)
     private Set<User> usersList;*/
+
+    @ManyToMany(mappedBy = "departures")
+    private Set<User> usersList = new HashSet<>();
 
     private Double price;
     private LocalDateTime startDate;
