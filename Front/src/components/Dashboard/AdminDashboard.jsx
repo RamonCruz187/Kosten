@@ -128,7 +128,6 @@ const toggleShowConfirmPassword = () => {
 
   return (
     <div>
-      <NavBar />
       <h1>Dashboard</h1>
       <Button variant="contained" color="primary" onClick={handleOpenAddUser} style={{ marginBottom: '16px' }}>
         Crear Usuario
