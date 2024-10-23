@@ -40,7 +40,7 @@ export const customFonts = {
 export const defaultParagraph = {
     fontFamily: customFonts.family.catamaran,
     fontWeight: "normal",
-    fontSize: "0.875rem", // 12px
+    fontSize: "0.875rem", // 14px
     letterSpacing: customFonts.letter.normal,
     color: customPalette.text.main,
 }
