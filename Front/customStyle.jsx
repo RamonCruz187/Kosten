@@ -1,11 +1,11 @@
 export const customPalette = {
     primary: { // yellow
-        main: "#FCBA5B", // prim 500 figma
-        dark: "#9F763A", // prim 800 figma
+        main: "#FFC800", // prim 500 figma
+        dark: "#806400", // prim 800 figma
     },
     secondary: { // brown
-        main: "#6B290C", // sec 700 figma
-        dark: "#3E1807", // sec 900 figma
+        main: "#552F08", // sec 700 figma
+        dark: "#361E05", // sec 900 figma
     },
     accent: { // green
         main: "#00BD7E", // acent 500 figma
@@ -24,6 +24,14 @@ export const customPalette = {
         mid: "#5C5C5C", // gray 800 figma
         light: "#F3F3F3" // gray 50 figma
     },
+    error: {
+        lighter: "#F8F2F2", // error 50 figma
+        light: "#B96161", // error 300 figma
+        main: "#A40000", // error 500 figma
+        dark: "#790000", // error 700 figma
+        darkest: "#630000", // error 800 figma
+        darkest2: "#4C0000" // error 900 figma
+    }
 };
 
 export const customFonts = {
