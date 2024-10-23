@@ -1,4 +1,4 @@
-import { useState, useCallback } from 'react';
+import {useState, useCallback, useEffect} from 'react';
 
 import Box from '@mui/material/Box';
 import Popover from '@mui/material/Popover';
@@ -49,7 +49,7 @@ export function UserPopover() {
 
     const { mode, toggleColorMode } = useGlobalTheme();
     const { handleLogout } = useAuth();
-    const { getUserData } = useUserData();
+    const { getUserData, user } = useUserData();
 
     const navigate = useNavigate();
 
@@ -58,7 +58,7 @@ export function UserPopover() {
         handleLogout();
     };
 
-    const user = getUserData();
+    // const user = getUserData();
 
     const [openPopover, setOpenPopover] = useState(null);
 
@@ -84,6 +84,14 @@ export function UserPopover() {
     },
     [handleClosePopover]
   );
+
+    useEffect(() => {
+
+        if( !user.id ) {
+            getUserData();
+        }
+
+    }, [user]);
 
   return (
     <>
