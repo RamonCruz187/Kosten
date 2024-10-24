@@ -24,7 +24,7 @@ public record PackageResponseDTO(
         String technical_level,
         String included_services,
         List<ImageResponseDTO> images,
-        Set<DepartureResponseDto> departures,
+        List<DepartureResponseDto> departures,
 
         List<MonthNames> months,
 

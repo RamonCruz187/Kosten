@@ -43,9 +43,9 @@ public class User implements UserDetails {
 
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
-            name = "user_package",
+            name = "departure_user",
             joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"),
-            inverseJoinColumns = @JoinColumn(name = "package_id", referencedColumnName = "id")
+            inverseJoinColumns = @JoinColumn(name = "departure_id", referencedColumnName = "id")
     )
     private Set<Departure> departures = new HashSet<>();
 

@@ -99,7 +99,7 @@ public class Package {
      ****************************************/
     @OneToMany(mappedBy = "packageRef", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonManagedReference
-    private Set<Departure> departures = new HashSet<>();
+    private List<Departure> departures = new ArrayList<>();
 
     //Helper Methods: Keep Both Sides of the Association in SYNC
     public void addDeparture(Departure departure) {

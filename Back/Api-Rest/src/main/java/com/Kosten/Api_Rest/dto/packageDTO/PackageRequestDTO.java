@@ -37,7 +37,7 @@ public record PackageRequestDTO(
         List<ImageResponseDTO> images,
 
         List<MultipartFile> filesImages,
-        Set<DepartureResponseDto> departures,
+        List<DepartureResponseDto> departures,
 
         List<MonthNames> months,
         List<Integer> all_months,

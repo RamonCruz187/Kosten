@@ -72,7 +72,7 @@ public class PackageController {
                 packageRequestDTO.included_services(),
                 new ArrayList<>(),
                 filesImages,
-                new HashSet<>(),
+                new ArrayList<>(),
                 new ArrayList<>(),
                 packageRequestDTO.all_months(),
                 packageRequestDTO.active()
