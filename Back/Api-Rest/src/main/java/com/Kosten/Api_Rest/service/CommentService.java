@@ -1,8 +1,6 @@
 package com.Kosten.Api_Rest.service;
 
-import com.Kosten.Api_Rest.dto.comment.CommentDto;
-import com.Kosten.Api_Rest.dto.comment.CommentRequestDto;
-import com.Kosten.Api_Rest.dto.comment.UpdateCommentDto;
+import com.Kosten.Api_Rest.dto.comment.*;
 
 import java.util.List;
 
@@ -18,8 +16,12 @@ public interface CommentService {
 
     void deleteComment(Long commentId);
 
-    CommentDto updateCommentVisibility(Long commentId, boolean visible);
+    CommentDto updateCommentVisibility(UpdateVisibilityCommentDto updateVisibilityCommentDto);
 
     int getReportCommentCount(Long commentId);
+
+    CommentDto updateCommentFavorite(UpdateFavoriteCommentDto updateFavoriteCommentDto);
+
+    List<CommentDto> findVisibleAndFavoriteComments();
 
 }

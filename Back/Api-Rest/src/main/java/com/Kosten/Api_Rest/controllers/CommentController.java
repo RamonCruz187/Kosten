@@ -1,11 +1,9 @@
 package com.Kosten.Api_Rest.controllers;
 
-import com.Kosten.Api_Rest.dto.comment.CommentDto;
+import com.Kosten.Api_Rest.dto.comment.*;
 import com.Kosten.Api_Rest.dto.BaseResponse;
 import com.Kosten.Api_Rest.dto.ExtendedBaseResponse;
 import com.Kosten.Api_Rest.Exception.commentExc.CommentNotFoundException;
-import com.Kosten.Api_Rest.dto.comment.CommentRequestDto;
-import com.Kosten.Api_Rest.dto.comment.UpdateCommentDto;
 import com.Kosten.Api_Rest.service.CommentService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -143,12 +141,13 @@ public class CommentController {
             @ApiResponse(responseCode = "400", description = "Solicitud no válida.", content = {@Content}),
             @ApiResponse(responseCode = "500", description = "Error del servidor.", content = {@Content})
     })
-    @PutMapping("/update-visibility/{id}")
-    public ResponseEntity<ExtendedBaseResponse<CommentDto>> updateCommentVisibility(@PathVariable("id") Long id, @RequestParam boolean visible) {
-        CommentDto updatedComment = commentService.updateCommentVisibility(id, visible);
+    @PutMapping("/update-visibility")
+    public ResponseEntity<ExtendedBaseResponse<CommentDto>> updateCommentVisibility(@Valid @RequestBody UpdateVisibilityCommentDto updateVisibilityCommentDto) {
+        CommentDto updatedComment = commentService.updateCommentVisibility(updateVisibilityCommentDto);
         BaseResponse response = BaseResponse.ok("La visibilidad de los comentarios se actualizó correctamente.");
         return ResponseEntity.ok(ExtendedBaseResponse.of(response, updatedComment));
     }
+
 
     @Operation(summary = "Obtener el número de reportes de un comentario",
             description = "Devuelve la cantidad de reportes asociados a un comentario específico.")
@@ -170,5 +169,41 @@ public class CommentController {
         return ResponseEntity.ok(ExtendedBaseResponse.of(response, reportCount));
     }
 
+    @Operation(summary = "Actualizar el estado de favorito de un comentario",
+            description = "Permite a un usuario marcar o desmarcar un comentario como favorito.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200",
+                    description = "Estado de favorito actualizado exitosamente.",
+                    content = {
+                            @Content(mediaType = "application/json",
+                                    schema = @Schema(implementation = ExtendedBaseResponse.class))
+                    }),
+            @ApiResponse(responseCode = "404", description = "Comentario no encontrado.", content = {@Content}),
+            @ApiResponse(responseCode = "400", description = "Solicitud no válida.", content = {@Content}),
+            @ApiResponse(responseCode = "500", description = "Error del servidor.", content = {@Content})
+    })
+    @PutMapping("/update-favorite")
+    public ResponseEntity<ExtendedBaseResponse<CommentDto>> updateCommentFavorite(@Valid @RequestBody UpdateFavoriteCommentDto updateFavoriteCommentDto) {
+        CommentDto updatedComment = commentService.updateCommentFavorite(updateFavoriteCommentDto);
+        BaseResponse response = BaseResponse.ok("El estado de favorito del comentario se actualizó correctamente.");
+        return ResponseEntity.ok(ExtendedBaseResponse.of(response, updatedComment));
+    }
+
+    @Operation(summary = "Obtener comentarios visibles y favoritos",
+            description = "Devuelve todos los comentarios que están marcados como visibles y favoritos.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Comentarios obtenidos exitosamente.",
+                    content = {
+                            @Content(mediaType = "application/json",
+                                    schema = @Schema(implementation = CommentDto.class))
+                    }),
+            @ApiResponse(responseCode = "500", description = "Error del servidor.", content = {@Content})
+    })
+    @GetMapping("/comments/visible-favorite")
+    public ResponseEntity<ExtendedBaseResponse<List<CommentDto>>> getVisibleAndFavoriteComments() {
+        List<CommentDto> comments = commentService.findVisibleAndFavoriteComments();
+        BaseResponse response = BaseResponse.ok("Comentarios visibles y favoritos obtenidos exitosamente.");
+        return ResponseEntity.ok(ExtendedBaseResponse.of(response, comments));
+    }
 
 }
