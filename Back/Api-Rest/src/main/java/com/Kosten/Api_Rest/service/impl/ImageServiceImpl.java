@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.FileNotFoundException;
+import java.util.List;
 import java.util.Map;
 
 @Service
@@ -56,5 +57,17 @@ public class ImageServiceImpl implements ImageService {
             throw new RuntimeException("No se ha podido subir la imagen: " + e.getMessage());
         }
     }
+
+    @Override
+    public ExtendedBaseResponse<List<ImageResponseDTO>> getPackageImages() {
+
+        List<Image> images = imageRepository.findImagesWithPackage();
+
+        return ExtendedBaseResponse.of(
+                BaseResponse.ok("Imagenes encontradas exitosamente."),
+                imageMapper.imageListToImageResponseDTOList(images)
+        );
+    }
+
 
 }

@@ -12,6 +12,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.List;
+
 @Tag(name = "Imagenes", description = "Maneja los endpoints para subir imagenes.")
 @RestController
 @RequestMapping("/images")
@@ -35,4 +37,9 @@ public class ImagesController {
         }
     }
 
+    public ResponseEntity<ExtendedBaseResponse<List<ImageResponseDTO>>> getPackageImages() {
+        return ResponseEntity
+                .status(200)
+                .body(imageService.getPackageImages());
+    }
 }
