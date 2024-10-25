@@ -1,5 +1,6 @@
 package com.Kosten.Api_Rest.dto.packageDTO;
 
+import com.Kosten.Api_Rest.dto.category.CategoryResponseDTO;
 import com.Kosten.Api_Rest.dto.images.ImageResponseDTO;
 import com.Kosten.Api_Rest.model.MonthNames;
 
@@ -24,6 +25,8 @@ public record PackageResponseDTO(
         List<ImageResponseDTO> images,
 
         List<MonthNames> months,
+
+        CategoryResponseDTO category,
 
         boolean active
 
