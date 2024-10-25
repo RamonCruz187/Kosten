@@ -11,6 +11,7 @@ import {UserPrivateRoutes} from "./UserPrivateRoutes.jsx";
 import {AdminPackages} from "../modules/admin/pages/AdminPackages.jsx";
 import PageNotFound from "../shared/pages/error/PageNotFound.jsx";
 import {CreateEditPackage} from "../modules/admin/components/CreateEditPackage.jsx";
+import About from '../components/Home/About.jsx';
 
 const AppRoutes = () => (
   <Router>
@@ -25,6 +26,7 @@ const AppRoutes = () => (
 
         <Route path="/muestras" element={<Muestras />} />
         <Route path="/salidas" element={<PackageView />} />
+        <Route path="/about" element={<About />} />
         <Route path="/paquetes/:id" element={<PackageFull />} />
 
 

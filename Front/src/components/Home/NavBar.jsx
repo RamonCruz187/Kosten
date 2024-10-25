@@ -1,5 +1,5 @@
-import {AppBar, Toolbar, Button, Box, Typography} from "@mui/material";
-import logo from "../../assets/logo.svg";
+import {AppBar, Toolbar, Button, Box} from "@mui/material";
+import logo from "../../assets/logo.png";
 import NavLink from "./NavLink";
 import { Link } from "react-router-dom";
 import {useAuth} from "../../shared/hooks/useAuth.jsx";
@@ -30,7 +30,7 @@ const NavBar = () => {
         >
             <Box>
                 <Link to="/">
-                    <img src={logo} alt="KOSTEN"/>
+                    <img src={logo} alt="KOSTEN" height={64} width={104}/>
                 </Link>
             </Box>
             <Box
@@ -42,7 +42,7 @@ const NavBar = () => {
                 }}
             >
                 <NavLink href="/salidas">Salidas</NavLink>
-                <NavLink href="#quienes-somos">Quienes somos</NavLink>
+                <NavLink href="/about">Quienes somos</NavLink>
                 <NavLink href="#destinos">Destinos</NavLink>
                 <NavLink href="#galeria">Galería</NavLink>
                 <NavLink href="#contacto">Contacto</NavLink>

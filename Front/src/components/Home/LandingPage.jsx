@@ -1,10 +1,11 @@
 import { Box, Typography, Button, Link } from '@mui/material';
 import NavBar from './NavBar';
-import imgfondo from '../../assets/Image-hero.jpg';
+
 import kosten from '../../assets/kosten.svg';
 import bot from '../../assets/bot.svg';
 import {PackageGrid} from "../../modules/package/components/PackageGrid.jsx";
 import Footer from './Footer.jsx';
+import Carousel from './Carousel.jsx';
 /*<<<<<<< HEAD
 import AppAppBar from "../../shared/components/AppAppBar.jsx";
 import Box from "@mui/material/Box";
@@ -23,14 +24,14 @@ const LandingPage = () => {
 const LandingPage = () => {
   return (
     <>
-      <Box sx={{ width: '100%', height: '100vh', backgroundColor: 'grey.600' }}>
+      <Box sx={{ width: '100%', height: '100vh', backgroundColor: 'grey.600'}}>
         <NavBar />
         <Box
           sx={{
             position: 'relative',
             width: '100%',
             height: 'calc(100vh - 64px)',
-            overflow: 'hidden',
+            overflow: 'hidden', 
           }}
         >
           <style>
@@ -48,17 +49,7 @@ const LandingPage = () => {
               }
             `}
           </style>
-          <img
-            src={imgfondo}
-            alt="Adventure Background"
-            style={{
-              width: '100%',
-              height: '100%',
-              objectFit: 'cover',
-              filter: 'grayscale(50%)',
-              animation: 'zoom 20s',
-              animationIterationCount: '1',
-            }}
+          <Carousel 
           />
           <Box
             sx={{
