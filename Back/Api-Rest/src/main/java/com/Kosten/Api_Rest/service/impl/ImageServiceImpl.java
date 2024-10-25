@@ -33,14 +33,14 @@ public class ImageServiceImpl implements ImageService {
             throw new FileNotFoundException("No se ha encontrado la imagen");
         }
 
-            var image = createNewImage(file);
+        var image = createNewImage(file);
 
-            ImageResponseDTO imageResponseDTO = imageMapper.imageToImageResponseDTO( imageRepository.save(image) );
+        ImageResponseDTO imageResponseDTO = imageMapper.imageToImageResponseDTO(imageRepository.save(image));
 
-            return ExtendedBaseResponse.of(
-                    BaseResponse.created("Imagen guardada exitosamente."),
-                    imageResponseDTO
-            );
+        return ExtendedBaseResponse.of(
+                BaseResponse.created("Imagen guardada exitosamente."),
+                imageResponseDTO
+        );
     }
 
     public Image createNewImage(MultipartFile file) {
@@ -61,13 +61,15 @@ public class ImageServiceImpl implements ImageService {
     @Override
     public ExtendedBaseResponse<List<ImageResponseDTO>> getPackageImages() {
 
-        List<Image> images = imageRepository.findImagesWithPackage();
+        try {
+            List<Image> images = imageRepository.findImagesWithPackage();
 
-        return ExtendedBaseResponse.of(
-                BaseResponse.ok("Imagenes encontradas exitosamente."),
-                imageMapper.imageListToImageResponseDTOList(images)
-        );
+            return ExtendedBaseResponse.of(
+                    BaseResponse.ok("Imagenes encontradas exitosamente."),
+                    imageMapper.imageListToImageResponseDTOList(images)
+            );
+        } catch (Exception e) {
+            throw new RuntimeException("No se han podido encontrar las imagenes: " + e.getMessage());
+        }
     }
-
-
 }
