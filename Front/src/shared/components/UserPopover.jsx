@@ -147,16 +147,20 @@ export function UserPopover() {
                   },
               }}
           >
-              {data.map((option) => (
-                  <MenuItem
-                      key={option.label}
-                      // selected={option.href === pathname}
-                      onClick={() => handleClickItem(option.href)}
-                  >
-                      {option.icon}
-                      {option.label}
-                  </MenuItem>
-              ))}
+              {data
+                  .filter(option =>
+                      option.label !== 'Administrar' || user.role === 'ADMIN'
+                  )
+                  .map(option => (
+                      <MenuItem
+                          key={option.label}
+                          onClick={() => handleClickItem(option.href)}
+                      >
+                          {option.icon}
+                          {option.label}
+                      </MenuItem>
+                  ))
+              }
           </MenuList>
 
           <Divider sx={{ borderStyle: 'dashed' }} />

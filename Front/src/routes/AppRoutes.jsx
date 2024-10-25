@@ -5,13 +5,13 @@ import LandingPage from '../components/Home/LandingPage';
 import AdminDashboard from '../components/Dashboard/AdminDashboard';
 import Muestras from '../components/muestras';
 import {UserGuestRoutes} from "./UserGuestRoutes.jsx";
-import {UserPrivateRoutes} from "./UserPrivateRoutes.jsx";
 import {AdminPackages} from "../modules/admin/pages/AdminPackages.jsx";
 import PageNotFound from "../shared/pages/error/PageNotFound.jsx";
 import {CreateEditPackage} from "../modules/admin/components/CreateEditPackage.jsx";
 import {DepartureView} from "../modules/Departures/pages/DepartureView.jsx";
 import {DepartureFull} from "../modules/Departures/pages/DepartureFull.jsx";
 import {PackageFullView} from "../modules/admin/pages/PackageFullView.jsx";
+import {UserAdminPrivateRoutes} from "./UserAdminPrivateRoutes.jsx";
 
 const AppRoutes = () => (
   <Router>
@@ -29,7 +29,7 @@ const AppRoutes = () => (
         <Route path="/salidas/:id" element={<DepartureFull />} />
 
 
-        <Route path="/admin" element={<UserPrivateRoutes />}>
+        <Route path="/admin" element={<UserAdminPrivateRoutes />}>
             <Route index element={<Navigate to="usuarios" replace />} />
             <Route path="usuarios" element={<AdminDashboard />} />
             <Route path="paquetes" element={<AdminPackages />} />
