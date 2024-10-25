@@ -2,10 +2,10 @@ import React, {useEffect, useState} from "react";
 import {useParams} from "react-router-dom";
 import Box from "@mui/material/Box";
 import {Button, Typography} from "@mui/material";
-import {_price, _productInfo, _productNames} from "../mock/_data.js";
+import {_price, _departureInfo, _departureNames} from "../../Departures/mock/_data.js";
 import Divider from "@mui/material/Divider";
 import AppAppBar from "../../../shared/components/AppAppBar.jsx";
-import {iconsCardPackages} from "../utils/utils.jsx";
+import {iconsCardDepartures} from "../../Departures/utils/utils.jsx";
 import {fCurrency} from "../../../shared/utils/formatNumber.js";
 import NavBar from "../../../components/Home/NavBar.jsx";
 
@@ -115,51 +115,51 @@ export const PackageFull = () => {
                     fontWeight='500'
                     sx={{ mb: 2, fontSize: {xs: "1rem", sm: '1.5rem', md: '2rem'} }}
                 >
-                    {_productNames( Number(id) + 1)}
+                    {_departureNames( Number(id) + 1)}
                 </Typography>
 
                 <Box sx={{ display: "flex", flexDirection: 'column', alignItems: 'flex-start', gap: 1 }}>
                     <Box sx={{ display: 'flex', justifyContent: 'flex-start', alignItems: 'center', gap: 1 }}>
                         <Box sx={{ display: 'flex' }}>
-                            { iconsCardPackages[0] }
+                            { iconsCardDepartures[0] }
                         </Box>
                         <Typography
                             sx={{ fontSize: {xs: ".6rem", sm: '.8rem', md: '1rem'} }}
                         >
-                            {_productInfo(Number(id) + 1).date}
+                            {_departureInfo(Number(id) + 1).date}
                         </Typography>
                     </Box>
 
                     <Box sx={{ display: 'flex', justifyContent: 'flex-start', alignItems: 'center', gap: 1 }}>
                         <Box sx={{ display: 'flex' }}>
-                            { iconsCardPackages[1] }
+                            { iconsCardDepartures[1] }
                         </Box>
                         <Typography
                             sx={{ fontSize: {xs: ".6rem", sm: '.8rem', md: '1rem'} }}
                         >
-                            {_productInfo(Number(id) + 1).days}
+                            {_departureInfo(Number(id) + 1).days}
                         </Typography>
                     </Box>
 
                     <Box sx={{ display: 'flex', justifyContent: 'flex-start', alignItems: 'center', gap: 1 }}>
                         <Box sx={{ display: 'flex' }}>
-                            { iconsCardPackages[2] }
+                            { iconsCardDepartures[2] }
                         </Box>
                         <Typography
                             sx={{ fontSize: {xs: ".6rem", sm: '.8rem', md: '1rem'} }}
                         >
-                            {_productInfo(Number(id) + 1).physicLvl}
+                            {_departureInfo(Number(id) + 1).physicLvl}
                         </Typography>
                     </Box>
 
                     <Box sx={{ display: 'flex', justifyContent: 'flex-start', alignItems: 'center', gap: 1 }}>
                         <Box sx={{ display: 'flex' }}>
-                            { iconsCardPackages[3] }
+                            { iconsCardDepartures[3] }
                         </Box>
                         <Typography
                             sx={{ fontSize: {xs: ".6rem", sm: '.8rem', md: '1rem'} }}
                         >
-                            {_productInfo(Number(id) + 1).technicalLvl}
+                            {_departureInfo(Number(id) + 1).technicalLvl}
                         </Typography>
                     </Box>
                 </Box>

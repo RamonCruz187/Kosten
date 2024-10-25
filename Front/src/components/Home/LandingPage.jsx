@@ -5,6 +5,7 @@ import kosten from '../../assets/kosten.svg';
 import bot from '../../assets/bot.svg';
 import {PackageGrid} from "../../modules/package/components/PackageGrid.jsx";
 import Footer from './Footer.jsx';
+import {DepartureGrid} from "../../modules/Departures/components/DepartureGrid.jsx";
 import Carousel from './Carousel.jsx';
 /*<<<<<<< HEAD
 import AppAppBar from "../../shared/components/AppAppBar.jsx";
@@ -135,7 +136,7 @@ const LandingPage = () => {
           
           }}
         >
-          <PackageGrid title="PRÓXIMAS SALIDAS" />
+          <DepartureGrid title="PRÓXIMAS SALIDAS" />
         </Box>
         <Footer/>
       </Box>
