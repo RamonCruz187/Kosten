@@ -1,13 +1,14 @@
 package com.Kosten.Api_Rest.dto.packageDTO;
 
-import com.Kosten.Api_Rest.dto.Departure.DepartureResponseDto;
+
+
 import com.Kosten.Api_Rest.dto.Departure.DepartureToBeListed;
+import com.Kosten.Api_Rest.dto.category.CategoryResponseDTO;
 import com.Kosten.Api_Rest.dto.images.ImageResponseDTO;
 import com.Kosten.Api_Rest.model.MonthNames;
-
 import java.io.Serializable;
 import java.util.List;
-import java.util.Set;
+
 
 /**
  * DTO for {@link com.Kosten.Api_Rest.model.Package}
@@ -28,6 +29,8 @@ public record PackageResponseDTO(
         List<DepartureToBeListed> departures,
 
         List<MonthNames> months,
+
+        CategoryResponseDTO category,
 
         boolean active
 

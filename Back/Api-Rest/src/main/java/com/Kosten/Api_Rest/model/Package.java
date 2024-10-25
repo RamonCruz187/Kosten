@@ -70,6 +70,7 @@ public class Package {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "category_id",referencedColumnName = "id", nullable = false)
+    @JsonManagedReference(value = "category")
     private Category category;
 
     /********End of Relations with Category Entity********/
@@ -116,6 +117,13 @@ public class Package {
         departures.clear();
     }
 
+    /****************End of Relations with Departure Entity********/
+
+    /* Relations with others Entities */
+    /*@OneToMany(mappedBy = "comments", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Comment> comments;
+    */
+
     @Override
     public String toString() {
         return "Package{" +
@@ -133,19 +141,6 @@ public class Package {
                 ", images=" + images +
                 '}';
     }
-
-    /****************End of Relations with Departure Entity********/
-
-    /* Relations with others Entities */
-    /*@ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "category_id", referencedColumnName = "id")
-    private Category category;
-
-    @OneToMany(mappedBy = "comments", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Comment> comments;
-    */
-
-
 
     public Package update(PackageToUpdateDTO packageToUpdateDTO) {
         if (packageToUpdateDTO.name() != null)
