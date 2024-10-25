@@ -1,6 +1,7 @@
 package com.Kosten.Api_Rest.dto.packageDTO;
 
 import com.Kosten.Api_Rest.dto.Departure.DepartureResponseDto;
+import com.Kosten.Api_Rest.dto.Departure.DepartureToBeListed;
 import com.Kosten.Api_Rest.dto.images.ImageResponseDTO;
 import com.Kosten.Api_Rest.model.MonthNames;
 
@@ -24,7 +25,7 @@ public record PackageResponseDTO(
         String technical_level,
         String included_services,
         List<ImageResponseDTO> images,
-        List<DepartureResponseDto> departures,
+        List<DepartureToBeListed> departures,
 
         List<MonthNames> months,
 

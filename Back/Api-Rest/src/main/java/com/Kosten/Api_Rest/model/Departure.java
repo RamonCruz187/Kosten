@@ -3,11 +3,10 @@ package com.Kosten.Api_Rest.model;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.*;
-
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.List;
+
 
 @Entity
 @Getter
@@ -35,13 +34,10 @@ public class Departure {
         }
     }
 
-/*
-    @OneToMany
-    @JoinColumn(name = "user_id", referencedColumnName = "id", nullable = false)
-    private Set<User> usersList;*/
 
     @ManyToMany(mappedBy = "departures")
-    private Set<User> usersList = new HashSet<>();
+    @JsonBackReference
+    private List<User> usersList = new ArrayList<>();
 
     private Double price;
     private LocalDateTime startDate;

@@ -1,5 +1,6 @@
 package com.Kosten.Api_Rest.dto.Departure;
 
+import com.Kosten.Api_Rest.dto.user.UserToBeListed;
 import com.Kosten.Api_Rest.model.User;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
@@ -12,6 +13,7 @@ import lombok.Setter;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Set;
 
 @Getter
@@ -22,9 +24,6 @@ public class DepartureResponseDto implements Serializable {
     @NotNull
     @Min(1)
     private Integer id;
-
-   /*
-    private Set<User> usersList;*/
     private Double price;
     @NotNull
     private LocalDateTime startDate;
@@ -39,4 +38,5 @@ public class DepartureResponseDto implements Serializable {
     private Boolean isActive;
     @NotNull
     private int quota;
+    private List<UserToBeListed> usersList;
 }

@@ -2,11 +2,10 @@ package com.Kosten.Api_Rest.mapper;
 
 import com.Kosten.Api_Rest.dto.Departure.DepartureRequestDto;
 import com.Kosten.Api_Rest.dto.Departure.DepartureResponseDto;
+import com.Kosten.Api_Rest.dto.Departure.DepartureToBeListed;
 import com.Kosten.Api_Rest.dto.Departure.DepartureToUpdateDto;
 import com.Kosten.Api_Rest.model.Departure;
-import org.mapstruct.Mapper;
-import org.mapstruct.MappingConstants;
-import org.mapstruct.ReportingPolicy;
+import org.mapstruct.*;
 
 import java.util.List;
 
@@ -25,4 +24,8 @@ public interface DepartureMapper {
 
     DepartureToUpdateDto departureToDepartureToUpdateDTO(Departure departure_);
 
+    @Mappings({
+            @Mapping(target = "packageId", source = "packageRef.id")
+    })
+    DepartureToBeListed departureToDepartureToBeListed(Departure departure_);
 }
