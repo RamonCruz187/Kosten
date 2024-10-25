@@ -5,11 +5,11 @@ import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.*;
 
+
 import java.text.DateFormatSymbols;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Locale;
-import java.util.Objects;
+import java.util.*;
+
+
 
 @Entity
 @Table(name = "packages")
@@ -98,12 +98,12 @@ public class Package {
     /****************************************
      *  Relations with Departure Entity
      ****************************************/
-    /*@OneToMany(mappedBy = "packageRef", orphanRemoval = true)
-    @JsonManagedReference(value = "packageRef")
-    private List<Departure> departures;
-*/
+    @OneToMany(mappedBy = "packageRef", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference
+    private List<Departure> departures = new ArrayList<>();
+
     //Helper Methods: Keep Both Sides of the Association in SYNC
-   /* public void addDeparture(Departure departure) {
+    public void addDeparture(Departure departure) {
         this.departures.add(departure);
         departure.setPackageRef(this);
     }
@@ -111,7 +111,11 @@ public class Package {
     public void deleteDeparture(Departure departure) {
         this.departures.remove(departure);
         departure.setPackageRef(null);
-    }*/
+    }
+    public void clearDepartures() {
+        departures.forEach(departure -> departure.setPackageRef(null));
+        departures.clear();
+    }
 
     /****************End of Relations with Departure Entity********/
 

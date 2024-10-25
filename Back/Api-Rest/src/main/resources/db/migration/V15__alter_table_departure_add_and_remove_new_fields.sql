@@ -1,0 +1,7 @@
+
+ALTER TABLE departure DROP COLUMN startTime;
+ALTER TABLE departure DROP COLUMN endTime;
+
+
+ALTER TABLE departure ADD COLUMN isActive BOOLEAN NOT NULL DEFAULT TRUE;
+ALTER TABLE departure ADD COLUMN quota INT NOT NULL;

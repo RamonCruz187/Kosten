@@ -26,6 +26,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 import java.net.URI;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 
 @Tag(name = "Paquetes", description = "Maneja todos los endpoints de los Paquetes que se ofrecen.")
@@ -72,6 +73,7 @@ public class PackageController {
                 new ArrayList<>(),
                 filesImages,
                 new ArrayList<>(),
+                new ArrayList<>(),
                 packageRequestDTO.all_months(),
                 packageRequestDTO.active()
         );
@@ -112,6 +114,32 @@ public class PackageController {
                 .body(packageService.getPackageById(id));
     }
 
+    @Operation(
+            summary = "Obtener todos los Paquetes activos en una lista paginada y/o ordenada.",
+            description = "Permite a un usuario logueado de la empresa obtener todos los paquetes activos, en una lista paginada."
+    )
+    @ApiResponses(value = {
+            @ApiResponse(
+                    responseCode = "201", description = "Lista de Paquetes activos obtenidos exitosamente.",
+                    content = {
+                            @Content(mediaType = "application/json",
+                                    schema = @Schema(implementation = ExtendedBaseResponse.class))
+                    }),
+            @ApiResponse(responseCode = "403", description = "Forbidden access to this resource", content = {@Content}),
+            @ApiResponse(responseCode = "404", description = "Paquetes no encontrados", content = {@Content}),
+            @ApiResponse(responseCode = "500", description = "Internal Server Error", content = {@Content})
+    })
+    @Parameters({
+            @Parameter(name = "page", description = "Page number", required = false, example = "0"),
+            @Parameter(name = "size", description = "Size of the page", required = false, example = "10"),
+            @Parameter(name = "sort", description = "Sort the page", required = false, example = "id,desc")
+    })
+    @GetMapping("/actives")
+    public ResponseEntity<ExtendedBaseResponse<Page<PackageResponseDTO>>> getAllActivePackages(Pageable pageable) {
+        return ResponseEntity
+                .status(200)
+                .body(packageService.getAllActivePackages(pageable));
+    }
     @Operation(
             summary = "Obtener todos los Paquetes en una lista paginada y/o ordenada.",
             description = "Permite a un usuario logueado de la empresa obtener todos los paquetes, en una lista paginada."
@@ -189,5 +217,30 @@ public class PackageController {
         return ResponseEntity
                 .status(200)
                 .body(packageService.delete( id ));
+    }
+
+    @Operation(
+            summary = "Eliminar una Salida de un Paquete.",
+            description = "Permite a un usuario logueado de la empresa eliminar una Salida de la lista de salidas de un Paquete."
+    )
+    @ApiResponses(value = {
+            @ApiResponse(
+                    responseCode = "200", description = "Salida eliminada de la lsta exitosamente.",
+                    content = {
+                            @Content(mediaType = "application/json",
+                                    schema = @Schema(implementation = BaseResponse.class))
+                    }),
+            @ApiResponse(responseCode = "400", description = "Bad request.", content = {@Content}),
+            @ApiResponse(responseCode = "401", description = "Unauthorized.", content = {@Content}),
+            @ApiResponse(responseCode = "403", description = "Forbidden.", content = {@Content}),
+            @ApiResponse(responseCode = "404", description = "Salida no encontrada.", content = {@Content}),
+            @ApiResponse(responseCode = "500", description = "Server error.", content = {@Content})
+    })
+    @DeleteMapping("/{packageId}/departures/{departureId}")
+    @Transactional
+    public ExtendedBaseResponse<PackageResponseDTO> removeDepartureFromPackage(
+            @PathVariable Long packageId,
+            @PathVariable Integer departureId) {
+        return packageService.removeDepartureFromPackage(packageId, departureId);
     }
 }
