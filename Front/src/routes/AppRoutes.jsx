@@ -12,7 +12,7 @@ import {CreateEditPackage} from "../modules/admin/components/CreateEditPackage.j
 import {DepartureView} from "../modules/Departures/pages/DepartureView.jsx";
 import {DepartureFull} from "../modules/Departures/pages/DepartureFull.jsx";
 import {PackageFullView} from "../modules/admin/pages/PackageFullView.jsx";
-import About from '../components/Home/About.jsx';
+import About from '../components/Home/About';
 
 const AppRoutes = () => (
   <Router>
