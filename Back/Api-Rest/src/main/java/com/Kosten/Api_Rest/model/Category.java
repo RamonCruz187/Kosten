@@ -23,4 +23,15 @@ public class Category {
     @OneToMany(mappedBy = "category", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JsonManagedReference(value = "category")
     private List<Package> packages;
+
+    //****** Helper Methods for Promotions: Keep Both Sides of the Association in SYNC.********/
+    public void addPackage(Package package_) {
+        this.packages.add(package_);
+        package_.setCategory(this);
+    }
+
+    public void removePackage(Package package_) {
+        package_.setCategory(null);
+        this.packages.remove(package_);
+    }
 }
