@@ -23,6 +23,7 @@ import Divider from "@mui/material/Divider";
 import {UserPopover} from "../../../shared/components/UserPopover.jsx";
 import {MenuOptionsBottom, MenuOptionsTop} from "../utils/Menu.jsx";
 import {Breadcrumb} from "../../../shared/components/Breadcrumb/Breadcrumb.jsx";
+import NavBar from "../../../components/Home/NavBar.jsx";
 
 const drawerWidth = 240;
 
@@ -110,7 +111,7 @@ export const MenuAdmin = ( props ) => {
     const [open, setOpen] = useState(false);
 
     const handleDrawerOpen = () => {
-        setOpen(true);
+        setOpen(!open);
     };
 
     const handleDrawerClose = () => {
@@ -118,10 +119,11 @@ export const MenuAdmin = ( props ) => {
     };
 
     return (
-        <Box sx={{ display: 'flex' }}>
+        <Box sx={{ display: 'flex' }} >
             <CssBaseline />
-            <AppBar position="fixed" open={open} sx={{ bgColor: 'red' }}>
-                <Toolbar>
+            <AppBar position="fixed" open={open} >
+                <NavBar isAdmin={true} handleDrawerOpen={handleDrawerOpen} />
+                {/*<Toolbar sx={{ m: 0 }}>
                     <IconButton
                         color="inherit"
                         aria-label="open drawer"
@@ -146,7 +148,7 @@ export const MenuAdmin = ( props ) => {
                             <UserPopover />
                         </Box>
                     </Box>
-                </Toolbar>
+                </Toolbar>*/}
             </AppBar>
             <Drawer variant="permanent" open={open}>
                 <DrawerHeader>
