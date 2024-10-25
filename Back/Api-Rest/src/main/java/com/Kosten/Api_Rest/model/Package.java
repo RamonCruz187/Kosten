@@ -70,6 +70,7 @@ public class Package {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "category_id",referencedColumnName = "id", nullable = false)
+    @JsonManagedReference(value = "category")
     private Category category;
 
     /********End of Relations with Category Entity********/
