@@ -1,6 +1,7 @@
 package com.Kosten.Api_Rest.security;
 
 import com.Kosten.Api_Rest.Jwt.JwtAuthenticationFilter;
+import com.Kosten.Api_Rest.model.Role;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -32,26 +33,28 @@ public class SecurityConfiguration {
                 .csrf(AbstractHttpConfigurer::disable)
                 .sessionManagement(sessionManagement -> sessionManagement.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests( auth -> auth
+                        .requestMatchers(HttpMethod.OPTIONS, "/**")
+                            .permitAll()
                         .requestMatchers("/test")
                             .permitAll()
                         .requestMatchers("/user/**")
-                        .permitAll()
-                        /*.requestMatchers("/packages")
                             .permitAll()
-                        .requestMatchers("/packages/**")
-                            .permitAll()*/
+                        .requestMatchers(HttpMethod.POST, "/packages")
+                            .hasAnyAuthority(Role.ADMIN.name(), Role.USER.name())
+                        .requestMatchers(HttpMethod.GET, "/packages")
+                            .hasAnyAuthority(Role.ADMIN.name(), Role.USER.name())
                         .requestMatchers("/auth/**")
-                        .permitAll()
+                            .permitAll()
                         .requestMatchers("/comment/**")
-                        .permitAll()
+                            .permitAll()
                         .requestMatchers("/report-comment/**")
-                        .permitAll()
+                            .permitAll()
                         .requestMatchers("/api-docs/**", "api-docs.yaml")
                             .permitAll()
                         .requestMatchers("/swagger-ui-custom.html", "/swagger-ui/**", "/swagger-ui/")
                             .permitAll()
                         .requestMatchers("/departures/**")
-                        .permitAll()
+                            .permitAll()
                         .anyRequest().authenticated()
                 )
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
