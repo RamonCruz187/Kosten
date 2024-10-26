@@ -61,11 +61,11 @@ const theme = createTheme({
       htmlFontSize: 14, // Asigna 14px a 1rem para pantallas xs
     },
     // titulos
-    titleXL: {
+    titleXL: { 
       ...defaultTitle,
       fontSize: "2.25rem", // 36px
     },
-    titleH1: {
+    titleH1: { // titulo 0
       ...defaultTitle,
       fontSize: "1.5rem", // 24px
     },
@@ -108,6 +108,10 @@ const theme = createTheme({
     p: {
       ...defaultParagraph,
     },
+    text2: {
+      ...defaultParagraph,
+      fontSize: "0.75rem", // 12px
+    },
     paragraphLight: {
       ...defaultParagraph,
       color: customPalette.text.light,
@@ -115,6 +119,10 @@ const theme = createTheme({
     paragraphDetails: {
       ...defaultParagraph,
       fontSize: "0.625rem", // 10px
+    },
+    textBoxFill:{
+      ...defaultParagraph,
+      fontSize: "0.875rem", // 14px
     },
     textBox: {
       ...defaultParagraph,

@@ -108,7 +108,6 @@ const AdminDashboard = () => {
 
   return (
     <div>
-      <NavBar />
       <h1>Dashboard</h1>
       <div>
       <Button 

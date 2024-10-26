@@ -22,6 +22,7 @@ import {ChevronLeft, ChevronRight } from "@mui/icons-material";
 import Divider from "@mui/material/Divider";
 import {UserPopover} from "../../../shared/components/UserPopover.jsx";
 import {MenuOptionsBottom, MenuOptionsTop} from "../utils/Menu.jsx";
+import {Breadcrumb} from "../../../shared/components/Breadcrumb/Breadcrumb.jsx";
 
 const drawerWidth = 240;
 
@@ -270,6 +271,9 @@ export const MenuAdmin = ( props ) => {
             </Drawer>
             <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
                 <DrawerHeader />
+                <Box sx={{ mb: 2 }}>
+                    <Breadcrumb />
+                </Box>
                 <Outlet />
             </Box>
         </Box>
