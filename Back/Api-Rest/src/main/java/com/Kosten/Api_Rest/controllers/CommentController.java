@@ -206,4 +206,23 @@ public class CommentController {
         return ResponseEntity.ok(ExtendedBaseResponse.of(response, comments));
     }
 
+    @Operation(summary = "Buscar un comentario con nombre del paquete por ID",
+            description = "Permite recuperar un comentario específico junto con el nombre del paquete mediante su ID.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200",
+                    description = "Comentario y nombre del paquete recuperados exitosamente.",
+                    content = {
+                            @Content(mediaType = "application/json",
+                                    schema = @Schema(implementation = ExtendedBaseResponse.class))
+                    }),
+            @ApiResponse(responseCode = "404", description = "Comentario no encontrado.", content = {@Content}),
+            @ApiResponse(responseCode = "500", description = "Error del servidor.", content = {@Content})
+    })
+    @GetMapping("/package/{commentId}")
+    public ResponseEntity<ExtendedBaseResponse<CPackageResponse>> findCommentWithPackageById(@PathVariable("commentId") Long commentId) {
+            CPackageResponse cPackageResponse = commentService.findCommentWithPackageById(commentId);
+            BaseResponse response = BaseResponse.ok("Comentario y nombre del paquete recuperados exitosamente.");
+            return ResponseEntity.ok(ExtendedBaseResponse.of(response, cPackageResponse));
+    }
+
 }

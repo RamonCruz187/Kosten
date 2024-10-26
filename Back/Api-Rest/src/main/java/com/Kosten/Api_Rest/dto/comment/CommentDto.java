@@ -9,7 +9,8 @@ public record CommentDto(
         Boolean isVisible,
         Boolean isFavorite,
         LocalDateTime dateCreation,
-        Long userId
+        Long userId,
+        Long packageId
 ) implements Serializable {
 }
 

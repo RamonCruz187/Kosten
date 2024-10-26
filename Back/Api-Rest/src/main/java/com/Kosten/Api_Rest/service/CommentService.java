@@ -24,4 +24,6 @@ public interface CommentService {
 
     List<CommentDto> findVisibleAndFavoriteComments();
 
+    CPackageResponse findCommentWithPackageById(Long commentId);
+
 }

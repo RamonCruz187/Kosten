@@ -8,5 +8,6 @@ public record UpdateFavoriteCommentDto(
     @NotNull(message = "El id del comentario no puede estar en blanco")
     Long commentId,
     boolean isFavorite
+
 ) implements Serializable {
 }
