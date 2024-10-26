@@ -1,10 +1,12 @@
 import React from 'react';
-import { Dialog, DialogActions, DialogContent, DialogTitle, TextField, Button } from '@mui/material';
+import { Dialog, DialogActions, DialogContent, DialogTitle, TextField, Button, Typography } from '@mui/material';
 
 const EditUserDialog = ({ open, onClose, userForm, handleInputChange, handleSubmit }) => {
   return (
     <Dialog open={open} onClose={onClose} aria-labelledby="form-dialog-title">
-      <DialogTitle>Editar Usuario</DialogTitle>
+      <DialogTitle sx={{ padding: "10", gap: "1.25rem", alignItems: "center", justifyItems: "center" }}> 
+      <Typography variant="titleH2">REGISTRO</Typography>
+      </DialogTitle>
       <DialogContent>
         <TextField
           label="Nombre"
@@ -17,7 +19,7 @@ const EditUserDialog = ({ open, onClose, userForm, handleInputChange, handleSubm
           placeholder="Nombres y apellidos"
         />
         <TextField
-          label="email"
+          label="Mail"
           name="email"
           type="email"
           value={userForm.email}
@@ -28,7 +30,7 @@ const EditUserDialog = ({ open, onClose, userForm, handleInputChange, handleSubm
           placeholder="ejemplo@mail.com"
         />
         <TextField
-          label="Contacto"
+          label="Número de teléfono"
           name="contact"
           value={userForm.contact}
           onChange={handleInputChange}
@@ -37,10 +39,12 @@ const EditUserDialog = ({ open, onClose, userForm, handleInputChange, handleSubm
           variant="outlined"
           placeholder="541112345678"
         />
+
+        
       </DialogContent>
       <DialogActions>
-        <Button onClick={onClose} color="primary">Cancel</Button>
-        <Button onClick={handleSubmit} color="primary">Update User</Button>
+        <Button onClick={onClose} color="transparent">Cerrar</Button>
+        <Button onClick={handleSubmit} color="transparent">Guardar</Button>
       </DialogActions>
     </Dialog>
   );

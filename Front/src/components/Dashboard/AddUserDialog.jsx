@@ -1,12 +1,14 @@
 import React from 'react';
-import { Dialog, DialogActions, DialogContent, DialogTitle, TextField, Button, InputAdornment, IconButton } from '@mui/material';
+import { Dialog, DialogActions, DialogContent, DialogTitle, TextField, Button, InputAdornment, IconButton, Typography } from '@mui/material';
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
 
 const AddUserDialog = ({ open, onClose, userForm, handleInputChange, handleSubmit, toggleShowPassword, showPassword, toggleShowConfirmPassword, showConfirmPassword }) => {
   return (
     <Dialog open={open} onClose={onClose} aria-labelledby="form-dialog-title">
-      <DialogTitle>Crear Usuario</DialogTitle>
+      <DialogTitle sx={{ padding: "10", gap: "1.25rem", alignItems: "center", justifyItems: "center" }}> 
+      <Typography variant="titleH2">NUEVO USUARIO</Typography>
+      </DialogTitle>
       <DialogContent>
         <TextField
           label="Nombre"
@@ -19,7 +21,7 @@ const AddUserDialog = ({ open, onClose, userForm, handleInputChange, handleSubmi
           placeholder="Nombres y apellidos"
         />
         <TextField
-          label="email"
+          label="Mail"
           name="email"
           type="email"
           value={userForm.email}
@@ -30,7 +32,7 @@ const AddUserDialog = ({ open, onClose, userForm, handleInputChange, handleSubmi
           placeholder="ejemplo@mail.com"
         />
         <TextField
-          label="Contacto"
+          label="Número de Teléfono"
           name="contact"
           value={userForm.contact}
           onChange={handleInputChange}
@@ -81,8 +83,8 @@ const AddUserDialog = ({ open, onClose, userForm, handleInputChange, handleSubmi
         />
       </DialogContent>
       <DialogActions>
-        <Button onClick={onClose} color="primary">Cancel</Button>
-        <Button onClick={handleSubmit} color="primary">Add User</Button>
+        <Button onClick={onClose} color="transparent">Cerrar</Button>
+        <Button onClick={handleSubmit} color="transparent">Guardar</Button>
       </DialogActions>
     </Dialog>
   );

@@ -1,7 +1,6 @@
 //*************/ version 5 endpoint users CRUD 2 Modals ****************
 import React, { useEffect, useState } from 'react';
-import { Button, Paper, Table, TableBody, TableCell, TableHead, TableRow, TablePagination } from '@mui/material';
-
+import { Box, Tabs, Tab, Typography, Button, Link, Paper, Table, TableBody, TableCell, TableHead, TableRow, TablePagination, tableCellClasses  } from '@mui/material';
 import { RiEditLine, RiDeleteBin6Line } from 'react-icons/ri';
 import axios from 'axios';
 
@@ -106,50 +105,94 @@ const AdminDashboard = () => {
     setPage(0); // Reset to first page
   };
 
-  return (
-    <div>
-      <h1>Dashboard</h1>
-      <div>
-      <Button 
-      onClick={handleOpenAddUser} 
-      style={{ marginBottom: '16px' }}
-            color="grayButton"
-            type="submit"
-            // sx={{ padding: ".75rem 3rem", marginTop: "1rem" }}
-      >
+  const [filter, setFilter] = useState('Todos');
+  // Function to handle tab selection and filtering
+  const handleTabChange = (event, newFilter) => {
+    setFilter(newFilter);
+  };
 
-        Crear Usuario
-      </Button>
-      <Button
-        color="grayButton">
-          Nuevo Staff
-      </Button>
-      </div>
-      <Paper>
-        <Table>
-          <TableHead>
+
+  return (
+    <Box sx={{ width: '100%', minHeight: '100vh', backgroundColor: 'grey.600', padding: 4 }}>
+        <Box display="flex" justifyContent="space-between" alignItems="center" mb={3}>
+          <Tabs
+            value={filter}
+            onChange={handleTabChange}
+            textColor="primary"
+            indicatorColor="primary"
+            aria-label="filter tabs"
+          >
+            <Tab label="Todos" value="Todos" sx={{ color: 'grey.300', textTransform: 'none', fontWeight: 'bold' }} />
+            <Tab label="Activos" value="Activos" sx={{ color: 'grey.300', textTransform: 'none', fontWeight: 'bold' }} />
+            <Tab label="Inactivos" value="Inactivos" sx={{ color: 'grey.300', textTransform: 'none', fontWeight: 'bold' }} />
+            <Tab label="Staff" value="Staff" sx={{ color: 'grey.300', textTransform: 'none', fontWeight: 'bold' }} />
+          </Tabs>
+          <Box >
+          <Button
+            variant="contained"
+            sx={{ backgroundColor: 'grey.200', color: 'black', mr: 1 }}
+            // color="terciary"
+            onClick={() => console.log('Nuevo Staff')}>
+              Nuevo Staff
+          </Button>
+          <Button 
+            variant="contained"
+            sx={{ backgroundColor: 'grey.200', color: 'black' }}
+            onClick={handleOpenAddUser}>
+            Nuevo Usuario
+          </Button>
+        </Box>
+      </Box>
+
+      <Paper elevation={0} sx={{ backgroundColor: 'transparent'}}>
+        <Table sx={{ borderBottom: "none" }}>
+          {/* <TableHead>
             <TableRow>
-              <TableCell>ID</TableCell>
+              <TableCell >ID</TableCell>
               <TableCell>Nombre</TableCell>
               <TableCell>Email</TableCell>
               <TableCell>Contacto</TableCell>
               <TableCell>Role</TableCell>
               <TableCell>Acciones</TableCell>
             </TableRow>
-          </TableHead>
+          </TableHead> */}
           <TableBody>
             {users.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((user) => (
-              <TableRow key={user.id}>
-                <TableCell>{user.id}</TableCell>
-                <TableCell>{user.username}</TableCell>
-                <TableCell>{user.email}</TableCell>
-                <TableCell>{user.contact}</TableCell>
-                <TableCell>{user.role}</TableCell>
-                <TableCell>
-                  <Button onClick={() => handleOpenEditUser(user.id)}>
-                    <RiEditLine />
+              <TableRow key={user.id} 
+              sx={{
+                backgroundColor: 'grey.200',
+                marginBottom: 2,
+                borderRadius: 2,
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'space-between',
+                padding: 2,
+                boxShadow: 2,
+              }}
+              >
+                <TableCell sx={{ border: 0 }}>{user.id}</TableCell>
+                <TableCell sx={{ border: 0 }}>{user.username}</TableCell>
+                <TableCell sx={{ border: 0 }}>{user.email}</TableCell>
+                <TableCell sx={{ border: 0 }}>{user.contact}</TableCell>
+                <TableCell sx={{ border: 0 }}>{user.role}</TableCell>
+                <TableCell sx={{ border: 0 }}>
+                  <Button 
+                    onClick={() => handleOpenEditUser(user.id)} 
+                    sx={{
+                    backgroundColor: 'grey.300',
+                    marginRight: 1,
+                    '&:hover': { backgroundColor: 'grey.400' },
+                    }}
+                    >
+                    <RiEditLine /> EDITAR
                   </Button>
-                  <Button onClick={() => handleDelete(user.id)}>
+                  <Button 
+                    onClick={() => handleDelete(user.id)} 
+                    sx={{backgroundColor: 'red.500',
+                    color: 'white',
+                        '&:hover': { backgroundColor: 'red.400' },
+                      }}
+                    >
                     <RiDeleteBin6Line />
                   </Button>
                 </TableCell>
@@ -187,7 +230,7 @@ const AdminDashboard = () => {
         handleInputChange={handleInputChange}
         handleSubmit={handleSubmitEdit}
       />
-    </div>
+    </Box>
   );
 };
 
