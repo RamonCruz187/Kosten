@@ -5,6 +5,7 @@ import com.Kosten.Api_Rest.dto.ExtendedBaseResponse;
 import com.Kosten.Api_Rest.dto.user.UpdateUserRequestDto;
 import com.Kosten.Api_Rest.dto.user.UserResponseDto;
 import com.Kosten.Api_Rest.dto.user.UserRoleUpdateRequestDto;
+import com.Kosten.Api_Rest.dto.user.UserToBeListed;
 import com.Kosten.Api_Rest.service.UserService;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
@@ -47,7 +48,7 @@ public class UserController {
 
     @GetMapping("/all")
     @Transactional
-    public ResponseEntity<ExtendedBaseResponse<List<UserResponseDto>>> getAllUsers() {
+    public ResponseEntity<ExtendedBaseResponse<List<UserToBeListed>>> getAllUsers() {
         return ResponseEntity.status(200).body(userService.getAllUsers());
     }
 
@@ -58,5 +59,6 @@ public class UserController {
                 .status(200)
                 .body(userService.delete(id));
     }
+
 
 }

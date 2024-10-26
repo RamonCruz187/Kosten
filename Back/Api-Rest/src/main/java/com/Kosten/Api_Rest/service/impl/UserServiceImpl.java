@@ -1,13 +1,21 @@
 package com.Kosten.Api_Rest.service.impl;
 
+import com.Kosten.Api_Rest.Exception.DepartureNotFoundException;
+import com.Kosten.Api_Rest.Exception.userExc.UserNotFoundException;
 import com.Kosten.Api_Rest.dto.BaseResponse;
+import com.Kosten.Api_Rest.dto.Departure.DepartureResponseDto;
+import com.Kosten.Api_Rest.dto.Departure.DepartureToBeListed;
 import com.Kosten.Api_Rest.dto.ExtendedBaseResponse;
 import com.Kosten.Api_Rest.dto.user.UpdateUserRequestDto;
 import com.Kosten.Api_Rest.dto.user.UserResponseDto;
 import com.Kosten.Api_Rest.dto.user.UserRoleUpdateRequestDto;
 import com.Kosten.Api_Rest.Exception.UserException.NotFoundUser;
+import com.Kosten.Api_Rest.dto.user.UserToBeListed;
+import com.Kosten.Api_Rest.mapper.DepartureMapper;
 import com.Kosten.Api_Rest.mapper.UserMapper;
+import com.Kosten.Api_Rest.model.Departure;
 import com.Kosten.Api_Rest.model.User;
+import com.Kosten.Api_Rest.repository.IDepartureRepository;
 import com.Kosten.Api_Rest.repository.UserRepository;
 import com.Kosten.Api_Rest.service.UserService;
 import lombok.AllArgsConstructor;
@@ -21,7 +29,9 @@ import java.util.Optional;
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
+    private final IDepartureRepository departureRepository;
     private final UserMapper userMapper;
+    private final DepartureMapper departureMapper;
 
     public ExtendedBaseResponse<UserResponseDto> update(UpdateUserRequestDto updateUser){
 
@@ -68,9 +78,9 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public ExtendedBaseResponse<List<UserResponseDto>> getAllUsers() {
+    public ExtendedBaseResponse<List<UserToBeListed>> getAllUsers() {
         List<User> users = userRepository.findAll();
-        List<UserResponseDto> listUsersResponseDto = users.stream().map(userMapper::entityToDto).toList();
+        List<UserToBeListed> listUsersResponseDto = users.stream().map(userMapper::userToUserToBeListed).toList();
         return ExtendedBaseResponse.of(
                 BaseResponse.ok("Usuarios listados con exito."), listUsersResponseDto
         );
@@ -86,4 +96,24 @@ public class UserServiceImpl implements UserService {
 
         return BaseResponse.ok("Paquete eliminado exitosamente.");
     }
+
+
+    public List<DepartureToBeListed> getDeparturesByUserId(Long userId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new UserNotFoundException("User not found"));
+        user.getDepartures();
+
+        return user.getDepartures().stream().map(departureMapper::departureToDepartureToBeListed).toList();
+    }
+
+
+
+
+    public List<UserResponseDto> getAllUsersWithDepartures() {
+        List<User> userList = userRepository.findAllWithDepartures();
+        List<UserResponseDto> userResponseDtoList = userList.stream().
+                map(userMapper::entityToDto).toList();
+        return userResponseDtoList;
+    }
+
 }

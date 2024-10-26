@@ -1,5 +1,6 @@
 package com.Kosten.Api_Rest.dto.packageDTO;
 
+import com.Kosten.Api_Rest.dto.Departure.DepartureResponseDto;
 import com.Kosten.Api_Rest.dto.images.ImageResponseDTO;
 import com.Kosten.Api_Rest.model.MonthNames;
 import jakarta.validation.constraints.Max;
@@ -10,6 +11,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.Serializable;
 import java.util.List;
+import java.util.Set;
 
 /**
  * DTO for {@link com.Kosten.Api_Rest.model.Package}
@@ -35,6 +37,7 @@ public record PackageRequestDTO(
         List<ImageResponseDTO> images,
 
         List<MultipartFile> filesImages,
+        List<DepartureResponseDto> departures,
 
         List<MonthNames> months,
         List<Integer> all_months,
