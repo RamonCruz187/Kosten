@@ -25,6 +25,7 @@ public interface CommentMapper {
     @Mapping(source = "packageRef.id", target = "packageId")
     CommentDto toDto(Comment comment);
 
+    @Mapping(source = "comment", target = "commentDto")
     @Mapping(source = "packageRef.name", target = "name")
     CPackageResponse toCPackageResponse(Comment comment);
 
