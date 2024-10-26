@@ -12,6 +12,7 @@ import {CreateEditPackage} from "../modules/admin/components/CreateEditPackage.j
 import {DepartureView} from "../modules/Departures/pages/DepartureView.jsx";
 import {DepartureFull} from "../modules/Departures/pages/DepartureFull.jsx";
 import {PackageFullView} from "../modules/admin/pages/PackageFullView.jsx";
+import { Gallery } from '../components/PhotosGallery/Gallery.jsx';
 
 const AppRoutes = () => (
   <Router>
@@ -27,6 +28,8 @@ const AppRoutes = () => (
         <Route path="/muestras" element={<Muestras />} />
         <Route path="/salidas" element={<DepartureView />} />
         <Route path="/salidas/:id" element={<DepartureFull />} />
+
+        <Route path="/gallery" element={<Gallery />} />
 
 
         <Route path="/admin" element={<UserPrivateRoutes />}>
