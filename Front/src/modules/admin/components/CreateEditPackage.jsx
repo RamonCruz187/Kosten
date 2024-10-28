@@ -41,6 +41,7 @@ export const CreateEditPackage = () => {
     const [disabledButton, setDisabledButton] = useState(false);
     const [imagenes, setImagenes] = useState([]);
     const [package_, setPackage] = useState(null);
+    const [imagePreview, setImagePreview] = useState('');
     const [packageValues, setPackageValues] = useState(
         {
             name: '',
@@ -139,6 +140,25 @@ export const CreateEditPackage = () => {
         setImagenes( prev => [...prev, ...event.target.files]);
     };
 
+    const handleImageTitle = (event) => {
+
+        const file = event.target.files[0];
+
+        if( file ) {
+            const previewUrl = URL.createObjectURL(file);
+            setImagePreview(previewUrl);
+        }
+
+         if( imagenes.length > 0 ) {
+            const newImagenes = [...imagenes];
+            newImagenes[0] = file;
+            setImagenes(newImagenes);
+            return;
+         }
+
+            setImagenes([file]);
+    }
+
     const handleClearForm = () => {
         formik.resetForm();
         setImagenes([]);
@@ -149,6 +169,15 @@ export const CreateEditPackage = () => {
             getPackById(params.id);
         }
     }, [ params.id, getPackById ]);
+
+    useEffect(() => {
+
+        if( imagenes.length > 0 ) {
+            const previewUrl = URL.createObjectURL(imagenes[0]);
+            setImagePreview(previewUrl);
+        }
+
+    }, [imagenes]);
 
     return (
         <Container component="main" sx={{ display: 'flex', flexDirection: 'column', gap: 2 }} >
@@ -244,38 +273,51 @@ export const CreateEditPackage = () => {
                                     <Box
                                         sx={{
                                             height: '180px',
-                                            bgcolor: '#747474',
+                                            backgroundColor: '#747474',
                                             display: 'flex',
                                             justifyContent: 'center',
                                             alignItems: "flex-end",
                                             position: 'relative',
+                                            backgroundImage: `url(${
+                                                imagePreview ||
+                                                (package_ && package_.images.length > 0 ? package_.images[0].url : '')
+                                            })`,
+                                            backgroundSize: 'cover',
+                                            backgroundPosition: 'center',
+                                            backgroundRepeat: 'no-repeat'
                                         }}
                                     >
                                         {
-                                            <Typography variant="body1" sx={{ color: '#fff', pb: 4, fontSize: '2rem' }}>
-                                                { formik.values.name || packageValues.name || 'Título del paquete' }
+                                            <Typography variant="body1" sx={{color: '#fff', pb: 4, fontSize: '2.5rem', fontWeight: 'bold'}}>
+                                                {formik.values.name || packageValues.name || 'Título del paquete'}
                                             </Typography>
                                         }
+
                                         {/*Modificar imagen button*/}
-                                        <Button startIcon={<Edit />} variant="contained"
-                                                sx={{
-                                                    position: 'absolute',
-                                                    left: 10,
-                                                    top: 10,
-                                                    bgcolor: 'var(--color-links)'
-                                                }}
+                                        <input
+                                            accept="image/*"
+                                            style={{display: 'none'}}
+                                            id="raised-button-file"
+                                            type="file"
+                                            onChange={handleImageTitle}
+                                        />
+                                        <label htmlFor="raised-button-file"
+                                                  style={{position: 'absolute', left: 10, top: 10 }}
                                         >
-                                            Modificar imagen
-                                        </Button>
+                                            <Button startIcon={<Edit/>} className="hover__transform" variant="contained" component="span"
+                                                    sx={{transition: 'transform 0.3s ease-in-out', bgcolor: 'var(--color-links)'}}>
+                                                Modificar imagen
+                                            </Button>
+                                        </label>
                                     </Box>
                                 </Grid>
-                                <Grid item xs={12} sx={{ p: 2 }}>
+                                <Grid item xs={12} sx={{p: 2}}>
                                     <TextField
                                         fullWidth
                                         id="name"
                                         name="name"
                                         label="Título del paquete"
-                                        value={ formik.values.name }
+                                        value={formik.values.name}
                                         onChange={formik.handleChange}
                                         onBlur={formik.handleBlur}
                                         error={formik.touched.name && Boolean(formik.errors.name)}
@@ -442,12 +484,12 @@ export const CreateEditPackage = () => {
                             <input
                                 accept="image/*"
                                 style={{ display: 'none' }}
-                                id="raised-button-file"
+                                id="multiple-images-input"
                                 multiple
                                 type="file"
                                 onChange={handleImageChange}
                             />
-                            <label htmlFor="raised-button-file">
+                            <label htmlFor="multiple-images-input">
                                 <Button className="hover__transform" variant="contained" component="span" sx={{ transition: 'transform 0.3s ease-in-out' }}>
                                     Subir imágenes
                                 </Button>
