@@ -11,8 +11,12 @@ import {CreateEditPackage} from "../modules/admin/components/CreateEditPackage.j
 import {DepartureView} from "../modules/Departures/pages/DepartureView.jsx";
 import {DepartureFull} from "../modules/Departures/pages/DepartureFull.jsx";
 import {PackageFullView} from "../modules/admin/pages/PackageFullView.jsx";
+
+import { Gallery } from '../components/PhotosGallery/Gallery.jsx';
+
 import {UserAdminPrivateRoutes} from "./UserAdminPrivateRoutes.jsx";
 import About from "../components/Home/About";
+
 
 const AppRoutes = () => (
   <Router>
@@ -24,10 +28,15 @@ const AppRoutes = () => (
         <Route path="/register" element={<Register />} />
       </Route>
 
+
+        <Route path="/gallery" element={<Gallery />} />
+
+
       <Route path="/muestras" element={<Muestras />} />
       <Route path="/salidas" element={<DepartureView />} />
       <Route path="/about" element={<About />} />
       <Route path="/salidas/:id" element={<DepartureFull />} />
+
 
         <Route path="/admin" element={<UserAdminPrivateRoutes />}>
             <Route index element={<Navigate to="usuarios" replace />} />
