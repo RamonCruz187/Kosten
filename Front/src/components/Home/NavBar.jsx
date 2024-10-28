@@ -1,25 +1,21 @@
 import {AppBar, Toolbar, Button, Box, Typography} from "@mui/material";
-import logo from "../../assets/logo.svg";
+import logo from "../../assets/logo.png";
 import NavLink from "./NavLink";
 import { Link } from "react-router-dom";
-import {useAuth} from "../../shared/hooks/useAuth.jsx";
-import {NotificationService} from "../../shared/services/notistack.service.jsx";
-import IconButton from "@mui/material/IconButton";
-import {AccountCircle, AdminPanelSettings} from "@mui/icons-material";
-import {SettingsPopover} from "../../shared/components/SettingsPopover.jsx";
-import {UserPopover} from "../../shared/components/UserPopover.jsx";
+import { useAuth } from "../../shared/hooks/useAuth.jsx";
+import { UserPopover } from "../../shared/components/UserPopover.jsx";
 
 const NavBar = ({ isAdmin = false, handleDrawerOpen = null }) => {
+  const { isAuthenticated } = useAuth();
 
-    const {isAuthenticated, handleLogout} = useAuth();
-
-    return <AppBar
-        position="static"
-        sx={{
-            display: "flex",
-            justifyContent: "space-between",
-            background: "#080808",
-        }}
+  return (
+    <AppBar
+      position="static"
+      sx={{
+        display: "flex",
+        justifyContent: "space-between",
+        background: "#080808",
+      }}
     >
         <Toolbar
             sx={{
@@ -28,9 +24,9 @@ const NavBar = ({ isAdmin = false, handleDrawerOpen = null }) => {
                 marginY: isAdmin ? '' : "0.5rem",
             }}
         >
-            <Box sx={{ height: isAdmin ? '40px' : "", }}>
+            <Box sx={{ height: isAdmin ? '40px' : "60px", }}>
                 <Link to="/">
-                    <img src={logo} alt="KOSTEN" style={{ height: isAdmin ? '40px' : "" }} />
+                    <img src={logo} alt="KOSTEN" style={{ height: isAdmin ? '40px' : "60px" }} />
                 </Link>
             </Box>
             <Box
@@ -88,6 +84,7 @@ const NavBar = ({ isAdmin = false, handleDrawerOpen = null }) => {
             }
         </Toolbar>
     </AppBar>
+  );
 };
 
 export default NavBar;
