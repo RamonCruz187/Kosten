@@ -19,9 +19,9 @@ export const Breadcrumb = () => {
                 { icon ? icon : null }
 
                 <Box sx={{
-                    color: 'gray',
+                    color: 'white',
                     '&:hover': {
-                        color: 'lightgray',
+                        color: 'var(--bg-hover-links)',
                     }
                 }}>
                     { text ? text : '' }
@@ -33,10 +33,10 @@ export const Breadcrumb = () => {
     const HomeIcon = () =>{
         return (
             <Home sx={{
-                color: 'gray',
+                color: 'white',
                 fontSize: '1.1rem',
                 '&:hover': {
-                    color: 'lightgray',
+                    color: 'var(--bg-hover-links)',
                 }
             }} fontSize="inherit" />
         );
@@ -74,7 +74,7 @@ export const Breadcrumb = () => {
     return (
         <Breadcrumbs
             maxItems={4}
-            separator={<NavigateNext fontSize="small" />}
+            separator={<NavigateNext fontSize="small" sx={{ color: 'white' }} />}
         >
             { breadcrumbs }
         </Breadcrumbs>
