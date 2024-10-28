@@ -45,14 +45,15 @@ export default function Footer() {
               Contacto
             </Typography>
             <Typography variant="paragraphLight" align="left" color="#F3F3F3">
-              Nombre calle 123
+              Mitre N° 1745, S. C. de Bariloche. 
               <br />
-              Provincia, Argentina
+              Río Negro, Argentina.           
               <br />
+              CP 8400
               <br />
-              123456789
+              +54 9 11 6298 4904
               <br />
-              info@gmail.com
+              info@kostentrek.com
             </Typography>
           </Grid2>
           <Grid2 xs={12} sm={6} md={4}>
