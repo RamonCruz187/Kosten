@@ -24,13 +24,13 @@ const NavBar = ({ isAdmin = false, handleDrawerOpen = null }) => {
         <Toolbar
             sx={{
                 display: "flex",
-                marginX: isAdmin ? '' : "60px",
+                marginX: isAdmin ? '20px' : "60px",
                 marginY: isAdmin ? '' : "0.5rem",
             }}
         >
-            <Box>
+            <Box sx={{ height: isAdmin ? '40px' : "", }}>
                 <Link to="/">
-                    <img src={logo} alt="KOSTEN"/>
+                    <img src={logo} alt="KOSTEN" style={{ height: isAdmin ? '40px' : "" }} />
                 </Link>
             </Box>
             <Box
@@ -83,9 +83,7 @@ const NavBar = ({ isAdmin = false, handleDrawerOpen = null }) => {
 
                 <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
 
-                    <Button variant="contained" >
-                        <UserPopover />
-                    </Button>
+                    <UserPopover />
                 </Box>
             }
         </Toolbar>

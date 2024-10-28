@@ -101,11 +101,15 @@ export function UserPopover() {
         sx={{
           p: 0,
           m: 0,
-          width: 30,
-          height: 30
+          width: 40,
+          height: 40,
+            color: 'var(--color-links)',
+            '&:hover': {
+                color: '#9E9E9E',
+            },
         }}
       >
-          <AccountCircle  />
+          <AccountCircle />
       </IconButton>
 
       <Popover
