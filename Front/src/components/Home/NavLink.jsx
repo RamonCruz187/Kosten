@@ -20,7 +20,7 @@ const NavLink = ({ href, children }) => (
         color: '#9E9E9E',
       },
       '&:active': {
-        color: '#00BD7E',
+        color: '#FFC800',
       },
       }}
     >

@@ -23,6 +23,7 @@ export const AdminLayout = () => {
                 sx={{
                     display: {sm: 'flex'},
                     justifyContent: {sm: 'center'},
+                    backgroundColor: 'var(--bg-lightgray)'
                 }}
             >
                 <Box

@@ -31,6 +31,7 @@ export const useAuth = (factory, deps) => {
 
     return useMemo(() => ({
         isAuthenticated,
+        userAuth: context.state.user_auth,
         handleLogin,
         handleLogout
     }), [isAuthenticated, handleLogin, handleLogout]);
