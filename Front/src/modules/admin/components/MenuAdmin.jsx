@@ -23,19 +23,23 @@ import Divider from "@mui/material/Divider";
 import {UserPopover} from "../../../shared/components/UserPopover.jsx";
 import {MenuOptionsBottom, MenuOptionsTop} from "../utils/Menu.jsx";
 import {Breadcrumb} from "../../../shared/components/Breadcrumb/Breadcrumb.jsx";
+import NavBar from "../../../components/Home/NavBar.jsx";
 
 const drawerWidth = 240;
 
 const openedMixin = (theme) => ({
+    backgroundColor: 'var(--bg-boldgray)',
+    color: 'var(--color-links)',
     width: drawerWidth,
     transition: theme.transitions.create('width', {
         easing: theme.transitions.easing.sharp,
         duration: theme.transitions.duration.enteringScreen,
-    }),
-    overflowX: 'hidden',
+    })
 });
 
 const closedMixin = (theme) => ({
+    backgroundColor: 'var(--bg-boldgray)',
+    color: 'var(--color-links)',
     transition: theme.transitions.create('width', {
         easing: theme.transitions.easing.sharp,
         duration: theme.transitions.duration.leavingScreen,
@@ -110,7 +114,7 @@ export const MenuAdmin = ( props ) => {
     const [open, setOpen] = useState(false);
 
     const handleDrawerOpen = () => {
-        setOpen(true);
+        setOpen(!open);
     };
 
     const handleDrawerClose = () => {
@@ -118,47 +122,33 @@ export const MenuAdmin = ( props ) => {
     };
 
     return (
-        <Box sx={{ display: 'flex' }}>
+        <Box sx={{ display: 'flex', minHeight: '100dvh' }} >
             <CssBaseline />
-            <AppBar position="fixed" open={open} sx={{ bgColor: 'red' }}>
-                <Toolbar>
-                    <IconButton
-                        color="inherit"
-                        aria-label="open drawer"
-                        onClick={handleDrawerOpen}
-                        edge="start"
-                        sx={[
-                            {
-                                marginRight: 5,
-                            },
-                            open && { display: 'none' },
-                        ]}
-                    >
-                        <MenuIcon />
-                    </IconButton>
-
-                    <Box sx={{ display: 'flex', width: '100%', justifyContent: 'space-between', alignItems: 'center' }}>
-                        <Typography variant="h6" noWrap component="div">
-                            Administración
-                        </Typography>
-
-                        <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', width: '75px' }}>
-                            <UserPopover />
-                        </Box>
-                    </Box>
-                </Toolbar>
+            <AppBar position="fixed" open={open} >
+                <NavBar isAdmin={true} handleDrawerOpen={handleDrawerOpen} />
             </AppBar>
-            <Drawer variant="permanent" open={open}>
+            <Drawer variant="permanent" open={open} >
                 <DrawerHeader>
-                    <IconButton onClick={handleDrawerClose}>
+                    <IconButton onClick={handleDrawerClose} sx={{ color: 'var(--color-links)' }}>
                         {theme.direction === 'rtl' ? <ChevronRight /> : <ChevronLeft />}
                     </IconButton>
                 </DrawerHeader>
                 <Divider />
-                <List>
+                <List >
                     {
                         MenuOptionsTop.map((item, index) => (
-                            <ListItem key={index} disablePadding sx={{ display: 'block' }}>
+                            <ListItem key={index} disablePadding
+                                  sx={{
+                                      display: 'block',
+                                      '&:hover': {
+                                          backgroundColor: 'var(--bg-hover-links)',
+                                          color: 'var(--color-hover-links)',
+                                          '& .MuiListItemIcon-root': {
+                                              color: 'var(--color-hover-links)'
+                                          }
+                                      }
+                                }}
+                            >
                                 <Link to={item.to} style={{ textDecoration: 'none', color: 'inherit' }}>
                                 <ListItemButton
                                     sx={[
@@ -177,8 +167,10 @@ export const MenuAdmin = ( props ) => {
                                 >
                                     <Tooltip title={item.title} placement="right-end">
                                         <ListItemIcon
+                                            className="MuiListItemIcon-root"
                                             sx={[
                                                 {
+                                                    color: 'var(--color-links)',
                                                     minWidth: 0,
                                                     justifyContent: 'center',
                                                 },
@@ -213,10 +205,21 @@ export const MenuAdmin = ( props ) => {
                     }
                 </List>
                 <Divider />
-                <List>
+                <List >
                     {
                         MenuOptionsBottom.map((item, index) => (
-                            <ListItem key={index} disablePadding sx={{ display: 'block' }}>
+                            <ListItem key={index} disablePadding
+                                      sx={{
+                                          display: 'block',
+                                          '&:hover': {
+                                              backgroundColor: 'var(--bg-hover-links)',
+                                              color: 'var(--color-hover-links)',
+                                              '& .MuiListItemIcon-root': {
+                                                  color: 'var(--color-hover-links)'
+                                              }
+                                          }
+                                      }}
+                            >
                                 <ListItemButton
                                     sx={[
                                         {
@@ -236,6 +239,7 @@ export const MenuAdmin = ( props ) => {
                                         <ListItemIcon
                                             sx={[
                                                 {
+                                                    color: 'var(--color-links)',
                                                     minWidth: 0,
                                                     justifyContent: 'center',
                                                 },
@@ -270,8 +274,7 @@ export const MenuAdmin = ( props ) => {
                 </List>
             </Drawer>
             <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
-                <DrawerHeader />
-                <Box sx={{ mb: 2 }}>
+                <Box sx={{ mt: 8, mb: 2 }}>
                     <Breadcrumb />
                 </Box>
                 <Outlet />

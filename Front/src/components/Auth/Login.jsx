@@ -25,24 +25,16 @@ const Login = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-        setIsFetching(true);
+
+      setIsFetching(true);
+
       const { data: dataAuth } = await login({ email, password });
-      NotificationService.success(`Bienvenido nuevamente`, 3000);
-
-      if( dataAuth.isError ) {
-        NotificationService.error(dataAuth.message, 3000);
-        return
-      }
-
-      handleLogin(dataAuth.data);
-
       const { data: dataUser } = await getData(dataAuth.data.id);
 
-      if( dataAuth.isError ) {
-        return
-      }
-
       setUserData(dataUser.data);
+      handleLogin(dataAuth.data);
+
+      NotificationService.success(`Bienvenido nuevamente`, 3000);
 
     } catch (error) {
       NotificationService.error('Error al intentar iniciar sesión.', 3000);

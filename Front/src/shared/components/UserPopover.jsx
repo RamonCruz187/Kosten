@@ -101,11 +101,15 @@ export function UserPopover() {
         sx={{
           p: 0,
           m: 0,
-          width: 30,
-          height: 30
+          width: 40,
+          height: 40,
+            color: 'var(--color-links)',
+            '&:hover': {
+                color: '#9E9E9E',
+            },
         }}
       >
-          <AccountCircle  />
+          <AccountCircle />
       </IconButton>
 
       <Popover
@@ -147,16 +151,20 @@ export function UserPopover() {
                   },
               }}
           >
-              {data.map((option) => (
-                  <MenuItem
-                      key={option.label}
-                      // selected={option.href === pathname}
-                      onClick={() => handleClickItem(option.href)}
-                  >
-                      {option.icon}
-                      {option.label}
-                  </MenuItem>
-              ))}
+              {data
+                  .filter(option =>
+                      option.label !== 'Administrar' || user.role === 'ADMIN'
+                  )
+                  .map(option => (
+                      <MenuItem
+                          key={option.label}
+                          onClick={() => handleClickItem(option.href)}
+                      >
+                          {option.icon}
+                          {option.label}
+                      </MenuItem>
+                  ))
+              }
           </MenuList>
 
           <Divider sx={{ borderStyle: 'dashed' }} />
