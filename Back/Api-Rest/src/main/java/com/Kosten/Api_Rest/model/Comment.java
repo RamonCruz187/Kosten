@@ -27,7 +27,11 @@ public class Comment {
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
     private Boolean isVisible;
+    private Boolean isFavorite;
     @OneToMany(mappedBy = "comment", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<ReportComment> reportComments = new ArrayList<>();
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "package_id")
+    private Package packageRef;
 }
 

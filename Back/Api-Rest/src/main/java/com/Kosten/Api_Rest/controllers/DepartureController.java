@@ -3,8 +3,10 @@ package com.Kosten.Api_Rest.controllers;
 import com.Kosten.Api_Rest.dto.BaseResponse;
 import com.Kosten.Api_Rest.dto.Departure.DepartureRequestDto;
 import com.Kosten.Api_Rest.dto.Departure.DepartureResponseDto;
+import com.Kosten.Api_Rest.dto.Departure.DepartureToBeListed;
 import com.Kosten.Api_Rest.dto.Departure.DepartureToUpdateDto;
 import com.Kosten.Api_Rest.dto.ExtendedBaseResponse;
+import com.Kosten.Api_Rest.service.UserService;
 import com.Kosten.Api_Rest.service.impl.DepartureServiceImpl;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -28,6 +30,8 @@ import java.util.List;
 public class DepartureController {
     @Autowired
     DepartureServiceImpl departureService;
+    @Autowired
+    UserService userService;
 
     @Operation(
             summary = "Crea una nueva salida.",
@@ -99,7 +103,7 @@ public class DepartureController {
             @ApiResponse(responseCode = "500", description = "Internal Server Error", content = {@Content})
     })
     @GetMapping
-    public ResponseEntity<ExtendedBaseResponse<List<DepartureResponseDto>>> getAllDepartures() {
+    public ResponseEntity<ExtendedBaseResponse<List<DepartureToBeListed>>> getAllDepartures() {
         return ResponseEntity
                 .status(200)
                 .body(departureService.findAll());
@@ -156,6 +160,9 @@ public class DepartureController {
                 .status(200)
                 .body(departureService.delete(id));
     }
+
+
+
 
 
 }

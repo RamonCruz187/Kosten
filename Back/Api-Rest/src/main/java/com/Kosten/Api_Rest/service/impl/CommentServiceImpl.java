@@ -1,15 +1,16 @@
 package com.Kosten.Api_Rest.service.impl;
 
-import com.Kosten.Api_Rest.dto.comment.CommentDto;
+import com.Kosten.Api_Rest.Exception.packagesExc.PackageNotFoundException;
+import com.Kosten.Api_Rest.dto.comment.*;
 import com.Kosten.Api_Rest.Exception.commentExc.CommentNotFoundException;
 import com.Kosten.Api_Rest.Exception.userExc.UserNotFoundException;
-import com.Kosten.Api_Rest.dto.comment.CommentRequestDto;
-import com.Kosten.Api_Rest.dto.comment.UpdateCommentDto;
 import com.Kosten.Api_Rest.mapper.CommentMapper;
 import com.Kosten.Api_Rest.model.Comment;
+import com.Kosten.Api_Rest.model.Package;
 import com.Kosten.Api_Rest.model.ReportComment;
 import com.Kosten.Api_Rest.model.User;
 import com.Kosten.Api_Rest.repository.CommentRepository;
+import com.Kosten.Api_Rest.repository.PackageRepository;
 import com.Kosten.Api_Rest.repository.ReportCommentRepository;
 import com.Kosten.Api_Rest.repository.UserRepository;
 import com.Kosten.Api_Rest.service.CommentService;
@@ -28,15 +29,20 @@ public class CommentServiceImpl implements CommentService {
     private final CommentMapper commentMapper;
     private final UserRepository userRepository;
     private final ReportCommentRepository reportCommentRepository;
+    private final PackageRepository packageRepository;
 
     @Override
     @Transactional
     public CommentDto createComment(CommentRequestDto commentRequestDto) {
         User user = userRepository.findById(commentRequestDto.userId())
-                .orElseThrow(() -> new UserNotFoundException("Usuario no encontrado con ID: " + commentRequestDto.userId()));
+                .orElseThrow(() -> new UserNotFoundException("Usuario no encontrado con ese ID: " + commentRequestDto.userId()));
+        Package pack = packageRepository.findById(commentRequestDto.packageId())
+                .orElseThrow(() -> new PackageNotFoundException("Paquete no encontrado con ese ID: " + commentRequestDto.packageId()));
         Comment comment = commentMapper.toEntity(commentRequestDto);
+        comment.setPackageRef(pack);
         comment.setUser(user);
         comment.setIsVisible(false);
+        comment.setIsFavorite(false);
         Comment commentSaved = commentRepository.save(comment);
         return commentMapper.toDto(commentSaved);
     }
@@ -75,13 +81,14 @@ public class CommentServiceImpl implements CommentService {
 
     @Override
     @Transactional
-    public CommentDto updateCommentVisibility(Long commentId, boolean visible) {
-        Comment comment = commentRepository.findById(commentId)
-                .orElseThrow(() -> new CommentNotFoundException("Comentario no encontrado con ID: " + commentId));
-        comment.setIsVisible(visible);
+    public CommentDto updateCommentVisibility(UpdateVisibilityCommentDto updateVisibilityCommentDto) {
+        Comment comment = commentRepository.findById(updateVisibilityCommentDto.commentId())
+                .orElseThrow(() -> new CommentNotFoundException("Comentario no encontrado con ID: " + updateVisibilityCommentDto.commentId()));
+        comment.setIsVisible(updateVisibilityCommentDto.isVisible());
         Comment commentSaved = commentRepository.save(comment);
         return commentMapper.toDto(commentSaved);
     }
+
 
     @Override
     @Transactional(readOnly = true)
@@ -92,5 +99,29 @@ public class CommentServiceImpl implements CommentService {
         return reportCommentList.size();
     }
 
+    @Override
+    @Transactional
+    public CommentDto updateCommentFavorite(UpdateFavoriteCommentDto updateFavoriteCommentDto) {
+        Comment comment = commentRepository.findById(updateFavoriteCommentDto.commentId())
+                .orElseThrow(() -> new CommentNotFoundException("Comentario no encontrado con ID: " + updateFavoriteCommentDto.commentId()));
+        comment.setIsFavorite(updateFavoriteCommentDto.isFavorite());
+        Comment commentSaved = commentRepository.save(comment);
+        return commentMapper.toDto(commentSaved);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<CommentDto> findVisibleAndFavoriteComments() {
+        List<Comment> comments = commentRepository.findByIsVisibleTrueAndIsFavoriteTrue();
+        return commentMapper.entityListToDtoList(comments);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public CPackageResponse findCommentWithPackageById(Long commentId) {
+        Comment comment = commentRepository.findById(commentId)
+                .orElseThrow(() -> new CommentNotFoundException("Comentario no encontrado con ese ID: " + commentId));
+        return commentMapper.toCPackageResponse(comment);
+    }
 
 }

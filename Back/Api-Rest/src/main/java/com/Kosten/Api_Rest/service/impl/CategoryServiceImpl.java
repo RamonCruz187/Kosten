@@ -22,12 +22,17 @@ public class CategoryServiceImpl implements CategoryService {
     private final CategoryRepository categoryRepository;
     @Override
     public ExtendedBaseResponse<CategoryResponseDTO> newCategory(CategoryRequestDTO categoryRequestDto) {
-        CategoryMapper categoryMapper = Mappers.getMapper(CategoryMapper.class);
-        Category category = categoryMapper.toEntity(categoryRequestDto);
-        categoryRepository.save(category);
-        return ExtendedBaseResponse.of(
-                BaseResponse.created("Categoría creada exitosamente"), categoryMapper.toDto(category)
-        );
+        try {
+            CategoryMapper categoryMapper = Mappers.getMapper(CategoryMapper.class);
+            Category category = categoryMapper.toEntity(categoryRequestDto);
+            categoryRepository.save(category);
+            return ExtendedBaseResponse.of(
+                    BaseResponse.created("Categoría creada exitosamente"), categoryMapper.toDto(category)
+            );
+        }catch (Exception e){
+            throw new RuntimeException(e.getMessage());
+        }
+
     }
 
     @Override
@@ -43,12 +48,17 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     public ExtendedBaseResponse<List<CategoryResponseDTO>> getAllCategories() {
-        List<Category> categories = categoryRepository.findAll();
-        CategoryMapper categoryMapper = Mappers.getMapper(CategoryMapper.class);
-        List<CategoryResponseDTO> categoryResponseDto = categories.stream().map(categoryMapper::toDto).toList();
-        return ExtendedBaseResponse.of(
-                BaseResponse.ok("Categorías listadas exitosamente"), categoryResponseDto
-        );
+        try {
+            List<Category> categories = categoryRepository.findAll();
+            CategoryMapper categoryMapper = Mappers.getMapper(CategoryMapper.class);
+            List<CategoryResponseDTO> categoryResponseDto = categories.stream().map(categoryMapper::toDto).toList();
+            return ExtendedBaseResponse.of(
+                    BaseResponse.ok("Categorías listadas exitosamente"), categoryResponseDto
+            );
+        }catch (Exception e){
+            throw new RuntimeException(e.getMessage());
+        }
+
     }
 
     @Override
