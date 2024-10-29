@@ -1,8 +1,8 @@
 import { login } from "../../api/authApi.js";
-import { NotificationService } from "../../shared/services/notistack.service.jsx";
-import { useAuth } from "../../shared/hooks/useAuth.jsx";
+import { NotificationService } from "../services/notistack.service.jsx";
+import { useAuth } from "./useAuth.jsx";
 import { getData } from "../../api/userApi.js";
-import { useUserData } from "../../shared/hooks/useUserData.jsx";
+import { useUserData } from "./useUserData.jsx";
 export default function useAutoLogin() {
   const { handleLogin } = useAuth();
   const { setUserData } = useUserData();
