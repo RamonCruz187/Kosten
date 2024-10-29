@@ -11,44 +11,45 @@ import AlertTitle from "@mui/material/AlertTitle";
 import NavBar from "../Home/NavBar";
 import Footer from "../Home/Footer";
 import { getAllPackages } from "../../api/packageApi";
-import heroImage from '../../assets/Image-1.png';
-import heroImage1 from '../../assets/Image-2.jpg';
-import reg_left from '../../assets/Image-3.jpg';
+
 import Typography from "@mui/material/Typography";
 import ShareIcon from "@mui/icons-material/Share";
 import CloseIcon from "@mui/icons-material/Close"; 
 import { useRef } from "react";
 
+
 export function Gallery() {
-    const [images, setImages] = useState([heroImage,heroImage1,reg_left,heroImage,heroImage1,reg_left,heroImage,heroImage1,reg_left]);
+    const [images, setImages] = useState([]);
     const [isFetching, setIsFetching] = useState(true);
     const [open, setOpen] = useState(false);
     const [currentImageIndex, setCurrentImageIndex] = useState(0);
     const [imageWidth, setImageWidth] = useState(0);
     const imageRef = useRef(null);
 
-    // const fetchPackages = useCallback(async () => {
-    //     try {
-    //         const { data } = await getAllPackages();
-    //         console.log(data);
-    //         const packageImages = data.data ? data.data.content.map(pkg => pkg.imageUrl) : []; 
-    //         setImages(packageImages);
-    //     } catch (error) {
-    //         console.error(error);
-    //         NotificationService.error('Error al cargar las imágenes de los paquetes');
-    //     } finally {
-    //         setIsFetching(false);
-    //     }
-    // }, []);
+    useEffect(() => {
+        const fetchImages = async () => {
+            try {
+                const response = await fetch("https://kostentours-api-10061c08f8f8.herokuapp.com/images/all");
+                const result = await response.json();
+                
+                if (!result.isError && Array.isArray(result.data)) {
+                    const imageUrls = result.data.map(item => item.url);
+                    setImages(imageUrls);
+                } else {
+                    console.error("Error en la respuesta del servidor:", result.message);
+                }
+            } catch (error) {
+                console.error("Error al obtener imágenes:", error);
+            } finally {
+                setIsFetching(false);
+            }
+        };
 
-    // useEffect(() => {
-    //     if (isFetching) {
-    //         fetchPackages();
-    //     }
-    // }, [fetchPackages, isFetching]);
+        fetchImages();
+    }, []);
+    
     const handleImageLoad = () => {
         if (imageRef.current) {
-            // Obtener el ancho actual de la imagen
             const width = imageRef.current.offsetWidth;
             setImageWidth(width);
         }
@@ -70,14 +71,14 @@ export function Gallery() {
     };
 
 
-    // if (isFetching) {
-    //     return (
-    //         <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '50vh' }}>
-    //             <CircularProgress />
-    //         </Box>
-    //     );
-    // }
 
+    if (isFetching) {
+        return (
+            <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '50vh' }}>
+                <CircularProgress />
+            </Box>
+        );
+    }
     return (
         <Box sx={{ display: "flex", flexDirection: "column", minHeight: "100vh" }}>
             <NavBar />

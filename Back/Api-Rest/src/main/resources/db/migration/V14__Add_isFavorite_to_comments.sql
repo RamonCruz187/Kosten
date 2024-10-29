@@ -1,0 +1,2 @@
+ALTER TABLE comments
+ADD isFavorite BOOLEAN DEFAULT FALSE;

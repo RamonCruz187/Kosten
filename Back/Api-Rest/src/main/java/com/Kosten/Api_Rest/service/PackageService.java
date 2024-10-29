@@ -12,8 +12,10 @@ public interface PackageService {
 
     ExtendedBaseResponse<PackageResponseDTO> createPackage(PackageRequestDTO packageRequestDTO);
     ExtendedBaseResponse<PackageResponseDTO> getPackageById(Long id);
+    ExtendedBaseResponse<Page<PackageResponseDTO>> getAllActivePackages(Pageable pageable);
     ExtendedBaseResponse<Page<PackageResponseDTO>> getAllPackages(Pageable pageable);
     ExtendedBaseResponse<PackageResponseDTO> update(PackageToUpdateDTO packageToUpdateDTO);
     BaseResponse delete(Long id);
+
 
 }
