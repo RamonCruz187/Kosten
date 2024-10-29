@@ -20,7 +20,7 @@ createRoot(document.getElementById("root")).render(
           <GlobalContextProvider>
               <GlobalThemeContextProvider>
                   <ThemeProvider theme={theme}>
-                      <Box sx={{ px: 2}}>
+                      <Box >
                           <App />
                       </Box>
                   </ThemeProvider>

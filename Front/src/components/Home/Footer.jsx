@@ -1,4 +1,3 @@
-import React from "react";
 import { Box, Divider, Typography, Grid2, Link } from "@mui/material";
 import logo from "../../assets/logo.png";
 import { RiInstagramFill, RiTiktokFill, RiWhatsappFill } from "react-icons/ri";
@@ -23,7 +22,7 @@ export default function Footer() {
           className="grid-container"
         >
           <Grid2 xs={12} sm={6} md={4}>
-            <img src={logo} alt="KOSTEN" style={{ maxWidth: "100px" }} />
+            <img src={logo} alt="KOSTEN" style={{ height: '86px', width: '140px' }} />
           </Grid2>
           <Grid2
             xs={12}
@@ -66,14 +65,14 @@ export default function Footer() {
               }}
             >
               <Link
-                href="https://wa.me/2291455602"
+                href="https://wa.me/1162984904"
                 target="_blank"
                 rel="noreferrer"
               >
                 <RiWhatsappFill color="#F3F3F3" size={24} />
               </Link>
               <Link
-                href="https://www.instagram.com/kostenmontanas/profilecard/?igsh=eTFqcmUzanNsemdt"
+                href="https://www.instagram.com/kostentrek/"
                 target="_blank"
                 rel="noreferrer"
               >

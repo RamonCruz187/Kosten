@@ -20,12 +20,12 @@ const Carousel = () => {
     autoplay: true,
     autoplaySpeed: 7000, // Cambiar imagen cada 7 segundos
     fade: true,
-    cssEase: 'linear',
+    cssEase: 'ease-in-out',
     beforeChange: (current, next) => {
       const slides = document.querySelectorAll('.slick-slide img');
       slides.forEach((slide) => {
         slide.style.animation = 'none';
-        slide.offsetHeight; // Trigger reflow
+        slide.offsetHeight; 
         slide.style.animation = 'zoom 7s ease-in-out';
       });
     },
