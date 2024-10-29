@@ -174,7 +174,7 @@ const About = () => {
         <Typography variant="titleH1" color="#F3F3F3" sx={{ textAlign: 'center', marginBottom: '2rem' }}>STAFF</Typography>
         <Grid2 container spacing={2} justifyContent="center" gap="24px">
           {staffMembers.map((member, index) => (
-            <Grid2 item xs={12} sm={4} key={index}>
+            <Grid2 item="true" xs={12} sm={4} key={index}>
               <Card>
                 <CardMedia
                   component="img"

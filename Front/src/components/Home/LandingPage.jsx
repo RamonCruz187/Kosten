@@ -94,6 +94,7 @@ const LandingPage = () => {
                 }}
               />
             </Box>
+            <Link href="/salidas">
             <Button
               variant="contained"
               color="primary"
@@ -106,6 +107,7 @@ const LandingPage = () => {
             >
               VER NUESTRAS SALIDAS
             </Button>
+            </Link>
           </Box>
           <Link href="#bot">
             <img
