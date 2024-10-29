@@ -18,7 +18,7 @@ export const PackageGrid = ({ title }) => {
 
         try {
             const { data } = await getAllPackages();
-
+            console.log(data);
             setPackages( data.data ? data.data.content : [] );
             setPaginatedData( data.data );
 

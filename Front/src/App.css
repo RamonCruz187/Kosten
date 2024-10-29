@@ -1,4 +1,18 @@
-#root {
+:root {
+  --bg-boldgray: #323232;
+  --bg-lightgray: #494949;
+  --color-links: #F3F3F3;
+  --color-hover-links: #080808;
+  --bg-hover-links: #FFC800;
+}
+
+.hover__transform:hover {
+  box-shadow: 1px 1px 2px rgb(0 0 0 / 50%);
+  filter: opacity(0.9);
+  transform: scale(1.04);
+}
+
+/*#root {
   max-width: 1280px;
   margin: 0 auto;
   padding: 2rem;
@@ -39,4 +53,4 @@
 
 .read-the-docs {
   color: #888;
-}
+}*/
