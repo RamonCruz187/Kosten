@@ -1,11 +1,11 @@
 import { Box, Typography, Button, Link } from "@mui/material";
 import NavBar from "./NavBar";
-import kosten from "../../assets/kosten.svg";
+import kosten from "../../assets/kosten.png";
 import bot from "../../assets/bot.svg";
 import Footer from "./Footer.jsx";
 import { DepartureGrid } from "../../modules/Departures/components/DepartureGrid.jsx";
 import Carousel from "./Carousel.jsx";
-/*<<<<<<< HEAD
+/*<<<<<<< HEAD  
 import AppAppBar from "../../shared/components/AppAppBar.jsx";
 import Box from "@mui/material/Box";
 import {PackageGrid} from "../../modules/package/components/PackageGrid.jsx";
@@ -23,7 +23,7 @@ const LandingPage = () => {
 const LandingPage = () => {
   return (
     <>
-      <Box sx={{ width: "100%", height: "100vh", backgroundColor: "grey.600" }}>
+      <Box sx={{ width: "100%", height: "100vh", backgroundColor: "grey.800" }}>
         <NavBar />
         <Box
           sx={{
