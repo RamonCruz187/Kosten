@@ -17,6 +17,7 @@ import { Gallery } from "../components/PhotosGallery/Gallery.jsx";
 import { UserAdminPrivateRoutes } from "./UserAdminPrivateRoutes.jsx";
 import About from "../components/Home/About";
 import TourDestinationFull from "../components/TourDestination/TourDestinationFull.jsx";
+import TourDestinationDetail from "../components/TourDestination/TourDestinationDetail.jsx";
 
 const AppRoutes = () => (
   <Router>
@@ -35,6 +36,7 @@ const AppRoutes = () => (
       <Route path="/about" element={<About />} />
       <Route path="/salidas/:id" element={<DepartureFull />} />
       <Route path="/destinos" element={<TourDestinationFull />} />
+      <Route path="/destinos/:id" element={<TourDestinationDetail />} />
 
       <Route path="/admin" element={<UserAdminPrivateRoutes />}>
         <Route index element={<Navigate to="usuarios" replace />} />
