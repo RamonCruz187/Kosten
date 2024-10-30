@@ -60,10 +60,5 @@ public class UserController {
                 .body(userService.delete(id));
     }
 
-    @GetMapping("/actives")
-    public ResponseEntity<ExtendedBaseResponse<List<UserToBeListed>>> getAllActivesUsers() {
-        return ResponseEntity.status(200).body(userService.getAllActivesUsers());
-    }
-
 
 }
