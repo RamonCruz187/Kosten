@@ -34,7 +34,7 @@ const EditUserDialog = ({ open, onClose, userForm, setUserForm, fetchUsers }) =>
       fetchUsers();
       onClose();
     } catch (error) {
-      console.error('Error editing user:', error);
+      console.error('Error editando usuario:', error);
     }
   };
 
@@ -44,7 +44,7 @@ const EditUserDialog = ({ open, onClose, userForm, setUserForm, fetchUsers }) =>
       setUserForm((prev) => ({ ...prev, role: newRole }));
       NotificationService.success("Rol: " + newRole, 2000);
     } catch (error) {
-      console.error("Error updating role:", error);
+      console.error("Error cargando roles:", error);
     }
   };
 
@@ -130,8 +130,8 @@ const EditUserDialog = ({ open, onClose, userForm, setUserForm, fetchUsers }) =>
         
       </DialogContent>
       <DialogActions>
-        <Button onClick={onClose} color='transparent'>Cerrar</Button>
-        <Button onClick={handleSubmitEdit} color='transparent'>Guardar</Button>
+        <Button onClick={onClose} color='transparent' sx={{ boxShadow: 'none' }}>Cerrar</Button>
+        <Button onClick={handleSubmitEdit} color='transparent' sx={{ boxShadow: 'none' }}>Guardar</Button>
         
         </DialogActions>
 
@@ -142,61 +142,3 @@ const EditUserDialog = ({ open, onClose, userForm, setUserForm, fetchUsers }) =>
 
 export default EditUserDialog;
 
-
-
-
-
-//*********************version 1 **************** */
-// import React from 'react';
-// import { Dialog, DialogActions, DialogContent, DialogTitle, TextField, Button, Typography } from '@mui/material';
-
-// const EditUserDialog = ({ open, onClose, userForm, handleInputChange, handleSubmit }) => {
-//   return (
-//     <Dialog open={open} onClose={onClose} aria-labelledby="form-dialog-title">
-//       <DialogTitle sx={{ padding: "10", gap: "1.25rem", alignItems: "center", justifyItems: "center" }}> 
-//       <Typography variant="titleH2">REGISTRO</Typography>
-//       </DialogTitle>
-//       <DialogContent>
-//         <TextField
-//           label="Nombre"
-//           name="username"
-//           value={userForm.username}
-//           onChange={handleInputChange}
-//           fullWidth
-//           margin="normal"
-//           variant="outlined"
-//           placeholder="Nombres y apellidos"
-//         />
-//         <TextField
-//           label="Mail"
-//           name="email"
-//           type="email"
-//           value={userForm.email}
-//           onChange={handleInputChange}
-//           fullWidth
-//           margin="normal"
-//           variant="outlined"
-//           placeholder="ejemplo@mail.com"
-//         />
-//         <TextField
-//           label="Número de teléfono"
-//           name="contact"
-//           value={userForm.contact}
-//           onChange={handleInputChange}
-//           fullWidth
-//           margin="normal"
-//           variant="outlined"
-//           placeholder="541112345678"
-//         />
-
-        
-//       </DialogContent>
-//       <DialogActions>
-//         <Button onClick={onClose} color="transparent">Cerrar</Button>
-//         <Button onClick={handleSubmit} color="transparent">Guardar</Button>
-//       </DialogActions>
-//     </Dialog>
-//   );
-// };
-
-// export default EditUserDialog;

@@ -53,7 +53,7 @@ const AddUserDialog = ({ open, onClose, fetchUsers }) => {
       fetchUsers();
       onClose();
     } catch (error) {
-      console.error('Error adding user:', error);
+      console.error('Error al crear usuario:', error);
     }
   };
 
@@ -65,7 +65,7 @@ const AddUserDialog = ({ open, onClose, fetchUsers }) => {
       setUserForm((prev) => ({ ...prev, role: newRole }));
       NotificationService.success("Rol: " + newRole, 2000);
     } catch (error) {
-      console.error("Error updating role:", error);
+      console.error("Error al editar role:", error);
     }
   };
 
@@ -188,8 +188,8 @@ const AddUserDialog = ({ open, onClose, fetchUsers }) => {
         </Grid>
       </DialogContent>
       <DialogActions>
-        <Button onClick={onClose} color='transparent'>Cerrar</Button>
-        <Button onClick={handleSubmitAdd} color='transparent'>Guardar</Button>
+        <Button onClick={onClose} color='transparent' sx={{ boxShadow: 'none' }}>Cerrar</Button>
+        <Button onClick={handleSubmitAdd} color='transparent' sx={{ boxShadow: 'none' }}>Guardar</Button>
       </DialogActions>
     </Dialog>
   );
