@@ -92,4 +92,8 @@ public class User implements UserDetails {
             this.role = Role.valueOf(changeUserRole.role());
         return true;
     }
+
+    public void delete() {
+        this.isActive = false;
+    }
 }
