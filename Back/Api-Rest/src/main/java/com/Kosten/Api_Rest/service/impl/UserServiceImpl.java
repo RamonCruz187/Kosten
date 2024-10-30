@@ -94,7 +94,7 @@ public class UserServiceImpl implements UserService {
             throw new NotFoundUser();
         }
 
-        return BaseResponse.ok("Paquete eliminado exitosamente.");
+        return BaseResponse.ok("Usuario eliminado exitosamente.");
     }
 
 
