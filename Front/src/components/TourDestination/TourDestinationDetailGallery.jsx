@@ -1,51 +1,70 @@
-import React, { useState } from 'react';
-import { Button, Grid2, IconButton } from '@mui/material';
-import { ArrowBack, ArrowForward } from '@mui/icons-material';
+import { useState } from "react";
+import { Grid2, IconButton, Stack, Typography } from "@mui/material";
+import { ArrowBack, ArrowForward } from "@mui/icons-material";
+import { customPalette } from "../../../customStyle";
+import arrowLeft from "../../assets/TourDestination/gallery_arrow_left.svg"
+import arrowRight from "../../assets/TourDestination/gallery_arrow_right.svg"
 
 
-export default function TourDestinationDetailGallery(  ) {
+export default function TourDestinationDetailGallery() {
+  const url = "/images/tourDestination/cerro_penitente/";
+  const photos = [
+    `${url}01.png`,
+    `${url}02.png`,
+    `${url}03.png`,
+    `${url}04.png`,
+  ];
 
-    const photos = [
-        'url1.jpg',
-        'url2.jpg',
-        'url3.jpg',
-        // Agrega más URLs de imágenes aquí
-      ];    
+  const arrows = (arrow) => <img src={arrow} alt="arrow" style={{ width: "32px" }} />;
 
-    const [currentIndex, setCurrentIndex] = useState(0);
+  const [startIndex, setStartIndex] = useState(0);
 
-    const handleNext = () => {
-      setCurrentIndex((prevIndex) => (prevIndex + 1) % photos.length);
-    };
-  
-    const handlePrev = () => {
-      setCurrentIndex((prevIndex) => (prevIndex - 1 + photos.length) % photos.length);
-    };
-  
-    return (
-      <Grid2 container alignItems="center" justifyContent="center" spacing={2}>
+
+  const handleNext = () => {
+    setStartIndex((prevIndex) => (prevIndex + 4) % photos.length);
+  };
+
+  const handlePrev = () => {
+    setStartIndex((prevIndex) => (prevIndex - 4 + photos.length) % photos.length);
+  };
+
+  return (
+    <>
+      <Stack
+        sx={{ gap: "2rem", background: customPalette.page_bg, padding: "2rem 3rem" }}
+      >
+        <Typography
+          variant="titleH1"
+          sx={{
+            textAlign: "center",
+            color: customPalette.text.light,
+          }}
+        >
+          OPINIONES DE QUIENES PARTICIPARON
+        </Typography>
+      
+      <Grid2 container alignItems="center" justifyContent="center" spacing={4}>
         <Grid2 item>
           <IconButton onClick={handlePrev}>
-            <ArrowBack />
+            {arrows(arrowLeft)}
           </IconButton>
         </Grid2>
-        <Grid2 item>
-          <img src={photos[currentIndex]} alt={`photo-${currentIndex}`} style={{ maxHeight: '300px', maxWidth: '100%' }} />
-        </Grid2>
+        {photos.slice(startIndex, startIndex + 4).map((photo, index) => (
+          <Grid2 item key={index} spacing={4}>
+            <img
+              src={photo}
+              alt={`photo-${startIndex + index}`}
+              style={{ maxHeight: "200px", maxWidth: "100%" }}
+            />
+          </Grid2>
+        ))}
         <Grid2 item>
           <IconButton onClick={handleNext}>
-            <ArrowForward />
+            {arrows(arrowRight)}
           </IconButton>
         </Grid2>
       </Grid2>
-    );
+      </Stack>
+    </>
+  );
 }
-
-// PhotoGallery.js
-
-
-const PhotoGallery = () => {
- 
-};
-
-export default PhotoGallery;

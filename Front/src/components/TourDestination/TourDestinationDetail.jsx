@@ -1,11 +1,12 @@
 /* eslint-disable react/prop-types */
 import { useEffect, useState } from "react";
 import { destinationCerroPenitentes } from "./tourDestinationData";
-import { Box, Button, Grid2, Typography } from "@mui/material";
+import { Box, Button, Grid2, Stack, Typography } from "@mui/material";
 import { customPalette } from "../../../customStyle";
 import { Link, useParams } from "react-router-dom";
 import NavBar from "../Home/NavBar";
 import Footer from "../Home/Footer";
+import TourDestinationDetailGallery from "./TourDestinationDetailGallery";
 export default function TourDestinationDetail() {
   const { id } = useParams();
 
@@ -136,9 +137,13 @@ export default function TourDestinationDetail() {
               title={destinationCerroPenitentes.row3.title}
             />
           </RowGridContainer>
+          <TourDestinationDetailGallery />
         </Box>
       ) : (
-        <Typography variant="titleXL">Página en construcción</Typography>
+        <Stack sx={{justifyContent:'center', alignItems: 'center', height:'40rem', background: customPalette.page_bg}}>
+        <Typography variant="titleXL" sx={{color:customPalette.text.light}}>« Página en construcción »</Typography>
+        </Stack>
+
       )}
       <Footer />
     </>
