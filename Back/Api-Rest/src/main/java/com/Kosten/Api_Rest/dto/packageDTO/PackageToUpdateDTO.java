@@ -1,10 +1,12 @@
 package com.Kosten.Api_Rest.dto.packageDTO;
 
+import com.Kosten.Api_Rest.model.MonthNames;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.PositiveOrZero;
 
 import java.io.Serializable;
+import java.util.List;
 
 /**
  * DTO for {@link com.Kosten.Api_Rest.model.Package}
@@ -21,8 +23,12 @@ public record PackageToUpdateDTO(
         @PositiveOrZero(message = "La puntuación debe ser 0 o mayor")
         int punctuation,
 
-        @PositiveOrZero(message = "La duración debe ser 0 o mayor")
-        int duration
+        String duration,
+        String itinerary,
+        String physical_level,
+        String technical_level,
+        String included_services,
+        List<MonthNames> months
 
 ) implements Serializable {
 }
