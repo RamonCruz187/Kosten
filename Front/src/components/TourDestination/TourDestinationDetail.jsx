@@ -17,9 +17,9 @@ export default function TourDestinationDetail() {
     <Grid2
       item
       size={{ xs: 12, sm: 6 }}
-      sx={{ display: "flex", flexDirection: "column", justifyContent: "center", padding: "3rem", gap: "1rem" }}
+      sx={{ display: "flex", flexDirection: "column", justifyContent: "center", padding: "7rem", gap: "1rem" }}
     >
-      <Typography variant="titleH2" >{title}</Typography>
+      <Typography variant="titleH2">{title}</Typography>
 
       {text.split("_").map((part, index) => (
         <Typography key={index} variant="p">
@@ -30,7 +30,7 @@ export default function TourDestinationDetail() {
   );
 
   const RowGridImg = ({ img, title }) => (
-    <Grid2 item size={{ xs: 12, sm: 6 }} sx={{ objectFit: "cover", overflow: "clip" }}>
+    <Grid2 item size={{ xs: 12, sm: 6 }} sx={{ objectFit: "cover", overflow: "clip", display:'flex', justifyContent:'center' }}>
       <img src={img} alt={title} style={{ height: "100%", width:"fit-content" }} />
     </Grid2>
   );
