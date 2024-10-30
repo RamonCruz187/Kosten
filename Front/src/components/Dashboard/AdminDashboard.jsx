@@ -127,6 +127,9 @@ import EditUserDialog from './EditUserDialog.jsx';
 import AdminStaff from './AdminStaff.jsx';
 import EditStaffDialog from './EditStaffDialog.jsx';
 
+
+
+
 const AdminDashboard = () => {
   const [users, setUsers] = useState([]);
   const [userForm, setUserForm] = useState({ id: null, username: '', email: '', contact: '', role: 'USER', password: '', confirmPassword: '' });
@@ -233,12 +236,12 @@ const AdminDashboard = () => {
           <TableBody>
             {filteredUsers.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((user) => (
               <TableRow key={user.id} sx={{ backgroundColor: 'grey.200', marginBottom: 1, borderRadius: 1, display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: 1, boxShadow: 2 }}>
-                <TableCell sx={{ border: 0 }}>{user.id}</TableCell>
-                <TableCell sx={{ border: 0 }}>{user.username}</TableCell>
-                <TableCell sx={{ border: 0 }}>{user.email}</TableCell>
-                <TableCell sx={{ border: 0 }}>{user.contact}</TableCell>
-                <TableCell sx={{ border: 0 }}>{user.isActive}</TableCell>
-                <TableCell sx={{ border: 0 }}>{user.role}</TableCell>
+                <TableCell sx={{ border: 0, textAlign: 'left', flexBasis: '3%' }} align="left">{user.id}</TableCell>
+                <TableCell sx={{ border: 0, textAlign: 'left', flexBasis: '20%' }} align="left">{user.username}</TableCell>
+                <TableCell sx={{ border: 0, textAlign: 'left', flexBasis: '20%' }} align="left">{user.email}</TableCell>
+                <TableCell sx={{ border: 0, textAlign: 'left', flexBasis: '10%'}} align="left">{user.contact}</TableCell>
+                <TableCell sx={{ border: 0, textAlign: 'left', flexBasis: '5%' }} align="left">{user.isActive}</TableCell>
+                <TableCell sx={{ border: 0, textAlign: 'left', flexBasis: '10%' }} align="left">{user.role}</TableCell>
                 <TableCell sx={{ border: 0 }}>
                   <Button onClick={() => handleOpenEditUser(user.id)} sx={{ backgroundColor: 'grey.300', mr: 1, '&:hover': { backgroundColor: 'grey.400' } }}><RiEditLine /> EDITAR</Button>
                   {/* <Button onClick={() => handleDelete(user.id)} sx={{ backgroundColor: 'red.500', color: 'white', '&:hover': { backgroundColor: 'red.400' } }}><RiDeleteBin6Line /></Button> */}

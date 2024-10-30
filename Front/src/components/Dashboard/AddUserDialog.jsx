@@ -5,6 +5,8 @@ import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import { NotificationService } from "../../shared/services/notistack.service.jsx";
 import axios from 'axios';
+import { register } from "../../api/authApi.js";
+
 
 const AddUserDialog = ({ open, onClose, fetchUsers }) => {
   const [userForm, setUserForm] = useState({
