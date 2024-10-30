@@ -106,7 +106,16 @@ public class UserServiceImpl implements UserService {
         return user.getDepartures().stream().map(departureMapper::departureToDepartureToBeListed).toList();
     }
 
-
+    @Override
+    public ExtendedBaseResponse<List<UserToBeListed>> getAllActivesUsers() {
+        List<User> users = userRepository.findAllIsActiveTrue();
+        if(users.isEmpty())
+            throw new UserNotFoundException("No se encontraron usuarios activos");
+        List<UserToBeListed> listUsersResponseDto = users.stream().map(userMapper::userToUserToBeListed).toList();
+        return ExtendedBaseResponse.of(
+                BaseResponse.ok("Usuarios listados con exito."), listUsersResponseDto
+        );
+    }
 
 
     public List<UserResponseDto> getAllUsersWithDepartures() {

@@ -26,4 +26,6 @@ public interface UserService {
 
     public List<UserResponseDto> getAllUsersWithDepartures();
     public List<DepartureToBeListed> getDeparturesByUserId(Long userId);
+
+    ExtendedBaseResponse<List<UserToBeListed>> getAllActivesUsers();
 }
