@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import Box from "@mui/material/Box";
 import { Button, Typography } from "@mui/material";
@@ -8,6 +8,7 @@ import { iconsCardDepartures } from "../utils/utils.jsx";
 import { fCurrency } from "../../../shared/utils/formatNumber.js";
 import NavBar from "../../../components/Home/NavBar.jsx";
 import CommentsBox from "../components/CommentsBox.jsx";
+import {commentsDeparture} from "../../../shared/utils/comments.js"
 
 export const DepartureFull = () => {
   const [id, setId] = useState(null);
@@ -202,7 +203,7 @@ export const DepartureFull = () => {
             </Box>
           </Box>
         </Box>
-        <CommentsBox />
+        <CommentsBox comments={commentsDeparture} />
       </>
     )
   );
