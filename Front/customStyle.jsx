@@ -31,7 +31,8 @@ export const customPalette = {
         dark: "#790000", // error 700 figma
         darkest: "#630000", // error 800 figma
         darkest2: "#4C0000" // error 900 figma
-    }
+    },
+    page_bg: "#494949",
 };
 
 export const customFonts = {

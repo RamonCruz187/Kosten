@@ -45,7 +45,7 @@ export default function CommentsBox() {
   ];
 
   return (
-    <Stack sx={{ gap: "2rem", background: "#494949", padding: "2rem 3rem" }}>
+    <Stack sx={{ gap: "2rem", background: customPalette.page_bg, padding: "2rem 3rem" }}>
       <Typography
         variant="titleH1"
         sx={{
