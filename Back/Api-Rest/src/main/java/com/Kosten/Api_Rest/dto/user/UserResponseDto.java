@@ -13,6 +13,7 @@ public record UserResponseDto(
         String email,
         String contact,
         List<Departure> departures,
-        String role
+        String role,
+        Boolean isActive
 ) implements Serializable {
 }
