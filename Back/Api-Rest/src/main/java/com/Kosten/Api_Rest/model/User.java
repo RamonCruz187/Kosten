@@ -1,18 +1,17 @@
 package com.Kosten.Api_Rest.model;
 
+import com.Kosten.Api_Rest.dto.user.UpdateUserRequestDto;
+import com.Kosten.Api_Rest.dto.user.UserRoleUpdateRequestDto;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.CreationTimestamp;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
-
-import java.time.LocalDateTime;
-import java.util.Collection;
-import java.util.List;
+import java.util.*;
 
 @Builder
 @AllArgsConstructor
@@ -29,9 +28,20 @@ public class User implements UserDetails {
     private String password;
     @Column(name = "email", nullable = false, unique = true)
     private String email;
+    private String contact;
     @Enumerated(EnumType.STRING)
     Role role;
+    @Column(name = "is_active")
     private Boolean isActive;
+
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JsonManagedReference
+    @JoinTable(
+            name = "departure_user",
+            joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(name = "departure_id", referencedColumnName = "id")
+    )
+    private List<Departure> departures = new ArrayList<>();
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -42,6 +52,10 @@ public class User implements UserDetails {
     @Override
     public String getUsername() {
         return email;
+    }
+
+    public String getName() {
+        return username;
     }
 
     @Override
@@ -60,4 +74,22 @@ public class User implements UserDetails {
     @Override
     public boolean isEnabled() { return UserDetails.super.isEnabled(); }
 
+    public User update(UpdateUserRequestDto updateUserRequestDto) {
+        if (updateUserRequestDto.email() != null)
+            this.email = updateUserRequestDto.email();
+
+        if (updateUserRequestDto.username() != null)
+            this.username = updateUserRequestDto.username();
+
+        if (updateUserRequestDto.contact() != null)
+            this.contact = updateUserRequestDto.contact();
+
+        return this;
+    }
+
+    public boolean isChangedRole(UserRoleUpdateRequestDto changeUserRole){
+        if(changeUserRole != null)
+            this.role = Role.valueOf(changeUserRole.role());
+        return true;
+    }
 }

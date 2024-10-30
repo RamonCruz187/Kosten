@@ -27,4 +27,6 @@ public record BaseResponse(
     public static BaseResponse ok(String message) {
         return new BaseResponse(false, HttpStatus.OK, message);
     }
+
 }
+

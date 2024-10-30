@@ -7,22 +7,38 @@ import jakarta.validation.constraints.Pattern;
 import java.io.Serializable;
 
 public record RegisterRequestDto(
-        @NotBlank(message = "Username cannot be blank")
+        @Pattern(
+                regexp = "^(?=\\S*[a-zA-ZÀ-ÿ])(?=(?:\\S*\\s*){3,})[a-zA-ZÀ-ÿ\\s'-]+$",
+                message = "El nombre de usuario debe tener al menos 3 letras y puede incluir espacios, apóstrofes o guiones"
+        )
+        @NotBlank(message = "El nombre de usuario no puede estar en blanco")
         String username,
 
-        @Email(message = "Email should be valid")
-        @NotBlank(message = "Email cannot be blank")
+        @Pattern(
+                regexp = "^[\\w.-]+@[\\w.-]+\\.[a-zA-Z]{2,6}$",
+                message = "El correo electrónico debe ser válido y contener un dominio correcto"
+        )
+        @Email(message = "El correo electrónico debe ser valido, utilizando ´@´")
+        @NotBlank(message = "El correo electrónico no puede estar en blanco")
         String email,
 
-        @NotBlank(message = "Password cannot be blank")
+        @Pattern(
+                regexp = "^[0-9]+$",
+                message = "El contacto solo puede contener números positivos"
+        )
+        @NotBlank(message = "El contacto no puede estar en blanco")
+        String contact,
+
+        @NotBlank(message = "La contraseña no puede estar en blanco")
         @Pattern(
                 regexp = "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=])(?=\\S+$).{8,}$",
                 message = """
-                        Password must be at least 8 characters long,
-                        contain at least one digit, one lowercase letter, one uppercase letter,
-                        and one special character (@#$%^&+=), and have no spaces."""
+                        La contraseña debe tener al menos 8 caracteres,
+                        contener al menos un dígito, una letra minúscula, una letra mayúscula,
+                        un carácter especial (@#$%^&+=) y no debe tener espacios."""
         )
         String password
+
 ) implements Serializable {
 }
 

@@ -13,8 +13,8 @@ public record StaffRequestDto(
 
         String rol,
 
-        int contact,
+        int contact
 
-        String photo
-) implements Serializable {
+
+)  {
 }
