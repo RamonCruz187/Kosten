@@ -3,27 +3,23 @@ import { useEffect, useState } from "react";
 import { destinationCerroPenitentes } from "./tourDestinationData";
 import { Box, Grid2, Typography } from "@mui/material";
 import { customPalette } from "../../../customStyle";
-export default function TourDestinationDetail({ id }) {
+import { useParams } from "react-router-dom";
+export default function TourDestinationDetail() {
+  const { id } = useParams();
+
   const [isId, setIsId] = useState(false);
 
   useEffect(() => {
-    id === destinationCerroPenitentes.row0.id && setIsId(true);
+    id == destinationCerroPenitentes.row0.id && setIsId(true);
   }, [id]);
 
   const RowGridText = ({ title, text }) => (
     <Grid2
       item
       size={{ xs: 12, sm: 6 }}
-      sx={{
-        display: "flex",
-        flexWrap: "wrap",
-        justifyContent: "center",
-        alignItems: "center",
-        gap: "1rem",
-        padding: "2rem",
-      }}
+      sx={{ display: "flex", flexDirection: "column", justifyContent: "center", padding: "3rem", gap: "1rem" }}
     >
-      <Typography variant="titleH2">{title}</Typography>
+      <Typography variant="titleH2" >{title}</Typography>
 
       {text.split("_").map((part, index) => (
         <Typography key={index} variant="p">
@@ -35,7 +31,7 @@ export default function TourDestinationDetail({ id }) {
 
   const RowGridImg = ({ img, title }) => (
     <Grid2 item size={{ xs: 12, sm: 6 }} sx={{ objectFit: "cover", overflow: "clip" }}>
-      <img src={img} alt={title} style={{ height: "100%" }} />
+      <img src={img} alt={title} style={{ height: "100%", width:"fit-content" }} />
     </Grid2>
   );
 
@@ -70,7 +66,7 @@ export default function TourDestinationDetail({ id }) {
                 filter: "drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.5))",
               }}
             >
-              {destinationCerroPenitentes.row0.id}{" "}
+              {destinationCerroPenitentes.row0.id}
             </Typography>
           </Box>
 

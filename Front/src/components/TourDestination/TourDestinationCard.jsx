@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 /* eslint-disable react/prop-types */
 export default function TourDestinationCard({ img, title }) {
   return (
-    <Link to={`/destinos/${title}`} style={{ textDecoration: "none" }}>
+    <Link to={`/destinos/${title}`}  style={{ textDecoration: "none" }}>
       <Paper
         sx={{
           borderRadius: "1rem",
