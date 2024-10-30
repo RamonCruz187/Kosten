@@ -1,27 +1,145 @@
-//*************/ version 5 endpoint users CRUD 2 Modals ****************
+// import React, { useEffect, useState } from 'react';
+// import { Box, Tabs, Tab, Button, Paper, Table, TableBody, TableCell, TableRow, TablePagination } from '@mui/material';
+// import { RiEditLine, RiDeleteBin6Line } from 'react-icons/ri';
+// import axios from 'axios';
+
+// import NavBar from '../Home/NavBar.jsx';
+// import AddUserDialog from './AddUserDialog.jsx';
+// import EditUserDialog from './EditUserDialog.jsx';
+// import AdminStaff from './AdminStaff.jsx';
+// import AddStaffDialog from './AddStaffDialog.jsx';
+// import EditStaffDialog from './EditStaffDialog.jsx';
+
+
+
+// const AdminDashboard = () => {
+//   const [users, setUsers] = useState([]);
+//   const [userForm, setUserForm] = useState({ id: null, username: '', email: '', contact: '', role: 'USER', password: '', confirmPassword: '' });
+//   const [staffForm, setStaffForm] = useState({ id: null, name: '', lastName: '', contact: '', rol: 'STAFF' });
+//   const [openAdd, setOpenAdd] = useState(false);
+//   const [openAddStaff, setOpenAddStaff] = useState(false); // New state for AddStaffDialog
+//   const [openEdit, setOpenEdit] = useState(false);
+//   const [page, setPage] = useState(0);
+//   const [rowsPerPage, setRowsPerPage] = useState(5);
+//   const [filter, setFilter] = useState('Todos');
+
+
+
+//   useEffect(() => {
+//     fetchUsers();
+//   }, []);
+
+//   const fetchUsers = async () => {
+//     try {
+//       const response = await axios.get('https://kostentours-api-10061c08f8f8.herokuapp.com/user/all');
+//       setUsers(response.data.data);
+//     } catch (error) {
+//       console.error('Error fetching users:', error);
+//     }
+//   };
+
+//   const filteredUsers = users.filter(user => {
+//     if (filter === 'Activos') return user.isActive;
+//     if (filter === 'Inactivos') return !user.isActive;
+//     return true; // For 'Todos' tab
+//   });
+
+//   const handleOpenAddUser = () => {
+//     setUserForm({ id: null, username: '', email: '', contact: '', password: '', confirmPassword: '', role: 'USER' });
+//     setOpenAdd(true);
+//   };
+
+//   // const handleOpenAddStaff = () => {
+//   //   setStaffForm({ id: null, name: '', lastName: '', contact: '', rol: 'STAFF' });
+//   //   setOpenAddStaff(true);
+//   // };
+
+//   const handleOpenAddStaff = () => {
+//     setStaffForm({ id: null, name: '', lastName: '', contact: '', rol: 'STAFF', photo: null });
+//     setOpenAddStaff(true);
+// };
+
+
+//   return (
+//     <Box sx={{ width: '100%', minHeight: '100vh', backgroundColor: 'grey.600', padding: 4 }}>
+//       <Box display="flex" justifyContent="space-between" alignItems="center" mb={3}>
+//         <Tabs
+//           value={filter}
+//           onChange={(e, newFilter) => setFilter(newFilter)}
+//           textColor="primary"
+//           indicatorColor="primary"
+//           aria-label="filter tabs"
+//         >
+//           {['Todos', 'Activos', 'Inactivos', 'Staff'].map((tab) => (
+//             <Tab key={tab} label={tab} value={tab} sx={{ color: 'grey.300', textTransform: 'none', fontWeight: 'bold' }} />
+//           ))}
+//         </Tabs>
+//         <Box>
+//           <Button variant="contained" sx={{ backgroundColor: 'grey.200', color: 'black', mr: 1 }} onClick={handleOpenAddStaff}>Nuevo Staff</Button>
+//           <Button variant="contained" sx={{ backgroundColor: 'grey.200', color: 'black' }} onClick={handleOpenAddUser}>Nuevo Usuario</Button>
+//         </Box>
+//       </Box>
+
+//       <Paper elevation={0} sx={{ backgroundColor: 'transparent' }}>
+//         {filter === 'Staff' ? (
+//           <AdminStaff />
+//         ) : (
+//           <Table sx={{ borderBottom: 'none' }}>
+//             <TableBody>
+//               {filteredUsers.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((user) => (
+//                 <TableRow key={user.id} sx={{ backgroundColor: 'grey.200', marginBottom: 1, borderRadius: 1, display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: 1, boxShadow: 2 }}>
+//                   <TableCell sx={{ border: 0 }}>{user.id}</TableCell>
+//                   <TableCell sx={{ border: 0 }}>{user.username}</TableCell>
+//                   <TableCell sx={{ border: 0 }}>{user.email}</TableCell>
+//                   <TableCell sx={{ border: 0 }}>{user.contact}</TableCell>
+//                   <TableCell sx={{ border: 0 }}>{user.isActive}</TableCell>
+//                   <TableCell sx={{ border: 0 }}>{user.role}</TableCell>
+//                   <TableCell sx={{ border: 0 }}>
+//                     <Button onClick={() => handleOpenEditUser(user.id)} sx={{ backgroundColor: 'grey.300', mr: 1 }}><RiEditLine /> EDITAR</Button>
+//                     <Button onClick={() => handleDelete(user.id)} sx={{ backgroundColor: 'red.500', color: 'white' }}><RiDeleteBin6Line /></Button>
+//                   </TableCell>
+//                 </TableRow>
+//               ))}
+//             </TableBody>
+//           </Table>
+//         )}
+//       </Paper>
+
+//       <AddUserDialog open={openAdd} onClose={() => setOpenAdd(false)} fetchUsers={fetchUsers} />
+//       <AddStaffDialog open={openAddStaff} onClose={() => setOpenAddStaff(false)} staffForm={staffForm} setStaffForm={setStaffForm} fetchStaff={fetchUsers} />
+//     </Box>
+//   );
+// };
+
+// export default AdminDashboard;
+
+
+
+//*************/ version 6 new restructure and tabs CRUD 2 Modals ****************
 import React, { useEffect, useState } from 'react';
-import { Box, Tabs, Tab, Typography, Button, Link, Paper, Table, TableBody, TableCell, TableHead, TableRow, TablePagination, tableCellClasses  } from '@mui/material';
+import { Box, Tabs, Tab, Button, Paper, Table, TableBody, TableCell, TableRow, TablePagination } from '@mui/material';
 import { RiEditLine, RiDeleteBin6Line } from 'react-icons/ri';
 import axios from 'axios';
 
 import NavBar from '../Home/NavBar.jsx';
 import AddUserDialog from './AddUserDialog.jsx';
 import EditUserDialog from './EditUserDialog.jsx';
-
+import AdminStaff from './AdminStaff.jsx';
+import EditStaffDialog from './EditStaffDialog.jsx';
 
 const AdminDashboard = () => {
   const [users, setUsers] = useState([]);
   const [userForm, setUserForm] = useState({ id: null, username: '', email: '', contact: '', role: 'USER', password: '', confirmPassword: '' });
-  const [isEditing, setIsEditing] = useState(false);
   const [openAdd, setOpenAdd] = useState(false);
   const [openEdit, setOpenEdit] = useState(false);
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
-  const [showPassword, setShowPassword] = useState(false);
-  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [filter, setFilter] = useState('Todos');
+  // const [staff, setStaff] = useState([]); // New state for staff data
 
   useEffect(() => {
     fetchUsers();
+    // fetchStaff(); // Fetch staff data
   }, []);
 
   const fetchUsers = async () => {
@@ -33,54 +151,33 @@ const AdminDashboard = () => {
     }
   };
 
+  // const fetchStaff = async () => {
+  //   try {
+  //     const response = await axios.get('https://kostentours-api-10061c08f8f8.herokuapp.com/staff/all');
+  //     setStaff(response.data);
+  //   } catch (error) {
+  //     console.error('Error fetching staff:', error);
+  //   }
+  // };
+
+  const filteredUsers = users.filter(user => {
+    if (filter === 'Activos') return user.isActive;
+    if (filter === 'Inactivos') return !user.isActive;
+    return true; // For 'Todos' tab
+  });
+
   const handleOpenAddUser = () => {
     setUserForm({ id: null, username: '', email: '', contact: '', password: '', confirmPassword: '', role: 'USER' });
-    setIsEditing(false);
     setOpenAdd(true);
   };
 
-  const handleOpenEditUser = (id) => {
-    handleEdit(id);
-    setOpenEdit(true);
-  };
-
-  const handleCloseAdd = () => {
-    setOpenAdd(false);
-  };
-
-  const handleCloseEdit = () => {
-    setOpenEdit(false);
-  };
-
-  const handleInputChange = (e) => {
-    const { name, value } = e.target;
-    setUserForm({ ...userForm, [name]: value });
-  };
-
-  const toggleShowPassword = () => {
-    setShowPassword(!showPassword);
-  };
-
-  const toggleShowConfirmPassword = () => {
-    setShowConfirmPassword(!showConfirmPassword);
-  };
-
-  const handleSubmitAdd = async () => {
-    // Add user logic here
-    setOpenAdd(false);
-  };
-
-  const handleSubmitEdit = async () => {
-    // Edit user logic here
-    setOpenEdit(false);
-  };
-
-  const handleEdit = async (id) => {
+  const handleOpenEditUser = async (id) => {
     try {
       const response = await axios.get(`https://kostentours-api-10061c08f8f8.herokuapp.com/user/${id}`);
       const { username, email, contact, role } = response.data.data;
       setUserForm({ id, username, email, contact, role });
-      setIsEditing(true);
+      setOpenEdit(true);
+      console.log(userForm)
     } catch (error) {
       console.error('Error fetching user:', error);
     }
@@ -95,146 +192,324 @@ const AdminDashboard = () => {
     }
   };
 
-  // Pagination handlers
-  const handleChangePage = (event, newPage) => {
-    setPage(newPage);
-  };
-
+  const handleChangePage = (event, newPage) => setPage(newPage);
   const handleChangeRowsPerPage = (event) => {
     setRowsPerPage(parseInt(event.target.value, 10));
-    setPage(0); // Reset to first page
+    setPage(0);
   };
 
-  const [filter, setFilter] = useState('Todos');
-  // Function to handle tab selection and filtering
   const handleTabChange = (event, newFilter) => {
     setFilter(newFilter);
+    setPage(0); // Reset page when switching tabs
   };
-
 
   return (
     <Box sx={{ width: '100%', minHeight: '100vh', backgroundColor: 'grey.600', padding: 4 }}>
-        <Box display="flex" justifyContent="space-between" alignItems="center" mb={3}>
-          <Tabs
-            value={filter}
-            onChange={handleTabChange}
-            textColor="primary"
-            indicatorColor="primary"
-            aria-label="filter tabs"
-          >
-            <Tab label="Todos" value="Todos" sx={{ color: 'grey.300', textTransform: 'none', fontWeight: 'bold' }} />
-            <Tab label="Activos" value="Activos" sx={{ color: 'grey.300', textTransform: 'none', fontWeight: 'bold' }} />
-            <Tab label="Inactivos" value="Inactivos" sx={{ color: 'grey.300', textTransform: 'none', fontWeight: 'bold' }} />
-            <Tab label="Staff" value="Staff" sx={{ color: 'grey.300', textTransform: 'none', fontWeight: 'bold' }} />
-          </Tabs>
-          <Box >
-          <Button
-            variant="contained"
-            sx={{ backgroundColor: 'grey.200', color: 'black', mr: 1 }}
-            // color="terciary"
-            onClick={() => console.log('Nuevo Staff')}>
-              Nuevo Staff
-          </Button>
-          <Button 
-            variant="contained"
-            sx={{ backgroundColor: 'grey.200', color: 'black' }}
-            onClick={handleOpenAddUser}>
-            Nuevo Usuario
-          </Button>
+      <Box display="flex" justifyContent="space-between" alignItems="center" mb={3}>
+        <Tabs
+          value={filter}
+          onChange={handleTabChange}
+          textColor="primary"
+          indicatorColor="primary"
+          aria-label="filter tabs"
+        >
+          {['Todos', 'Activos', 'Inactivos', 'Staff'].map((tab) => (
+            <Tab key={tab} label={tab} value={tab} sx={{ color: 'grey.300', textTransform: 'none', fontWeight: 'bold' }} />
+          ))}
+        </Tabs>
+        <Box>
+          <Button variant="contained" sx={{ backgroundColor: 'grey.200', color: 'black', mr: 1 }}>Nuevo Staff</Button>
+          <Button variant="contained" sx={{ backgroundColor: 'grey.200', color: 'black' }} onClick={handleOpenAddUser}>Nuevo Usuario</Button>
         </Box>
       </Box>
 
-      <Paper elevation={0} sx={{ backgroundColor: 'transparent'}}>
-        <Table sx={{ borderBottom: "none" }}>
-          {/* <TableHead>
-            <TableRow>
-              <TableCell >ID</TableCell>
-              <TableCell>Nombre</TableCell>
-              <TableCell>Email</TableCell>
-              <TableCell>Contacto</TableCell>
-              <TableCell>Role</TableCell>
-              <TableCell>Acciones</TableCell>
-            </TableRow>
-          </TableHead> */}
+      <Paper elevation={0} sx={{ backgroundColor: 'transparent' }}>
+
+      {filter === 'Staff' ? (
+  <AdminStaff />
+) : (
+
+        <Table sx={{ borderBottom: 'none' }}>
           <TableBody>
-            {users.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((user) => (
-              <TableRow key={user.id} 
-              sx={{
-                backgroundColor: 'grey.200',
-                marginBottom: 2,
-                borderRadius: 2,
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'space-between',
-                padding: 2,
-                boxShadow: 2,
-              }}
-              >
+            {filteredUsers.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((user) => (
+              <TableRow key={user.id} sx={{ backgroundColor: 'grey.200', marginBottom: 1, borderRadius: 1, display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: 1, boxShadow: 2 }}>
                 <TableCell sx={{ border: 0 }}>{user.id}</TableCell>
                 <TableCell sx={{ border: 0 }}>{user.username}</TableCell>
                 <TableCell sx={{ border: 0 }}>{user.email}</TableCell>
                 <TableCell sx={{ border: 0 }}>{user.contact}</TableCell>
+                <TableCell sx={{ border: 0 }}>{user.isActive}</TableCell>
                 <TableCell sx={{ border: 0 }}>{user.role}</TableCell>
                 <TableCell sx={{ border: 0 }}>
-                  <Button 
-                    onClick={() => handleOpenEditUser(user.id)} 
-                    sx={{
-                    backgroundColor: 'grey.300',
-                    marginRight: 1,
-                    '&:hover': { backgroundColor: 'grey.400' },
-                    }}
-                    >
-                    <RiEditLine /> EDITAR
-                  </Button>
-                  <Button 
-                    onClick={() => handleDelete(user.id)} 
-                    sx={{backgroundColor: 'red.500',
-                    color: 'white',
-                        '&:hover': { backgroundColor: 'red.400' },
-                      }}
-                    >
-                    <RiDeleteBin6Line />
-                  </Button>
+                  <Button onClick={() => handleOpenEditUser(user.id)} sx={{ backgroundColor: 'grey.300', mr: 1, '&:hover': { backgroundColor: 'grey.400' } }}><RiEditLine /> EDITAR</Button>
+                  {/* <Button onClick={() => handleDelete(user.id)} sx={{ backgroundColor: 'red.500', color: 'white', '&:hover': { backgroundColor: 'red.400' } }}><RiDeleteBin6Line /></Button> */}
                 </TableCell>
               </TableRow>
             ))}
           </TableBody>
         </Table>
+
+)}
+
+{filter !== 'Staff' && (
         <TablePagination
           rowsPerPageOptions={[5, 10, 25]}
           component="div"
-          count={users.length}
+          count={filteredUsers.length}
           rowsPerPage={rowsPerPage}
           page={page}
           onPageChange={handleChangePage}
           onRowsPerPageChange={handleChangeRowsPerPage}
         />
+      )}
       </Paper>
 
-      <AddUserDialog
-        open={openAdd}
-        onClose={handleCloseAdd}
-        userForm={userForm}
-        handleInputChange={handleInputChange}
-        handleSubmit={handleSubmitAdd}
-        showPassword={showPassword}
-        showConfirmPassword={showConfirmPassword}
-        toggleShowPassword={toggleShowPassword}
-        toggleShowConfirmPassword={toggleShowConfirmPassword}
-      />
-
-      <EditUserDialog
-        open={openEdit}
-        onClose={handleCloseEdit}
-        userForm={userForm}
-        handleInputChange={handleInputChange}
-        handleSubmit={handleSubmitEdit}
-      />
+      <AddUserDialog open={openAdd} onClose={() => setOpenAdd(false)} fetchUsers={fetchUsers} />
+      <EditUserDialog open={openEdit} onClose={() => setOpenEdit(false)} userForm={userForm} setUserForm={setUserForm} fetchUsers={fetchUsers} />
     </Box>
   );
 };
 
 export default AdminDashboard;
+
+
+
+// //*************/ version 5 endpoint users CRUD 2 Modals ****************
+// import React, { useEffect, useState } from 'react';
+// import { Box, Tabs, Tab, Typography, Button, Link, Paper, Table, TableBody, TableCell, TableHead, TableRow, TablePagination, tableCellClasses  } from '@mui/material';
+// import { RiEditLine, RiDeleteBin6Line } from 'react-icons/ri';
+// import axios from 'axios';
+
+// import NavBar from '../Home/NavBar.jsx';
+// import AddUserDialog from './AddUserDialog.jsx';
+// import EditUserDialog from './EditUserDialog.jsx';
+
+
+// const AdminDashboard = () => {
+//   const [users, setUsers] = useState([]);
+//   const [userForm, setUserForm] = useState({ id: null, username: '', email: '', contact: '', role: 'USER', password: '', confirmPassword: '' });
+//   const [isEditing, setIsEditing] = useState(false);
+//   const [openAdd, setOpenAdd] = useState(false);
+//   const [openEdit, setOpenEdit] = useState(false);
+//   const [page, setPage] = useState(0);
+//   const [rowsPerPage, setRowsPerPage] = useState(5);
+//   const [showPassword, setShowPassword] = useState(false);
+//   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+
+//   useEffect(() => {
+//     fetchUsers();
+//   }, []);
+
+//   const fetchUsers = async () => {
+//     try {
+//       const response = await axios.get('https://kostentours-api-10061c08f8f8.herokuapp.com/user/all');
+//       setUsers(response.data.data);
+//     } catch (error) {
+//       console.error('Error fetching users:', error);
+//     }
+//   };
+
+//   const handleOpenAddUser = () => {
+//     setUserForm({ id: null, username: '', email: '', contact: '', password: '', confirmPassword: '', role: 'USER' });
+//     setIsEditing(false);
+//     setOpenAdd(true);
+//   };
+
+//   const handleOpenEditUser = (id) => {
+//     handleEdit(id);
+//     setOpenEdit(true);
+//   };
+
+//   const handleCloseAdd = () => {
+//     setOpenAdd(false);
+//   };
+
+//   const handleCloseEdit = () => {
+//     setOpenEdit(false);
+//   };
+
+//   const handleInputChange = (e) => {
+//     const { name, value } = e.target;
+//     setUserForm({ ...userForm, [name]: value });
+//   };
+
+//   const toggleShowPassword = () => {
+//     setShowPassword(!showPassword);
+//   };
+
+//   const toggleShowConfirmPassword = () => {
+//     setShowConfirmPassword(!showConfirmPassword);
+//   };
+
+//   const handleSubmitAdd = async () => {
+//     // Add user logic here
+//     setOpenAdd(false);
+//   };
+
+//   const handleSubmitEdit = async () => {
+//     // Edit user logic here
+//     setOpenEdit(false);
+//   };
+
+//   const handleEdit = async (id) => {
+//     try {
+//       const response = await axios.get(`https://kostentours-api-10061c08f8f8.herokuapp.com/user/${id}`);
+//       const { username, email, contact, role } = response.data.data;
+//       setUserForm({ id, username, email, contact, role });
+//       setIsEditing(true);
+//     } catch (error) {
+//       console.error('Error fetching user:', error);
+//     }
+//   };
+
+//   const handleDelete = async (id) => {
+//     try {
+//       await axios.delete(`https://kostentours-api-10061c08f8f8.herokuapp.com/user/${id}`);
+//       fetchUsers();
+//     } catch (error) {
+//       console.error('Error deleting user:', error);
+//     }
+//   };
+
+//   // Pagination handlers
+//   const handleChangePage = (event, newPage) => {
+//     setPage(newPage);
+//   };
+
+//   const handleChangeRowsPerPage = (event) => {
+//     setRowsPerPage(parseInt(event.target.value, 10));
+//     setPage(0); // Reset to first page
+//   };
+
+//   const [filter, setFilter] = useState('Todos');
+//   // Function to handle tab selection and filtering
+//   const handleTabChange = (event, newFilter) => {
+//     setFilter(newFilter);
+//   };
+
+
+//   return (
+//     <Box sx={{ width: '100%', minHeight: '100vh', backgroundColor: 'grey.600', padding: 4 }}>
+//         <Box display="flex" justifyContent="space-between" alignItems="center" mb={3}>
+//           <Tabs
+//             value={filter}
+//             onChange={handleTabChange}
+//             textColor="primary"
+//             indicatorColor="primary"
+//             aria-label="filter tabs"
+//           >
+//             <Tab label="Todos" value="Todos" sx={{ color: 'grey.300', textTransform: 'none', fontWeight: 'bold' }} />
+//             <Tab label="Activos" value="Activos" sx={{ color: 'grey.300', textTransform: 'none', fontWeight: 'bold' }} />
+//             <Tab label="Inactivos" value="Inactivos" sx={{ color: 'grey.300', textTransform: 'none', fontWeight: 'bold' }} />
+//             <Tab label="Staff" value="Staff" sx={{ color: 'grey.300', textTransform: 'none', fontWeight: 'bold' }} />
+//           </Tabs>
+//           <Box >
+//           <Button
+//             variant="contained"
+//             sx={{ backgroundColor: 'grey.200', color: 'black', mr: 1 }}
+//             // color="terciary"
+//             onClick={() => console.log('Nuevo Staff')}>
+//               Nuevo Staff
+//           </Button>
+//           <Button 
+//             variant="contained"
+//             sx={{ backgroundColor: 'grey.200', color: 'black' }}
+//             onClick={handleOpenAddUser}>
+//             Nuevo Usuario
+//           </Button>
+//         </Box>
+//       </Box>
+
+//       <Paper elevation={0} sx={{ backgroundColor: 'transparent'}}>
+//         <Table sx={{ borderBottom: "none" }}>
+//           {/* <TableHead>
+//             <TableRow>
+//               <TableCell >ID</TableCell>
+//               <TableCell>Nombre</TableCell>
+//               <TableCell>Email</TableCell>
+//               <TableCell>Contacto</TableCell>
+//               <TableCell>Role</TableCell>
+//               <TableCell>Acciones</TableCell>
+//             </TableRow>
+//           </TableHead> */}
+//           <TableBody>
+//             {users.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((user) => (
+//               <TableRow key={user.id} 
+//               sx={{
+//                 backgroundColor: 'grey.200',
+//                 marginBottom: 2,
+//                 borderRadius: 2,
+//                 display: 'flex',
+//                 alignItems: 'center',
+//                 justifyContent: 'space-between',
+//                 padding: 2,
+//                 boxShadow: 2,
+//               }}
+//               >
+//                 <TableCell sx={{ border: 0 }}>{user.id}</TableCell>
+//                 <TableCell sx={{ border: 0 }}>{user.username}</TableCell>
+//                 <TableCell sx={{ border: 0 }}>{user.email}</TableCell>
+//                 <TableCell sx={{ border: 0 }}>{user.contact}</TableCell>
+//                 <TableCell sx={{ border: 0 }}>{user.role}</TableCell>
+//                 <TableCell sx={{ border: 0 }}>
+//                   <Button 
+//                     onClick={() => handleOpenEditUser(user.id)} 
+//                     sx={{
+//                     backgroundColor: 'grey.300',
+//                     marginRight: 1,
+//                     '&:hover': { backgroundColor: 'grey.400' },
+//                     }}
+//                     >
+//                     <RiEditLine /> EDITAR
+//                   </Button>
+//                   <Button 
+//                     onClick={() => handleDelete(user.id)} 
+//                     sx={{backgroundColor: 'red.500',
+//                     color: 'white',
+//                         '&:hover': { backgroundColor: 'red.400' },
+//                       }}
+//                     >
+//                     <RiDeleteBin6Line />
+//                   </Button>
+//                 </TableCell>
+//               </TableRow>
+//             ))}
+//           </TableBody>
+//         </Table>
+//         <TablePagination
+//           rowsPerPageOptions={[5, 10, 25]}
+//           component="div"
+//           count={users.length}
+//           rowsPerPage={rowsPerPage}
+//           page={page}
+//           onPageChange={handleChangePage}
+//           onRowsPerPageChange={handleChangeRowsPerPage}
+//         />
+//       </Paper>
+
+//       <AddUserDialog
+//         open={openAdd}
+//         onClose={handleCloseAdd}
+//         userForm={userForm}
+//         handleInputChange={handleInputChange}
+//         handleSubmit={handleSubmitAdd}
+//         showPassword={showPassword}
+//         showConfirmPassword={showConfirmPassword}
+//         toggleShowPassword={toggleShowPassword}
+//         toggleShowConfirmPassword={toggleShowConfirmPassword}
+//       />
+
+//       <EditUserDialog
+//         open={openEdit}
+//         onClose={handleCloseEdit}
+//         userForm={userForm}
+//         handleInputChange={handleInputChange}
+//         handleSubmit={handleSubmitEdit}
+//       />
+//     </Box>
+//   );
+// };
+
+// export default AdminDashboard;
 
 
 
