@@ -14,7 +14,7 @@ import {getAllStaff, getStaffById} from "../../api/staffApi.js";
 
 const AdminDashboard = () => {
   const [users, setUsers] = useState([]);
-  const [userForm, setUserForm] = useState({ id: null, username: '', email: '', contact: '', role: 'USER', password: '', confirmPassword: '' });
+  const [userForm, setUserForm] = useState({ id: null, username: '', email: '', contact: '', role: 'USER', password: '', confirmPassword: '', isActive: '' });
   const [openAdd, setOpenAdd] = useState(false);
   const [openEdit, setOpenEdit] = useState(false);
   const [page, setPage] = useState(0);
@@ -66,8 +66,8 @@ const AdminDashboard = () => {
   const handleOpenEditUser = async (id) => {
     try {
       const response = await axios.get(`https://kostentours-api-10061c08f8f8.herokuapp.com/user/${id}`);
-      const { username, email, contact, role } = response.data.data;
-      setUserForm({ id, username, email, contact, role });
+      const { username, email, contact, role, isActive } = response.data.data;
+      setUserForm({ id, username, email, contact, role, isActive });
       setOpenEdit(true);
       console.log(userForm)
     } catch (error) {
@@ -136,11 +136,11 @@ const AdminDashboard = () => {
                 <TableCell sx={{ border: 0, textAlign: 'left', flexBasis: '20%' }} align="left">{user.username}</TableCell>
                 <TableCell sx={{ border: 0, textAlign: 'left', flexBasis: '20%' }} align="left">{user.email}</TableCell>
                 <TableCell sx={{ border: 0, textAlign: 'left', flexBasis: '10%'}} align="left">{user.contact}</TableCell>
-                <TableCell sx={{ border: 0, textAlign: 'left', flexBasis: '5%' }} align="left">{user.isActive}</TableCell>
-                <TableCell sx={{ border: 0, textAlign: 'left', flexBasis: '10%' }} align="left">{user.role}</TableCell>
-                <TableCell sx={{ border: 0 }}>
+                <TableCell sx={{ border: 0, textAlign: 'left', flexBasis: '5%' }} align="left">{user.isActive ? "Activo" : "Inactivo"}</TableCell>
+                <TableCell sx={{ border: 0, textAlign: 'left', flexBasis: '12%' }} align="left">{user.role==="ADMIN" ? "ADMINISTRADOR" : "USUARIO"}</TableCell>
+                <TableCell sx={{ border: 0, textAlign: 'left', flexBasis: '20%'}}>
                   <Button onClick={() => handleOpenEditUser(user.id)} sx={{ backgroundColor: 'grey.300', mr: 1, '&:hover': { backgroundColor: 'grey.400' } }}><RiEditLine /> EDITAR</Button>
-                  {/* <Button onClick={() => handleDelete(user.id)} sx={{ backgroundColor: 'red.500', color: 'white', '&:hover': { backgroundColor: 'red.400' } }}><RiDeleteBin6Line /></Button> */}
+                  <Button onClick={() => handleDelete(user.id)} sx={{ backgroundColor: 'red.500', color: 'white', '&:hover': { backgroundColor: 'red.400' } }}><RiDeleteBin6Line /></Button>
                 </TableCell>
               </TableRow>
             ))}
