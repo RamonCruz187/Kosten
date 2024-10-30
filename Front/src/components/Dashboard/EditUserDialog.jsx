@@ -100,8 +100,10 @@ const EditUserDialog = ({ open, onClose, userForm, setUserForm, fetchUsers }) =>
               <InputLabel>Estado</InputLabel>
               <Select
                 name="isActive"
-                value={userForm.isActive ? "Activo" : "Inactivo"}
-                onChange={(e) => setUserForm((prev) => ({ ...prev, isActive: e.target.value === "Activo" }))}
+                // value={userForm.isActive ? "Activo" : "Inactivo"}
+                // onChange={(e) => setUserForm((prev) => ({ ...prev, isActive: e.target.value === "Activo" }))}
+                value={userForm.isActive}
+                onChange={(e) => handleRoleChange(e.target.value)}
                 label="Estado"
               >
                 <MenuItem value="Activo">Activo</MenuItem>
