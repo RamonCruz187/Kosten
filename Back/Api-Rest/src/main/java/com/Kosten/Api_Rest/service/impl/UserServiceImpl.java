@@ -93,7 +93,7 @@ public class UserServiceImpl implements UserService {
         if (oUser.isEmpty()) {
             throw new NotFoundUser();
         }
-
+        userRepository.delete(oUser.get());
         return BaseResponse.ok("Usuario eliminado exitosamente.");
     }
 
