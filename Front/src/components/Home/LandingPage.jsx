@@ -5,6 +5,7 @@ import bot from "../../assets/bot.svg";
 import Footer from "./Footer.jsx";
 import { DepartureGrid } from "../../modules/Departures/components/DepartureGrid.jsx";
 import Carousel from "./Carousel.jsx";
+import CommentsBox from "../../modules/Departures/components/CommentsBox.jsx";
 /*<<<<<<< HEAD  
 import AppAppBar from "../../shared/components/AppAppBar.jsx";
 import Box from "@mui/material/Box";
@@ -134,6 +135,7 @@ const LandingPage = () => {
         >
           <DepartureGrid title="PRÓXIMAS SALIDAS" />
         </Box>
+        <CommentsBox />
         <Footer />
       </Box>
     </>
