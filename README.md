@@ -90,11 +90,11 @@ Características Principales
 
 #### 👉🏻 Desarrolladores 👨🏻‍💻
 
-| <img src="https://avatars.githubusercontent.com/u/116591941?v=4" width=100> |  <img src="https://avatars.githubusercontent.com/u/94977362?v=4" width=100> |  <img src="https://avatars.githubusercontent.com/u/141652211?v=4" width=100><br> | <img src="https://avatars.githubusercontent.com/u/83792513?v=4" width=100><br> | <img src="" width=100><br> |
+| <img src="https://avatars.githubusercontent.com/u/116591941?v=4" width=100> |  <img src="https://avatars.githubusercontent.com/u/94977362?v=4" width=100> |  <img src="https://avatars.githubusercontent.com/u/141652211?v=4" width=100><br> | <img src="https://avatars.githubusercontent.com/u/83792513?v=4" width=100><br> | <img src="https://avatars.githubusercontent.com/u/12447707?v=4" width=100><br> |
 | :---: | :---: | :---: | :---: | :---: |
 | **Ramon Cruz**| **Johana Carrizo**| **Luciano Molina**| **Agustin Vessoni**| **Hiram Chavez**| 
-| <a href="https://www.linkedin.com/in/ramon-cruz187/"><img src="https://img.shields.io/badge/linkedin%20-%230077B5.svg?&style=for-the-badge&logo=linkedin&logoColor=white"/></a> | <a href="https://www.linkedin.com/in/johanacarrizo/"><img src="https://img.shields.io/badge/linkedin%20-%230077B5.svg?&style=for-the-badge&logo=linkedin&logoColor=white"/></a> | <a href="https://www.linkedin.com/in/luciano-molina-/"><img src="https://img.shields.io/badge/linkedin%20-%230077B5.svg?&style=for-the-badge&logo=linkedin&logoColor=white"/></a> | <a href="https://www.linkedin.com/in/agustin-vessoni-374128234/"><img src="https://img.shields.io/badge/linkedin%20-%230077B5.svg?&style=for-the-badge&logo=linkedin&logoColor=white"/></a> | <a href="#"><img src="https://img.shields.io/badge/linkedin%20-%230077B5.svg?&style=for-the-badge&logo=linkedin&logoColor=white"/></a> |
-| <a href="https://github.com/RamonCruz187"><img src="https://img.shields.io/badge/github-%23121011.svg?&style=for-the-badge&logo=github&logoColor=white"/></a> | <a href="https://github.com/JohanaCarrizo"><img src="https://img.shields.io/badge/github-%23121011.svg?&style=for-the-badge&logo=github&logoColor=white"/></a> | <a href="https://www.linkedin.com/in/luciano-molina-/"><img src="https://img.shields.io/badge/github-%23121011.svg?&style=for-the-badge&logo=github&logoColor=white"/></a> | <a href="https://github.com/Vessoni149"><img src="https://img.shields.io/badge/github-%23121011.svg?&style=for-the-badge&logo=github&logoColor=white"/></a> | <a href="https://www.linkedin.com/"><img src="https://img.shields.io/badge/github-%23121011.svg?&style=for-the-badge&logo=github&logoColor=white"/></a> |
+| <a href="https://www.linkedin.com/in/ramon-cruz187/"><img src="https://img.shields.io/badge/linkedin%20-%230077B5.svg?&style=for-the-badge&logo=linkedin&logoColor=white"/></a> | <a href="https://www.linkedin.com/in/johanacarrizo/"><img src="https://img.shields.io/badge/linkedin%20-%230077B5.svg?&style=for-the-badge&logo=linkedin&logoColor=white"/></a> | <a href="https://www.linkedin.com/in/luciano-molina-/"><img src="https://img.shields.io/badge/linkedin%20-%230077B5.svg?&style=for-the-badge&logo=linkedin&logoColor=white"/></a> | <a href="https://www.linkedin.com/in/agustin-vessoni-374128234/"><img src="https://img.shields.io/badge/linkedin%20-%230077B5.svg?&style=for-the-badge&logo=linkedin&logoColor=white"/></a> | <a href="https://www.linkedin.com/in/hiram-chavez-24126831/"><img src="https://img.shields.io/badge/linkedin%20-%230077B5.svg?&style=for-the-badge&logo=linkedin&logoColor=white"/></a> |
+| <a href="https://github.com/RamonCruz187"><img src="https://img.shields.io/badge/github-%23121011.svg?&style=for-the-badge&logo=github&logoColor=white"/></a> | <a href="https://github.com/JohanaCarrizo"><img src="https://img.shields.io/badge/github-%23121011.svg?&style=for-the-badge&logo=github&logoColor=white"/></a> | <a href="https://www.linkedin.com/in/luciano-molina-/"><img src="https://img.shields.io/badge/github-%23121011.svg?&style=for-the-badge&logo=github&logoColor=white"/></a> | <a href="https://github.com/Vessoni149"><img src="https://img.shields.io/badge/github-%23121011.svg?&style=for-the-badge&logo=github&logoColor=white"/></a> | <a href="https://github.com/JustLearningMX"><img src="https://img.shields.io/badge/github-%23121011.svg?&style=for-the-badge&logo=github&logoColor=white"/></a> |
 
 <br><br>
 
@@ -150,11 +150,11 @@ Características Principales
 
 #### 👉🏻 Testers y Analista Funcional👨🏻‍💻
 
-| <img src="https://media.licdn.com/dms/image/D4D03AQGlOH3tDd20Zg/profile-displayphoto-shrink_400_400/0/1679316358970?e=1724889600&v=beta&t=pUeplZXLfubUBtJSMVu1Q7_OrSOXXjOtlTrPlEyzpgU" width=100>|
+| <img src="https://avatars.githubusercontent.com/u/106366596?v=4" width=100>|
 | :---: |
 | **Luz Trabraj**|/
 | <a href="#"><img src="https://img.shields.io/badge/linkedin%20-%230077B5.svg?&style=for-the-badge&logo=linkedin&logoColor=white"/></a> |
-| <a href="#"><img src="https://img.shields.io/badge/github-%23121011.svg?&style=for-the-badge&logo=github&logoColor=white"/></a> |
+| <a href="https://github.com/luztabraj"><img src="https://img.shields.io/badge/github-%23121011.svg?&style=for-the-badge&logo=github&logoColor=white"/></a> |
 <br>
 
 ## ✔ UX/UI Design
