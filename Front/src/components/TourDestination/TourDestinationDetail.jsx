@@ -4,6 +4,8 @@ import { destinationCerroPenitentes } from "./tourDestinationData";
 import { Box, Grid2, Typography } from "@mui/material";
 import { customPalette } from "../../../customStyle";
 import { useParams } from "react-router-dom";
+import NavBar from "../Home/NavBar";
+import Footer from "../Home/Footer";
 export default function TourDestinationDetail() {
   const { id } = useParams();
 
@@ -43,6 +45,7 @@ export default function TourDestinationDetail() {
 
   return (
     <>
+    <NavBar />
       {isId ? (
         <Box>
 
@@ -110,6 +113,7 @@ export default function TourDestinationDetail() {
       :
       <Typography variant="titleXL">Página en construcción</Typography>
     }
+    <Footer />
     </>
   );
 }
