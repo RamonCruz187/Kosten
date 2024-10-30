@@ -108,7 +108,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public ExtendedBaseResponse<List<UserToBeListed>> getAllActivesUsers() {
-        List<User> users = userRepository.findAllByActiveIsTrue();
+        List<User> users = userRepository.findAllByIsActiveTrue();
         if(users.isEmpty())
             throw new UserNotFoundException("No se encontraron usuarios activos");
         List<UserToBeListed> listUsersResponseDto = users.stream().map(userMapper::userToUserToBeListed).toList();
