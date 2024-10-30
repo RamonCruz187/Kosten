@@ -19,7 +19,13 @@ export default function TourDestinationDetail() {
     <Grid2
       item
       size={{ xs: 12, sm: 6 }}
-      sx={{ display: "flex", flexDirection: "column", justifyContent: "center", padding: "7rem", gap: "1rem" }}
+      sx={{
+        display: "flex",
+        flexDirection: "column",
+        justifyContent: "center",
+        padding: "7rem",
+        gap: "1rem",
+      }}
     >
       <Typography variant="titleH2">{title}</Typography>
 
@@ -32,8 +38,17 @@ export default function TourDestinationDetail() {
   );
 
   const RowGridImg = ({ img, title }) => (
-    <Grid2 item size={{ xs: 12, sm: 6 }} sx={{ objectFit: "cover", overflow: "clip", display:'flex', justifyContent:'center' }}>
-      <img src={img} alt={title} style={{ height: "100%", width:"fit-content" }} />
+    <Grid2
+      item
+      size={{ xs: 12, sm: 6 }}
+      sx={{
+        objectFit: "cover",
+        overflow: "clip",
+        display: "flex",
+        justifyContent: "center",
+      }}
+    >
+      <img src={img} alt={title} style={{ height: "100%", width: "fit-content" }} />
     </Grid2>
   );
 
@@ -45,10 +60,10 @@ export default function TourDestinationDetail() {
 
   return (
     <>
-    <NavBar />
+      <NavBar />
+
       {isId ? (
         <Box>
-
           {/* Row 0 */}
           <Box
             sx={{
@@ -56,7 +71,9 @@ export default function TourDestinationDetail() {
               backgroundSize: "cover",
               backgroundPosition: "center",
               width: "100%",
-              height: "280px",
+              height: {lg: "280px",
+                xl: "400px"
+              },
               display: "flex",
               justifyContent: "center",
               alignItems: "center",
@@ -66,7 +83,7 @@ export default function TourDestinationDetail() {
               variant="titleXL"
               sx={{
                 color: customPalette.text.light,
-                filter: "drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.5))",
+                filter: "drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.9))",
               }}
             >
               {destinationCerroPenitentes.row0.id}
@@ -108,12 +125,11 @@ export default function TourDestinationDetail() {
               title={destinationCerroPenitentes.row3.title}
             />
           </RowGridContainer>
-        </Box> 
-      )
-      :
-      <Typography variant="titleXL">Página en construcción</Typography>
-    }
-    <Footer />
+        </Box>
+      ) : (
+        <Typography variant="titleXL">Página en construcción</Typography>
+      )}
+      <Footer />
     </>
   );
 }
