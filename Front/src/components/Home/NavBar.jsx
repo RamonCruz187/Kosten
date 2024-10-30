@@ -1,5 +1,5 @@
 /* eslint-disable react/prop-types */
-import { AppBar, Toolbar, Button, Box, Typography } from "@mui/material";
+import { AppBar, Toolbar, Button, Box, Typography, useMediaQuery } from "@mui/material";
 import logo from "../../assets/logo.png";
 import NavLink from "./NavLink";
 import { Link } from "react-router-dom";
@@ -36,6 +36,9 @@ const NavBar = ({ isAdmin = false, handleDrawerOpen = null }) => {
           display: "flex",
           marginX: isAdmin ? "20px" : "60px",
           marginY: isAdmin ? "" : "0.5rem",
+          flexDirection: {xs:"column", lg: "row"},
+          gap:'1rem',
+  
         }}
       >
         <Box sx={{ height: isAdmin ? "40px" : "60px" }}>
@@ -49,8 +52,9 @@ const NavBar = ({ isAdmin = false, handleDrawerOpen = null }) => {
             justifyContent: "center",
             alignItems: "center",
             flexGrow: 1,
-            gap: "2rem",
+            gap: {xs: "0.5rem", sm:"1rem", md:"2rem"},
             cursor: "pointer",
+            flexDirection: {xs:"column", sm: "row"},
           }}
           style={{ textDecoration: "none" }}
         >
@@ -109,3 +113,5 @@ const NavBar = ({ isAdmin = false, handleDrawerOpen = null }) => {
 };
 
 export default NavBar;
+
+

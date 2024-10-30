@@ -15,6 +15,7 @@ export default function TourDestinationCard({ img, title }) {
           flexDirection: "column",
           alignItems: "center",
           justifyContent: "center",
+          flexGrow: 1,
         }}
       >
         <img src={img} alt={title} width="100%" />

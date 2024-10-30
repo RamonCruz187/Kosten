@@ -1,9 +1,9 @@
 /* eslint-disable react/prop-types */
 import { useEffect, useState } from "react";
 import { destinationCerroPenitentes } from "./tourDestinationData";
-import { Box, Grid2, Typography } from "@mui/material";
+import { Box, Button, Grid2, Typography } from "@mui/material";
 import { customPalette } from "../../../customStyle";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import NavBar from "../Home/NavBar";
 import Footer from "../Home/Footer";
 export default function TourDestinationDetail() {
@@ -15,25 +15,34 @@ export default function TourDestinationDetail() {
     id == destinationCerroPenitentes.row0.id && setIsId(true);
   }, [id]);
 
-  const RowGridText = ({ title, text }) => (
+  const RowGridText = ({ title, text, isButton = false, buttonText }) => (
     <Grid2
       item
       size={{ xs: 12, sm: 6 }}
       sx={{
         display: "flex",
         flexDirection: "column",
+        alignItems: "center",
         justifyContent: "center",
         padding: "7rem",
         gap: "1rem",
       }}
     >
-      <Typography variant="titleH2">{title}</Typography>
+      <Typography variant="titleH2" sx={{textTransform: 'uppercase'}}>{title}</Typography>
 
       {text.split("_").map((part, index) => (
         <Typography key={index} variant="p">
           {part}
         </Typography>
       ))}
+
+      {isButton && (
+        <Link to={`/salidas/${title}`} style={{ textDecoration: "none" }}>
+        <Button color="greenButton" sx={{marginTop:"2rem"}}>
+          {buttonText}
+          </Button>
+          </Link> 
+      )}
     </Grid2>
   );
 
@@ -119,6 +128,8 @@ export default function TourDestinationDetail() {
             <RowGridText
               title={destinationCerroPenitentes.row3.title}
               text={destinationCerroPenitentes.row3.text}
+              isButton={true}
+              buttonText={"Ver salidas disponibles"}
             />
             <RowGridImg
               img={destinationCerroPenitentes.row3.imgRow}
