@@ -14,7 +14,7 @@ export default function TourDestinationView() {
           
           <Grid2 container spacing={4}>
             {Object.entries(destinations).map(([destino, img], idx) => (
-              <Grid2 size={3} key={idx}>
+              <Grid2 item size={{xs:12, sm:6, md:4, lg:3}} key={idx}>
                 <TourDestinationCard img={img} title={destino} />
               </Grid2>
             ))}
