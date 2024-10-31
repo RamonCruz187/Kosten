@@ -18,6 +18,7 @@ import { UserAdminPrivateRoutes } from "./UserAdminPrivateRoutes.jsx";
 import About from "../components/Home/About";
 import TourDestinationFull from "../components/TourDestination/TourDestinationFull.jsx";
 import TourDestinationDetail from "../components/TourDestination/TourDestinationDetail.jsx";
+import ContactView from "../components/Contact/ContactView.jsx";
 
 const AppRoutes = () => (
   <Router>
@@ -37,6 +38,7 @@ const AppRoutes = () => (
       <Route path="/salidas/:id" element={<DepartureFull />} />
       <Route path="/destinos" element={<TourDestinationFull />} />
       <Route path="/destinos/:id" element={<TourDestinationDetail />} />
+      <Route path="/contacto" element={<ContactView />} />
 
       <Route path="/admin" element={<UserAdminPrivateRoutes />}>
         <Route index element={<Navigate to="usuarios" replace />} />

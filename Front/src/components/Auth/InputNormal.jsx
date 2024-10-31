@@ -1,7 +1,7 @@
 import { TextField } from "@mui/material";
 import PropTypes from "prop-types";
 
-export default function InputNormal({ type, value, label, fx }) {
+export default function InputNormal({ type, value, label, fx, inputName = '', isObject = false, placeholder = '' }) {
   return (
     <TextField
       sx={{ width: "100%" }}
@@ -10,7 +10,11 @@ export default function InputNormal({ type, value, label, fx }) {
       type={type}
       label={label}
       value={value}
-      onChange={(e) => fx(e.target.value)}
+      name={inputName}
+      placeholder={placeholder}
+      onChange={ isObject ? fx :
+        (e) => fx(e.target.value)
+      }
       required
     />
   );
@@ -21,4 +25,7 @@ InputNormal.propTypes = {
   value: PropTypes.string.isRequired,
   label: PropTypes.string.isRequired,
   fx: PropTypes.func.isRequired,
+  inputName: PropTypes.string,
+  isObject: PropTypes.bool,
+  placeholder: PropTypes.string
 };

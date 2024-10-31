@@ -57,18 +57,20 @@ const About = () => {
             background: "#080808",
             padding: "0",
             display: "flex",
-            flexDirection: "row",
+            
+            objectFit: "cover",
+            flexDirection: { xs: "column", md: "column", lg: "row", xl: "row", sm: "column" },
           }}
         >
           <Box
             sx={{
               flex: 1,
               padding: "4rem",
-              width: "50vw",
               textAlign: "center",
               alignContent: "center",
-              marginRight: "120px",
-              marginLeft: "120px",
+              marginRight: {xl:"120px", lg:"120px", md:"120px", sm:"0px", xs:"0px"},
+              marginLeft: {xl:"120px", lg:"120px", md:"120px", sm:"0px", xs:"0px"},
+             
               
             }}
           >
@@ -116,8 +118,8 @@ const About = () => {
             src={imgquienessomos}
             alt="Imagen Fondo"
             sx={{
-              width: "50vw",
-              objectFit: "inherit",
+              width: { xs: "100%", md: "100%", lg: "100%", xl: "50vw", sm: "100%" },
+              objectFit: "cover",
               padding: "0",
               margin: "0",
             }}
@@ -131,8 +133,8 @@ const About = () => {
               paddingBottom: "50px",
               paddingLeft: "5rem",
               paddingRight: "5rem",
-              marginLeft: "350px",
-              marginRight: "350px",
+              marginLeft: {xl:"350px", lg:"350px", md:"350px", sm:"0px", xs:"0px"},
+              marginRight: {xl:"350px", lg:"350px", md:"350px", sm:"0px", xs:"0px"},
               textAlign: "center",
               alignContent: "center",
               gap: "0",
@@ -174,7 +176,7 @@ const About = () => {
         <Typography variant="titleH1" color="#F3F3F3" sx={{ textAlign: 'center', marginBottom: '2rem' }}>STAFF</Typography>
         <Grid2 container spacing={2} justifyContent="center" gap="24px">
           {staffMembers.map((member, index) => (
-            <Grid2 item xs={12} sm={4} key={index}>
+            <Grid2 item="true" xs={12} sm={4} key={index}>
               <Card>
                 <CardMedia
                   component="img"
