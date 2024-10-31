@@ -1,11 +1,12 @@
 import { Box, Typography, Button, Link } from "@mui/material";
 import NavBar from "./NavBar";
 import kosten from "../../assets/kosten.png";
-import bot from "../../assets/bot.svg";
+import chatwhatsapp from "../../assets/chatwhatsapp.svg";
 import Footer from "./Footer.jsx";
 import { DepartureGrid } from "../../modules/Departures/components/DepartureGrid.jsx";
 import Carousel from "./Carousel.jsx";
 import CommentsBox from "../../modules/Departures/components/CommentsBox.jsx";
+import { commentsDeparture } from "../../shared/utils/comments.js";
 /*<<<<<<< HEAD  
 import AppAppBar from "../../shared/components/AppAppBar.jsx";
 import Box from "@mui/material/Box";
@@ -110,9 +111,10 @@ const LandingPage = () => {
             </Button>
             </Link>
           </Box>
-          <Link href="#bot">
+          <Link href="https://wa.me/1162984904" target="_blank"
+                rel="noreferrer">
             <img
-              src={bot}
+              src={chatwhatsapp}
               alt="Bot"
               style={{
                 position: "fixed",
@@ -135,7 +137,7 @@ const LandingPage = () => {
         >
           <DepartureGrid title="PRÓXIMAS SALIDAS" />
         </Box>
-        <CommentsBox />
+        <CommentsBox comments={commentsDeparture} />
         <Footer />
       </Box>
     </>

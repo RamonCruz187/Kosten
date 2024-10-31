@@ -32,8 +32,8 @@ export const DepartureCard = ({ departure_ }) => {
             src={departure_.coverUrl}
             sx={{
                 top: 0,
-                width: 1,
-                height: 1,
+                width: 371,
+                height: 200,
                 objectFit: 'cover',
                 position: 'absolute',
             }}
@@ -58,14 +58,13 @@ export const DepartureCard = ({ departure_ }) => {
     );
 
     return (
-        <Card>
-            <Box sx={{ pt: '100%', position: 'relative' }}>
-                {departure_.status && renderStatus}
+        <Card sx={{ width: 371, height: 407, display: 'flex', flexDirection: 'column' }}>
+      <Box sx={{ position: 'relative' }}>
+        {departure_.status && renderStatus}
+        {renderImg}
+      </Box>
 
-                {renderImg}
-            </Box>
-
-            <Stack spacing={2} sx={{ p: 3 }}>
+      <Stack spacing={2} sx={{ p: 3, flexGrow: 1, justifyContent: 'end' }}>
                 <Link to={`/salidas/${departure_.id}`} style={{ textDecoration: 'none', color: 'inherit' }}>
                     <Typography variant="subtitle2" noWrap style={{ color: 'inherit' }}>
                         {departure_.name}
@@ -73,7 +72,7 @@ export const DepartureCard = ({ departure_ }) => {
                 </Link>
 
                 <Box display="flex" alignItems="center" justifyContent="space-between">
-                    <Stack spacing={1} sx={{ display: 'flex', flexDirection: 'column'}}>
+                    <Stack spacing={1} sx={{ display: 'flex', flexDirection: 'column', flexGrow: 1, overflow: 'hidden' }}>
 
                         <Box sx={{ display: 'flex', justifyContent: 'flex-start', alignItems: 'center', gap: 1 }}>
                             <Box sx={{ display: 'flex' }}>
@@ -106,7 +105,7 @@ export const DepartureCard = ({ departure_ }) => {
                             <Box sx={{ display: 'flex' }}>
                                 { iconsCardPackages[3] }
                             </Box>
-                            <Typography variant="caption" >
+                            <Typography variant="caption" noWrap >
                                 {departure_.info.technicalLvl}
                             </Typography>
                         </Box>
@@ -125,7 +124,7 @@ export const DepartureCard = ({ departure_ }) => {
 
                          {renderPrice}
 
-                        <Button variant="contained" size="small" color="primary">
+                        <Button variant="contained" size="small" color="brownButton">
                             Reservar
                         </Button>
                     </Box>
