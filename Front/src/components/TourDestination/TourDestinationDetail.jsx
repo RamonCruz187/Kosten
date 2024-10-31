@@ -81,7 +81,9 @@ export default function TourDestinationDetail() {
               backgroundSize: "cover",
               backgroundPosition: "center",
               width: "100%",
-              height: {lg: "280px",
+              height: {
+                xs: "200px",
+                lg: "280px",
                 xl: "400px"
               },
               display: "flex",
