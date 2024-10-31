@@ -10,6 +10,7 @@ public record UserToBeListed(
         String username,
         String email,
         String contact,
-        String role
+        String role,
+        Boolean isActive
 ) implements Serializable {
 }

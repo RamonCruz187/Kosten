@@ -21,5 +21,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     @Query("SELECT DISTINCT u FROM User u LEFT JOIN FETCH u.departures")
     List<User> findAllWithDepartures();
+
+    List<User> findAllByIsActiveTrue();
 }
 

@@ -3,10 +3,10 @@ import Slider from 'react-slick';
 import { Box } from '@mui/material';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
-import img1 from '../../assets/Image-1.png';
-import img2 from '../../assets/Image-2.jpg';
-import img3 from '../../assets/Image-3.jpg';
-import img4 from '../../assets/Image-4.jpg';
+import img1 from '../../assets/Image-1.webp';
+import img2 from '../../assets/Image-2.webp';
+import img3 from '../../assets/Image-3.webp';
+import img4 from '../../assets/Image-4.webp';
 
 const images = [img1, img2, img3, img4];
 

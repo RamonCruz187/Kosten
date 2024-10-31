@@ -1,5 +1,4 @@
 import React from 'react';
-// import { Dialog, DialogActions, DialogContent, DialogTitle, TextField, Button, Typography } from '@mui/material';
 import { Dialog, DialogActions, DialogContent, DialogTitle, TextField, Button, InputAdornment, IconButton, Typography, MenuItem, Select, FormControl, InputLabel, Grid } from '@mui/material';
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
@@ -12,6 +11,15 @@ const EditUserDialog = ({ open, onClose, userForm, setUserForm, fetchUsers }) =>
     const { name, value } = e.target;
     setUserForm((prev) => ({ ...prev, [name]: value }));
   };
+// const EditUserDialog = ({ open, onClose, userForm, setUserForm, fetchUsers }) => {
+//   const handleInputChange = (name, value) => {
+//     setUserForm((prev) => ({
+//       ...prev,
+//       [name]: value,
+//     }));
+//   };
+
+
 
   const handleSubmitEdit = async () => {
     // if (!validatePassword(userForm.password)) {
@@ -36,6 +44,15 @@ const EditUserDialog = ({ open, onClose, userForm, setUserForm, fetchUsers }) =>
     } catch (error) {
       console.error('Error editando usuario:', error);
     }
+  };
+
+  const handleStatusChange = (name, value) => {
+    setUserForm((prev) => ({
+      ...prev,
+      [name]: value === "Activo",
+    }));
+    NotificationService.success(`Estado: ${value}`, 2000);
+    console.log(userForm);
   };
 
   const handleRoleChange = async (newRole) => {
@@ -101,7 +118,10 @@ const EditUserDialog = ({ open, onClose, userForm, setUserForm, fetchUsers }) =>
               <Select
                 name="isActive"
                 value={userForm.isActive ? "Activo" : "Inactivo"}
-                onChange={(e) => setUserForm((prev) => ({ ...prev, isActive: e.target.value === "Activo" }))}
+                onChange={(e) => handleStatusChange('isActive', e.target.value)}
+                // onChange={(e) => setUserForm((prev) => ({ ...prev, isActive: e.target.value === "Activo" }))}
+                // value={userForm.isActive}
+                // onChange={(e) => handleInputChange(e.target.value)}
                 label="Estado"
               >
                 <MenuItem value="Activo">Activo</MenuItem>

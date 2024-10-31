@@ -60,6 +60,7 @@ const Register = () => {
       console.log(response);
       response.status == 200 && autologin(email, password);
     } catch (error) {
+      setIsFetching(false);
       Object.entries(error.response.data.messages).forEach(([key, value]) => {
         NotificationService.error(value, 4000);
       });
