@@ -62,7 +62,7 @@ const NavBar = ({ isAdmin = false, handleDrawerOpen = null }) => {
           <NavLink href="#quienes-somos">Quienes somos</NavLink>
           <NavLink href="/destinos">Destinos</NavLink>
           <NavLink href="/gallery">Galería</NavLink>
-          <NavLink href="#contacto">Contacto</NavLink>
+          <NavLink href="/contacto">Contacto</NavLink>
 
           {isAdmin && (
             <Typography
