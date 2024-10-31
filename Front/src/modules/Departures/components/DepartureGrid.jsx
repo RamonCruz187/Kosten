@@ -7,7 +7,7 @@ import { customPalette } from "../../../../customStyle.jsx";
 
 export const DepartureGrid = ({ title }) => {
   return (
-    <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', background: customPalette.tertiary.darkest, padding: '1rem 2rem 2rem 2rem' }}>
+    <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', background: customPalette.tertiary.darkest, padding: '1rem 16rem 2rem 16rem' }}>
       <Typography variant='titleH1' gutterBottom sx={{ textAlign: 'center', mb: 5, color: customPalette.text.light }}>
         {title}
       </Typography>
