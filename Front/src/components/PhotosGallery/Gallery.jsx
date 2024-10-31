@@ -10,7 +10,20 @@ import Alert from "@mui/material/Alert";
 import AlertTitle from "@mui/material/AlertTitle";
 import NavBar from "../Home/NavBar";
 import Footer from "../Home/Footer";
-import { getAllPackages } from "../../api/packageApi";
+import image1 from "../../assets/image-1.png";
+import image2 from "../../assets/image-2.jpg"
+import image3 from '../../assets/image-3.jpg';
+import image4 from '../../assets/image-4.jpg';
+import image5 from '../../assets/TourDestination/cerro_champaqui.jpg'
+import image6 from '../../assets/TourDestination/cerro_del_medio.jpg'
+import image7 from '../../assets/TourDestination/cerro_penitente.jpg'
+import image8 from '../../assets/TourDestination/cerro_serrata.jpg'
+import image9 from '../../assets/TourDestination/cerro_tres_picos.jpg'
+import image10 from '../../assets/TourDestination/cerro_vallecitos.jpg'
+import image11 from '../../assets/TourDestination/la_cadenita.jpg'
+import image12 from '../../assets/TourDestination/lanin.jpg'
+
+//import { getAllPackages } from "../../api/packageApi";
 
 import Typography from "@mui/material/Typography";
 import ShareIcon from "@mui/icons-material/Share";
@@ -25,27 +38,30 @@ export function Gallery() {
     const [currentImageIndex, setCurrentImageIndex] = useState(0);
     const [imageWidth, setImageWidth] = useState(0);
     const imageRef = useRef(null);
+    const imageTitles = ["El Chalten", "Cerro Tronador", "Cerro Torre", "Cerro Colorado", "Cerro Champaqui", "Cerro del Medio", "Cerro Penitente", "Cerro Serrata", "Cerro Tres Picos", "Cerro Vallecitos", "La Cadenita", "Volcán Lanin"];
 
     useEffect(() => {
-        const fetchImages = async () => {
-            try {
-                const response = await fetch("https://kostentours-api-10061c08f8f8.herokuapp.com/images/all");
-                const result = await response.json();
+        // const fetchImages = async () => {
+        //     try {
+        //         const response = await fetch("https://kostentours-api-10061c08f8f8.herokuapp.com/images/all");
+        //         const result = await response.json();
                 
-                if (!result.isError && Array.isArray(result.data)) {
-                    const imageUrls = result.data.map(item => item.url);
-                    setImages(imageUrls);
-                } else {
-                    console.error("Error en la respuesta del servidor:", result.message);
-                }
-            } catch (error) {
-                console.error("Error al obtener imágenes:", error);
-            } finally {
-                setIsFetching(false);
-            }
-        };
-
-        fetchImages();
+        //         if (!result.isError && Array.isArray(result.data)) {
+        //             const imageUrls = result.data.map(item => item.url);
+        //             setImages(imageUrls);
+        //         } else {
+        //             console.error("Error en la respuesta del servidor:", result.message);
+        //         }
+        //     } catch (error) {
+        //         console.error("Error al obtener imágenes:", error);
+        //     } finally {
+        //         setIsFetching(false);
+        //     }
+        // };
+        //fetchImages();
+        const imageUrls = [image1, image2, image3, image4, image5,image6, image7, image8,image9,image10,image11,image12];
+        setImages(imageUrls);
+        setIsFetching(false);
     }, []);
     
     const handleImageLoad = () => {
@@ -173,6 +189,8 @@ export function Gallery() {
                         onLoad={handleImageLoad}
                         sx={{ 
                             maxHeight: "80%", 
+                            minHeight: "65%",
+                            minWidth: "65%",
                             maxWidth: "80%", 
                             objectFit: "contain"
                         }}
@@ -189,7 +207,7 @@ export function Gallery() {
                         }}
                     >
                         <Typography variant="h6" sx={{ fontWeight: "bold" }}>
-                            Título de la imagen {currentImageIndex + 1}
+                            {imageTitles[currentImageIndex]}
                         </Typography>
                         <IconButton
                             onClick={() => console.log("Compartir")}
