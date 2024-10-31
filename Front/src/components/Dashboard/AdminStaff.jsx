@@ -13,9 +13,8 @@ import {getAllStaff, getStaffById} from "../../api/staffApi.js";
 const AdminStaff = () => {
   const [staff, setStaff] = useState([]);
   const { userAuth } = useContext(GlobalContext);
-  const token = userAuth ? userAuth.token : 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1c2VyM0BnbWFpbC5jb20iLCJpYXQiOjE3MzAyNzI2NTQsImV4cCI6MTczMDM1OTA1NH0.hUSPhkQWj21xnWz_YQFrGyUcHBZ8emD-pmOW98XHEKU';
+  const token = userAuth ? userAuth.token : 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1c2VyM0BnbWFpbC5jb20iLCJpYXQiOjE3MzAzNzc5NTcsImV4cCI6MTczMDQ2NDM1N30.wRzEymzXiS4PmelkzHUkWeAcI6YELzKGSz8rQ5bDb3M';
 
-//   const [token,setToken] = useState("eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1c2VyM0BnbWFpbC5jb20iLCJpYXQiOjE3MzAxODYxNjksImV4cCI6MTczMDI3MjU2OX0.WkMpN2gJrokFb3aHDAIZY18Q9JI0dZvWVyYIqkg5HD8");
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
   const [editDialogOpen, setEditDialogOpen] = useState(false);
@@ -84,7 +83,7 @@ const AdminStaff = () => {
   };
 
   return (
-    <Box sx={{ width: '100%', minHeight: '100vh', backgroundColor: 'grey.600', padding: 4 }}>
+    <Box sx={{ width: '100%', minHeight: '100vh', backgroundColor: 'grey.750', padding: 4 }}>
       <Paper elevation={0} sx={{ backgroundColor: 'transparent' }}>
         <Table sx={{ borderBottom: 'none' }}>
           <TableBody>
@@ -100,7 +99,7 @@ const AdminStaff = () => {
                   <Button onClick={() => handleEditStaff(staffMember.id)} sx={{ backgroundColor: 'grey.300', mr: 1, '&:hover': { backgroundColor: 'grey.400' } }}>
                     <RiEditLine /> EDITAR
                   </Button>
-                  <Button onClick={() => handleDeleteStaff(staffMember.id)} sx={{ backgroundColor: 'red.500', color: 'white', '&:hover': { backgroundColor: 'red.400' } }}>
+                  <Button onClick={() => handleDeleteStaff(staffMember.id)} sx={{ minWidth: 'auto', backgroundColor: 'red.500', color: 'white', '&:hover': { backgroundColor: 'red.400' } }}>
                     <RiDeleteBin6Line />
                   </Button>
                 </TableCell>

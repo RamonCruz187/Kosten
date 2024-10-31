@@ -103,7 +103,7 @@ const AdminDashboard = () => {
 
 
   return (
-    <Box sx={{ width: '100%', minHeight: '100vh', backgroundColor: 'grey.600', padding: 4 }}>
+    <Box sx={{ width: '100%', minHeight: '100vh', backgroundColor: 'grey.750', padding: 4 }}>
       <Box display="flex" justifyContent="space-between" alignItems="center" mb={3}>
         <Tabs
           value={filter}
@@ -140,7 +140,7 @@ const AdminDashboard = () => {
                 <TableCell sx={{ border: 0, textAlign: 'left', flexBasis: '12%' }} align="left">{user.role==="ADMIN" ? "ADMINISTRADOR" : "USUARIO"}</TableCell>
                 <TableCell sx={{ border: 0, textAlign: 'left', flexBasis: '20%'}}>
                   <Button onClick={() => handleOpenEditUser(user.id)} sx={{ backgroundColor: 'grey.300', mr: 1, '&:hover': { backgroundColor: 'grey.400' } }}><RiEditLine /> EDITAR</Button>
-                  <Button onClick={() => handleDelete(user.id)} sx={{ backgroundColor: 'red.500', color: 'white', '&:hover': { backgroundColor: 'red.400' } }}><RiDeleteBin6Line /></Button>
+                  <Button onClick={() => handleDelete(user.id)} sx={{ minWidth: 'auto', backgroundColor: 'red.500', color: 'white', '&:hover': { backgroundColor: 'red.400' } }}><RiDeleteBin6Line /></Button>
                 </TableCell>
               </TableRow>
             ))}

@@ -54,7 +54,7 @@ const EditStaffDialog = ({ open, onClose, staffForm, setStaffForm, fetchStaff })
 
       await axios.put('https://kostentours-api-10061c08f8f8.herokuapp.com/staff/update', formData, {
         headers: {
-          'Authorization': `Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1c2VyM0BnbWFpbC5jb20iLCJpYXQiOjE3MzAyNzI2NTQsImV4cCI6MTczMDM1OTA1NH0.hUSPhkQWj21xnWz_YQFrGyUcHBZ8emD-pmOW98XHEKU`,  // Replace YOUR_TOKEN_HERE with actual token logic
+          'Authorization': `Bearer ${token}`,  // Replace YOUR_TOKEN_HERE with actual token logic
           'Content-Type': 'multipart/form-data',
         },
       });
