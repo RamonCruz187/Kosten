@@ -41,7 +41,7 @@ public class Package {
     private List<MonthNames> months = new ArrayList<>();
 
     public void setMonths(List<Integer> monthIndices) {
-        Locale localeMX = Locale.of("es", "MX");
+        Locale localeMX = Locale.forLanguageTag("es");
         DateFormatSymbols dfs = new DateFormatSymbols(localeMX);
         String[] monthNames = dfs.getMonths();
         String[] shortMonthNames = dfs.getShortMonths();
