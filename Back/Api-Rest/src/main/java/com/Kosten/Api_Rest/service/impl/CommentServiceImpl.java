@@ -41,8 +41,6 @@ public class CommentServiceImpl implements CommentService {
         Comment comment = commentMapper.toEntity(commentRequestDto);
         comment.setPackageRef(pack);
         comment.setUser(user);
-        comment.setIsVisible(false);
-        comment.setIsFavorite(false);
         Comment commentSaved = commentRepository.save(comment);
         return commentMapper.toDto(commentSaved);
     }
