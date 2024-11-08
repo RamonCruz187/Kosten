@@ -23,15 +23,19 @@ const AdminDashboard = () => {
   const [staff, setStaff] = useState([]); // New state for staff data
   const [staffForm, setStaffForm] = useState({ id: null, name: '', lastName: '', contact: '', rol: 'STAFF' });
   const [openAddStaff, setOpenAddStaff] = useState(false); // New state for AddStaffDialog
+  const API_URL = 'https://kosten.up.railway.app';
+
 
   useEffect(() => {
     fetchUsers();
     fetchStaff(); // Fetch staff data
   }, []);
 
+//`${API_URL_PROD}/staff/${ id }`,
+
   const fetchUsers = async () => {
     try {
-      const response = await axios.get('https://kostentours-api-10061c08f8f8.herokuapp.com/user/all');
+      const response = await axios.get(`${API_URL}/user/all`);
       setUsers(response.data.data);
     } catch (error) {
       console.error('Error cargando usuarios:', error);
@@ -40,12 +44,8 @@ const AdminDashboard = () => {
 
   const fetchStaff = async () => {
     try {
-      const response = await axios.get('https://kostentours-api-10061c08f8f8.herokuapp.com/staff/all', {
-        headers: {
-          'Authorization': `Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1c2VyM0BnbWFpbC5jb20iLCJpYXQiOjE3MzAxODYxNjksImV4cCI6MTczMDI3MjU2OX0.WkMpN2gJrokFb3aHDAIZY18Q9JI0dZvWVyYIqkg5HD8`,//`Bearer ${token}`, //`Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1c2VyM0BnbWFpbC5jb20iLCJpYXQiOjE3MzAxODYxNjksImV4cCI6MTczMDI3MjU2OX0.WkMpN2gJrokFb3aHDAIZY18Q9JI0dZvWVyYIqkg5HD8`, // Replace YOUR_TOKEN_HERE with actual token logic
-          'Content-Type': 'application/json',
-        }
-      });
+      // const response = await axios.get('https://kostentours-api-10061c08f8f8.herokuapp.com/staff/all', {
+        const response = await axios.get(`${API_URL}/staff/all`);
       setStaff(response.data);
     } catch (error) {
       console.error('Error en la carga de staff:', error);
@@ -65,7 +65,7 @@ const AdminDashboard = () => {
 
   const handleOpenEditUser = async (id) => {
     try {
-      const response = await axios.get(`https://kostentours-api-10061c08f8f8.herokuapp.com/user/${id}`);
+      const response = await axios.get(`${API_URL}/user/${id}`);
       const { username, email, contact, role, isActive } = response.data.data;
       setUserForm({ id, username, email, contact, role, isActive });
       setOpenEdit(true);
@@ -77,7 +77,7 @@ const AdminDashboard = () => {
 
   const handleDelete = async (id) => {
     try {
-      await axios.delete(`https://kostentours-api-10061c08f8f8.herokuapp.com/user/${id}`);
+      await axios.delete(`${API_URL}/user/${id}`);
       fetchUsers();
     } catch (error) {
       console.error('Error al eliminar el usuario:', error);
