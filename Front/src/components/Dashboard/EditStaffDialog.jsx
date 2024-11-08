@@ -14,8 +14,8 @@ import { NotificationService } from '../../shared/services/notistack.service.jsx
 import axios from 'axios';
 
 const EditStaffDialog = ({ open, onClose, staffForm, setStaffForm, fetchStaff }) => {
+  const API_URL = 'https://kosten.up.railway.app';
   const [file, setFile] = useState(null);
-
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setStaffForm((prev) => ({ ...prev, [name]: value }));
@@ -52,11 +52,7 @@ const EditStaffDialog = ({ open, onClose, staffForm, setStaffForm, fetchStaff })
       formData.append('contact', staffForm.contact);
       formData.append('photo', file);
 
-      await axios.put('https://kostentours-api-10061c08f8f8.herokuapp.com/staff/update', formData, {
-        headers: {
-          'Authorization': `Bearer ${token}`,  // Replace YOUR_TOKEN_HERE with actual token logic
-          'Content-Type': 'multipart/form-data',
-        },
+      await axios.put(`${API_URL}/staff/update`, formData, {
       });
       NotificationService.success('Staff agregado correctamente', 2000);
       fetchStaff();
