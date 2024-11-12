@@ -7,7 +7,11 @@ import java.io.Serializable;
 import java.util.List;
 
 public record UserPackDepDto(
-        UserDto user,
+        String username,
+        String email,
+        String contact,
+        String role,
+        Boolean isActive,
         List<DepartureDto> departures,
         List<PackageDto> packages
 ) implements Serializable {
