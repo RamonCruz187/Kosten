@@ -21,7 +21,6 @@ public interface PackageMapper {
 
     PackageToUpdateDTO packageToPackageToUpdateDTO(Package package_);
 
-    @Mapping(target = "id", source = "id")
     @Mapping(target = "name", source = "name")
     @Mapping(target = "images", source = "images")
     PackageDto toPackageDto(Package packageEntity);

@@ -6,7 +6,6 @@ import java.io.Serializable;
 import java.util.List;
 
 public record PackageDto(
-    Long id,
     String name,
     List<ImageResponseDTO> images
 ) implements Serializable {

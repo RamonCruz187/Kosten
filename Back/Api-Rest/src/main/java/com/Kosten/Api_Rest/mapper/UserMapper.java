@@ -8,7 +8,7 @@ import org.mapstruct.*;
 
 import java.util.List;
 
-@Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.IGNORE, uses = {PackageMapper.class})
+@Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.IGNORE, uses = {PackageMapper.class, DepartureMapper.class})
 public interface UserMapper {
 
     @Mapping(target = "username", expression = "java(mapUsername(userEntity))")
@@ -19,7 +19,6 @@ public interface UserMapper {
 
     @Mapping(target = "username", expression = "java(mapUsername(userEntity))")
     @Mapping(target = "departures", source = "userEntity.departures")
-    @Mapping(target = "packages", source = "userEntity.packages")
     UserPackDepDto toUserPackDepDto(User userEntity);
 
     List<UserResponseDto> entityListToDtoList(List<User> userList);
