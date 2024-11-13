@@ -48,8 +48,8 @@ public class StaffController {
     @PostMapping(value = "/new", consumes = {"multipart/form-data"})
     @Transactional
     public ResponseEntity<ExtendedBaseResponse<StaffResponseDto>> newStaff(
-            @ModelAttribute @Valid StaffRequestDto staff,
-            @RequestParam("file") @Valid MultipartFile file) {
+            @RequestPart("staffData") @Valid StaffRequestDto staff,
+            @RequestPart("fileImage") @Valid MultipartFile file) {
 
         try {
             return ResponseEntity.status(201).body(staffService.newStaff(staff, file));
