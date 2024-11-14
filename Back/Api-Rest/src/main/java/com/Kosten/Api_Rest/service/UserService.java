@@ -15,6 +15,8 @@ public interface UserService {
     ExtendedBaseResponse<List<UserToBeListed>> getAllUsers();
     BaseResponse delete(Long id);
 
+    UserResponseDto updateUserIsActive(UserIsActiveDto userIsActiveDto);
+
 
     public List<UserResponseDto> getAllUsersWithDepartures();
     public List<DepartureToBeListed> getDeparturesByUserId(Long userId);

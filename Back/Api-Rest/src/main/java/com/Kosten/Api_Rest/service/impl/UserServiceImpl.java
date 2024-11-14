@@ -14,6 +14,7 @@ import com.Kosten.Api_Rest.repository.UserRepository;
 import com.Kosten.Api_Rest.service.UserService;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -118,6 +119,14 @@ public class UserServiceImpl implements UserService {
         return userResponseDtoList;
     }
 
-
+    @Override
+    @Transactional
+    public UserResponseDto updateUserIsActive(UserIsActiveDto userIsActiveDto){
+        User user = userRepository.findById(userIsActiveDto.userId()).orElseThrow(
+                () -> new UserNotFoundException("Usuario no encontrado con ID: " + userIsActiveDto.userId()));
+        user.setIsActive(userIsActiveDto.isActive());
+        User userSaved = userRepository.save(user);
+        return userMapper.entityToDto(userSaved);
+    }
 
 }
