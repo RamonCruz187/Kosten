@@ -10,7 +10,7 @@ import { useAuth } from "../../shared/hooks/useAuth.jsx";
 import { UserPopover } from "../../shared/components/UserPopover.jsx";
 import PopoverLogin from "../Auth/PopoverLogin.jsx";
 
-const NavBar = ({ isAdmin = true, setIsOpenDrawer, isOpenDrawer = false, isDrawer = false }) => {
+const NavBar = ({ isAdmin = false, setIsOpenDrawer, isOpenDrawer = false, isDrawer = false }) => {
   const { isAuthenticated } = useAuth();
   const location = useLocation().pathname;
   const navigate = useNavigate();
@@ -22,7 +22,7 @@ const NavBar = ({ isAdmin = true, setIsOpenDrawer, isOpenDrawer = false, isDrawe
   // popover login
   const [isOpenLogin, setIsOpenLogin] = useState(false);
 
-  const handleClick = (event) => {
+  const handleClick = () => {
     setIsOpenLogin(true);
   };
 
