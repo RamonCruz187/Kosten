@@ -17,7 +17,9 @@ export default function CommentsCards({ avatar, user, title, text, date }) {
         padding: "1rem",
         backgroundColor: customPalette.text.light,
         borderRadius: "8px",
-        width: "31%",
+        // width: "100%",
+        height: "fit-content",
+        maxWidth: "400px",
         gap:'.5rem'
       }}
     >
