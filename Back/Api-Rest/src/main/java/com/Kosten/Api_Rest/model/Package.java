@@ -31,6 +31,9 @@ public class Package {
     private String technical_level;
     private String included_services;
     private boolean active;
+    private String locationInfo;
+    private String historyInfo;
+    private String activityInfo;
 
     /****************************************
      *  Relations with Month Names Entity
