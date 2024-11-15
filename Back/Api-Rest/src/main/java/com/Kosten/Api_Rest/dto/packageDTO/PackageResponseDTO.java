@@ -32,7 +32,10 @@ public record PackageResponseDTO(
 
         CategoryResponseDTO category,
 
-        boolean active
+        boolean active,
+        String locationInfo,
+        String historyInfo,
+        String activityInfo
 
 
 ) implements Serializable {

@@ -51,4 +51,6 @@ public class Departure {
     private Boolean isActive;
     private int quota;
 
+
+
 }
