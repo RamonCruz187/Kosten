@@ -10,7 +10,7 @@ const PopoverLogin = ({ isOpenLogin=false, handleClose }) => {
        onClose={handleClose}
       >
         <Box sx={{ position: "absolute", top: "20px", right: "20px"}}>
-          <Login handleClose={handleClose}/>
+          <Login handleClose={handleClose} isModal={true} />
         </Box>
       </Modal>
     
