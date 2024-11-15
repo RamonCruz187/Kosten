@@ -1,5 +1,5 @@
 import { useState } from "react";
-import {Button, Typography, Stack, CircularProgress} from "@mui/material";
+import { Button, Typography, Stack, CircularProgress } from "@mui/material";
 import { login } from "../../api/authApi.js";
 import { NotificationService } from "../../shared/services/notistack.service.jsx";
 import { useAuth } from "../../shared/hooks/useAuth.jsx";
@@ -10,7 +10,7 @@ import {getData} from "../../api/userApi.js";
 import {useUserData} from "../../shared/hooks/useUserData.jsx";
 import Box from "@mui/material/Box";
 
-const Login = ({handleClose=() => {}}) => {
+const Login = ({handleClose=() => {}, isModal=false}) => {
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -55,8 +55,9 @@ const Login = ({handleClose=() => {}}) => {
         sx={{
           justifyContent: "center",
           alignItems: "center",
-          width: 400,
-          padding: "1rem 2rem",
+          width: !isModal ? "100%" : 400,
+          minHeight: !isModal ?  "55dvh" : "auto" ,
+          padding: !isModal ? "1rem 35dvw": "1rem 2rem",
           background: "white",
         }}
       >
