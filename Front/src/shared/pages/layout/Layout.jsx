@@ -43,8 +43,10 @@ const Layout = () => {
   return (
     <Box
       sx={{
+        display: "flex",
+        flexDirection: "column",
         width: "100dvw",
-        height: "101dvh",
+        minHeight: "100dvh",
         backgroundColor: "grey.800",
         overflowX: "hidden",
       }}
@@ -66,6 +68,7 @@ const Layout = () => {
         sx={{
           position: "relative",
           width: "100%",
+          flexGrow: 1,
         }}
       >
         <Link
