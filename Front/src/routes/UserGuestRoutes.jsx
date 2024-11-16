@@ -3,14 +3,14 @@
  * no está autenticado): Login, Signup
  */
 
-import { Navigate, Outlet } from 'react-router-dom';
+import { Navigate } from 'react-router-dom';
 import { useAuth } from "../shared/hooks/useAuth.jsx";
 import {useUserData} from "../shared/hooks/useUserData.jsx";
 
-export function UserGuestRoutes() {
+const UserGuestRoutes = ({ children }) =>{
 
-    const { isAuthenticated } = useAuth();
-    const { user } = useUserData();
+    const { isAuthenticated = false } = useAuth();
+    const { user = {} } = useUserData();
 
     if ( isAuthenticated && user.role !== 'ADMIN' ) {
         return <Navigate to="/" replace />;
@@ -20,5 +20,7 @@ export function UserGuestRoutes() {
         return <Navigate to="/admin" replace />;
     }
 
-    return <Outlet />;
+    return children
 }
+
+export default UserGuestRoutes

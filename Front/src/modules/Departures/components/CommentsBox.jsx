@@ -1,5 +1,5 @@
 /* eslint-disable react/prop-types */
-import { Stack, Typography } from "@mui/material";
+import { Box, Typography } from "@mui/material";
 import { customPalette } from "../../../../customStyle";
 import avatarImage from "../../../assets/avatar.svg";
 import CommentsCards from "./CommentsCards";
@@ -7,7 +7,17 @@ import CommentsCards from "./CommentsCards";
 export default function CommentsBox({ comments }) { 
 
   return (
-    <Stack sx={{ gap: "2rem", background: customPalette.page_bg, padding: "2rem 3rem" }}>
+    <Box sx={{ 
+      display: 'flex', 
+      flexDirection: 'column', 
+      alignItems: 'center', 
+      justifyContent: 'center', 
+      gap: "2rem", 
+      width: '100%',
+      paddingY: '5rem',
+      maxWidth: '1200px',
+      margin: '0 auto',
+    }}>
       <Typography
         variant="titleH1"
         sx={{
@@ -17,18 +27,22 @@ export default function CommentsBox({ comments }) {
       >
         OPINIONES DE QUIENES PARTICIPARON
       </Typography>
-      <Stack direction="row" sx={{ justifyContent:'center', flexWrap:'wrap', gap:'1.5rem' }}>
+      <Box sx={{ 
+        display: 'grid', 
+        gridTemplateColumns: {sx: 'repeat(1, 1fr)', md: 'repeat(2, 1fr)', lg: 'repeat(3, 1fr)'}, 
+        gap: '2rem',
+      }}>
         {comments && comments?.map((comment, index) => (
-          <CommentsCards
-            key={index}
-            user={comment.user}
-            title={comment.title}
-            text={comment.text}
-            date={comment.date}
-            avatar={avatarImage}
-          />
+            <CommentsCards
+              key={index}
+              user={comment.user}
+              title={comment.title}
+              text={comment.text}
+              date={comment.date}
+              avatar={avatarImage}
+            />
         ))}
-      </Stack>
-    </Stack>
+      </Box>
+    </Box>
   );
 }

@@ -6,8 +6,6 @@ import {
   Grid2,
   Typography,
 } from "@mui/material";
-import NavBar from "./NavBar";
-import Footer from "./Footer.jsx";
 import img from "../../assets/about.jpg";
 import imgquienessomos from "../../assets/quienes-somos.jpg";
 import staffalejandro from "../../assets/staff-alejandro.jpg";
@@ -36,7 +34,6 @@ const staffMembers = [
 const About = () => {
   return (
     <>
-      <NavBar />
       <Box>
         <Box>
           <img
@@ -195,7 +192,6 @@ const About = () => {
       </Box>
         </Box>
       </Box>
-      <Footer />
     </>
   );
 };

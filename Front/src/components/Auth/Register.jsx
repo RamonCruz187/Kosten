@@ -6,7 +6,6 @@ import imageReg from "../../assets/registro.webp";
 import InputNormal from "./InputNormal.jsx";
 import InputPassword from "./InputPassword.jsx";
 import useAutoLogin from "../../shared/hooks/useAutoLogin.jsx";
-import NavBar from "../Home/NavBar.jsx";
 
 const Register = () => {
   const autologin = useAutoLogin();
@@ -70,7 +69,6 @@ const Register = () => {
 
   return (
     <>
-      <NavBar />
       <Stack direction={{ xs: "column", md: "row" }}>
         <Stack
           sx={{

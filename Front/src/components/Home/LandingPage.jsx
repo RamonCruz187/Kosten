@@ -1,144 +1,122 @@
-import { Box, Typography, Button, Link } from "@mui/material";
-import NavBar from "./NavBar";
+import { Box, Typography, Button, Link, useMediaQuery, useTheme } from "@mui/material";
+
 import kosten from "../../assets/kosten.png";
-import chatwhatsapp from "../../assets/chatwhatsapp.svg";
-import Footer from "./Footer.jsx";
-import { DepartureGrid } from "../../modules/Departures/components/DepartureGrid.jsx";
+import DepartureGrid from "../../modules/Departures/components/DepartureGrid.jsx";
 import Carousel from "./Carousel.jsx";
 import CommentsBox from "../../modules/Departures/components/CommentsBox.jsx";
 import { commentsDeparture } from "../../shared/utils/comments.js";
-/*<<<<<<< HEAD  
-import AppAppBar from "../../shared/components/AppAppBar.jsx";
-import Box from "@mui/material/Box";
-import {PackageGrid} from "../../modules/package/components/PackageGrid.jsx";
+
 
 const LandingPage = () => {
-  return (
-    <Box sx={{ mt: 15 }}>
-        <AppAppBar />
-        <PackageGrid title="PRÓXIMAS SALIDAS" />
-      <h1>Welcome to the App</h1>
-      <p>This is the landing page.</p>
-    </Box>
-=======*/
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
+  const isTablet = useMediaQuery(theme.breakpoints.down('md'));
 
-const LandingPage = () => {
   return (
     <>
-      <Box sx={{ width: "100%", height: "100vh", backgroundColor: "grey.800" }}>
-        <NavBar />
+      <Box
+        sx={{
+          position: "relative",
+          width: "100%",
+          height: {xs: "calc(100dvh - 80px)", md: "calc(100dvh - 100px)", xl: "calc(100dvh - 120px)"},
+          overflow: "hidden",
+        }}
+      >
+        <h1 style={{ position: "absolute", top: "-50px", color: "transparent", userSelect: "none" }}>Kosten Trekking & Montañismo - Somos Guías de Montaña. Veni con nosotros a disfrutar tu próxima Aventura</h1>
+        <style>
+          {`
+            @keyframes zoom {
+              0% {
+                transform: scale(1);
+              }
+              50% {
+                transform: scale(1.1);
+              }
+              100% {
+                transform: scale(1);
+              }
+            }
+          `}
+        </style>
+        <Carousel />
         <Box
           sx={{
-            position: "relative",
-            width: "100%",
-            height: "calc(100vh - 64px)",
-            overflow: "hidden",
+            position: "absolute",
+            top: "50%",
+            left: "50%",
+            transform: "translate(-50%, -50%)",
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
           }}
         >
-          <style>
-            {`
-              @keyframes zoom {
-                0% {
-                  transform: scale(1);
-                }
-                50% {
-                  transform: scale(1.1);
-                }
-                100% {
-                  transform: scale(1);
-                }
-              }
-            `}
-          </style>
-          <Carousel />
           <Box
             sx={{
-              position: "absolute",
-              top: "50%",
-              left: "50%",
-              transform: "translate(-50%, -50%)",
               display: "flex",
               flexDirection: "column",
               alignItems: "center",
+              justifyContent: "center",
+              position: "relative",
             }}
           >
-            <Box
-              sx={{
-                display: "flex",
-                flexDirection: "column",
-                alignItems: "center",
-                justifyContent: "center",
+            <img
+              src={kosten}
+              alt="Kosten"
+              style={{
+                height: isMobile ? "unset" : "10rem",
+                width: isTablet ? "90dvw" : "unset",
+                margin: "16px",
+                opacity: "0.5",
+                zIndex: 0,
                 position: "relative",
               }}
-            >
-              <Typography
-                variant="paragraphLight"
-                sx={{
-                  fontWeight: "bold",
-                  fontSize: "3rem",
-                  fontFamily: "Oswald",
-                  opacity: "100%",
-                  zIndex: 1,
-                  position: "absolute ",
-                }}
-              >
-                SOMOS AVENTURA
-              </Typography>
-              <img
-                src={kosten}
-                alt="Kosten"
-                style={{
-                  height: "10rem",
-                  margin: "16px",
-                  opacity: "0.5",
-                  zIndex: 0,
-                  position: "relative",
-                }}
-              />
-            </Box>
-            <Link href="/salidas">
-            <Button
-              variant="contained"
-              color="primary"
-              size="large"
-              sx={{
-                paddingLeft: "5rem",
-                paddingRight: "5rem",
-                fontSize: "20px",
-              }}
-            >
-              VER NUESTRAS SALIDAS
-            </Button>
-            </Link>
-          </Box>
-          <Link href="https://wa.me/1162984904" target="_blank"
-                rel="noreferrer">
-            <img
-              src={chatwhatsapp}
-              alt="Bot"
-              style={{
-                position: "fixed",
-                right: "60px",
-                bottom: "60px",
-                zIndex: 100,
-              }}
             />
+            <Typography
+              variant="paragraphLight"
+              sx={{
+                fontWeight: "bold",
+                fontSize: {xs: "2rem", sm: "3rem"},
+                fontFamily: "Oswald",
+                opacity: "100%",
+                zIndex: 1,
+                position: {xs: "relative", sm:"absolute"},
+                top: {xs: "50%", sm: "unset"},
+                userSelect: "none",
+                textShadow: "0px 4px 6px rgba(0, 0, 0, 0.3), 0px 8px 20px rgba(0, 0, 0, 0.2)",
+              }}
+            >
+              VIENTO DE AVENTURA
+            </Typography>
+          </Box>
+          <Link href="/salidas">
+          <Button
+            variant="contained"
+            color="primary"
+            size="large"
+            sx={{
+              marginTop: "3rem",
+              paddingX: {xs: "2rem", sm: "5rem"},
+              fontSize: {xs: "20px", sm: "20px"},
+            }}
+          >
+            VER NUESTRAS SALIDAS
+          </Button>
           </Link>
         </Box>
-        <Box
-          sx={{
-            display: "flex",
-            backgroundColor: "#494949",
-            flexDirection: "column",
-            alignItems: "center",
-            gap: "1rem",
-            padding: "60px",
-          }}
-        >
-          <DepartureGrid title="PRÓXIMAS SALIDAS" />
-        </Box>
+      </Box>
+      <Box
+        sx={{
+          display: "flex",
+          backgroundColor: "#494949",
+          flexDirection: "column",
+          alignItems: "center",
+          justifyContent: "center",
+          paddingBottom: "1rem",
+          paddingX: {xs: "1.5rem", sm: 0},
+        }}
+      >
+        <DepartureGrid title="PRÓXIMAS SALIDAS" sx={{paddingBottom: "1rem"}} />
         <CommentsBox comments={commentsDeparture} />
-        <Footer />
       </Box>
     </>
   );

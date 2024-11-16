@@ -3,23 +3,28 @@ import logo from "../../assets/logo.png";
 import { RiInstagramFill, RiTiktokFill, RiWhatsappFill } from "react-icons/ri";
 
 export default function Footer() {
+  const currentYear = new Date().getFullYear();
   return (
-    <footer className="footer">
-      <Box
+      <Box component="footer"
+        className="footer"
         sx={{
           display: "flex",
           flexDirection: "column",
           justifyContent: "center",
           alignItems: "center",
           background: "#080808",
-          padding: "1rem",
         }}
-      >
-        <Grid2
-          container
-          spacing={10}
-          alignItems="center"
-          className="grid-container"
+        >
+        <Box
+          sx={{
+            display: "flex",
+            flexDirection: {xs: "column", sm: "row"},
+            alignItems: "center",
+            justifyContent: "center",
+            gap: {xs: "2rem", lg: "60px", xl: "80px"},
+            paddingX: "1rem",
+            paddingY: "2rem",
+          }}
         >
           <Grid2 xs={12} sm={6} md={4}>
             <img src={logo} alt="KOSTEN" style={{ height: '86px', width: '140px' }} />
@@ -80,13 +85,13 @@ export default function Footer() {
               </Link>
               <RiTiktokFill color="#F3F3F3" size={24} />
             </Box>
-            <Typography variant="paragraphLight" align="center" color="#F3F3F3">
+            {/* <Typography variant="paragraphLight" align="center" color="#F3F3F3">
               TÉRMINOS Y CONDICIONES
               <br />
               POLÍTICAS DE PRIVACIDAD
-            </Typography>
+            </Typography> */}
           </Grid2>
-        </Grid2>
+        </Box>
         <Divider
           orientation="horizontal"
           variant="middle"
@@ -97,10 +102,9 @@ export default function Footer() {
             margin: "1rem 3.75rem",
           }}
         />
-        <Typography variant="body2" align="center" color="#F3F3F3">
-          2024 | Todos los derechos reservados.
+        <Typography variant="body2" align="center" color="#F3F3F3" sx={{ fontSize: "10px", marginBottom: "2rem" }}>
+          {currentYear} | Todos los derechos reservados.
         </Typography>
       </Box>
-    </footer>
   );
 }

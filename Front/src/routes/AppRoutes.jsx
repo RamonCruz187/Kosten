@@ -1,59 +1,61 @@
 import { BrowserRouter as Router, Navigate, Route, Routes } from "react-router-dom";
-import Login from "../components/Auth/Login";
-import Register from "../components/Auth/Register";
-import LandingPage from "../components/Home/LandingPage";
+import { Suspense, lazy } from "react";
+
+import Layout from "../shared/pages/layout/Layout.jsx"
+import LandingPage from "../components/Home/LandingPage"
+import Loading from "../shared/components/Loading.jsx";
+const Login = lazy(() => import("../components/Auth/Login"));
+const Register = lazy(() => import("../components/Auth/Register"));
+// const AdminDashboard = lazy(() => import("../components/Dashboard/AdminDashboard"));
 import AdminDashboard from "../components/Dashboard/AdminDashboard";
-import Muestras from "../components/muestras";
-import { UserGuestRoutes } from "./UserGuestRoutes.jsx";
-import { AdminPackages } from "../modules/admin/pages/AdminPackages.jsx";
-import PageNotFound from "../shared/pages/error/PageNotFound.jsx";
-import { CreateEditPackage } from "../modules/admin/components/CreateEditPackage.jsx";
-import { DepartureView } from "../modules/Departures/pages/DepartureView.jsx";
-import { DepartureFull } from "../modules/Departures/pages/DepartureFull.jsx";
-import { PackageFullView } from "../modules/admin/pages/PackageFullView.jsx";
-
-import { Gallery } from "../components/PhotosGallery/Gallery.jsx";
-
+const Muestras = lazy(() => import("../components/muestras"));
+const UserGuestRoutes = lazy(() => import("./UserGuestRoutes.jsx"));
+const AdminPackages = lazy(() => import("../modules/admin/pages/AdminPackages.jsx"));
+const PageNotFound = lazy(() => import("../shared/pages/error/PageNotFound.jsx"));
+const CreateEditPackage = lazy(() => import("../modules/admin/components/CreateEditPackage.jsx"));
+const DepartureGrid = lazy(() => import("../modules/Departures/components/DepartureGrid.jsx"));
+const DepartureFull = lazy(() => import("../modules/Departures/pages/DepartureFull.jsx"));
+const PackageFullView = lazy(() => import("../modules/admin/pages/PackageFullView.jsx"));
+const Gallery = lazy(() => import("../components/PhotosGallery/Gallery.jsx"));
+// const UserAdminPrivateRoutes = lazy(() => import("./UserAdminPrivateRoutes.jsx"));
 import { UserAdminPrivateRoutes } from "./UserAdminPrivateRoutes.jsx";
-import About from "../components/Home/About";
-import TourDestinationFull from "../components/TourDestination/TourDestinationFull.jsx";
-import TourDestinationDetail from "../components/TourDestination/TourDestinationDetail.jsx";
-import ContactView from "../components/Contact/ContactView.jsx";
+const About = lazy(() => import("../components/Home/About"));
+const TourDestinationView = lazy(() => import("../components/TourDestination/TourDestinationView.jsx"));
+const TourDestinationDetail = lazy(() => import("../components/TourDestination/TourDestinationDetail.jsx"));
+const ContactView = lazy(() => import("../components/Contact/ContactView.jsx"));
 
 const AppRoutes = () => (
   <Router>
-    <Routes>
-      <Route path="/" element={<LandingPage />} />
+    <Suspense fallback={<Loading />}>
+      <Routes>
+        {/* Routes with Layout */}
+        <Route element={<Layout></Layout>}>
+          <Route path="/" element={<LandingPage />} />
+          <Route path="/login" element={<UserGuestRoutes><Login /></UserGuestRoutes>} />
+          <Route path="/register" element={<UserGuestRoutes><Register /></UserGuestRoutes>} />
+          <Route path="/gallery" element={<Gallery />} />
+          <Route path="/muestras" element={<Muestras />} />
+          <Route path="/salidas" element={<DepartureGrid />} />
+          <Route path="/about" element={<About />} />
+          <Route path="/salidas/:id" element={<DepartureFull />} />
+          <Route path="/destinos" element={<TourDestinationView />} />
+          <Route path="/destinos/:id" element={<TourDestinationDetail />} />
+          <Route path="/contacto" element={<ContactView />} />
+          <Route path="/admin" element={<UserAdminPrivateRoutes />}>
+            <Route index element={<Navigate to="usuarios" replace />} />
+            <Route path="usuarios" element={<AdminDashboard />} />
+            <Route path="paquetes" element={<AdminPackages />} />
+            <Route path="paquetes/:id" element={<PackageFullView />} />
+            <Route path="paquetes/nuevo" element={<CreateEditPackage />} />
+            <Route path="paquetes/editar/:id" element={<CreateEditPackage />} />
+          </Route>
+        </Route>
 
-      <Route path="/" element={<UserGuestRoutes />}>
-        <Route path="/login" element={<Login />} />,
-        <Route path="/register" element={<Register />} />
-      </Route>
-
-      <Route path="/gallery" element={<Gallery />} />
-
-      <Route path="/muestras" element={<Muestras />} />
-      <Route path="/salidas" element={<DepartureView />} />
-      <Route path="/about" element={<About />} />
-      <Route path="/salidas/:id" element={<DepartureFull />} />
-      <Route path="/destinos" element={<TourDestinationFull />} />
-      <Route path="/destinos/:id" element={<TourDestinationDetail />} />
-      <Route path="/contacto" element={<ContactView />} />
-
-      <Route path="/admin" element={<UserAdminPrivateRoutes />}>
-        <Route index element={<Navigate to="usuarios" replace />} />
-        <Route path="usuarios" element={<AdminDashboard />} />
-        <Route path="paquetes" element={<AdminPackages />} />
-        <Route path="paquetes/:id" element={<PackageFullView />} />
-        <Route path="paquetes/nuevo" element={<CreateEditPackage />} />
-        <Route path="paquetes/editar/:id" element={<CreateEditPackage />} />
-      </Route>
-
-      <Route path="/404" element={<PageNotFound />} />
-
-      {/*Not found or error*/}
-      <Route path="*" element={<Navigate to="/404" replace />} />
-    </Routes>
+        {/* Error and 404 pages without Layout */}
+        <Route path="/404" element={<PageNotFound />} />
+        <Route path="*" element={<Navigate to="/404" replace />} />
+      </Routes>
+    </Suspense>
   </Router>
 );
 
