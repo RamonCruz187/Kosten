@@ -99,6 +99,7 @@ const theme = createTheme({
 
     // buttons
     buttonMini: {
+      ...defaultParagraph,
       fontSize: "0.687rem", // 11px
       color: customPalette.tertiary.darkest,
       textTransform: "uppercase",

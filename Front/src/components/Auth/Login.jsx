@@ -1,16 +1,17 @@
 import { useState } from "react";
-import {Button, Typography, Stack, CircularProgress} from "@mui/material";
+import { Button, Typography, Stack, CircularProgress } from "@mui/material";
 import { login } from "../../api/authApi.js";
 import { NotificationService } from "../../shared/services/notistack.service.jsx";
 import { useAuth } from "../../shared/hooks/useAuth.jsx";
-import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import InputNormal from "./InputNormal.jsx";
 import InputPassword from "./InputPassword.jsx";
 import {getData} from "../../api/userApi.js";
 import {useUserData} from "../../shared/hooks/useUserData.jsx";
 import Box from "@mui/material/Box";
 
-const Login = () => {
+const Login = ({handleClose=() => {}, isModal=false}) => {
+  const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [isFetching, setIsFetching] = useState(false);
@@ -18,7 +19,10 @@ const Login = () => {
   const [showPassword, setShowPassword] = useState(false);
 
   const handleClickShowPassword = () => setShowPassword((show) => !show);
-
+  const handleGoToRegister = () => {
+    handleClose();
+    navigate("/register");
+  };
   const { handleLogin } = useAuth();
   const{ setUserData } = useUserData();
 
@@ -51,8 +55,10 @@ const Login = () => {
         sx={{
           justifyContent: "center",
           alignItems: "center",
-          width: 400,
-          padding: "1rem 2rem",
+          width: !isModal ? "100%" : 400,
+          minHeight: !isModal ?  "55dvh" : "auto" ,
+          padding: !isModal ? "1rem 35dvw": "1rem 2rem",
+          background: "white",
         }}
       >
         <Typography variant="titleH2">LOGIN</Typography>
@@ -66,17 +72,15 @@ const Login = () => {
           fxIcon={handleClickShowPassword} 
         
         />
-
+{/* 
         <Typography variant="buttonMini">
           olvidé mi contraseña
-        </Typography>
+        </Typography> */}
 
         {
           isFetching ? (
               <Box sx={{ display: 'flex', flexDirection: 'column', width: "50%", textAlign: 'center', alignItems: 'center', p: 1, gap: 1 }}>
-                <CircularProgress
-                    size={20}
-                />
+                <CircularProgress size={20}/>
                 <Typography variant="caption">Cargando...</Typography>
               </Box>
           ) : (
@@ -86,11 +90,11 @@ const Login = () => {
           )
         }
 
-        <Link to="/register" style={{width:'50%'}}>
-        <Button color="transparentButton" disableElevation sx={{width:"100%"}}>
+        <Button color="transparentButton" disableElevation sx={{width:'50%'}}
+          onClick={handleGoToRegister}
+        >
           Registrarse
         </Button>
-        </Link>
       </Stack>
     </form>
   );
