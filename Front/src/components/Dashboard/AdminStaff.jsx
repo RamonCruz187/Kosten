@@ -13,7 +13,7 @@ import {getAllStaff, getStaffById} from "../../api/staffApi.js";
 const AdminStaff = () => {
   const [staff, setStaff] = useState([]);
   const { userAuth } = useContext(GlobalContext);
-  const token = userAuth ? userAuth.token : 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1c2VyM0BnbWFpbC5jb20iLCJpYXQiOjE3MzAzNzc5NTcsImV4cCI6MTczMDQ2NDM1N30.wRzEymzXiS4PmelkzHUkWeAcI6YELzKGSz8rQ5bDb3M';
+  const API_URL = 'https://kosten.up.railway.app';
 
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
@@ -23,9 +23,10 @@ const AdminStaff = () => {
     name: '',
     lastName: '',
     contact: '',
-    rol: 'STAFF', // Assuming 'STAFF' is a default role
+    rol: '',
     photo: ''
   });
+  const [file, setFile] = useState(null);
 
   useEffect(() => {
     fetchStaff();
@@ -33,24 +34,22 @@ const AdminStaff = () => {
 
   const fetchStaff = async () => {
     try {
-      const response = await axios.get('https://kostentours-api-10061c08f8f8.herokuapp.com/staff/all',
-        {
-        headers: {
-          'Authorization': `Bearer ${token}`, //`Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1c2VyM0BnbWFpbC5jb20iLCJpYXQiOjE3MzAxODYxNjksImV4cCI6MTczMDI3MjU2OX0.WkMpN2gJrokFb3aHDAIZY18Q9JI0dZvWVyYIqkg5HD8`, // Replace YOUR_TOKEN_HERE with actual token logic
-          'Content-Type': 'application/json',
-          },
-        });
-        console.log("token: " + token);
+      const response = await axios.get(`${API_URL}/staff/all`);
       setStaff(response.data.data); // Assuming `data` is under `response.data`
     } catch (error) {
       console.error('Error en la carga de staff:', error);
     }
   };
 
-
   const handleEditStaff = (staffId) => {
+    const token = JSON.parse(localStorage.getItem("userAuth"))?.token;
+    if (!token) {
+      console.error('Token not found or user not authenticated');
+      return;
+    }
     const selectedStaff = staff.find((member) => member.id === staffId);
     setStaffForm(selectedStaff);
+    console.log(staffForm);
     setEditDialogOpen(true);
   };
 
@@ -59,14 +58,23 @@ const AdminStaff = () => {
   };
 
   const handleDeleteStaff = async (id) => {
+    const token = JSON.parse(localStorage.getItem("userAuth"))?.token;
+    if (!token) {
+      console.error('Token not found or user not authenticated');
+      return;
+    }
+
     try {
-      await axios.delete(`https://kostentours-api-10061c08f8f8.herokuapp.com/staff/${id}`, {
-        headers: {
-          'Authorization': `Bearer ${token}`, //`Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1c2VyM0BnbWFpbC5jb20iLCJpYXQiOjE3MzAxODYxNjksImV4cCI6MTczMDI3MjU2OX0.WkMpN2gJrokFb3aHDAIZY18Q9JI0dZvWVyYIqkg5HD8`, // Replace YOUR_TOKEN_HERE with actual token logic
-          'Content-Type': 'application/json',
-        },
-      });
-      console.log(token);
+      await axios.delete(`${API_URL}/staff/${id}`,
+        {
+          headers: {
+            'Content-Type': 'multipart/form-data',
+            Authorization: `Bearer ${token}`,
+          },
+        }
+
+      );
+
       fetchStaff(); // Refresh the staff list
       NotificationService.success("Staff eliminado correctamente", 2000);
     } catch (error) {

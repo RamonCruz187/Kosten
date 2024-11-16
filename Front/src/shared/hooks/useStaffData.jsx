@@ -1,22 +1,22 @@
 import {useCallback, useContext, useMemo} from "react";
 import {GlobalContext} from "../context/GlobalContext.jsx";
 
-export const usePackages = () => {
+export const useStaffData = () => {
     const context = useContext(GlobalContext);
 
     if(!context)
         return null;
 
-    const setPackages = useCallback( ( packages ) => {
+    const setStaffData = useCallback( ( staffData ) => {
         context.dispatch({
-            type: "SET_STAFF_DATA",
-            payload: packages
+            type: "SET_PACKAGES",
+            payload: staffData
         });
     }, [context]);
 
     return useMemo(() => ({
-        packages: context.state.packages,
-        setPackages
-    }), [setPackages]);
+        staffData: context.state.staffData,
+        setStaffData
+    }), [setStaffData]);
 
 }

@@ -2,10 +2,7 @@ package com.Kosten.Api_Rest.controllers;
 
 import com.Kosten.Api_Rest.dto.BaseResponse;
 import com.Kosten.Api_Rest.dto.ExtendedBaseResponse;
-import com.Kosten.Api_Rest.dto.user.UpdateUserRequestDto;
-import com.Kosten.Api_Rest.dto.user.UserResponseDto;
-import com.Kosten.Api_Rest.dto.user.UserRoleUpdateRequestDto;
-import com.Kosten.Api_Rest.dto.user.UserToBeListed;
+import com.Kosten.Api_Rest.dto.user.*;
 import com.Kosten.Api_Rest.service.UserService;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
@@ -32,7 +29,7 @@ public class UserController {
 
     @GetMapping("/{id}")
     @Transactional
-    public ResponseEntity<ExtendedBaseResponse<UserResponseDto>> findUserById(@PathVariable Long id){
+    public ResponseEntity<ExtendedBaseResponse<UserPackDepDto>> findUserById(@PathVariable Long id){
 
         return ResponseEntity.status(200).body(userService.getUserById(id));
     }

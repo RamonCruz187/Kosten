@@ -19,6 +19,9 @@ const AddUserDialog = ({ open, onClose, fetchUsers }) => {
   });
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const API_URL = 'https://kosten.up.railway.app';
+  // const API_URL ='https://kostentours-api-10061c08f8f8.herokuapp.com';
+
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -48,7 +51,7 @@ const AddUserDialog = ({ open, onClose, fetchUsers }) => {
           password: userForm.password
         };
         console.log(payload);
-      await axios.post('https://kostentours-api-10061c08f8f8.herokuapp.com/auth/register', payload);
+      await axios.post(`${API_URL}/auth/register`, payload);
       NotificationService.success("Usuario registrado exitosamente", 2000);
       fetchUsers();
       onClose();
@@ -60,7 +63,7 @@ const AddUserDialog = ({ open, onClose, fetchUsers }) => {
 
   const handleRoleChange = async (newRole) => {
     try {
-      // await axios.put(`https://kostentours-api-10061c08f8f8.herokuapp.com/user/${userForm.id}/role`, { role: newRole });
+      await axios.put(`${API_URL}/user/${userForm.id}/role`, { role: newRole });
 
       setUserForm((prev) => ({ ...prev, role: newRole }));
       NotificationService.success("Rol: " + newRole, 2000);

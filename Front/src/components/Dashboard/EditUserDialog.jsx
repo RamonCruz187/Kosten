@@ -11,15 +11,8 @@ const EditUserDialog = ({ open, onClose, userForm, setUserForm, fetchUsers }) =>
     const { name, value } = e.target;
     setUserForm((prev) => ({ ...prev, [name]: value }));
   };
-// const EditUserDialog = ({ open, onClose, userForm, setUserForm, fetchUsers }) => {
-//   const handleInputChange = (name, value) => {
-//     setUserForm((prev) => ({
-//       ...prev,
-//       [name]: value,
-//     }));
-//   };
 
-
+  const API_URL = 'https://kosten.up.railway.app';
 
   const handleSubmitEdit = async () => {
     // if (!validatePassword(userForm.password)) {
@@ -37,7 +30,7 @@ const EditUserDialog = ({ open, onClose, userForm, setUserForm, fetchUsers }) =>
       return;
     }
     try {
-      await axios.put('https://kostentours-api-10061c08f8f8.herokuapp.com/user/update', userForm);
+      await axios.put(`${API_URL}/user/update`, userForm);
       NotificationService.success("Usuario guardado exitosamente", 2000);
       fetchUsers();
       onClose();
@@ -57,7 +50,7 @@ const EditUserDialog = ({ open, onClose, userForm, setUserForm, fetchUsers }) =>
 
   const handleRoleChange = async (newRole) => {
     try {
-      await axios.put(`https://kostentours-api-10061c08f8f8.herokuapp.com/user/${userForm.id}/role`, { role: newRole });
+      await axios.put(`${API_URL}/user/${userForm.id}/role`, { role: newRole });
       setUserForm((prev) => ({ ...prev, role: newRole }));
       NotificationService.success("Rol: " + newRole, 2000);
     } catch (error) {

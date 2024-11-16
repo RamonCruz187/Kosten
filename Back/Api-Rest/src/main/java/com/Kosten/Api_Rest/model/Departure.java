@@ -15,6 +15,7 @@ import java.util.List;
 @NoArgsConstructor
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @ToString
+@Table(name = "departure")
 public class Departure {
     @Id
     @GeneratedValue(strategy= GenerationType.IDENTITY)

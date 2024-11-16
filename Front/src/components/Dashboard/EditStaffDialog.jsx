@@ -1,138 +1,152 @@
 import React, { useState } from 'react';
-import {
-  Dialog,
-  DialogActions,
-  DialogContent,
-  DialogTitle,
-  TextField,
-  Button,
-  Typography,
-  Grid,
-  Input,
-} from '@mui/material';
-import { NotificationService } from '../../shared/services/notistack.service.jsx';
+import { Dialog, DialogActions, DialogContent, DialogTitle, TextField, Button, Typography, Grid, Input, Box, IconButton } from '@mui/material';
+import { RiEditLine, RiDeleteBin6Line, RiCloseLargeLine, RiImage2Line } from 'react-icons/ri';
 import axios from 'axios';
+import { NotificationService } from '../../shared/services/notistack.service.jsx';
+
 
 const EditStaffDialog = ({ open, onClose, staffForm, setStaffForm, fetchStaff }) => {
+
+  const API_URL = 'https://kosten.up.railway.app';
   const [file, setFile] = useState(null);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setStaffForm((prev) => ({ ...prev, [name]: value }));
+    setFile()
   };
 
-  const handleFileChange = (e) => {
-    const selectedFile = e.target.files[0];
+  const handleFileChange = (event) => {
+    const selectedFile = event.target.files[0];
     const validExtensions = ['image/jpeg', 'image/png', 'image/bmp'];
 
     if (selectedFile && validExtensions.includes(selectedFile.type)) {
       setFile(selectedFile);
+      NotificationService.success('Imagen seleccionada correctamente.', 5000);
     } else {
-      NotificationService.info('Seleccione una imagen valida tipo: (.jpg, .bmp, .png).', 5000);
+      NotificationService.info('Seleccione una imagen válida tipo: (.jpg, .bmp, .png).', 5000);
     }
   };
 
   const handleSubmitEdit = async () => {
+    const token = JSON.parse(localStorage.getItem("userAuth"))?.token;
+    if (!token) {
+      console.error('Token not found or user not authenticated');
+      return;
+    }
     if (!staffForm.name || !staffForm.lastName || !staffForm.contact) {
-      NotificationService.error('Debe llenar todos los campos requeridos.', 2000);
+      NotificationService.error('Debe llenar todos los campos requeridos.', 5000);
       return;
     }
 
-    if (!file) {
-      NotificationService.error('Por favor, seleccione una imagen.', 2000);
+    const formData = new FormData();
+    formData.append('staffData', new Blob([JSON.stringify(staffForm)], { type: 'application/json' }));
+
+    if (file) {
+      formData.append('fileImage', file);
+    } else {
+      NotificationService.info('Debe seleccionar una imagen .jpg', 5000);
       return;
     }
-
+console.log(formData);
     try {
-      const formData = new FormData();
-      formData.append('id', staffForm.id);
-      formData.append('name', staffForm.name);
-      formData.append('lastName', staffForm.lastName);
-      formData.append('rol', staffForm.rol); // Assuming 'STAFF' role is constant
-      formData.append('contact', staffForm.contact);
-      formData.append('photo', file);
-
-      await axios.put('https://kostentours-api-10061c08f8f8.herokuapp.com/staff/update', formData, {
+      await axios.put(`${API_URL}/staff/update`, formData, {
         headers: {
-          'Authorization': `Bearer ${token}`,  // Replace YOUR_TOKEN_HERE with actual token logic
           'Content-Type': 'multipart/form-data',
+          Authorization: `Bearer ${token}`,
         },
       });
-      NotificationService.success('Staff agregado correctamente', 2000);
+
+      NotificationService.success('Staff editado correctamente.', 2000);
       fetchStaff();
       onClose();
     } catch (error) {
       console.error('Error editing staff:', error);
-      NotificationService.error('Error en la edición de Staff', 2000);
+      NotificationService.error('Error en la edición de Staff.', 2000);
     }
+  };
+
+  const handleButtonClick = () => {
+    document.getElementById('fileInput').click();
   };
 
   return (
     <Dialog open={open} onClose={onClose}>
+        <Box  display="flex" justifyContent="flex-end" p={1} >   
+          <IconButton onClick={onClose}>
+            <RiCloseLargeLine size={24} />
+          </IconButton>
+        </Box>
       <DialogTitle align="center">
         <Typography variant="titleH1" align="center">EDITAR STAFF</Typography>
       </DialogTitle>
+
       <DialogContent>
-        <TextField
+      <TextField
           label="Nombre"
           name="name"
           value={staffForm.name}
           onChange={handleInputChange}
+          required
           fullWidth
           margin="normal"
-          variant="outlined"
-          required
         />
         <TextField
           label="Apellido"
           name="lastName"
           value={staffForm.lastName}
           onChange={handleInputChange}
+          required
           fullWidth
           margin="normal"
-          variant="outlined"
-          required
         />
         <TextField
-          label="Número de contacto"
+          label="Contacto"
           name="contact"
           value={staffForm.contact}
           onChange={handleInputChange}
+          required
           fullWidth
           margin="normal"
-          variant="outlined"
-
         />
         <TextField
           label="Rol"
           name="rol"
           value={staffForm.rol}
           onChange={handleInputChange}
+          required
           fullWidth
           margin="normal"
-          variant="outlined"
-
         />
-        <Grid container spacing={2} alignItems="center">
-          <Grid item>
-            <Typography>Subir Foto:</Typography>
+        <Grid container spacing={2} alignItems="center" justifyContent="center" sx={{ paddingTop: 1 }}>
+        <Grid item xs={12}>
+            <Typography variant="body2" align="center">{file ? file.name : 'foto de perfil.png'}</Typography>
           </Grid>
           <Grid item>
-            <Input
-              type="file"
+            <Input 
+            type="file"
+            id="fileInput"
+            style={{ display: 'none' }}
+              accept=".jpg,.bmp,.png"
               onChange={handleFileChange}
-              inputProps={{ accept: '.jpg,.bmp,.png' }}
             />
+            <Box>
+              <Button 
+                onClick={handleButtonClick} 
+                // color="grayButton" 
+                variant="contained"
+                // sx={{ boxShadow: 'none'}}
+                sx={{ backgroundColor: 'black', color: 'white', boxShadow: 'none', '&:hover': { backgroundColor: '#333' } }}
+                >
+                 <RiImage2Line size={20} style={{ marginRight: 8 }} /> CAMBIAR FOTO
+              </Button>
+            </Box>
           </Grid>
         </Grid>
       </DialogContent>
       <DialogActions>
-        <Button onClick={onClose} color="tranparent" sx={{ boxShadow: 'none' }}>
-          Cerrar
-        </Button>
-        <Button onClick={handleSubmitEdit} color="transparent" sx={{ boxShadow: 'none' }}>
-          Guardar
-        </Button>
+        <Button onClick={onClose} color='transparent' sx={{ boxShadow: 'none' }}>CERRAR</Button>
+        <Button onClick={handleSubmitEdit} variant="contained" color='transparent' sx={{ boxShadow: 'none' }}>GUARDAR</Button>
       </DialogActions>
     </Dialog>
   );

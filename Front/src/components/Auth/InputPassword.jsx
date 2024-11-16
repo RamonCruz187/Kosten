@@ -21,7 +21,7 @@ export default function InputPassword({ label, value, fx, toggleVar, fxIcon }) {
                 onClick={fxIcon}
                 edge="end"
               >
-                {toggleVar ? <VisibilityOff /> : <Visibility />}
+                {toggleVar ? <Visibility /> : <VisibilityOff />}
               </IconButton>
             </InputAdornment>
           ),
