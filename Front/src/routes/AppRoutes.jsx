@@ -6,7 +6,8 @@ import LandingPage from "../components/Home/LandingPage"
 import Loading from "../shared/components/Loading.jsx";
 const Login = lazy(() => import("../components/Auth/Login"));
 const Register = lazy(() => import("../components/Auth/Register"));
-const AdminDashboard = lazy(() => import("../components/Dashboard/AdminDashboard"));
+// const AdminDashboard = lazy(() => import("../components/Dashboard/AdminDashboard"));
+import AdminDashboard from "../components/Dashboard/AdminDashboard";
 const Muestras = lazy(() => import("../components/muestras"));
 const UserGuestRoutes = lazy(() => import("./UserGuestRoutes.jsx"));
 const AdminPackages = lazy(() => import("../modules/admin/pages/AdminPackages.jsx"));
@@ -16,7 +17,8 @@ const DepartureGrid = lazy(() => import("../modules/Departures/components/Depart
 const DepartureFull = lazy(() => import("../modules/Departures/pages/DepartureFull.jsx"));
 const PackageFullView = lazy(() => import("../modules/admin/pages/PackageFullView.jsx"));
 const Gallery = lazy(() => import("../components/PhotosGallery/Gallery.jsx"));
-const UserAdminPrivateRoutes = lazy(() => import("./UserAdminPrivateRoutes.jsx"));
+// const UserAdminPrivateRoutes = lazy(() => import("./UserAdminPrivateRoutes.jsx"));
+import { UserAdminPrivateRoutes } from "./UserAdminPrivateRoutes.jsx";
 const About = lazy(() => import("../components/Home/About"));
 const TourDestinationView = lazy(() => import("../components/TourDestination/TourDestinationView.jsx"));
 const TourDestinationDetail = lazy(() => import("../components/TourDestination/TourDestinationDetail.jsx"));
