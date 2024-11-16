@@ -1,19 +1,13 @@
 package com.Kosten.Api_Rest.service.impl;
 
-import com.Kosten.Api_Rest.Exception.DepartureNotFoundException;
 import com.Kosten.Api_Rest.Exception.userExc.UserNotFoundException;
 import com.Kosten.Api_Rest.dto.BaseResponse;
-import com.Kosten.Api_Rest.dto.Departure.DepartureResponseDto;
 import com.Kosten.Api_Rest.dto.Departure.DepartureToBeListed;
 import com.Kosten.Api_Rest.dto.ExtendedBaseResponse;
-import com.Kosten.Api_Rest.dto.user.UpdateUserRequestDto;
-import com.Kosten.Api_Rest.dto.user.UserResponseDto;
-import com.Kosten.Api_Rest.dto.user.UserRoleUpdateRequestDto;
+import com.Kosten.Api_Rest.dto.user.*;
 import com.Kosten.Api_Rest.Exception.UserException.NotFoundUser;
-import com.Kosten.Api_Rest.dto.user.UserToBeListed;
 import com.Kosten.Api_Rest.mapper.DepartureMapper;
 import com.Kosten.Api_Rest.mapper.UserMapper;
-import com.Kosten.Api_Rest.model.Departure;
 import com.Kosten.Api_Rest.model.User;
 import com.Kosten.Api_Rest.repository.IDepartureRepository;
 import com.Kosten.Api_Rest.repository.UserRepository;
@@ -22,7 +16,6 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @AllArgsConstructor
@@ -46,16 +39,16 @@ public class UserServiceImpl implements UserService {
         );
     }
 
-    public ExtendedBaseResponse<UserResponseDto> getUserById(Long id){
+    public ExtendedBaseResponse<UserPackDepDto> getUserById(Long id){
 
         var userToGet = userRepository.findById(id).orElseThrow(() ->
                 new IllegalArgumentException("Usuario con el id: " + id + " no fue encontrado"));
 
-        UserResponseDto userResponseDto = userMapper.entityToDto(userToGet);
+        UserPackDepDto userPackDepDto = userMapper.toUserPackDepDto(userToGet);
 
         return ExtendedBaseResponse.of(
                 BaseResponse.ok("Usuario encontrado con exito"),
-                userResponseDto
+                userPackDepDto
         );
     }
 
@@ -124,5 +117,7 @@ public class UserServiceImpl implements UserService {
                 map(userMapper::entityToDto).toList();
         return userResponseDtoList;
     }
+
+
 
 }

@@ -24,6 +24,7 @@ const AdminDashboard = () => {
   const [staffForm, setStaffForm] = useState({ id: null, name: '', lastName: '', contact: '', rol: 'STAFF' });
   const [openAddStaff, setOpenAddStaff] = useState(false); // New state for AddStaffDialog
   const API_URL = 'https://kosten.up.railway.app';
+  // const API_URL ='https://kostentours-api-10061c08f8f8.herokuapp.com';
 
 
   useEffect(() => {
@@ -44,8 +45,7 @@ const AdminDashboard = () => {
 
   const fetchStaff = async () => {
     try {
-      // const response = await axios.get('https://kostentours-api-10061c08f8f8.herokuapp.com/staff/all', {
-        const response = await axios.get(`${API_URL}/staff/all`);
+      const response = await axios.get(`${API_URL}/staff/all`);
       setStaff(response.data);
     } catch (error) {
       console.error('Error en la carga de staff:', error);
@@ -95,7 +95,7 @@ const AdminDashboard = () => {
     setPage(0); // Reset page when switching tabs
   };
 
-//******** STAFF ****** */
+// //******** STAFF ****** */
   const handleOpenAddStaff = () => {
     setStaffForm({ id: null, name: '', lastName: '', contact: '', rol: 'STAFF', photo: null });
     setOpenAddStaff(true);

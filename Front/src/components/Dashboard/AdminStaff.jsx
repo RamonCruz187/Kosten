@@ -23,9 +23,10 @@ const AdminStaff = () => {
     name: '',
     lastName: '',
     contact: '',
-    rol: 'STAFF', // Assuming 'STAFF' is a default role
+    rol: '',
     photo: ''
   });
+  const [file, setFile] = useState(null);
 
   useEffect(() => {
     fetchStaff();
@@ -40,10 +41,15 @@ const AdminStaff = () => {
     }
   };
 
-
   const handleEditStaff = (staffId) => {
+    const token = JSON.parse(localStorage.getItem("userAuth"))?.token;
+    if (!token) {
+      console.error('Token not found or user not authenticated');
+      return;
+    }
     const selectedStaff = staff.find((member) => member.id === staffId);
     setStaffForm(selectedStaff);
+    console.log(staffForm);
     setEditDialogOpen(true);
   };
 
@@ -52,8 +58,22 @@ const AdminStaff = () => {
   };
 
   const handleDeleteStaff = async (id) => {
+    const token = JSON.parse(localStorage.getItem("userAuth"))?.token;
+    if (!token) {
+      console.error('Token not found or user not authenticated');
+      return;
+    }
+
     try {
-      await axios.delete(`${API_URL}/staff/${id}`);
+      await axios.delete(`${API_URL}/staff/${id}`,
+        {
+          headers: {
+            'Content-Type': 'multipart/form-data',
+            Authorization: `Bearer ${token}`,
+          },
+        }
+
+      );
 
       fetchStaff(); // Refresh the staff list
       NotificationService.success("Staff eliminado correctamente", 2000);
