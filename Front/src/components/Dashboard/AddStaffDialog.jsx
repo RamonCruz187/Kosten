@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
-import { Dialog, DialogActions, DialogContent, DialogTitle, TextField, Button, Typography, Grid, Input } from '@mui/material';
+import { Dialog, DialogActions, DialogContent, DialogTitle, TextField, Button, Typography, Grid, Input, Box, IconButton } from '@mui/material';
+import { RiEditLine, RiDeleteBin6Line, RiCloseLargeLine, RiImage2Line } from 'react-icons/ri';
 import axios from 'axios';
 import { NotificationService } from '../../shared/services/notistack.service.jsx';
 
-const AddStaffDialog = ({ open, onClose }) => {
+const AddStaffDialog = ({ open, onClose, fetchStaff }) => {
   const [staffForm, setStaffForm] = useState({
     name: '',
     lastName: '',
@@ -11,7 +12,7 @@ const AddStaffDialog = ({ open, onClose }) => {
     rol: '',
   });
   const [file, setFile] = useState(null);
-  const API_URL = 'https://kosten.up.railway.app/staff/new';
+  const API_URL = 'https://kosten.up.railway.app/staff/new'; // Replace with your actual endpoint
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -28,23 +29,21 @@ const AddStaffDialog = ({ open, onClose }) => {
   };
 
   const handleSubmitAdd = async () => {
-    const userAuth = JSON.parse(localStorage.getItem("userAuth"));
-    const token = userAuth ? userAuth.token : null;
-
+    const token = JSON.parse(localStorage.getItem("userAuth"))?.token;
     if (!token) {
       console.error('Token not found or user not authenticated');
-      NotificationService.error('Autenticación fallida');
+      return;
+    }
+    if (!staffForm.name || !staffForm.lastName || !staffForm.contact) {
+      NotificationService.error('Debe llenar todos los campos requeridos.', 2000);
       return;
     }
 
-    // Create a FormData object and append fields
     const formData = new FormData();
-    formData.append('name', staffForm.name);
-    formData.append('lastName', staffForm.lastName);
-    formData.append('contact', staffForm.contact);
-    formData.append('rol', staffForm.rol);
+    formData.append('staffData', new Blob([JSON.stringify(staffForm)], { type: 'application/json' }));
+
     if (file) {
-      formData.append('file', file);
+      formData.append('fileImage', file);
     } else {
       NotificationService.info('Debe seleccionar una imagen .jpg', 5000);
       return;
@@ -54,27 +53,35 @@ const AddStaffDialog = ({ open, onClose }) => {
       await axios.post(API_URL, formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
-          Authorization: `Bearer ${token}`
+          Authorization: `Bearer ${token}`,
         },
       });
 
       NotificationService.success('Staff agregado exitosamente');
+      fetchStaff(); // Optionally refresh staff list after successful update
       onClose();
     } catch (error) {
       console.error('Error al enviar el formulario:', error);
-      if (error.response && error.response.status === 500) {
-        NotificationService.error('Error en el servidor. Verifique los datos enviados.', 5000);
-      } else {
-        NotificationService.error('Error al agregar el staff', 5000);
-      }
+      NotificationService.error('Error al agregar el staff');
     }
   };
 
+  const handleButtonClick = () => {
+    document.getElementById('fileInput').click();
+  };
+
+
   return (
     <Dialog open={open} onClose={onClose}>
+        <Box  display="flex" justifyContent="flex-end" p={1} >   
+          <IconButton onClick={onClose}>
+            <RiCloseLargeLine size={24} />
+          </IconButton>
+        </Box>
       <DialogTitle align="center">
         <Typography variant="titleH1" align="center">NUEVO STAFF</Typography>
       </DialogTitle>
+
       <DialogContent>
         <TextField
           label="Nombre"
@@ -113,22 +120,41 @@ const AddStaffDialog = ({ open, onClose }) => {
           margin="normal"
         />
         <Grid container spacing={2} alignItems="center" justifyContent="center" sx={{ paddingTop: 1 }}>
+        <Grid item xs={12}>
+            <Typography variant="body2" align="center">{file ? file.name : 'foto de perfil.png'}</Typography>
+          </Grid>
           <Grid item>
-            <Input type="file" inputProps={{ accept: '.jpg' }} onChange={handleFileChange} />
+            <Input 
+            type="file"
+            id="fileInput"
+            style={{ display: 'none' }}
+            inputProps={{ accept: '.jpg' }} 
+            onChange={handleFileChange} 
+            />
+            <Box>
+              <Button 
+                onClick={handleButtonClick} 
+                // color="grayButton" 
+                variant="contained"
+                // sx={{ boxShadow: 'none'}}
+                sx={{ backgroundColor: 'black', color: 'white', boxShadow: 'none', '&:hover': { backgroundColor: '#333' } }}
+                >
+                 <RiImage2Line size={20} style={{ marginRight: 8 }} /> SUBIR FOTO
+              </Button>
+            </Box>
           </Grid>
         </Grid>
+
       </DialogContent>
       <DialogActions>
-        <Button onClick={onClose} color="secondary">Cancelar</Button>
-        <Button onClick={handleSubmitAdd} variant="contained" color="primary">Guardar</Button>
+        <Button onClick={onClose} color='transparent' sx={{ boxShadow: 'none' }}>Cancelar</Button>
+        <Button onClick={handleSubmitAdd} variant="contained" color='transparent' sx={{ boxShadow: 'none' }}>Guardar</Button>
       </DialogActions>
     </Dialog>
   );
 };
 
 export default AddStaffDialog;
-
-
 
 
 //****************version 3 sever error 500 */
