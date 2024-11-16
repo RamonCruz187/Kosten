@@ -58,18 +58,7 @@ public class StaffController {
         }
     }
 
-//    @PostMapping(consumes = {"multipart/form-data"})
-//    @Transactional
-//    public ResponseEntity<ExtendedBaseResponse<StaffResponseDto>> newStaff(
-//            @RequestPart("staff") @Valid StaffRequestDto staff,
-//            @RequestPart("file") MultipartFile file
-//    ){
-//        try {
-//            return ResponseEntity.status(201).body(staffService.newStaff(staff, file));
-//        } catch (Exception e) {
-//            throw new RuntimeException("No se ha podido crear el Staff");
-//        }
-//    }
+
 
     @Operation(
             summary = "Actualizar un miembro del staff.",
@@ -91,8 +80,8 @@ public class StaffController {
     @PutMapping(value = "/update", consumes = {"multipart/form-data"})
     @Transactional
     public ResponseEntity<ExtendedBaseResponse<StaffResponseDto>> updateStaff(
-            @ModelAttribute @Valid StaffToUpdateDto staff,
-            @RequestParam("file") @Valid MultipartFile file) {
+            @RequestPart("staffData") @Valid StaffToUpdateDto staff,
+            @RequestPart("fileImage") @Valid MultipartFile file) {
         try {
             return ResponseEntity.status(201).body(staffService.updateStaff(staff, file));
         } catch (Exception e) {
