@@ -14,8 +14,6 @@ const AdminStaff = () => {
   const [staff, setStaff] = useState([]);
   const { userAuth } = useContext(GlobalContext);
   const API_URL = 'https://kosten.up.railway.app';
- // const API_URL ='https://kostentours-api-10061c08f8f8.herokuapp.com';
-
 
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
@@ -25,9 +23,10 @@ const AdminStaff = () => {
     name: '',
     lastName: '',
     contact: '',
-    rol: '', // Assuming 'STAFF' is a default role
+    rol: '',
     photo: ''
   });
+  const [file, setFile] = useState(null);
 
   useEffect(() => {
     fetchStaff();
@@ -43,8 +42,14 @@ const AdminStaff = () => {
   };
 
   const handleEditStaff = (staffId) => {
+    const token = JSON.parse(localStorage.getItem("userAuth"))?.token;
+    if (!token) {
+      console.error('Token not found or user not authenticated');
+      return;
+    }
     const selectedStaff = staff.find((member) => member.id === staffId);
     setStaffForm(selectedStaff);
+    console.log(staffForm);
     setEditDialogOpen(true);
   };
 
