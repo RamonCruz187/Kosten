@@ -1,109 +1,29 @@
-import axios from 'axios';
+import apiClient from './apiClient';
+import { STAFF_ENDPOINT } from '../constants';
 
-const API_URL = 'http://localhost:8080/api';
-// const API_URL_PROD = 'https://kostentours-api-10061c08f8f8.herokuapp.com';
-const API_URL_PROD = 'https://kosten.up.railway.app';
-
-export const createStaff = ( body ) => {
-    return axios.post(`${API_URL_PROD}/staff/new`, body );
-  };
-
-export const getAllStaff = () => {
-    return axios.get(`${API_URL_PROD}/staff/all`);
-};
-
+// Obtiene un miembro del staff por su ID.
 export const getStaffById = ( id ) => {
-    return axios.get(`${API_URL_PROD}/staff/${ id }` );
-  };
-
-  export const updateStaff = ( body ) => {
-    return axios.put(`${API_URL_PROD}/staff/update`, body);
+    if (!id) throw new Error("El ID es obligatorio para obtener un miembro del staff");
+    return apiClient.get(`${STAFF_ENDPOINT}/${ id }` );
 };
 
-export const deletePackage = ( id ) => {
-    return axios.delete(`${API_URL_PROD}/staff/${ id }`);
+// Eliminar un miembro del staff.
+export const deleteStaffById = ( id ) => {
+    if (!id) throw new Error("El ID es obligatorio para eliminar un miembro del staff");
+    return apiClient.delete(`${STAFF_ENDPOINT}/${ id }`);
 };
 
-//************** version 1 ******************* */
-// import axios from 'axios';
+// Obtiene todos los miembros del staff.
+export const getAllStaff = () => {
+    return apiClient.get(`${STAFF_ENDPOINT}/all`);
+};
 
-// const API_URL = 'http://localhost:8080/api';
-// // const API_URL_PROD = 'https://kostentours-api-10061c08f8f8.herokuapp.com';
-// const API_URL_PROD = 'https://kosten.up.railway.app';
+// Crear un nuevo miembro del staff.
+export const createStaff = ( body ) => {
+    return apiClient.post(`${STAFF_ENDPOINT}/new`, body );
+};
 
-// export const createStaff = ( body ) => {
-
-//   const authLS = localStorage.getItem('userAuth');
-//     const auth = JSON.parse(authLS);
-
-//   return axios.post(
-//       `${API_URL_PROD}/staff/new`,
-//       body,
-//       {
-//         headers: {
-//           'Authorization': `Bearer ${auth.token}`
-//         }
-//       }
-//   );
-// };
-
-// export const getAllStaff = () => {
-
-//     const authLS = localStorage.getItem('userAuth');
-//     const auth = JSON.parse(authLS);
-
-//     return axios.get(
-//         `${API_URL_PROD}/staff/all`,
-//         // {
-//         //     headers: {
-//         //         'Authorization': `Bearer ${auth.token}`
-//         //     }
-//         // }
-//     );
-// };
-
-// export const getStaffById = ( id ) => {
-
-//     const authLS = localStorage.getItem('userAuth');
-//     const auth = JSON.parse(authLS);
-
-//     return axios.get(
-//         `${API_URL_PROD}/staff/${ id }`,
-//         // {
-//         //     headers: {
-//         //         'Authorization': `Bearer ${auth.token}`
-//         //     }
-//         // }
-//     );
-// };
-
-// export const updateStaff = ( body ) => {
-
-//     const authLS = localStorage.getItem('userAuth');
-//     const auth = JSON.parse(authLS);
-
-//     return axios.put(
-//         `${API_URL_PROD}/staff/update`,
-//         body,
-//         {
-//             headers: {
-//                 'Authorization': `Bearer ${auth.token}`
-//             }
-//         }
-//     );
-// };
-
-// export const deletePackage = ( id ) => {
-
-//     const authLS = localStorage.getItem('userAuth');
-//     const auth = JSON.parse(authLS);
-
-//     return axios.delete(
-//         `${API_URL_PROD}/staff/${ id }`,
-//         // {
-//         //     headers: {
-//         //         'Authorization': `Bearer ${auth.token}`
-//         //     }
-//         // }
-//     );
-// };
+// Actualizar un miembro del staff.
+export const updateStaff = ( body ) => {
+  return apiClient.put(`${STAFF_ENDPOINT}/update`, body);
+};

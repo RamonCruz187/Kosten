@@ -6,7 +6,7 @@ import { useAuth } from "../../shared/hooks/useAuth.jsx";
 import { useNavigate } from "react-router-dom";
 import InputNormal from "./InputNormal.jsx";
 import InputPassword from "./InputPassword.jsx";
-import {getData} from "../../api/userApi.js";
+import {getUserById} from "../../api/userApi.js";
 import {useUserData} from "../../shared/hooks/useUserData.jsx";
 import Box from "@mui/material/Box";
 
@@ -33,7 +33,7 @@ const Login = ({handleClose=() => {}, isModal=false}) => {
       setIsFetching(true);
 
       const { data: dataAuth } = await login({ email, password });
-      const { data: dataUser } = await getData(dataAuth.data.id);
+      const { data: dataUser } = await getUserById(dataAuth.data.id);
 
       setUserData(dataUser.data);
       handleLogin(dataAuth.data);

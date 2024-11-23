@@ -1,13 +1,12 @@
-import axios from 'axios';
+import apiClient from './apiClient';
+import { AUTH_ENDPOINT } from '../constants';
 
-const API_URL = 'http://localhost:8080/api';
-// const API_URL_PROD = 'https://kostentours-api-10061c08f8f8.herokuapp.com';
-const API_URL_PROD = 'https://kosten.up.railway.app';
-
+// Autentica a un usuario con sus credenciales y devuelve un token de autenticación.
 export const login = ( body ) => {
-  return axios.post(`${API_URL_PROD}/auth/login`, body );
+  return apiClient.post(`${AUTH_ENDPOINT}/login`, body );
 };
 
+// Registra un nuevo usuario en el sistema con los detalles proporcionados.
 export const register = ( body ) => {
-  return axios.post(`${API_URL_PROD}/auth/register`, body );
+  return apiClient.post(`${AUTH_ENDPOINT}/register`, body );
 };

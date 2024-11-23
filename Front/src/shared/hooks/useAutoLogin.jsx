@@ -1,7 +1,7 @@
 import { login } from "../../api/authApi.js";
 import { NotificationService } from "../services/notistack.service.jsx";
 import { useAuth } from "./useAuth.jsx";
-import { getData } from "../../api/userApi.js";
+import { getUserById } from "../../api/userApi.js";
 import { useUserData } from "./useUserData.jsx";
 export default function useAutoLogin() {
   const { handleLogin } = useAuth();
@@ -10,7 +10,7 @@ export default function useAutoLogin() {
   const autologin = async (email, password) => {
     try {
       const { data: dataAuth } = await login({ email, password });
-      const { data: dataUser } = await getData(dataAuth.data.id);
+      const { data: dataUser } = await getUserById(dataAuth.data.id);
 
       setUserData(dataUser.data);
       handleLogin(dataAuth.data);
