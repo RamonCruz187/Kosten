@@ -41,6 +41,7 @@ const AppRoutes = () => (
           <Route path="/destinos" element={<TourDestinationView />} />
           <Route path="/destinos/:id" element={<TourDestinationDetail />} />
           <Route path="/contacto" element={<ContactView />} />
+        </Route>
           <Route path="/admin" element={<UserAdminPrivateRoutes />}>
             <Route index element={<Navigate to="usuarios" replace />} />
             <Route path="usuarios" element={<AdminDashboard />} />
@@ -49,7 +50,6 @@ const AppRoutes = () => (
             <Route path="paquetes/nuevo" element={<CreateEditPackage />} />
             <Route path="paquetes/editar/:id" element={<CreateEditPackage />} />
           </Route>
-        </Route>
 
         {/* Error and 404 pages without Layout */}
         <Route path="/404" element={<PageNotFound />} />
