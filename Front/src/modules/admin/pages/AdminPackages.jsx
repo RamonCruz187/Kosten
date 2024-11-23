@@ -3,7 +3,7 @@ import {Button, Typography} from "@mui/material";
 import {Outlet, useNavigate} from "react-router-dom";
 import Container from "@mui/material/Container";
 import {PackageGrid} from "../../package/components/PackageGrid.jsx";
-import {DepartureGrid} from "../../Departures/components/DepartureGrid.jsx";
+// import {DepartureGrid} from "../../Departures/components/DepartureGrid.jsx";
 
 export const AdminPackages = () => {
 

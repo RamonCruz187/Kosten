@@ -70,7 +70,6 @@ export default function TourDestinationDetail() {
 
   return (
     <>
-      <NavBar />
 
       {isId ? (
         <Box>
