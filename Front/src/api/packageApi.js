@@ -1,82 +1,41 @@
-import axios from 'axios';
+import { PACKAGES_ENDPOINT } from "../constants";
+import apiClient from "./apiClient";
 
-const API_URL = 'http://localhost:8080/api';
-// const API_URL_PROD = 'https://kostentours-api-10061c08f8f8.herokuapp.com';
-const API_URL_PROD = 'https://kosten.up.railway.app';
-
-export const createPackage = ( body ) => {
-
-  const authLS = localStorage.getItem('userAuth');
-    const auth = JSON.parse(authLS);
-
-  return axios.post(
-      `${API_URL_PROD}/packages`,
-      body,
-      {
-        headers: {
-          'Authorization': `Bearer ${auth.token}`
-        }
-      }
-  );
-};
-
+// Obtener todos los Paquetes en una lista paginada y/o ordenada.
 export const getAllPackages = () => {
-
-    const authLS = localStorage.getItem('userAuth');
-    const auth = JSON.parse(authLS);
-
-    return axios.get(
-        `${API_URL_PROD}/packages`,
-        {
-            headers: {
-                'Authorization': `Bearer ${auth.token}`
-            }
-        }
-    );
+    return apiClient.get(`${PACKAGES_ENDPOINT}`);
 };
 
-export const getPackageById = ( id ) => {
-
-    const authLS = localStorage.getItem('userAuth');
-    const auth = JSON.parse(authLS);
-
-    return axios.get(
-        `${API_URL_PROD}/packages/${ id }`,
-        {
-            headers: {
-                'Authorization': `Bearer ${auth.token}`
-            }
-        }
-    );
-};
-
+// Actualizar un Paquete.
 export const updatePackage = ( body ) => {
-
-    const authLS = localStorage.getItem('userAuth');
-    const auth = JSON.parse(authLS);
-
-    return axios.put(
-        `${API_URL_PROD}/packages`,
-        body,
-        {
-            headers: {
-                'Authorization': `Bearer ${auth.token}`
-            }
-        }
-    );
+    return apiClient.put(`${PACKAGES_ENDPOINT}`,body);
 };
 
+// Crear un nuevo Paquete.
+export const createPackage = ( body ) => {
+    return apiClient.post(`${PACKAGES_ENDPOINT}`,body);
+};
+
+// Obtiene un Paquete por su ID.
+export const getPackageById = ( id ) => {
+    if (!id) throw new Error("El ID es obligatorio para obtener un paquete");
+    return apiClient.get(`${PACKAGES_ENDPOINT}/${ id }`);
+};
+
+// Eliminar un paquete.
 export const deletePackage = ( id ) => {
+    if (!id) throw new Error("El ID es obligatorio para eliminar un paquete");
+    return apiClient.delete(`${PACKAGES_ENDPOINT}/${ id }`,);
+};
 
-    const authLS = localStorage.getItem('userAuth');
-    const auth = JSON.parse(authLS);
+// Eliminar una Salida de un Paquete.       /packages/{packageId}/departures/{departureId}
+export const deleteDepartureFromPackage = ( packageId, departureId ) => {
+    if (!packageId) throw new Error("El ID del paquete es obligatorio para eliminar una salida");
+    if (!departureId) throw new Error("El ID de la salida es obligatorio para eliminar una salida");
+    return apiClient.delete(`${PACKAGES_ENDPOINT}/${ packageId }/departures/${ departureId }`,);
+};
 
-    return axios.delete(
-        `${API_URL_PROD}/packages/${ id }`,
-        {
-            headers: {
-                'Authorization': `Bearer ${auth.token}`
-            }
-        }
-    );
+// Obtener todos los Paquetes activos en una lista paginada y/o ordenada.       /packages/actives
+export const getAllPackagesPaginated = () => {
+    return apiClient.get(`${PACKAGES_ENDPOINT}/actives`);
 };
