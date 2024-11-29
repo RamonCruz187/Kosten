@@ -23,5 +23,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
     List<User> findAllWithDepartures();
 
     List<User> findAllByIsActiveTrue();
+
+    Optional<User> findByResetToken(String resetToken);
 }
 
