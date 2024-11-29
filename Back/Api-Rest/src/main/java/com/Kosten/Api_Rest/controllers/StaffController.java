@@ -81,7 +81,7 @@ public class StaffController {
     @Transactional
     public ResponseEntity<ExtendedBaseResponse<StaffResponseDto>> updateStaff(
             @RequestPart("staffData") @Valid StaffToUpdateDto staff,
-            @RequestPart("fileImage") @Valid MultipartFile file) {
+            @RequestPart(value = "fileImage", required = false) @Valid MultipartFile file) {
         try {
             return ResponseEntity.status(201).body(staffService.updateStaff(staff, file));
         } catch (Exception e) {
