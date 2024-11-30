@@ -16,6 +16,9 @@ const Layout = () => {
   const [isNearBottom, setIsNearBottom] = useState(false);
   const [isOpenDrawer, setIsOpenDrawer] = useState(false);
 
+  const userData = JSON.parse(localStorage.getItem('userData')) || {};
+  const isAdmin = userData?.role === 'ADMIN' || false;
+
   const handleOpenDrawer = () => {
     setIsOpenDrawer(!isOpenDrawer);
   };
@@ -60,10 +63,13 @@ const Layout = () => {
           setIsOpenDrawer={handleOpenDrawer}
           isOpenDrawer={isOpenDrawer}
           isDrawer={true}
+          isAdmin={isAdmin}
         />
       </Drawer>
-      <NavBar setIsOpenDrawer={handleOpenDrawer} />
-
+      <NavBar
+        setIsOpenDrawer={handleOpenDrawer}
+        isAdmin={isAdmin}
+      />
       <Box
         sx={{
           position: "relative",
@@ -72,7 +78,7 @@ const Layout = () => {
         }}
       >
         <Link
-          href="https://wa.me/1162984904"
+          href="https://wa.me/+5491162984904"
           target="_blank"
           rel="noreferrer"
           sx={{

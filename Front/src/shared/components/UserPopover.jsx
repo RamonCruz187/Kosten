@@ -39,7 +39,7 @@ const data = [
     },
 ]
 
-export function UserPopover() {
+export function UserPopover({ setIsOpenDrawer = () => {} }) {
 
     const [open, setOpen] = useState(false);
 
@@ -55,6 +55,7 @@ export function UserPopover() {
 
     const handleClick = () => {
         NotificationService.info('Vuelve pronto!');
+        setIsOpenDrawer(false);
         handleLogout();
     };
 
@@ -81,6 +82,7 @@ export function UserPopover() {
 
         navigate( path );
         handleClosePopover();
+        setIsOpenDrawer(false);
     },
     [handleClosePopover]
   );
