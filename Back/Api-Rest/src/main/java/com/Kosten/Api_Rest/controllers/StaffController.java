@@ -49,7 +49,7 @@ public class StaffController {
     @Transactional
     public ResponseEntity<ExtendedBaseResponse<StaffResponseDto>> newStaff(
             @RequestPart("staffData") @Valid StaffRequestDto staff,
-            @RequestPart("fileImage") @Valid MultipartFile file) {
+            @RequestPart(value ="fileImage", required = false) @Valid MultipartFile file) {
 
         try {
             return ResponseEntity.status(201).body(staffService.newStaff(staff, file));

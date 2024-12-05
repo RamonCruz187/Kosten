@@ -30,9 +30,12 @@ public class StaffServiceImpl implements StaffService {
     @Override
     public ExtendedBaseResponse<StaffResponseDto> newStaff(StaffRequestDto staffRequestDto, MultipartFile file) {
         try {
+            Image image = null;
+            if (file != null && !file.isEmpty()) {
+                image = imageService.createNewImage(file);
+                imageRepository.save(image);
+            }
             StaffMapper staffMapper = Mappers.getMapper(StaffMapper.class);
-            Image image = imageService.createNewImage(file);
-            imageRepository.save(image);
             Staff staff = staffMapper.toEntity(staffRequestDto, image);
             staff.setPhoto(image);
             return ExtendedBaseResponse.of(
@@ -50,7 +53,7 @@ public class StaffServiceImpl implements StaffService {
         try {
             Image image = null;
 
-            if (file != null && file.isEmpty()) {
+            if (file != null && !file.isEmpty()) {
                 image = imageService.createNewImage(file);
                 imageRepository.save(image);
                 staff.setPhoto(image);
