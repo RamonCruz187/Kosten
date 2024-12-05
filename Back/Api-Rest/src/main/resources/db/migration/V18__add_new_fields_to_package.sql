@@ -1,0 +1,4 @@
+ALTER TABLE packages
+ADD COLUMN locationInfo VARCHAR(255),
+ADD COLUMN historyInfo VARCHAR(255),
+ADD COLUMN activityInfo VARCHAR(255);

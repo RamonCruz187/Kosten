@@ -1,15 +1,12 @@
 package com.Kosten.Api_Rest.mapper;
 
-import com.Kosten.Api_Rest.dto.Departure.DepartureRequestDto;
-import com.Kosten.Api_Rest.dto.Departure.DepartureResponseDto;
-import com.Kosten.Api_Rest.dto.Departure.DepartureToBeListed;
-import com.Kosten.Api_Rest.dto.Departure.DepartureToUpdateDto;
+import com.Kosten.Api_Rest.dto.Departure.*;
 import com.Kosten.Api_Rest.model.Departure;
 import org.mapstruct.*;
 
 import java.util.List;
 
-@Mapper(unmappedTargetPolicy = ReportingPolicy.IGNORE, componentModel = MappingConstants.ComponentModel.SPRING)
+@Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.IGNORE, uses = {PackageMapper.class})
 public interface DepartureMapper {
 
     Departure toEntity(DepartureRequestDto departureRequestDto);
@@ -28,4 +25,7 @@ public interface DepartureMapper {
             @Mapping(target = "packageId", source = "packageRef.id")
     })
     DepartureToBeListed departureToDepartureToBeListed(Departure departure_);
+
+    @Mapping(target = "packageDto", source = "packageRef")
+    DepartureDto toDepartureDto(Departure departureEntity);
 }

@@ -80,7 +80,6 @@ public class DepartureServiceImpl implements IDepartureService {
         existingPackage.addDeparture(departure);
 
         packageRepository.save(existingPackage);
-        departureRepository.save(departure);
         DepartureResponseDto departureResponseDto = departureMapper.departureToDepartureResponseDto(departure);
 
         return ExtendedBaseResponse.of(

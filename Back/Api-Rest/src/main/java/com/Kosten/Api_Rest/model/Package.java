@@ -31,6 +31,9 @@ public class Package {
     private String technical_level;
     private String included_services;
     private boolean active;
+    private String locationInfo;
+    private String historyInfo;
+    private String activityInfo;
 
     /****************************************
      *  Relations with Month Names Entity
@@ -41,7 +44,7 @@ public class Package {
     private List<MonthNames> months = new ArrayList<>();
 
     public void setMonths(List<Integer> monthIndices) {
-        Locale localeMX = Locale.of("es", "MX");
+        Locale localeMX = new Locale("es", "MX");
         DateFormatSymbols dfs = new DateFormatSymbols(localeMX);
         String[] monthNames = dfs.getMonths();
         String[] shortMonthNames = dfs.getShortMonths();

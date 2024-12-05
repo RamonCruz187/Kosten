@@ -30,9 +30,12 @@ public class StaffServiceImpl implements StaffService {
     @Override
     public ExtendedBaseResponse<StaffResponseDto> newStaff(StaffRequestDto staffRequestDto, MultipartFile file) {
         try {
+            Image image = null;
+            if (file != null && !file.isEmpty()) {
+                image = imageService.createNewImage(file);
+                imageRepository.save(image);
+            }
             StaffMapper staffMapper = Mappers.getMapper(StaffMapper.class);
-            Image image = imageService.createNewImage(file);
-            imageRepository.save(image);
             Staff staff = staffMapper.toEntity(staffRequestDto, image);
             staff.setPhoto(image);
             return ExtendedBaseResponse.of(
@@ -48,14 +51,20 @@ public class StaffServiceImpl implements StaffService {
         Staff staff = staffRepository.findById(staffToUpdateDto.id()).orElseThrow(() -> new IllegalArgumentException("Staff not found"));
 
         try {
-            Image image = imageService.createNewImage(file);
-            imageRepository.save(image);
+            Image image = null;
+
+            if (file != null && !file.isEmpty()) {
+                image = imageService.createNewImage(file);
+                imageRepository.save(image);
+                staff.setPhoto(image);
+            }
+
             StaffMapper staffMapper = Mappers.getMapper(StaffMapper.class);
             staff.setName(staffToUpdateDto.name());
             staff.setLastName(staffToUpdateDto.lastName());
             staff.setRol(staffToUpdateDto.rol());
             staff.setContact(staffToUpdateDto.contact());
-            staff.setPhoto(image);
+
             return ExtendedBaseResponse.of(
                     BaseResponse.ok("Staff actualizado exitosamente"), staffMapper.toDto(staffRepository.save(staff))
             );

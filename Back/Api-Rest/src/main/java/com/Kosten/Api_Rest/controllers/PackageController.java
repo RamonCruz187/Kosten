@@ -75,7 +75,10 @@ public class PackageController {
                 new ArrayList<>(),
                 new ArrayList<>(),
                 packageRequestDTO.all_months(),
-                packageRequestDTO.active()
+                packageRequestDTO.active(),
+                packageRequestDTO.locationInfo(),
+                packageRequestDTO.historyInfo(),
+                packageRequestDTO.activityInfo()
         );
 
         ExtendedBaseResponse<PackageResponseDTO> packageResponseDTO = packageService.createPackage(packageRequestDTO);

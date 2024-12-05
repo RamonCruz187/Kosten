@@ -33,6 +33,7 @@ public class User implements UserDetails {
     Role role;
     @Column(name = "is_active")
     private Boolean isActive;
+    private String resetToken;
 
     @ManyToMany(fetch = FetchType.LAZY)
     @JsonManagedReference

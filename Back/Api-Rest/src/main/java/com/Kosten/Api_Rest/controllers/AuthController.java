@@ -1,10 +1,9 @@
 package com.Kosten.Api_Rest.controllers;
 
+import com.Kosten.Api_Rest.dto.BaseResponse;
 import com.Kosten.Api_Rest.dto.ExtendedBaseResponse;
+import com.Kosten.Api_Rest.dto.user.*;
 import com.Kosten.Api_Rest.service.AuthService;
-import com.Kosten.Api_Rest.dto.user.AuthResponseDto;
-import com.Kosten.Api_Rest.dto.user.LoginRequestDto;
-import com.Kosten.Api_Rest.dto.user.RegisterRequestDto;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
@@ -64,6 +63,60 @@ public class AuthController {
     public ResponseEntity<ExtendedBaseResponse<AuthResponseDto>> register(@Valid @RequestBody RegisterRequestDto request) {
         ExtendedBaseResponse<AuthResponseDto> authResponse = authService.register(request);
         return ResponseEntity.ok(authResponse);
+    }
+
+    /**
+     * Endpoint para generar un token de reseteo de contraseña.
+     * El token se enviará al correo electrónico del usuario.
+     *
+     * @param email Información del email del usuario
+     * @return Respuesta con el token de reseteo de contraseña
+     */
+    @Operation(summary = "Generar token de reseteo de contraseña",
+            description = "Genera un token para el reseteo de contraseña y lo envía al email del usuario.")
+    @ApiResponses(value = {
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "Token de reseteo de contraseña generado exitosamente.",
+                    content = {
+                            @Content(mediaType = "application/json",
+                                    schema = @Schema(implementation = ExtendedBaseResponse.class))
+                    }),
+            @ApiResponse(responseCode = "400", description = "Email inválido o no registrado.", content = {@Content}),
+            @ApiResponse(responseCode = "404", description = "Usuario no encontrado con ese email.", content = {@Content}),
+            @ApiResponse(responseCode = "500", description = "Error del servidor.", content = {@Content})
+    })
+    @PostMapping("/generate-reset-token")
+    public ResponseEntity<ExtendedBaseResponse<String>> generateResetToken(@Valid @RequestBody EmailDto email) {
+        var response = authService.generatePasswordResetToken(email);
+        return ResponseEntity.ok(response);
+    }
+
+    /**
+     * Endpoint para restablecer la contraseña de un usuario.
+     * Requiere el token de reseteo y la nueva contraseña.
+     *
+     * @param request Información del token de reseteo y la nueva contraseña
+     * @return Respuesta indicando que la contraseña fue restablecida con éxito
+     */
+    @Operation(summary = "Restablecer contraseña",
+            description = "Restablece la contraseña de un usuario utilizando un token de reseteo y una nueva contraseña.")
+    @ApiResponses(value = {
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "Contraseña restablecida exitosamente.",
+                    content = {
+                            @Content(mediaType = "application/json",
+                                    schema = @Schema(implementation = BaseResponse.class))
+                    }),
+            @ApiResponse(responseCode = "400", description = "Token inválido o expirado.", content = {@Content}),
+            @ApiResponse(responseCode = "404", description = "Usuario no encontrado o token no válido.", content = {@Content}),
+            @ApiResponse(responseCode = "500", description = "Error del servidor.", content = {@Content})
+    })
+    @PostMapping("/reset-password")
+    public ResponseEntity<BaseResponse> resetPassword(@RequestBody ResetPasswordRequest request) {
+        authService.resetPassword(request);
+        return ResponseEntity.ok(BaseResponse.ok("Contraseña restablecida exitosamente."));
     }
 }
 

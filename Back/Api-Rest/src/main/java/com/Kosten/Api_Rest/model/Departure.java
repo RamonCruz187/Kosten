@@ -15,6 +15,7 @@ import java.util.List;
 @NoArgsConstructor
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @ToString
+@Table(name = "departure")
 public class Departure {
     @Id
     @GeneratedValue(strategy= GenerationType.IDENTITY)
@@ -49,5 +50,7 @@ public class Departure {
     private String finishPlace;
     private Boolean isActive;
     private int quota;
+
+
 
 }

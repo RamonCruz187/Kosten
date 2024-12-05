@@ -1,5 +1,6 @@
 package com.Kosten.Api_Rest.mapper;
 
+import com.Kosten.Api_Rest.dto.packageDTO.PackageDto;
 import com.Kosten.Api_Rest.dto.packageDTO.PackageRequestDTO;
 import com.Kosten.Api_Rest.dto.packageDTO.PackageResponseDTO;
 import com.Kosten.Api_Rest.dto.packageDTO.PackageToUpdateDTO;
@@ -19,5 +20,9 @@ public interface PackageMapper {
     Package toEntity(PackageToUpdateDTO packageToUpdateDTO);
 
     PackageToUpdateDTO packageToPackageToUpdateDTO(Package package_);
+
+    @Mapping(target = "name", source = "name")
+    @Mapping(target = "images", source = "images")
+    PackageDto toPackageDto(Package packageEntity);
 
 }

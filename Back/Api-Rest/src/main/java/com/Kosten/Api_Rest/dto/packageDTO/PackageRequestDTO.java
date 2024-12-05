@@ -42,7 +42,10 @@ public record PackageRequestDTO(
         List<MonthNames> months,
         List<Integer> all_months,
 
-        boolean active
+        boolean active,
+        String locationInfo,
+        String historyInfo,
+        String activityInfo
 
 ) implements Serializable {
 
