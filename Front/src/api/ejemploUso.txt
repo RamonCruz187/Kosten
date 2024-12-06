@@ -1,0 +1,20 @@
+Ejemplo de GET:
+
+  const [isFetching, setIsFetching] = useState(true);
+  const [allPackages, setAllPackages] = useState(null);
+  
+  const fetchDepartures = useCallback( async () => {
+    setIsFetching(true);
+    try {
+        const response = await getAllActivesPackages(); // Axios devuelve 'data' directamente
+        console.log('data', response?.data?.data?.content);
+        setAllPackages(response?.data?.data?.content);
+        NotificationService.success('Las salidas fueron cargadas con éxito');
+        console.log('Las salidas fueron cargadas con éxito');
+    } catch (error) {
+        console.error(error);
+        NotificationService.error('Error al cargar las salidas');
+    } finally {
+        setIsFetching(false);
+    }
+  }, [])
