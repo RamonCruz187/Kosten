@@ -4,7 +4,7 @@ import { DEPARTURES_ENDPOINT } from '../constants';
 
 // Obtiene todas las salidas.
 export const getAllDepartures = () => {
-    return apiClient.get(`${DEPARTURES_ENDPOINT}`);
+    return apiClient.get(`${DEPARTURES_ENDPOINT}`, { skipAuth: true });
 };
 
 // Actualizar Salida.
