@@ -2,8 +2,8 @@ import { PACKAGES_ENDPOINT } from "../constants";
 import apiClient from "./apiClient";
 
 // Obtener todos los Paquetes en una lista paginada y/o ordenada.
-export const getAllPackages = () => {
-    return apiClient.get(`${PACKAGES_ENDPOINT}`);
+export const getAllPackages = (paginated = {}) => {
+    return apiClient.get(`${PACKAGES_ENDPOINT}`, { params: paginated });
 };
 
 // Actualizar un Paquete.
@@ -36,6 +36,6 @@ export const deleteDepartureFromPackage = ( packageId, departureId ) => {
 };
 
 // Obtener todos los Paquetes activos en una lista paginada y/o ordenada.       /packages/actives
-export const getAllPackagesPaginated = () => {
-    return apiClient.get(`${PACKAGES_ENDPOINT}/actives`);
+export const getAllActivesPackages = (paginated = {}) => {
+    return apiClient.get(`${PACKAGES_ENDPOINT}/actives`, { skipAuth: true , params: paginated });
 };

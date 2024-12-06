@@ -1,10 +1,50 @@
-import { _departures } from "../mock/_data.js";
-import { Typography } from "@mui/material";
+// Front/src/modules/Departures/components/DepartureGrid.jsx
+import { CircularProgress, Typography } from "@mui/material";
 import Box from "@mui/material/Box";
 import { DepartureCard } from "./DepartureCard.jsx";
 import { customPalette } from "../../../../customStyle.jsx";
+import { getAllActivesPackages } from "../../../api/packageApi.js";
+import { useCallback, useEffect, useState } from "react";
+import { NotificationService } from "../../../shared/services/notistack.service.jsx";
+import { processDepartures } from "../utils/utils.jsx";
 
 const DepartureGrid = ({ title="PRÓXIMAS SALIDAS", sx={}}) => {
+  const [isFetching, setIsFetching] = useState(true);
+  const [allPackages, setAllPackages] = useState(null);
+  // const [filteredPackages, setFilteredPackages] = useState(null);
+
+  // Función para obtener todas las salidas
+  const fetchDepartures = useCallback( async () => {
+    setIsFetching(true);
+    try {
+        const response = await getAllActivesPackages(); // Axios devuelve 'data' directamente
+        console.log('data', response?.data?.data?.content);
+        setAllPackages(response?.data?.data?.content);
+        // NotificationService.success('Las salidas fueron cargadas con éxito');
+        setIsFetching(false);
+    } catch (error) {
+        console.error(error);
+        NotificationService.error('Error al cargar las salidas');
+    } finally {
+        setIsFetching(false);
+    }
+  }, [])
+
+
+// Obtiene todas las salidas al cargar el componente
+useEffect(() => {
+  fetchDepartures();
+}, [])
+
+// Filtra las salidas para que sean solo las de destino activos, que sean futuras y ordenadas por fecha
+// useEffect(() => {
+//   if (!allPackages) return
+//   const filteredResponse = processDepartures(allPackages);
+//   console.log('filteredResponse', filteredResponse);
+//   setFilteredPackages(filteredResponse)
+// }, [allPackages])
+
+
   return (
     <Box sx={{ 
       display: 'flex', 
@@ -25,8 +65,10 @@ const DepartureGrid = ({ title="PRÓXIMAS SALIDAS", sx={}}) => {
           gap: '2rem' 
 
         }}>
-          {_departures.map((departure) => (
-            <DepartureCard key={departure.id} departure_={departure} />
+          {isFetching ? <CircularProgress />
+          :
+          allPackages.length !== 0 && allPackages?.map((departure) => (
+            departure?.active && <DepartureCard key={`departure-${departure.id}`} departure={departure} />
           ))}
         </Box>
       </Box>
