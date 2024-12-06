@@ -5,13 +5,13 @@ import { fCurrency } from "../../../shared/utils/formatNumber.js";
 import { Link } from "react-router-dom";
 import { iconsCardDepartures, iconsCardPackages } from "../utils/utils.jsx";
 
-export const DepartureCard = ({ departure_ }) => {
-  const { status } = departure_;
+export const DepartureCard = ({ departure, isAdmin = false }) => {
 
+  // el estatus para el admin
   const renderStatus = (
     <Label
       variant="inverted"
-      color={(status === "sale" && "error") || "info"}
+      color={(departure.active === "sale" && "error") || "info"}
       sx={{
         zIndex: 9,
         top: 16,
@@ -20,58 +20,69 @@ export const DepartureCard = ({ departure_ }) => {
         textTransform: "uppercase",
       }}
     >
-      {departure_.status}
+      {departure.active}
     </Label>
   );
 
-  const renderImg = (
-    <Box
-      component="img"
-      alt={departure_.name}
-      src={departure_.coverUrl}
-      sx={{
-        top: 0,
-        width: "100%",
-        height: 200,
-        objectFit: "cover",
-        position: "absolute",
-      }}
-    />
-  );
-
-  const renderPrice = (
-    <Typography variant="subtitle1" sx={{ fontWeight: "bold" }}>
-      <Typography
-        component="span"
-        variant="body1"
-        sx={{
-          color: "text.disabled",
-          textDecoration: "line-through",
-        }}
-      >
-        {departure_.priceSale && fCurrency(departure_.priceSale)}
-      </Typography>
-      &nbsp;
-      {fCurrency(departure_.price)}
-    </Typography>
-  );
+  // hacer una util que ordene las salidas por fecha con su correspondiente precio
+  // fijarse si es tiene este formato de mismo mes "03 al 05 de agosto" o si tiene el formato "30/07 al 02/08"
+  // y que tome el precio más más bajo y el más alto para mostrar como en el figma
 
   return (
     <Card
-      sx={{ width: "100%", maxWidth: "400px", height: "407px", display: "flex", flexDirection: "column" }}
-    >
-      <Box sx={{ position: "relative" }}>
-        {departure_.status && renderStatus}
-        {renderImg}
-      </Box>
+      sx={{ 
+        width: {xs: "90%", sm: "100%"}, 
+        maxWidth: "400px", 
+        height: "407px", 
+        display: "flex", 
+        flexDirection: "column", 
+        marginX: "auto", 
+        position: "relative"
+      }}
 
-      <Stack spacing={2} sx={{ p: 3, flexGrow: 1, justifyContent: "end" }}>
+    >
+
+        {isAdmin 
+        ? renderStatus 
+        : 
+        <Box
+          sx={{
+            position: "absolute", 
+            top: '16px', 
+            right: '16px', 
+            display: "grid",
+            placeItems: "center",
+            backgroundColor: "white", 
+            fontSize: "1.5rem", 
+            cursor: "pointer", 
+            zIndex: 10,
+            padding: "4px",
+            borderRadius: "5px"
+        }}
+        >
+        {iconsCardPackages[0]}
+        </Box>
+        } 
+        <Box
+          component="img"
+          alt={departure.name}
+          src={departure.images[0].url}
+          sx={{
+            top: 0,
+            width: "100%",
+            height: 200,
+            objectFit: "cover",
+          }}
+        />
+
+
+      <Stack spacing={2} sx={{ p: 3, flexGrow: 1, justifyContent: "space-between" }}>
         <Link
-          to={`/salidas/${departure_.id}`}
+          to={`/salidas/${departure.id}`}
           style={{ textDecoration: "none", color: "inherit" }}
         >
-          <Typography variant="subtitle2" noWrap style={{ color: "inherit" }}>
-            {departure_.name}
+          <Typography variant="titleH2" style={{ color: "inherit" }}>
+            {departure.name}
           </Typography>
         </Link>
 
@@ -93,20 +104,13 @@ export const DepartureCard = ({ departure_ }) => {
                 gap: 1,
               }}
             >
-              <Box sx={{ display: "flex" }}>{iconsCardPackages[0]}</Box>
-              <Typography variant="caption">{departure_.info.date}</Typography>
-            </Box>
-
-            <Box
-              sx={{
-                display: "flex",
-                justifyContent: "flex-start",
-                alignItems: "center",
-                gap: 1,
-              }}
-            >
               <Box sx={{ display: "flex" }}>{iconsCardPackages[1]}</Box>
-              <Typography variant="caption">{departure_.info.days}</Typography>
+              {/* fecha */
+              // departuresSorted.map((departure) => {
+              //   <Typography variant="caption">{departure.date}-{fCurrency(departure.price)}</Typography>
+              // })
+              }
+              
             </Box>
 
             <Box
@@ -118,9 +122,7 @@ export const DepartureCard = ({ departure_ }) => {
               }}
             >
               <Box sx={{ display: "flex" }}>{iconsCardPackages[2]}</Box>
-              <Typography variant="caption">
-                {departure_.info.physicLvl}
-              </Typography>
+              <Typography variant="caption">{departure.duration}</Typography>
             </Box>
 
             <Box
@@ -132,8 +134,8 @@ export const DepartureCard = ({ departure_ }) => {
               }}
             >
               <Box sx={{ display: "flex" }}>{iconsCardPackages[3]}</Box>
-              <Typography variant="caption" noWrap>
-                {departure_.info.technicalLvl}
+              <Typography variant="caption">
+              Nivel físico: {departure.physical_level}
               </Typography>
             </Box>
 
@@ -146,8 +148,8 @@ export const DepartureCard = ({ departure_ }) => {
               }}
             >
               <Box sx={{ display: "flex" }}>{iconsCardPackages[4]}</Box>
-              <Typography variant="caption">
-                {departure_.included_services}
+              <Typography variant="caption" noWrap>
+              Nivel técnico: {departure.technical_level}
               </Typography>
             </Box>
           </Stack>
@@ -156,10 +158,25 @@ export const DepartureCard = ({ departure_ }) => {
               display: "flex",
               flexDirection: "column",
               alignItems: "center",
-              gap: 1,
+              justifyContent: "space-between",
+              height: "100%",
             }}
           >
-            {renderPrice}
+            <Typography variant="titleH3">
+              <Typography
+                component="p"
+                variant="body1"
+                sx={{
+                  color: "text.disabled",
+                  textDecoration: "line-through",
+                  fontSize: "0.9rem",
+                }}
+              >
+                {/* {packageData.departures[departureIndex].price && fCurrency(packageData.departures[departureIndex].price * 1.3)} */}
+              </Typography>
+              {/* {fCurrency(packageData.departures[departureIndex].price)} */}
+              1000
+            </Typography>
 
             <Button variant="contained" size="small" color="brownButton">
               Reservar
