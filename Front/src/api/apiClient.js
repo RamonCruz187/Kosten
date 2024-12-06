@@ -13,7 +13,7 @@ apiClient.interceptors.request.use((config) => {
   const auth = JSON.parse(authLS) || {};
   const token = auth.token || '';
 
-  if (token) {
+  if (token && !config.skipAuth) {
     config.headers.Authorization = `Bearer ${token}`;
   }
   return config;
