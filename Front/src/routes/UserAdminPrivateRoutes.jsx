@@ -1,16 +1,12 @@
-/**
- * Componente que redirecciona al usuario autenticado (dado de alta y logueado)
- * a sus respectivas rutas: Administracion (si es admin)
- * y Logout.
- */
+// Front/src/routes/UserAdminPrivateRoutes.jsx
+/* Componente que redirecciona al usuario autenticado (dado de alta y logueado)
+ * a sus respectivas rutas: Administracion (si es admin) y Logout. */
 
-import { Navigate, Outlet } from 'react-router-dom';
+import { Navigate } from 'react-router-dom';
 import {useAuth} from "../shared/hooks/useAuth.jsx";
-import {AdminLayout} from "../modules/admin/layout/AdminLayout.jsx";
 import {useUserData} from "../shared/hooks/useUserData.jsx";
-import {useEffect} from "react";
 
-export function UserAdminPrivateRoutes() {
+export function UserAdminPrivateRoutes({ children }) {
 
     const { isAuthenticated } = useAuth();
     const { user } = useUserData();
@@ -23,6 +19,6 @@ export function UserAdminPrivateRoutes() {
         return <Navigate to="/" replace />;
     }
 
-    return <AdminLayout />;
+    return children;
 
 }
