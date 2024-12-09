@@ -1,42 +1,30 @@
+// Front/src/modules/admin/layout/AdminLayout.jsx
 import Box from "@mui/material/Box";
-import Container from "@mui/material/Container";
-import {Outlet} from "react-router-dom";
-import NavBar from "../../../components/Home/NavBar.jsx";
-import {css} from "@emotion/react";
-import {MenuAdmin} from "../components/MenuAdmin.jsx";
-
-const styles = {
-    container: css`
-      display: flex;
-      align-items: center;
-      margin-top: .6rem;
-    `,
-}
+import { Outlet } from "react-router-dom";
+import { MenuAdmin } from "../components/MenuAdmin.jsx";
+import { Breadcrumb } from "../../../shared/components/Breadcrumb/Breadcrumb.jsx";
 
 export const AdminLayout = () => {
-    return (
-        <Box>
-            <Container
-                disableGutters
-                component="div"
-                maxWidth="100%"
-                sx={{
-                    display: {sm: 'flex'},
-                    justifyContent: {sm: 'center'},
-                    backgroundColor: 'var(--bg-lightgray)'
-                }}
-            >
-                <Box
-                    css={styles.container}
-                    // maxWidth="lg"
-                    sx={{
-                        // width: { xs: 'auto', sm: '600px', md: '900px', lg: '1024px', xl: '1536px', xxl: '1600px' },
-                        width: '100%'
-                    }}
-                >
-                    <MenuAdmin />
-                </Box>
-            </Container>
+  return (
+    <Box
+      component="div"
+      sx={{
+				position: "relative",
+				maxWidth: "100%",
+				height: "100%",
+        display: "flex",
+        justifyContent: "center",
+        backgroundColor: "var(--bg-lightgray)",
+      }}
+    >
+      <MenuAdmin />
+
+      <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
+        <Box sx={{ m: 2, }}>
+          <Breadcrumb />
         </Box>
-    )
-}
+        <Outlet />
+      </Box>
+    </Box>
+  );
+};
