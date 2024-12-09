@@ -1,3 +1,4 @@
+// Front/src/routes/AppRoutes.jsx
 import { BrowserRouter as Router, Navigate, Route, Routes } from "react-router-dom";
 import { Suspense, lazy } from "react";
 
@@ -19,6 +20,7 @@ const PackageFullView = lazy(() => import("../modules/admin/pages/PackageFullVie
 const Gallery = lazy(() => import("../components/PhotosGallery/Gallery.jsx"));
 // const UserAdminPrivateRoutes = lazy(() => import("./UserAdminPrivateRoutes.jsx"));
 import { UserAdminPrivateRoutes } from "./UserAdminPrivateRoutes.jsx";
+import { AdminLayout } from "../modules/admin/layout/AdminLayout.jsx";
 const About = lazy(() => import("../components/Home/About"));
 const TourDestinationView = lazy(() => import("../components/TourDestination/TourDestinationView.jsx"));
 const TourDestinationDetail = lazy(() => import("../components/TourDestination/TourDestinationDetail.jsx"));
@@ -41,8 +43,7 @@ const AppRoutes = () => (
           <Route path="/destinos" element={<TourDestinationView />} />
           <Route path="/destinos/:id" element={<TourDestinationDetail />} />
           <Route path="/contacto" element={<ContactView />} />
-        </Route>
-          <Route path="/admin" element={<UserAdminPrivateRoutes />}>
+          <Route path="/admin" element={<UserAdminPrivateRoutes><AdminLayout /></UserAdminPrivateRoutes>}>
             <Route index element={<Navigate to="usuarios" replace />} />
             <Route path="usuarios" element={<AdminDashboard />} />
             <Route path="paquetes" element={<AdminPackages />} />
@@ -50,6 +51,7 @@ const AppRoutes = () => (
             <Route path="paquetes/nuevo" element={<CreateEditPackage />} />
             <Route path="paquetes/editar/:id" element={<CreateEditPackage />} />
           </Route>
+        </Route>
 
         {/* Error and 404 pages without Layout */}
         <Route path="/404" element={<PageNotFound />} />
