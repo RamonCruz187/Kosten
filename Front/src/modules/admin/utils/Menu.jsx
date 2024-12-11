@@ -7,17 +7,17 @@ export const MenuOptionsTop = [
     {
         title: 'Paquetes / Salidas',
         icon: <RiWalkLine width='34px' />,
-        to: '/admin/salidas'
+        to: '/admin/paquetes'
     },
     {
         title: 'Destinos',
         icon: <RiMapPinLine />,
-        to: '/admin/imagenes'
+        to: '/admin/destinos'
     },
     {
         title: 'Comentarios',
         icon: <RiChatQuoteLine />,
-        to: '/admin/imagenes'
+        to: '/admin/comentarios'
     },
     {
         title: 'Usuarios / Staff',

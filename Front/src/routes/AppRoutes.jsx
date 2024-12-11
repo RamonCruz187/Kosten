@@ -11,7 +11,8 @@ const Register = lazy(() => import("../components/Auth/Register"));
 import AdminDashboard from "../components/Dashboard/AdminDashboard";
 const Muestras = lazy(() => import("../components/muestras"));
 const UserGuestRoutes = lazy(() => import("./UserGuestRoutes.jsx"));
-const AdminPackages = lazy(() => import("../modules/admin/pages/AdminPackages.jsx"));
+// const AdminPackages = lazy(() => import("../modules/admin/pages/AdminPackages.jsx"));
+import { AdminPackages } from "../modules/admin/pages/AdminPackages.jsx";
 const PageNotFound = lazy(() => import("../shared/pages/error/PageNotFound.jsx"));
 const CreateEditPackage = lazy(() => import("../modules/admin/components/CreateEditPackage.jsx"));
 const DepartureGrid = lazy(() => import("../modules/Departures/components/DepartureGrid.jsx"));
@@ -50,6 +51,8 @@ const AppRoutes = () => (
             <Route path="paquetes/:id" element={<PackageFullView />} />
             <Route path="paquetes/nuevo" element={<CreateEditPackage />} />
             <Route path="paquetes/editar/:id" element={<CreateEditPackage />} />
+            {/* <Route path="destinos" element={<AdminPackages />} /> */}
+            {/* <Route path="comentarios" element={<AdminPackages />} /> */}
           </Route>
         </Route>
 
