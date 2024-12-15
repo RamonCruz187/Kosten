@@ -21,6 +21,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import com.Kosten.Api_Rest.repository.IDepartureRepository;
 
+import java.util.List;
 
 
 @Service
@@ -31,24 +32,19 @@ public class PackageServiceImpl implements PackageService {
     private final PackageMapper packageMapper;
     public final IDepartureRepository departureRepository;
     private final ImageRepository imageRepository;
-    private final ImageService imageService;
 
-    public ExtendedBaseResponse<PackageResponseDTO> createPackage(PackageRequestDTO packageRequestDTO) {
+    public ExtendedBaseResponse<PackageResponseDTO> createPackage(PackageRequestDTO packageRequestDTO, List<Image> images, List<Image> destinyImages, Image itineraryImage, Image bannerImage) {
 
         Package packageEntity = packageMapper.toEntity(packageRequestDTO);
-        System.out.println("control 1");
         var packageDB = packageRepository.save(packageEntity);
         packageDB.setMonths(packageRequestDTO.all_months());
-        System.out.println("control 2");
         // Agregar imagenes al paquete
-        if( !packageRequestDTO.filesImages().isEmpty() ) {
-            packageRequestDTO.filesImages().forEach( file -> {
+        if( !images.isEmpty() ) {
+            images.forEach( file -> {
                 try {
-                    System.out.println("control 3");
-                    Image image = imageService.createNewImage(file);
-                    packageDB.addImage( image );
+                    packageDB.addImage( file );
 
-                    imageRepository.save(image);
+                    imageRepository.save(file);
 
                 } catch (Exception e) {
                     throw new RuntimeException(e.getMessage());
@@ -57,41 +53,36 @@ public class PackageServiceImpl implements PackageService {
         }
 
         // Agregar imagenes al banner
-        if( !packageRequestDTO.bannerPhoto().isEmpty() ) {
                 try {
-                    Image image = imageService.createNewImage(packageRequestDTO.bannerPhoto());
-                    packageDB.addImageToBanner( image );
 
-                    imageRepository.save(image);
+                    packageDB.addImageToBanner(bannerImage);
+
+                    imageRepository.save(bannerImage);
 
                 } catch (Exception e) {
                     throw new RuntimeException(e.getMessage());
                 }
-        }
+
 
         // Agregar imagenes al itinerario
-        if( !packageRequestDTO.itineraryPhoto().isEmpty() ) {
-            try {
-                Image image = imageService.createNewImage(packageRequestDTO.itineraryPhoto());
-                System.out.println("imagen itinerario creada lista para agregar a paquete: " + image.toString());
-                packageDB.addImageToItinerary( image );
 
-                imageRepository.save(image);
+            try {
+                packageDB.addImageToItinerary( itineraryImage );
+
+                imageRepository.save(itineraryImage);
 
             } catch (Exception e) {
                 throw new RuntimeException(e.getMessage());
             }
-        }
+
 
         // Agregar imagenes al destino
-        if( !packageRequestDTO.destinyPhoto().isEmpty() ) {
-            packageRequestDTO.destinyPhoto().forEach( file -> {
+        if( !destinyImages.isEmpty() ) {
+            destinyImages.forEach( file -> {
                 try {
-                    Image image = imageService.createNewImage(file);
-                    System.out.println("imagen destino creada lista para agregar a paquete: " + image.toString());
-                    packageDB.addImageToDestiny( image );
+                    packageDB.addImageToDestiny(file);
 
-                    imageRepository.save(image);
+                    imageRepository.save(file);
 
                 } catch (Exception e) {
                     throw new RuntimeException(e.getMessage());

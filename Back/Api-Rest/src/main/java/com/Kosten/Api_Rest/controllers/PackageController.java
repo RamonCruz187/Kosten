@@ -5,6 +5,8 @@ import com.Kosten.Api_Rest.dto.ExtendedBaseResponse;
 import com.Kosten.Api_Rest.dto.packageDTO.PackageRequestDTO;
 import com.Kosten.Api_Rest.dto.packageDTO.PackageResponseDTO;
 import com.Kosten.Api_Rest.dto.packageDTO.PackageToUpdateDTO;
+import com.Kosten.Api_Rest.model.Image;
+import com.Kosten.Api_Rest.service.ImageService;
 import com.Kosten.Api_Rest.service.impl.PackageServiceImpl;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -28,6 +30,7 @@ import java.net.URI;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Tag(name = "Paquetes", description = "Maneja todos los endpoints de los Paquetes que se ofrecen.")
 @RestController
@@ -36,6 +39,7 @@ import java.util.List;
 public class PackageController {
 
     private final PackageServiceImpl packageService;
+    private final ImageService imageService;
 
     @Operation(
             summary = "Crear un nuevo Paquete.",
@@ -53,7 +57,7 @@ public class PackageController {
             @ApiResponse(responseCode = "403", description = "Forbidden access to this resource", content = {@Content}),
             @ApiResponse(responseCode = "500", description = "Internal Server Error", content = {@Content})
     })
-    @PostMapping(consumes = { "multipart/form-data" })
+    @PostMapping(consumes = {"multipart/form-data"})
     @Transactional
     public ResponseEntity<ExtendedBaseResponse<PackageResponseDTO>> createPackage(
             @RequestPart("packageData") @Valid PackageRequestDTO packageRequestDTO,
@@ -63,29 +67,20 @@ public class PackageController {
             @RequestPart(value = "destinyPhoto", required = false) List<MultipartFile> destinyPhoto,
             UriComponentsBuilder uriComponentsBuilder
     ) {
+        //primero creamos las imágenes
+        Image bannerPhotoCreated = imageService.createNewImage(bannerPhoto);
+        Image itineraryPhotoCreated = imageService.createNewImage(itineraryPhoto);
 
-        packageRequestDTO = new PackageRequestDTO(
-                packageRequestDTO.name(),
-                packageRequestDTO.description(),
-                packageRequestDTO.punctuation(),
-                packageRequestDTO.duration(),
-                packageRequestDTO.itinerary(),
-                packageRequestDTO.physical_level(),
-                packageRequestDTO.technical_level(),
-                packageRequestDTO.included_services(),
-                filesImages,
-                new ArrayList<>(),
-                packageRequestDTO.all_months(),
-                packageRequestDTO.active(),
-                packageRequestDTO.locationInfo(),
-                packageRequestDTO.historyInfo(),
-                packageRequestDTO.activityInfo(),
-                bannerPhoto,
-                itineraryPhoto,
-                destinyPhoto
-        );
+        List<Image> destinyPhotosCreated = destinyPhoto.stream()
+                .map(imageService::createNewImage)
+                .collect(Collectors.toList());
 
-        ExtendedBaseResponse<PackageResponseDTO> packageResponseDTO = packageService.createPackage(packageRequestDTO);
+        List<Image> images = filesImages.stream()
+                .map(imageService::createNewImage)
+                .collect(Collectors.toList());
+
+
+        ExtendedBaseResponse<PackageResponseDTO> packageResponseDTO = packageService.createPackage(packageRequestDTO, images, destinyPhotosCreated, bannerPhotoCreated, itineraryPhotoCreated);
 
         URI location = uriComponentsBuilder
                 .path("/packages/{id}")
@@ -147,6 +142,7 @@ public class PackageController {
                 .status(200)
                 .body(packageService.getAllActivePackages(pageable));
     }
+
     @Operation(
             summary = "Obtener todos los Paquetes en una lista paginada y/o ordenada.",
             description = "Permite a un usuario logueado de la empresa obtener todos los paquetes, en una lista paginada."
@@ -198,7 +194,7 @@ public class PackageController {
     ) {
         return ResponseEntity
                 .status(200)
-                .body(packageService.update( packageToUpdateDTO ));
+                .body(packageService.update(packageToUpdateDTO));
     }
 
     @Operation(
@@ -220,10 +216,10 @@ public class PackageController {
     })
     @DeleteMapping("/{id}")
     @Transactional
-    public ResponseEntity<BaseResponse> deleteNote( @PathVariable Long id ) {
+    public ResponseEntity<BaseResponse> deleteNote(@PathVariable Long id) {
         return ResponseEntity
                 .status(200)
-                .body(packageService.delete( id ));
+                .body(packageService.delete(id));
     }
 
     @Operation(
