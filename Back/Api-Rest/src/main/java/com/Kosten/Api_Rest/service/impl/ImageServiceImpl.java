@@ -44,11 +44,13 @@ public class ImageServiceImpl implements ImageService {
     }
 
     public Image createNewImage(MultipartFile file) {
-
+        System.out.println("en createNewImage");
         try {
             Map uploadResult = cloudinary
                     .uploader()
                     .upload(file.getBytes(), ObjectUtils.emptyMap());
+            String publicId= uploadResult.get("public_id").toString();
+            System.out.println(publicId);
 
             ImageRequestDTO imageRequestDTO = new ImageRequestDTO(uploadResult.get("url").toString(), uploadResult.get("public_id").toString());
 

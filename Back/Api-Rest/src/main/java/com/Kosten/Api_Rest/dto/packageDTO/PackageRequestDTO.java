@@ -33,11 +33,7 @@ public record PackageRequestDTO(
         String physical_level,
         String technical_level,
         String included_services,
-
-        List<ImageResponseDTO> images,
-
         List<MultipartFile> filesImages,
-        List<DepartureResponseDto> departures,
 
         List<MonthNames> months,
         List<Integer> all_months,
@@ -45,7 +41,10 @@ public record PackageRequestDTO(
         boolean active,
         String locationInfo,
         String historyInfo,
-        String activityInfo
+        String activityInfo,
+        MultipartFile bannerPhoto,
+        MultipartFile itineraryPhoto,
+        List<MultipartFile> destinyPhoto
 
 ) implements Serializable {
 

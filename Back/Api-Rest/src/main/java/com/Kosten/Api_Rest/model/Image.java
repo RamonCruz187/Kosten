@@ -33,6 +33,11 @@ public class Image {
     private Staff staffRef;
 
 
+    @ManyToOne
+    @JoinColumn(name = "package_destiny_id")
+    private Package packageDestinyRef;
+
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

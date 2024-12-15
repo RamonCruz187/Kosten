@@ -58,6 +58,9 @@ public class PackageController {
     public ResponseEntity<ExtendedBaseResponse<PackageResponseDTO>> createPackage(
             @RequestPart("packageData") @Valid PackageRequestDTO packageRequestDTO,
             @RequestPart("filesImages") List<MultipartFile> filesImages,
+            @RequestPart(value = "bannerPhoto", required = false) MultipartFile bannerPhoto,
+            @RequestPart(value = "itineraryPhoto", required = false) MultipartFile itineraryPhoto,
+            @RequestPart(value = "destinyPhoto", required = false) List<MultipartFile> destinyPhoto,
             UriComponentsBuilder uriComponentsBuilder
     ) {
 
@@ -70,15 +73,16 @@ public class PackageController {
                 packageRequestDTO.physical_level(),
                 packageRequestDTO.technical_level(),
                 packageRequestDTO.included_services(),
-                new ArrayList<>(),
                 filesImages,
-                new ArrayList<>(),
                 new ArrayList<>(),
                 packageRequestDTO.all_months(),
                 packageRequestDTO.active(),
                 packageRequestDTO.locationInfo(),
                 packageRequestDTO.historyInfo(),
-                packageRequestDTO.activityInfo()
+                packageRequestDTO.activityInfo(),
+                bannerPhoto,
+                itineraryPhoto,
+                destinyPhoto
         );
 
         ExtendedBaseResponse<PackageResponseDTO> packageResponseDTO = packageService.createPackage(packageRequestDTO);

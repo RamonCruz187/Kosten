@@ -35,7 +35,10 @@ public record PackageResponseDTO(
         boolean active,
         String locationInfo,
         String historyInfo,
-        String activityInfo
+        String activityInfo,
+        List<ImageResponseDTO> destinyPhotos,
+        ImageResponseDTO bannerPhoto,
+        ImageResponseDTO itineraryPhoto
 
 
 ) implements Serializable {

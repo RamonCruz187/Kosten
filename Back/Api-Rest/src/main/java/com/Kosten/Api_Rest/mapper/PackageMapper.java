@@ -11,7 +11,7 @@ import org.mapstruct.*;
 public interface PackageMapper {
     Package toEntity(PackageRequestDTO packageRequestDTO);
 
-    PackageRequestDTO packageToPackageRequestDTO(Package package_);
+    //PackageRequestDTO packageToPackageRequestDTO(Package package_);
 
     Package toEntity(PackageResponseDTO packageResponseDTO);
 

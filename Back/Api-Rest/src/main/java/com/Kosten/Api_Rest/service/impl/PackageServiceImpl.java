@@ -7,7 +7,6 @@ import com.Kosten.Api_Rest.dto.ExtendedBaseResponse;
 import com.Kosten.Api_Rest.dto.packageDTO.PackageRequestDTO;
 import com.Kosten.Api_Rest.dto.packageDTO.PackageResponseDTO;
 import com.Kosten.Api_Rest.dto.packageDTO.PackageToUpdateDTO;
-import com.Kosten.Api_Rest.mapper.DepartureMapper;
 import com.Kosten.Api_Rest.mapper.PackageMapper;
 import com.Kosten.Api_Rest.model.Departure;
 import com.Kosten.Api_Rest.model.Image;
@@ -23,7 +22,6 @@ import org.springframework.stereotype.Service;
 import com.Kosten.Api_Rest.repository.IDepartureRepository;
 
 
-import java.util.ArrayList;
 
 @Service
 @RequiredArgsConstructor
@@ -31,7 +29,6 @@ public class PackageServiceImpl implements PackageService {
 
     private final PackageRepository packageRepository;
     private final PackageMapper packageMapper;
-    private final DepartureMapper departureMapper;
     public final IDepartureRepository departureRepository;
     private final ImageRepository imageRepository;
     private final ImageService imageService;
@@ -39,16 +36,60 @@ public class PackageServiceImpl implements PackageService {
     public ExtendedBaseResponse<PackageResponseDTO> createPackage(PackageRequestDTO packageRequestDTO) {
 
         Package packageEntity = packageMapper.toEntity(packageRequestDTO);
-
+        System.out.println("control 1");
         var packageDB = packageRepository.save(packageEntity);
         packageDB.setMonths(packageRequestDTO.all_months());
-
+        System.out.println("control 2");
+        // Agregar imagenes al paquete
         if( !packageRequestDTO.filesImages().isEmpty() ) {
             packageRequestDTO.filesImages().forEach( file -> {
                 try {
+                    System.out.println("control 3");
                     Image image = imageService.createNewImage(file);
-
                     packageDB.addImage( image );
+
+                    imageRepository.save(image);
+
+                } catch (Exception e) {
+                    throw new RuntimeException(e.getMessage());
+                }
+            });
+        }
+
+        // Agregar imagenes al banner
+        if( !packageRequestDTO.bannerPhoto().isEmpty() ) {
+                try {
+                    Image image = imageService.createNewImage(packageRequestDTO.bannerPhoto());
+                    packageDB.addImageToBanner( image );
+
+                    imageRepository.save(image);
+
+                } catch (Exception e) {
+                    throw new RuntimeException(e.getMessage());
+                }
+        }
+
+        // Agregar imagenes al itinerario
+        if( !packageRequestDTO.itineraryPhoto().isEmpty() ) {
+            try {
+                Image image = imageService.createNewImage(packageRequestDTO.itineraryPhoto());
+                System.out.println("imagen itinerario creada lista para agregar a paquete: " + image.toString());
+                packageDB.addImageToItinerary( image );
+
+                imageRepository.save(image);
+
+            } catch (Exception e) {
+                throw new RuntimeException(e.getMessage());
+            }
+        }
+
+        // Agregar imagenes al destino
+        if( !packageRequestDTO.destinyPhoto().isEmpty() ) {
+            packageRequestDTO.destinyPhoto().forEach( file -> {
+                try {
+                    Image image = imageService.createNewImage(file);
+                    System.out.println("imagen destino creada lista para agregar a paquete: " + image.toString());
+                    packageDB.addImageToDestiny( image );
 
                     imageRepository.save(image);
 
