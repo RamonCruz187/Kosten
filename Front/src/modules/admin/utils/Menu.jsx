@@ -5,19 +5,19 @@ import { RiChatQuoteLine, RiGroupLine, RiWalkLine, RiMapPinLine,  } from 'react-
 
 export const MenuOptionsTop = [
     {
-        title: 'Paquetes / Salidas',
-        icon: <RiWalkLine width='34px' />,
-        to: '/admin/salidas'
+        title: 'Paquetes / Destinos',
+        icon: <RiWalkLine />,
+        to: '/admin/paquetes'
     },
     {
-        title: 'Destinos',
+        title: 'Salidas',
         icon: <RiMapPinLine />,
-        to: '/admin/imagenes'
+        to: '/admin/salidas'
     },
     {
         title: 'Comentarios',
         icon: <RiChatQuoteLine />,
-        to: '/admin/imagenes'
+        to: '/admin/comentarios'
     },
     {
         title: 'Usuarios / Staff',

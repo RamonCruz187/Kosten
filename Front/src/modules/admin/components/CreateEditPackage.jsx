@@ -1,4 +1,5 @@
-import React, {useState, useCallback, useEffect} from 'react';
+// @modules/admin/components/CreateEditPackage.jsx
+import {useState, useCallback, useEffect} from 'react';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import {
@@ -13,10 +14,10 @@ import {
     Chip,
     Typography, CardMedia, Card, Paper
 } from '@mui/material';
-import {createPackage, getPackageById, updatePackage} from "../../../api/packageApi.js";
+import {createPackage, getPackageById, updatePackage} from "@api/packageApi.js";
 import Container from "@mui/material/Container";
 import {useNavigate, useParams} from "react-router-dom";
-import {NotificationService} from "../../../shared/services/notistack.service.jsx";
+import {NotificationService} from "@shared/services/notistack.service.jsx";
 import {Edit} from "@mui/icons-material";
 
 const meses = [
@@ -24,8 +25,10 @@ const meses = [
     'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'
 ];
 
+// el estado de Incompleto lo va a tomar si el package tiene vacia los campos del destino
 const states = ['Activo', 'Inactivo'];
-const regions = ['Costa', 'Sierras', 'Cuyo', 'Norte', 'Litoral', 'Patagonia', 'Central'];
+//pidieron harcodear las regiones, en caso de que se quieran modificar, usar los endpoints de "category"
+const regions = ['Región Patagónica', 'Región Norte', 'Región Central', 'Región Cuyana', 'Perú', 'Bolivia', ];
 
 const niveles = ['Principiante', 'Intermedio', 'Intermedio-Avanzado', 'Avanzado'];
 

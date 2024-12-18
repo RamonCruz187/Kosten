@@ -2,7 +2,7 @@
 import Box from "@mui/material/Box";
 import { Outlet } from "react-router-dom";
 import { MenuAdmin } from "../components/MenuAdmin.jsx";
-import { Breadcrumb } from "../../../shared/components/Breadcrumb/Breadcrumb.jsx";
+// import { Breadcrumb } from "../../../shared/components/Breadcrumb/Breadcrumb.jsx";
 
 export const AdminLayout = () => {
   return (
@@ -20,9 +20,9 @@ export const AdminLayout = () => {
       <MenuAdmin />
 
       <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
-        <Box sx={{ m: 2, }}>
+        {/* <Box sx={{ m: 2, }}>
           <Breadcrumb />
-        </Box>
+        </Box> */}
         <Outlet />
       </Box>
     </Box>
