@@ -6,10 +6,12 @@ import { NotificationService } from '../../shared/services/notistack.service.jsx
 
 const AddStaffDialog = ({ open, onClose, fetchStaff }) => {
   const [staffForm, setStaffForm] = useState({
+    id: '',
     name: '',
     lastName: '',
     contact: '',
     rol: '',
+    photo: ''
   });
   const [file, setFile] = useState(null);
   const API_URL = 'https://kosten.up.railway.app'; // Replace with your actual endpoint
@@ -17,11 +19,13 @@ const AddStaffDialog = ({ open, onClose, fetchStaff }) => {
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setStaffForm((prev) => ({ ...prev, [name]: value }));
+    setFile();
   };
 
   const handleFileChange = (e) => {
-    const selectedFile = e.target.files[0];
-    if (selectedFile && selectedFile.type === 'image/jpeg') {
+      const selectedFile = e.target.files[0];
+    const validExtensions = ['image/jpeg', 'image/png', 'image/bmp'];
+    if (selectedFile && validExtensions.includes(selectedFile.type)) {
       setFile(selectedFile);
     } else {
       NotificationService.info('Por favor seleccione una imagen válida en formato .jpg', 5000);
@@ -34,21 +38,40 @@ const AddStaffDialog = ({ open, onClose, fetchStaff }) => {
       console.error('Token not found or user not authenticated');
       return;
     }
-    if (!staffForm.name || !staffForm.lastName || !staffForm.contact) {
-      NotificationService.error('Debe llenar todos los campos requeridos.', 5000);
+  
+    if (!staffForm.name || !staffForm.lastName || !staffForm.contact || !staffForm.rol) {
+      NotificationService.error('All fields are required.', 5000);
       return;
     }
-
+  
+    if (!file) {
+      NotificationService.info('Please select a valid image (.jpg, .png, .bmp)', 5000);
+      return;
+    }
+  
     const formData = new FormData();
-    formData.append('staffData', new Blob([JSON.stringify(staffForm)], { type: 'application/json' }));
+  // Create JSON object for staffData
+  const staffData = {
+    name: staffForm.name ,
+    lastName: staffForm.lastName,
+    rol: staffForm.rol,
+    contact: staffForm.contact,
+  }
+// Append staffData as a Blob
+formData.append("staffData", new Blob([JSON.stringify(staffData)], { type: "application/json" }));
+// Append the image file
+formData.append("fileImage", file); // Ensure `selectedFile` contains the chosen file object
 
-    if (file) {
-      formData.append('fileImage', file);
-    } else {
-      NotificationService.info('Debe seleccionar una imagen .jpg', 5000);
-      return;
+    // const formData = new FormData();
+    // Object.keys(staffForm).forEach((key) => {
+    //   formData.append(key, staffForm[key]);
+    // });
+    // formData.append('fileImage', file);
+  
+    for (const [key, value] of formData.entries()) {
+      console.log(`${key}:`, value);
     }
-
+  
     try {
       await axios.post(`${API_URL}/staff/new`, formData, {
         headers: {
@@ -56,15 +79,54 @@ const AddStaffDialog = ({ open, onClose, fetchStaff }) => {
           Authorization: `Bearer ${token}`,
         },
       });
-
-      NotificationService.success('Staff agregado exitosamente');
-      fetchStaff(); // Optionally refresh staff list after successful update
+  
+      NotificationService.success('Staff added successfully');
+      fetchStaff();
       onClose();
     } catch (error) {
-      console.error('Error al enviar el formulario:', error);
-      NotificationService.error('Error al agregar el staff');
+      console.error('Error submitting form:', error);
+      NotificationService.error('Failed to add staff.');
     }
   };
+
+
+//   const handleSubmitAdd = async () => {
+//     const token = JSON.parse(localStorage.getItem("userAuth"))?.token;
+//     if (!token) {
+//       console.error('Token not found or user not authenticated');
+//       return;
+//     }
+//     if (!staffForm.name || !staffForm.lastName || !staffForm.contact) {
+//       NotificationService.error('Debe llenar todos los campos requeridos.', 5000);
+//       return;
+//     }
+
+//     const formData = new FormData();
+//     formData.append('staffData', new Blob([JSON.stringify(staffForm)], { type: 'application/json' }));
+//     if (file) {
+//         formData.append('fileImage', file);
+//     } else {
+//         NotificationService.info('Debe seleccionar una imagen .jpg', 5000);
+//         return;
+//     }
+//     console.log("sraffData: ", formData);
+    
+//     try {
+//       await axios.post(`${API_URL}/staff/new`, formData, {
+//         headers: {
+//           'Content-Type': 'multipart/form-data',
+//           Authorization: `Bearer ${token}`,
+//         },
+//       });
+
+//       NotificationService.success('Staff agregado exitosamente');
+//       fetchStaff(); // Optionally refresh staff list after successful update
+//       onClose();
+//     } catch (error) {
+//       console.error('Error al enviar el formulario:', error);
+//       NotificationService.error('Error al agregar el staff');
+//     }
+//   };
 
   const handleButtonClick = () => {
     document.getElementById('fileInput').click();
