@@ -13,7 +13,7 @@ const Layout = () => {
   const [isNearFooter, setIsNearFooter] = useState(false);
   const [isOpenDrawer, setIsOpenDrawer] = useState(false);
 
-  const footerRef = useRef<HTMLDivElement>(null);
+  const footerRef = useRef(null); // Crear referencia
 
   const userData = JSON.parse(localStorage.getItem("userData") || "{}");
   const isAdmin = userData?.role === "ADMIN" || false;
@@ -34,7 +34,8 @@ const Layout = () => {
     };
 
     window.addEventListener("scroll", handleScroll);
-    // Initial check
+
+    // Chequeo inicial
     handleScroll();
 
     return () => window.removeEventListener("scroll", handleScroll);
@@ -81,7 +82,9 @@ const Layout = () => {
             sx={{
               position: "fixed",
               right: { xs: "20px", sm: "60px", xl: "80px" },
-              bottom: isNearFooter ? `${footerRef.current?.offsetHeight + 20}px` : { xs: "20px", sm: "30px", xl: "40px" },
+              bottom: isNearFooter
+                ? `${footerRef.current?.offsetHeight + 20}px`
+                : { xs: "20px", sm: "30px", xl: "40px" },
               zIndex: 100,
               transition: "all 0.5s ease-in-out",
             }}
@@ -89,8 +92,8 @@ const Layout = () => {
             <img
               src={chatwhatsapp}
               alt="Bot"
-              width={isLargeScreen ? 80 : 60}
-              height={isLargeScreen ? 80 : 60}
+              width={isLargeScreen ? 60 : 60}
+              height={isLargeScreen ? 60 : 60}
               style={{
                 filter: "drop-shadow(0px 4px 4px #00000040)",
                 cursor: "pointer",
@@ -100,7 +103,7 @@ const Layout = () => {
         )}
         <Outlet />
       </Box>
-      {/* Añade la referencia al Footer */}
+      {/* Pasar correctamente el ref al Footer */}
       <Footer ref={footerRef} />
     </Box>
   );

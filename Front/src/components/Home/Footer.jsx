@@ -3,8 +3,10 @@ import { Box, Divider, Typography, Grid2, Link } from "@mui/material";
 import logo from "../../assets/logo.png";
 import { RiInstagramFill, RiTiktokFill, RiWhatsappFill } from "react-icons/ri";
 
-const Footer = forwardRef<HTMLDivElement>((props, ref) => {
+const Footer = forwardRef((props, ref) => {
 const currentYear = new Date().getFullYear();
+
+console.log('ref', ref)
 
   return (
       <Box
@@ -115,4 +117,4 @@ const currentYear = new Date().getFullYear();
 
 Footer.displayName = "Footer";
 
-export default Footer
+export default Footer;
