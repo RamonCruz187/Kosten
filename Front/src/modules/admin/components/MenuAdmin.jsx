@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import {
   Box,
   IconButton,
@@ -33,6 +33,8 @@ const Sidebar = styled(Box)(({ theme, open }) => ({
 }));
 
 export const MenuAdmin = () => {
+  const location = useLocation();
+  const currentPath = location.pathname.split("/")[2];
 	const theme = useTheme();
 	const isLargeScreen = useMediaQuery(theme.breakpoints.up("lg"));
   const [open, setOpen] = useState(isLargeScreen ? true : false);
@@ -67,6 +69,8 @@ export const MenuAdmin = () => {
               key={index}
               sx={{
                 display: "block",
+                backgroundColor: currentPath === item.to.split("/")[2] && "var(--bg-hover-links)",
+                color: currentPath === item.to.split("/")[2] && "var(--color-hover-links)",
                 "&:hover": {
                   backgroundColor: "var(--bg-hover-links)",
                   color: "var(--color-hover-links)",

@@ -1,28 +1,72 @@
-import { Box, Paper, Typography } from "@mui/material";
-import { Link } from "react-router-dom";
+// @components/TourDestination/TourDestinationCard.jsx
+import { Box, Typography } from "@mui/material";
+import { RiImage2Line } from 'react-icons/ri';
+
+import { useNavigate } from "react-router-dom";
 
 /* eslint-disable react/prop-types */
-export default function TourDestinationCard({ img, title }) {
+export default function TourDestinationCard({ destination = {}, blank = false, route = '/destinos/' }) {
+  const navigate = useNavigate();
+  const handleClick = (id = null) => {
+    if (id) {
+      navigate(`${route}${id}`);
+    } else {
+      navigate(route);
+    }
+  }
   return (
-    <Link to={`/destinos/${title}`}  style={{ textDecoration: "none" }}>
-      <Paper
-        sx={{
-          borderRadius: "1rem",
-          objectFit: "cover",
-          overflow: "clip",
-          filter: "drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25))",
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "center",
-          justifyContent: "center",
-          flexGrow: 1,
-        }}
+  <Box
+    sx={{
+      position: "relative",
+      width: "100%",
+      aspectRatio: "10 / 9",
+      borderRadius: "10px",
+      overflow: "hidden",
+      boxShadow: "0px 4px 4px rgba(0, 0, 0, 0.25)",
+      display: "flex",
+      flexDirection: "column",
+      backgroundColor: "#c9c9c9",
+    }}
+    onClick={() => handleClick(blank ? null : destination?.id)}
+  >
+    {/* Imagen */}
+    {blank 
+    ? <Box
+      sx={{
+        width: "100%",
+        height: "100%",
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+      }}
       >
-        <img src={img} alt={title} width="100%" />
-        <Box sx={{ padding: "1rem" }}>
-          <Typography variant="titleH2">{title}</Typography>
-        </Box>
-      </Paper>
-    </Link>
+        <RiImage2Line size={50} color="#333"/>
+      </Box>
+    : <Box
+      component="img"
+      src={destination?.images[0].url}
+      alt={destination?.name}
+      sx={{
+        width: "100%",
+        height: "100%",
+        objectFit: "cover",
+      }}
+    />}
+    {/* Información */}
+    <Box
+      sx={{
+        width: "100%",
+        backgroundColor: "#f3f3f3",
+        padding: "1rem",
+        textAlign: "center",
+      }}
+    >
+      <Typography
+        variant="titleH2"
+      >
+        {blank ? "Nuevo Paquete / Destino" : destination?.name}
+      </Typography>
+    </Box>
+  </Box>
   );
 }

@@ -7,20 +7,25 @@ import LandingPage from "../components/Home/LandingPage"
 import Loading from "../shared/components/Loading.jsx";
 const Login = lazy(() => import("../components/Auth/Login"));
 const Register = lazy(() => import("../components/Auth/Register"));
-// const AdminDashboard = lazy(() => import("../components/Dashboard/AdminDashboard"));
+
+const UserGuestRoutes = lazy(() => import("./UserGuestRoutes.jsx"));
+import { UserAdminPrivateRoutes } from "./UserAdminPrivateRoutes.jsx";
+
 import AdminDashboard from "../components/Dashboard/AdminDashboard";
 const Muestras = lazy(() => import("../components/muestras"));
-const UserGuestRoutes = lazy(() => import("./UserGuestRoutes.jsx"));
-const AdminPackages = lazy(() => import("../modules/admin/pages/AdminPackages.jsx"));
+
+
 const PageNotFound = lazy(() => import("../shared/pages/error/PageNotFound.jsx"));
-const CreateEditPackage = lazy(() => import("../modules/admin/components/CreateEditPackage.jsx"));
 const DepartureGrid = lazy(() => import("../modules/Departures/components/DepartureGrid.jsx"));
 const DepartureFull = lazy(() => import("../modules/Departures/pages/DepartureFull.jsx"));
-const PackageFullView = lazy(() => import("../modules/admin/pages/PackageFullView.jsx"));
 const Gallery = lazy(() => import("../components/PhotosGallery/Gallery.jsx"));
-// const UserAdminPrivateRoutes = lazy(() => import("./UserAdminPrivateRoutes.jsx"));
-import { UserAdminPrivateRoutes } from "./UserAdminPrivateRoutes.jsx";
+// const PackageFullView = lazy(() => import("../modules/admin/pages/PackageFullView.jsx"));
+import { AdminPackages } from "../modules/admin/pages/AdminPackages.jsx";
+import { CreateEditPackage } from "../modules/admin/components/CreateEditPackage.jsx";
 import { AdminLayout } from "../modules/admin/layout/AdminLayout.jsx";
+import AdminDepartures from "../modules/admin/pages/AdminDepartures.jsx";
+import AdminComments from "../modules/admin/pages/AdminComments.jsx";
+import Perfil from "../components/Auth/Perfil";
 const About = lazy(() => import("../components/Home/About"));
 const TourDestinationView = lazy(() => import("../components/TourDestination/TourDestinationView.jsx"));
 const TourDestinationDetail = lazy(() => import("../components/TourDestination/TourDestinationDetail.jsx"));
@@ -43,13 +48,17 @@ const AppRoutes = () => (
           <Route path="/destinos" element={<TourDestinationView />} />
           <Route path="/destinos/:id" element={<TourDestinationDetail />} />
           <Route path="/contacto" element={<ContactView />} />
+          <Route path="/perfil" element={<Perfil />} />
           <Route path="/admin" element={<UserAdminPrivateRoutes><AdminLayout /></UserAdminPrivateRoutes>}>
             <Route index element={<Navigate to="usuarios" replace />} />
             <Route path="usuarios" element={<AdminDashboard />} />
             <Route path="paquetes" element={<AdminPackages />} />
-            <Route path="paquetes/:id" element={<PackageFullView />} />
+            <Route path="paquetes/:id" element={<CreateEditPackage />} />
             <Route path="paquetes/nuevo" element={<CreateEditPackage />} />
-            <Route path="paquetes/editar/:id" element={<CreateEditPackage />} />
+            {/* <Route path="paquetes/:id" element={<PackageFullView />} /> */}
+            {/* <Route path="paquetes/editar/:id" element={<CreateEditPackage />} /> */}
+            <Route path="salidas" element={<AdminDepartures />} />
+            <Route path="comentarios" element={<AdminComments />} />
           </Route>
         </Route>
 

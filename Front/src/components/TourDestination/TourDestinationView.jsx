@@ -1,27 +1,78 @@
-import { Box, Grid2, Stack, Typography } from "@mui/material";
+// @components/TourDestination/TourDestinationView.jsx
+import { Alert, AlertTitle, Box, CircularProgress } from "@mui/material";
 import TourDestinationCard from "./TourDestinationCard";
-import { customPalette } from "../../../customStyle";
-import { tourDestinationData } from "./tourDestinationData.js";
+
+import { useCallback, useEffect, useState } from "react";
+import { getAllActivesPackages } from "@/api/packageApi";
+import { NotificationService } from "@/shared/services/notistack.service";
 
 export default function TourDestinationView() {
+
+  const [isFetching, setIsFetching] = useState(true);
+  const [packages, setPackages] = useState();
+  const fetchPackages = useCallback(async () => {
+    setIsFetching(true);
+    try {
+      const response = await getAllActivesPackages();
+      console.log("data", response);
+      // const response = await getAllCategories();
+      // setPackages(response?.data?.data?);
+      setPackages(response?.data?.data?.content);
+      console.log("Las salidas fueron cargadas con éxito");
+    } catch (error) {
+      console.error(error);
+      NotificationService.error("Error al cargar las salidas");
+    } finally {
+      setIsFetching(false);
+    }
+  }, []);
+
+  useEffect(() => {
+      fetchPackages();
+  }, []);
+
+  if (isFetching) {
+    return (
+      <Box
+        sx={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          height: "50dvh",
+        }}
+      >
+        <CircularProgress />
+      </Box>
+    );
+  }
   return (
-    <Box sx={{ background: customPalette.page_bg, padding: "1rem 2rem 2rem" }}>
-      {Object.entries(tourDestinationData).map(([region, destinations], index) => (
-        <Stack key={index} sx={{ padding: "2rem", gap:"1rem"}}>
-          <Typography variant="titleH1" sx={{ color: customPalette.text.light }}>
-            {region}
-          </Typography>
-          
-          <Grid2 container spacing={4}>
-            {Object.entries(destinations).map(([destino, img], idx) => (
-              <Grid2 item size={{xs:12, sm:6, md:4, lg:3}} key={idx}>
-                <TourDestinationCard img={img} title={destino} />
-              </Grid2>
-            ))}
-          </Grid2>
-          
-        </Stack>
-      ))}
+    <Box sx={{ padding: '2rem 3rem'  }}>
+      {packages ? (
+        <Box sx={{ 
+          display: 'grid', 
+          gridTemplateColumns: {sx: 'repeat(1, 1fr)', md: 'repeat(2, 1fr)', lg: 'repeat(3, 1fr)'}, 
+          gap: '2rem' 
+
+        }}>
+          {packages.map((item) => (
+            <TourDestinationCard destination={item} key={item.id} route='/destinos/' />
+          ))}
+        </Box>
+      ) : (
+        <Box
+          sx={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            height: "30dvh",
+          }}
+        >
+          <Alert severity="info" sx={{ width: "100%" }}>
+            <AlertTitle>Sin paquetes</AlertTitle>
+            No hay paquetes para mostrar.
+          </Alert>
+        </Box>
+      )}
     </Box>
   );
 }
