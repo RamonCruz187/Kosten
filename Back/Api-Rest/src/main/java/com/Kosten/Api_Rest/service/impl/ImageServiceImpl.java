@@ -44,7 +44,6 @@ public class ImageServiceImpl implements ImageService {
     }
 
     public Image createNewImage(MultipartFile file) {
-
         try {
             Map uploadResult = cloudinary
                     .uploader()

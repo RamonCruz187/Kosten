@@ -84,8 +84,23 @@ public class Package {
     @JsonManagedReference(value = "packageRef")
     private List<Image> images = new ArrayList<>();
 
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "banner_photo_id", referencedColumnName = "id")
+    private Image bannerPhoto;
+
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "itinerary_photo_id", referencedColumnName = "id")
+    private Image itineraryPhoto;
+
+    @OneToMany(mappedBy = "packageDestinyRef", cascade = CascadeType.ALL)
+    private List<Image> destinyPhotos;
+
+
     //Helper Methods: Keep Both Sides of the Association in SYNC
     public void addImage(Image image) {
+        if (this.images == null) {
+            this.images = new ArrayList<>();
+        }
         this.images.add(image);
         image.setPackageRef(this);
     }
@@ -93,6 +108,27 @@ public class Package {
     public void deleteImage(Image image) {
         this.images.remove(image);
         image.setPackageRef(null);
+    }
+
+    public void addImageToBanner(Image image) {
+
+        this.bannerPhoto = image;
+        image.setPackageRef(this);
+    }
+
+
+    public void addImageToItinerary(Image image) {
+
+        this.itineraryPhoto = image;
+        image.setPackageRef(this);
+    }
+
+    public void addImageToDestiny(Image image) {
+        if (this.destinyPhotos == null) {
+            this.destinyPhotos = new ArrayList<>();
+        }
+        this.destinyPhotos.add(image);
+        image.setPackageDestinyRef(this);
     }
     /********End of Relations with Image Entity********/
 

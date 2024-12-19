@@ -34,11 +34,6 @@ public record PackageRequestDTO(
         String technical_level,
         String included_services,
 
-        List<ImageResponseDTO> images,
-
-        List<MultipartFile> filesImages,
-        List<DepartureResponseDto> departures,
-
         List<MonthNames> months,
         List<Integer> all_months,
 
