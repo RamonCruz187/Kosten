@@ -25,6 +25,7 @@ import { CreateEditPackage } from "../modules/admin/components/CreateEditPackage
 import { AdminLayout } from "../modules/admin/layout/AdminLayout.jsx";
 import AdminDepartures from "../modules/admin/pages/AdminDepartures.jsx";
 import AdminComments from "../modules/admin/pages/AdminComments.jsx";
+import Perfil from "../components/Auth/Perfil";
 const About = lazy(() => import("../components/Home/About"));
 const TourDestinationView = lazy(() => import("../components/TourDestination/TourDestinationView.jsx"));
 const TourDestinationDetail = lazy(() => import("../components/TourDestination/TourDestinationDetail.jsx"));
@@ -47,6 +48,7 @@ const AppRoutes = () => (
           <Route path="/destinos" element={<TourDestinationView />} />
           <Route path="/destinos/:id" element={<TourDestinationDetail />} />
           <Route path="/contacto" element={<ContactView />} />
+          <Route path="/perfil" element={<Perfil />} />
           <Route path="/admin" element={<UserAdminPrivateRoutes><AdminLayout /></UserAdminPrivateRoutes>}>
             <Route index element={<Navigate to="usuarios" replace />} />
             <Route path="usuarios" element={<AdminDashboard />} />

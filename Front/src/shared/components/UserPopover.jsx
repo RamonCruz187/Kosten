@@ -24,7 +24,7 @@ const data = [
     },
     {
         label: 'Mi Perfil',
-        href: '#',
+        href: '/perfil',
         icon: <ManageAccounts />,
     },
     {
