@@ -1,11 +1,15 @@
+import React, { forwardRef } from "react";
 import { Box, Divider, Typography, Grid2, Link } from "@mui/material";
 import logo from "../../assets/logo.png";
 import { RiInstagramFill, RiTiktokFill, RiWhatsappFill } from "react-icons/ri";
 
-export default function Footer() {
-  const currentYear = new Date().getFullYear();
+const Footer = forwardRef<HTMLDivElement>((props, ref) => {
+const currentYear = new Date().getFullYear();
+
   return (
-      <Box component="footer"
+      <Box
+        ref={ref}
+        component="footer"
         className="footer"
         sx={{
           display: "flex",
@@ -107,4 +111,8 @@ export default function Footer() {
         </Typography>
       </Box>
   );
-}
+})
+
+Footer.displayName = "Footer";
+
+export default Footer
