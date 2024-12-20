@@ -10,6 +10,7 @@ import com.Kosten.Api_Rest.model.User;
 import com.Kosten.Api_Rest.repository.UserRepository;
 import com.Kosten.Api_Rest.service.AuthService;
 import lombok.RequiredArgsConstructor;
+import lombok.var;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;

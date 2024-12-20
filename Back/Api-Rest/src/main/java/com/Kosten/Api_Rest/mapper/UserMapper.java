@@ -1,5 +1,6 @@
 package com.Kosten.Api_Rest.mapper;
 
+import com.Kosten.Api_Rest.dto.user.AuthResponseDto;
 import com.Kosten.Api_Rest.dto.user.UserPackDepDto;
 import com.Kosten.Api_Rest.dto.user.UserResponseDto;
 import com.Kosten.Api_Rest.dto.user.UserToBeListed;
@@ -21,10 +22,12 @@ public interface UserMapper {
     @Mapping(target = "departures", source = "userEntity.departures")
     UserPackDepDto toUserPackDepDto(User userEntity);
 
+    @Mapping(source = "user.id", target = "id")
+    @Mapping(target = "username", expression = "java(mapUsername(user))")
+    @Mapping(target = "token", ignore = true)
+    AuthResponseDto toAuthResponse(User user);
+
     List<UserResponseDto> entityListToDtoList(List<User> userList);
 
-    default String mapUsername(User user) {
-        return user.getName();
-    }
+    default String mapUsername(User user) {return user.getName();}
 }
-
