@@ -65,15 +65,13 @@ public class User implements UserDetails {
     }
 
     @Override
-    public boolean isAccountNonLocked() {
-        return UserDetails.super.isAccountNonLocked();
-    }
+    public boolean isAccountNonLocked() { return UserDetails.super.isAccountNonLocked(); }
 
     @Override
     public boolean isCredentialsNonExpired() { return UserDetails.super.isCredentialsNonExpired(); }
 
     @Override
-    public boolean isEnabled() { return UserDetails.super.isEnabled(); }
+    public boolean isEnabled() { return isActive; }
 
     public User update(UpdateUserRequestDto updateUserRequestDto) {
         if (updateUserRequestDto.email() != null)

@@ -1,6 +1,7 @@
 package com.Kosten.Api_Rest.Exception;
 
 import com.Kosten.Api_Rest.Exception.userExc.EmailNotFoundException;
+import com.Kosten.Api_Rest.Exception.userExc.UserNotActiveException;
 import com.Kosten.Api_Rest.dto.BaseResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,4 +20,9 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
     }
 
-}
+    @ExceptionHandler(UserNotActiveException.class)
+    public ResponseEntity<String> handleUserNotActiveException(UserNotActiveException ex) {
+        return ResponseEntity.status(HttpStatus.FORBIDDEN).body(ex.getMessage());
+    }
+
+    }

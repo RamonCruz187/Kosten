@@ -83,7 +83,7 @@ public class UserServiceImpl implements UserService {
     public BaseResponse delete(Long id){
 
         User user = userRepository.findById(id).orElseThrow(
-                ()-> new NotFoundUser()
+                NotFoundUser::new
         );
 
         user.delete();

@@ -1,5 +1,6 @@
 package com.Kosten.Api_Rest.service.impl;
 
+import com.Kosten.Api_Rest.Exception.userExc.UserNotActiveException;
 import com.Kosten.Api_Rest.Jwt.JwtService;
 import com.Kosten.Api_Rest.dto.BaseResponse;
 import com.Kosten.Api_Rest.dto.ExtendedBaseResponse;
@@ -34,6 +35,10 @@ public class AuthServiceImpl implements AuthService {
 
         User user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new IllegalArgumentException("El usuario con ese email no existe."));
+
+        if (!user.isEnabled()) {
+            throw new UserNotActiveException("El usuario no está activo. Por favor, contacte al administrador.");
+        }
 
         if (!passwordEncoder.matches(password, user.getPassword())) {
             throw new IllegalArgumentException("La contraseña es incorrecta");
