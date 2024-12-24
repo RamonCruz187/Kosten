@@ -67,8 +67,8 @@ useEffect(() => {
         }}>
           {isFetching ? <CircularProgress />
           :
-          allPackages.length !== 0 && allPackages?.map((departure) => (
-            departure?.active && <DepartureCard key={`departure-${departure.id}`} departure={departure} />
+          allPackages.length !== 0 && allPackages?.map((pack) => (
+            pack?.active && <DepartureCard key={`departure-${pack.id}`} pack={pack} />
           ))}
         </Box>
       </Box>
