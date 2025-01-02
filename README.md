@@ -123,11 +123,11 @@ Características Principales
 
 #### 👉🏻 Desarrolladores 👨🏻‍💻
 
-  <img src="https://avatars.githubusercontent.com/u/134340949?v=4" width=100><br> | <img src="https://avatars.githubusercontent.com/u/137120140?v=4" width=100><br> | <img src="" width=100><br> |
+  <img src="https://avatars.githubusercontent.com/u/134340949?v=4" width=100><br> | <img src="https://avatars.githubusercontent.com/u/137120140?v=4" width=100><br> | <img src="https://avatars.githubusercontent.com/u/128533111?s=400&u=a5803213b11ca3bbea59d596569f0d49e87c7443&v=4" width=100><br> |
 | :---: | :---: | :---: |
 | **Matias Saig**| **Mauro Cicchelli**| **Leon Asturizaga**|
-| <a href="https://www.linkedin.com/in/matias-saig/"><img src="https://img.shields.io/badge/linkedin%20-%230077B5.svg?&style=for-the-badge&logo=linkedin&logoColor=white"/></a> | <a href="https://www.linkedin.com/in/maurocicdev/"><img src="https://img.shields.io/badge/linkedin%20-%230077B5.svg?&style=for-the-badge&logo=linkedin&logoColor=white"/></a> | <a href="#"><img src="https://img.shields.io/badge/linkedin%20-%230077B5.svg?&style=for-the-badge&logo=linkedin&logoColor=white"/></a> |
-| <a href="https://github.com/Matias-Saig/Portafolio"><img src="https://img.shields.io/badge/github-%23121011.svg?&style=for-the-badge&logo=github&logoColor=white"/></a> | <a href="https://github.com/MCicchelliMauro"><img src="https://img.shields.io/badge/github-%23121011.svg?&style=for-the-badge&logo=github&logoColor=white"/></a> | <a href="#"><img src="https://img.shields.io/badge/github-%23121011.svg?&style=for-the-badge&logo=github&logoColor=white"/></a> |
+| <a href="https://www.linkedin.com/in/matias-saig/"><img src="https://img.shields.io/badge/linkedin%20-%230077B5.svg?&style=for-the-badge&logo=linkedin&logoColor=white"/></a> | <a href="https://www.linkedin.com/in/maurocicdev/"><img src="https://img.shields.io/badge/linkedin%20-%230077B5.svg?&style=for-the-badge&logo=linkedin&logoColor=white"/></a> | <a href="https://www.linkedin.com/in/leon-asturizaga-94a80377"><img src="https://img.shields.io/badge/linkedin%20-%230077B5.svg?&style=for-the-badge&logo=linkedin&logoColor=white"/></a> |
+| <a href="https://github.com/Matias-Saig/Portafolio"><img src="https://img.shields.io/badge/github-%23121011.svg?&style=for-the-badge&logo=github&logoColor=white"/></a> | <a href="https://github.com/MCicchelliMauro"><img src="https://img.shields.io/badge/github-%23121011.svg?&style=for-the-badge&logo=github&logoColor=white"/></a> | <a href="https://github.com/leonasturizaga"><img src="https://img.shields.io/badge/github-%23121011.svg?&style=for-the-badge&logo=github&logoColor=white"/></a> |
 
 <br><br>
 

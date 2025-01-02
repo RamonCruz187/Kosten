@@ -34,20 +34,20 @@ const EditStaffDialog = ({ open, onClose, staffForm, setStaffForm, fetchStaff })
             console.error('Token not found or user not authenticated');
             return;
         }
-        if (!staffForm.name || !staffForm.lastName || !staffForm.contact) {
-            NotificationService.error('Debe llenar todos los campos requeridos.', 5000);
-            return;
-        }
+        // if (!staffForm.name || !staffForm.lastName || !staffForm.contact) {
+        //     NotificationService.error('Debe llenar todos los campos requeridos.', 5000);
+        //     return;
+        // }
 
         const formData = new FormData();
         formData.append('staffData', new Blob([JSON.stringify(staffForm)], { type: 'application/json' }));
 
         if (file) {
-            formData.append('fileImage', file);
-        } else {
-            NotificationService.info('Debe seleccionar una imagen .jpg', 5000);
-            return;
-        }
+            formData.append('fileImage', file);}
+        // } else {
+        //     NotificationService.info('Debe seleccionar una imagen .jpg', 5000);
+        //     return;
+        // }
         console.log(formData);
         try {
             await axios.put(`${API_URL}/staff/update`, formData, {
