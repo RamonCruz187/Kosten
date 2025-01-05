@@ -215,6 +215,18 @@ public class Package {
         if (packageToUpdateDTO.included_services() != null)
             this.included_services = packageToUpdateDTO.included_services();
 
+        if (packageToUpdateDTO.active() != null)
+            this.active = packageToUpdateDTO.active();
+
+        if (packageToUpdateDTO.locationInfo() != null)
+            this.locationInfo = packageToUpdateDTO.locationInfo();
+
+        if (packageToUpdateDTO.historyInfo() != null)
+            this.historyInfo = packageToUpdateDTO.historyInfo();
+
+        if (packageToUpdateDTO.activityInfo() != null)
+            this.activityInfo =packageToUpdateDTO.activityInfo();
+
         return this;
     }
 

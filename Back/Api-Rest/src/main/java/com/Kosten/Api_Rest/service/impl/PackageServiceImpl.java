@@ -8,9 +8,11 @@ import com.Kosten.Api_Rest.dto.packageDTO.PackageRequestDTO;
 import com.Kosten.Api_Rest.dto.packageDTO.PackageResponseDTO;
 import com.Kosten.Api_Rest.dto.packageDTO.PackageToUpdateDTO;
 import com.Kosten.Api_Rest.mapper.PackageMapper;
+import com.Kosten.Api_Rest.model.Category;
 import com.Kosten.Api_Rest.model.Departure;
 import com.Kosten.Api_Rest.model.Image;
 import com.Kosten.Api_Rest.model.Package;
+import com.Kosten.Api_Rest.repository.CategoryRepository;
 import com.Kosten.Api_Rest.repository.ImageRepository;
 import com.Kosten.Api_Rest.repository.PackageRepository;
 import com.Kosten.Api_Rest.service.ImageService;
@@ -22,6 +24,7 @@ import org.springframework.stereotype.Service;
 import com.Kosten.Api_Rest.repository.IDepartureRepository;
 
 import java.util.List;
+import java.util.Optional;
 
 
 @Service
@@ -32,6 +35,7 @@ public class PackageServiceImpl implements PackageService {
     private final PackageMapper packageMapper;
     public final IDepartureRepository departureRepository;
     private final ImageRepository imageRepository;
+    private final CategoryRepository categoryRepository;
 
     public ExtendedBaseResponse<PackageResponseDTO> createPackage(PackageRequestDTO packageRequestDTO, List<Image> images, List<Image> destinyImages, Image itineraryImage, Image bannerImage) {
 
@@ -154,11 +158,14 @@ public class PackageServiceImpl implements PackageService {
     public ExtendedBaseResponse<PackageResponseDTO> update(PackageToUpdateDTO packageToUpdateDTO) {
 
         Package packageEntity = packageRepository.findByIdAndActiveIsTrue(packageToUpdateDTO.id());
+        Category category = categoryRepository.findById(packageToUpdateDTO.idCategory())
+                .orElseThrow(() -> new PackageNotFoundException("Categoría no encontrada."));
 
         if (packageEntity == null) {
             throw new PackageNotFoundException("Paquete no encontrado.");
         }
 
+        packageEntity.setCategory(category);
         PackageResponseDTO packageResponseDTO = packageMapper.packageToPackageResponseDTO(packageEntity.update(packageToUpdateDTO));
 
         return ExtendedBaseResponse.of(
