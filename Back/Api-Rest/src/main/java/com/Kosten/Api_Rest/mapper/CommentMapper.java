@@ -3,6 +3,7 @@ package com.Kosten.Api_Rest.mapper;
 import com.Kosten.Api_Rest.dto.comment.CPackageResponse;
 import com.Kosten.Api_Rest.dto.comment.CommentDto;
 import com.Kosten.Api_Rest.dto.comment.CommentRequestDto;
+import com.Kosten.Api_Rest.dto.comment.PackageCResponse;
 import com.Kosten.Api_Rest.model.Comment;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -32,5 +33,9 @@ public interface CommentMapper {
     List<CommentDto> entityListToDtoList(List<Comment> commentList);
 
     List<Comment> dtoListToEntityList(List<CommentDto> commentDtoList);
+
+    default PackageCResponse toPackageCResponse(List<Comment> commentList) {
+        return new PackageCResponse(entityListToDtoList(commentList));
+    }
 
 }

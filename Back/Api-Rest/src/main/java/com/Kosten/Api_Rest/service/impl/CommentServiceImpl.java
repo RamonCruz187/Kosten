@@ -1,5 +1,6 @@
 package com.Kosten.Api_Rest.service.impl;
 
+import com.Kosten.Api_Rest.Exception.commentExc.ResourceNotFoundException;
 import com.Kosten.Api_Rest.Exception.packagesExc.PackageNotFoundException;
 import com.Kosten.Api_Rest.dto.comment.*;
 import com.Kosten.Api_Rest.Exception.commentExc.CommentNotFoundException;
@@ -120,6 +121,16 @@ public class CommentServiceImpl implements CommentService {
         Comment comment = commentRepository.findById(commentId)
                 .orElseThrow(() -> new CommentNotFoundException("Comentario no encontrado con ese ID: " + commentId));
         return commentMapper.toCPackageResponse(comment);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public PackageCResponse findByPackageRef_Id(Long packageId) {
+        List<Comment> list = commentRepository.findByPackageRef_IdAndIsVisibleTrue(packageId);
+        if (list.isEmpty()) {
+            throw new ResourceNotFoundException("No se encontraron comentarios para el paquete con ID: " + packageId);
+        }
+        return commentMapper.toPackageCResponse(list);
     }
 
 }
