@@ -26,4 +26,6 @@ public interface CommentService {
 
     CPackageResponse findCommentWithPackageById(Long commentId);
 
+    PackageCResponse findByPackageRef_Id (Long packageId);
+
 }
