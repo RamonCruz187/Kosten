@@ -1,12 +1,13 @@
 import { Label } from "@mui/icons-material";
-import Box from "@mui/material/Box";
-import { Button, Card, Stack, Typography } from "@mui/material";
+import { Button, Card, Stack, Typography, Box } from "@mui/material";
 import { fCurrency } from "../../../shared/utils/formatNumber.js";
-import { Link } from "react-router-dom";
 import { iconsCardDepartures, iconsCardPackages } from "../utils/utils.jsx";
 import { processDepartures, useSharedPack } from "../utils/utils.jsx";
-import { useState } from "react";
-
+import { useState, useContext } from "react";
+import {GlobalContext} from '../../../shared/context/GlobalContext.jsx';
+import SessionRequestModal from './SessionRequestModal.jsx';
+import { useNavigate } from "react-router-dom";
+import { formatPricesRange } from '../utils/utils.jsx';
 
 export const DepartureCard = ({ pack, isAdmin = false }) => {
   const processedDepartures = processDepartures([pack]);
@@ -15,6 +16,16 @@ export const DepartureCard = ({ pack, isAdmin = false }) => {
   const [openThirdModal, setOpenThirdModal] = useState(false);
   const [selectedInfo, setSelectedInfo] = useState(null);
   const [, updatePack] = useSharedPack();
+  const { state } = useContext(GlobalContext);
+  const [openSessionRequestModal, setOpenSessionRequestModal] = useState(false);
+  const navigate = useNavigate();
+  console.log(pack)
+  
+  const handleCardClick = () => {
+    updatePack(pack);  // Guardar el pack en el estado compartido
+    navigate(`/salidas/${pack.id}`);  // Navegar programáticamente
+  };  
+
 //-------------------------------------------------------------------------
   const handleOpenSecondModal = (info) => {
     setSelectedInfo(info);
@@ -31,10 +42,6 @@ export const DepartureCard = ({ pack, isAdmin = false }) => {
   };
 //-------------------------------------------------------------------------
 
-
-const handleClick = () => {
-  updatePack(pack); // Guardar el pack en el estado compartido
-};
 
 
   // el estatus para el admin
@@ -104,19 +111,11 @@ const handleClick = () => {
             }}
           />
 
-            {/* Stack es el contenedor para la lista de elementos */}
         <Stack spacing={2} sx={{ p: 3, flexGrow: 1,  }}> 
-          
-          <Link
-            to={`/salidas/${pack.id ?? ""}`}
-            onClick={handleClick}
-            style={{ textDecoration: "none", color: "inherit" }}
-          >
-            <Typography variant="titleH2" style={{ color: "inherit" }}>
+            <Typography variant="titleH2" style={{ color: "inherit" }}
+            onClick={handleCardClick} >
               {pack.name}
             </Typography>
-          </Link>
-
           <Box display="flex" alignItems="center" justifyContent="space-between">
             <Stack
               spacing={1}
@@ -148,12 +147,8 @@ const handleClick = () => {
                       </div>
                     )
                   )}
-                  
                 </Box>
-
-                
               </Box>
-
               <Box
                 sx={{
                   display: "flex",
@@ -165,7 +160,6 @@ const handleClick = () => {
                 <Box sx={{ display: "flex" }}>{iconsCardPackages[2]}</Box>
                 <Typography variant="caption">{pack.duration}</Typography>
               </Box>
-
               <Box
                 sx={{
                   display: "flex",
@@ -203,32 +197,27 @@ const handleClick = () => {
                 height: "100%",
               }}
             >
-              <Typography variant="titleH3">
-                <Typography
-                  component="p"
-                  variant="body1"
-                  sx={{
-                    color: "text.disabled",
-                    textDecoration: "line-through",
-                    fontSize: "0.9rem",
-                  }}
-                >
-                  {/* {packageData.departures[departureIndex].price && fCurrency(packageData.departures[departureIndex].price * 1.3)}  */}
-                </Typography>
-                {/* {fCurrency(packageData.departures[departureIndex].price)} */}
-                1000
+              <Typography variant="titleH3" textAlign={'center'}>
+
+                { 
+                  formatPricesRange(pack.departures) 
+                  }
               </Typography>
 
-              <Button variant="contained" size="small" color="brownButton" onClick={()=>{setOpenModal(true)}}>
+              <Button variant="contained" size="small" color="brownButton" onClick={ ()=>{
+                state.user_auth.token ? 
+                  (
+                    setOpenModal(true)
+                  ) :
+                  (
+                    setOpenSessionRequestModal(true)
+                  )
+                }}>
                 Reservar
               </Button>
             </Box>
           </Box>
         </Stack>
-        <Link
-            to={`/salidas/${pack.id}`}
-            style={{ textDecoration: "none", color: "inherit" }}
-          >
         <Button
           variant="contained"
           size="large"
@@ -238,13 +227,17 @@ const handleClick = () => {
             borderRadius: 0, 
             marginTop: "auto", 
           }}
-          onClick={()=>{}}
+          onClick={handleCardClick} 
         >
           Ver más
         </Button>
-        </Link>
-      </Card>
 
+      </Card>
+      <SessionRequestModal
+        openSessionRequestModal={openSessionRequestModal}
+        onClose={() => setOpenSessionRequestModal(false)}
+        text="Para reservar o hacer consultas inicia sesion."
+      />
       {openModal && (
           <Box
             sx={{
@@ -348,7 +341,7 @@ const handleClick = () => {
                     <br />
                     La reserva quedará confirmada una vez realizado el pago de la salida correspondiente.
                     <br />
-                    Toda la información que necesitas saber para realizar el pago te llegará <b>vía mail</b> al confirmar</Typography>
+                    Toda la información que necesitas saber para realizar el pago te llegará al mail con el cual te has registrado en Kosten.</Typography>
             }
               
                 <Box sx={{display:"flex", justifyContent:"flex-end", gap:"8px", mt:"10px"}}>

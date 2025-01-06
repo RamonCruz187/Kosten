@@ -1,16 +1,18 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useContext } from 'react';
 import { 
   Box, IconButton, Typography, Card, CardContent,useMediaQuery,useTheme,Button} from '@mui/material';
 import { ChevronLeft as PrevIcon, ChevronRight as NextIcon } from '@mui/icons-material';
 import { processDepartures } from "../utils/utils.jsx";
+import {GlobalContext} from '../../../shared/context/GlobalContext.jsx';
+import SessionRequestModal from './SessionRequestModal.jsx';
 
 const DepartureSlider = ({ sharedPack }) => {
   const [currentDepartureIndex, setCurrentDepartureIndex] = useState(0);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
-  
   const [slides, setSlides] = useState(processDepartures([sharedPack]));
- 
-    
+  const { state } = useContext(GlobalContext);
+  const [openSessionRequestModal, setOpenSessionRequestModal] = useState(false);
+  const [modalText, setModalText] = useState();
 
   // Imágenes del sharedPack
   const images = sharedPack.images || [];
@@ -116,12 +118,29 @@ const DepartureSlider = ({ sharedPack }) => {
             >
               <CardContent>
                 <Typography variant="h6" component="div">
-                  {departure.startDate}
+                {departure.startDateFormatted || departure.message}
                 </Typography>
                 <Typography>
                   {typeof departure.price === "number" ? `$${departure.price}` : departure.price}
                 </Typography>
-                <Button>
+                <Button
+                  onClick={ ()=>{
+                    if (state.user_auth.token) {
+                      if (typeof departure.price !== "number") {
+                        // Al cambiar este texto se deberá cambiar la validación en SessionRequestModal.jsx línea 40
+                        setModalText("Al 'enviar' uno de nuestros Guías se pondrá en contacto con usted vía mail.");
+                        
+                      } else {
+                        setModalText("Al 'enviar' uno de nuestros Guías se pondrá en contacto con usted vía mail.");
+                        
+                      }
+                    } else {
+                      setModalText("Para reservar o hacer consultas inicia sesion.");
+                      
+                    }
+                    setOpenSessionRequestModal(true);
+                  }}
+                >
                   {typeof departure.price === "number" ? 'RESERVAR' : 'CONTACTANOS'}
                 </Button>
               </CardContent>
@@ -142,7 +161,23 @@ const DepartureSlider = ({ sharedPack }) => {
                 <Typography component="div" sx={{fontWeight:'600',paddingTop:'15%',paddingX:'16px', fontSize:'20px'}}>
                 Aún no hay salidas disponibles
                 </Typography>
-                <Button color="brownButton" sx={{marginTop:'12%'}}>
+                <Button 
+                  color="brownButton" 
+                  sx={{marginTop:'12%'}}
+                  onClick={ ()=>{
+                    state.user_auth.token ? 
+                      (
+                        // Al cambiar este texto se deberá cambiar la validación en SessionRequestModal.jsx línea 40
+                        setModalText("Al 'enviar' uno de nuestros Guías se pondrá en contacto con usted vía mail."),
+                        setOpenSessionRequestModal(true)
+                        
+                      ) :
+                      (
+                        setModalText("Para reservar o hacer consultas inicia sesion."),
+                        setOpenSessionRequestModal(true)
+                      )
+                  }}
+                >
                   CONSULTAR POR SALIDAS FUTURAS
                 </Button>
               </CardContent>
@@ -150,7 +185,11 @@ const DepartureSlider = ({ sharedPack }) => {
           )
         }
         </Box>
-
+        <SessionRequestModal
+          openSessionRequestModal={openSessionRequestModal}
+          onClose={() => setOpenSessionRequestModal(false)}
+          text={modalText}
+      />
         {totalSlides > getVisibleCards && (
           <IconButton 
             onClick={nextDepartureSlide} 
