@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Builder
@@ -26,9 +27,13 @@ public class Category {
 
     //****** Helper Methods for Promotions: Keep Both Sides of the Association in SYNC.********/
     public void addPackage(Package package_) {
+        if (this.packages == null) {
+            this.packages = new ArrayList<>();
+        }
         this.packages.add(package_);
-        package_.setCategory(this);
+        //package_.setCategory(this);
     }
+
 
     public void removePackage(Package package_) {
         package_.setCategory(null);

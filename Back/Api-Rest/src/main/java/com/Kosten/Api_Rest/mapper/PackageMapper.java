@@ -9,6 +9,10 @@ import org.mapstruct.*;
 
 @Mapper(unmappedTargetPolicy = ReportingPolicy.IGNORE, componentModel = MappingConstants.ComponentModel.SPRING)
 public interface PackageMapper {
+
+    @Mappings({
+            @Mapping(target = "category", ignore = true)
+    })
     Package toEntity(PackageRequestDTO packageRequestDTO);
 
     //PackageRequestDTO packageToPackageRequestDTO(Package package_);

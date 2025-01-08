@@ -3,7 +3,7 @@ package com.Kosten.Api_Rest.dto.packageDTO;
 
 
 import com.Kosten.Api_Rest.dto.Departure.DepartureToBeListed;
-import com.Kosten.Api_Rest.dto.category.CategoryResponseDTO;
+import com.Kosten.Api_Rest.dto.category.CategoryResponseDTOToBeListed;
 import com.Kosten.Api_Rest.dto.images.ImageResponseDTO;
 import com.Kosten.Api_Rest.model.MonthNames;
 import java.io.Serializable;
@@ -30,7 +30,7 @@ public record PackageResponseDTO(
 
         List<MonthNames> months,
 
-        CategoryResponseDTO category,
+        CategoryResponseDTOToBeListed category,
 
         boolean active,
         String locationInfo,

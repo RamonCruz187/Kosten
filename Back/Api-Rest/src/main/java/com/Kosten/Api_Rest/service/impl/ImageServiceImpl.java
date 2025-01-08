@@ -44,17 +44,17 @@ public class ImageServiceImpl implements ImageService {
     }
 
     public Image createNewImage(MultipartFile file) {
-        try {
-            Map uploadResult = cloudinary
-                    .uploader()
-                    .upload(file.getBytes(), ObjectUtils.emptyMap());
+            try {
+                Map uploadResult = cloudinary
+                        .uploader()
+                        .upload(file.getBytes(), ObjectUtils.emptyMap());
 
-            ImageRequestDTO imageRequestDTO = new ImageRequestDTO(uploadResult.get("url").toString(), uploadResult.get("public_id").toString());
+                ImageRequestDTO imageRequestDTO = new ImageRequestDTO(uploadResult.get("url").toString(), uploadResult.get("public_id").toString());
 
-            return imageMapper.toEntity(imageRequestDTO);
-        } catch (Exception e) {
-            throw new RuntimeException("No se ha podido subir la imagen: " + e.getMessage());
-        }
+                return imageMapper.toEntity(imageRequestDTO);
+            } catch (Exception e) {
+                throw new RuntimeException("No se ha podido subir la imagen: " + e.getMessage());
+            }
     }
 
     @Override

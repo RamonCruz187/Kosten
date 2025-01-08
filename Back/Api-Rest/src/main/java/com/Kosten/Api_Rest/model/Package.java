@@ -1,6 +1,7 @@
 package com.Kosten.Api_Rest.model;
 
 import com.Kosten.Api_Rest.dto.packageDTO.PackageToUpdateDTO;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.*;

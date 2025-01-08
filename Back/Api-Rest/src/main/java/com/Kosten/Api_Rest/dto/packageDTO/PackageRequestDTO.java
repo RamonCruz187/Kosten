@@ -2,11 +2,9 @@ package com.Kosten.Api_Rest.dto.packageDTO;
 
 import com.Kosten.Api_Rest.dto.Departure.DepartureResponseDto;
 import com.Kosten.Api_Rest.dto.images.ImageResponseDTO;
+import com.Kosten.Api_Rest.model.Category;
 import com.Kosten.Api_Rest.model.MonthNames;
-import jakarta.validation.constraints.Max;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Positive;
-import jakarta.validation.constraints.PositiveOrZero;
+import jakarta.validation.constraints.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.Serializable;
@@ -21,26 +19,12 @@ public record PackageRequestDTO(
         @NotBlank(message = "El nombre es requerido")
         String name,
 
-        @NotBlank(message = "La descripción es requerida")
-        String description,
-
-        @Max(message = "La puntuación máxima puede ser 10", value = 10)
-        @PositiveOrZero(message = "La puntuación debe ser 0 o mayor")
-        int punctuation,
-
-        String duration,
-        String itinerary,
-        String physical_level,
-        String technical_level,
-        String included_services,
-
-        List<MonthNames> months,
-        List<Integer> all_months,
 
         boolean active,
-        String locationInfo,
-        String historyInfo,
-        String activityInfo
+
+        @NotBlank(message = "La categoría es requerida")
+        String category
+
 
 ) implements Serializable {
 

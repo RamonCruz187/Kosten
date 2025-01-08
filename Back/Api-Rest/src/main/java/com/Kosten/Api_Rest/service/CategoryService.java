@@ -5,6 +5,7 @@ import com.Kosten.Api_Rest.dto.ExtendedBaseResponse;
 import com.Kosten.Api_Rest.dto.category.CategoryRequestDTO;
 import com.Kosten.Api_Rest.dto.category.CategoryResponseDTO;
 import com.Kosten.Api_Rest.dto.category.CategoryToUpdateDTO;
+import com.Kosten.Api_Rest.model.Category;
 
 import java.util.List;
 
@@ -18,5 +19,7 @@ public interface CategoryService {
     ExtendedBaseResponse<CategoryResponseDTO> getCategory(Long id);
 
     BaseResponse deleteCategory(Long id);
+
+    Category getCategoryByName(String name);
 
 }

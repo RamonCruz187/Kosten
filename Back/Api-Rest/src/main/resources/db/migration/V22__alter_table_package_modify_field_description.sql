@@ -1,0 +1,2 @@
+ALTER TABLE packages
+    MODIFY COLUMN description VARCHAR(255) NULL;

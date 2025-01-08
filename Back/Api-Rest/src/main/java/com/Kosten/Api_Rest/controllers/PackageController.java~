@@ -61,8 +61,11 @@ public class PackageController {
             @RequestPart(value = "bannerPhoto") MultipartFile bannerPhoto,
             UriComponentsBuilder uriComponentsBuilder
     ) {
-
-        ExtendedBaseResponse<PackageResponseDTO> packageResponseDTO = packageService.createPackage(packageRequestDTO, filesImages, bannerPhoto);
+        List <MultipartFile> imagesList= null;
+        if (filesImages != null ) {
+            imagesList = filesImages;
+        }
+        ExtendedBaseResponse<PackageResponseDTO> packageResponseDTO = packageService.createPackage(packageRequestDTO, imagesList, bannerPhoto);
 
         URI location = uriComponentsBuilder
                 .path("/packages/{id}")

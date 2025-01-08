@@ -77,4 +77,9 @@ public class CategoryServiceImpl implements CategoryService {
         categoryRepository.delete(category);
         return BaseResponse.ok("Categoría eliminada exitosamente");
     }
+
+    @Override
+    public Category getCategoryByName(String name) {
+        return categoryRepository.findByName(name);
+    }
 }
