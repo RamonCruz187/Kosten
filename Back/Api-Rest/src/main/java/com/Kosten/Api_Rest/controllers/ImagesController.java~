@@ -44,16 +44,4 @@ public class ImagesController {
             throw new RuntimeException("No se ha podido obtener las imágenes");
         }
     }
-
-    @DeleteMapping("/{imageId}")
-    public ResponseEntity<ExtendedBaseResponse<Void>> deleteImageById(@PathVariable Long imageId) {
-        try {
-            ExtendedBaseResponse<Void> response = imageService.deleteImageById(imageId);
-            return ResponseEntity
-                    .status(200)
-                    .body(response);
-        } catch (RuntimeException e) {
-            throw new RuntimeException("No se pudo eliminar la imagen: " + e.getMessage());
-        }
-    }
 }

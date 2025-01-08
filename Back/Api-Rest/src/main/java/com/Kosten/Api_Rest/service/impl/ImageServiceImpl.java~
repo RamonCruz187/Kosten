@@ -53,18 +53,26 @@ public class ImageServiceImpl implements ImageService {
                         .uploader()
                         .upload(file.getBytes(), ObjectUtils.emptyMap());
 
+<<<<<<< HEAD
                 ImageRequestDTO imageRequestDTO = new ImageRequestDTO(uploadResult.get("url").toString(), uploadResult.get("public_id").toString());
 
                 return imageMapper.toEntity(imageRequestDTO);
             } catch (Exception e) {
                 throw new RuntimeException("No se ha podido subir la imagen: " + e.getMessage());
             }
+=======
+            ImageRequestDTO imageRequestDTO = new ImageRequestDTO(
+                    uploadResult.get("url").toString(),
+                    uploadResult.get("public_id").toString()
+            );
 
+            Image image = imageMapper.toEntity(imageRequestDTO);
 
-//            Image image = imageMapper.toEntity(imageRequestDTO);
-//
-//            return imageRepository.save(image);
-
+            return imageRepository.save(image);
+        } catch (IOException e) {
+            throw new RuntimeException("No se ha podido subir la imagen: " + e.getMessage());
+        }
+>>>>>>> back-develop
     }
 
     @Override

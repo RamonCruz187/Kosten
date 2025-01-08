@@ -28,7 +28,12 @@ public record PackageToUpdateDTO(
         String physical_level,
         String technical_level,
         String included_services,
-        List<MonthNames> months
+        List<MonthNames> months,
+        Boolean active,
+        String locationInfo,
+        String historyInfo,
+        String activityInfo,
+        Long idCategory
 
 ) implements Serializable {
 }
