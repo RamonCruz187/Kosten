@@ -11,6 +11,8 @@ import java.util.List;
 public interface ImageMapper {
     Image toEntity(ImageResponseDTO imageResponseDTO);
 
+    @Mapping(source = "image.id", target = "id")
+    @Mapping(source = "image.url", target = "url")
     ImageResponseDTO imageToImageResponseDTO(Image image);
 
     Image toEntity(ImageRequestDTO imageRequestDTO);

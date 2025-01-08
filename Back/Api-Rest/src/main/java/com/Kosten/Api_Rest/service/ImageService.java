@@ -12,5 +12,7 @@ public interface ImageService {
     ExtendedBaseResponse<ImageResponseDTO> uploadImage(MultipartFile file) throws Exception;
     Image createNewImage(MultipartFile file);
     ExtendedBaseResponse<List<ImageResponseDTO>> getPackageImages();
-
+    ExtendedBaseResponse<Void> deleteImageById(Long imageId);
+    ExtendedBaseResponse<ImageResponseDTO> updateSingleImage(Long packageId, MultipartFile file, String imageType) throws Exception;
+    ExtendedBaseResponse<List<ImageResponseDTO>> addImageinArray(Long packageId, MultipartFile file, String imageType) throws Exception;
 }

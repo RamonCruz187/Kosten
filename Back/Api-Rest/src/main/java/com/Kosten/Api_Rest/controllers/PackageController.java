@@ -2,6 +2,7 @@ package com.Kosten.Api_Rest.controllers;
 
 import com.Kosten.Api_Rest.dto.BaseResponse;
 import com.Kosten.Api_Rest.dto.ExtendedBaseResponse;
+import com.Kosten.Api_Rest.dto.images.ImageResponseDTO;
 import com.Kosten.Api_Rest.dto.packageDTO.PackageRequestDTO;
 import com.Kosten.Api_Rest.dto.packageDTO.PackageResponseDTO;
 import com.Kosten.Api_Rest.dto.packageDTO.PackageToUpdateDTO;
@@ -246,4 +247,75 @@ public class PackageController {
             @PathVariable Integer departureId) {
         return packageService.removeDepartureFromPackage(packageId, departureId);
     }
+
+    @Operation(
+            summary = "Actualizar una imagen de un Paquete.",
+            description = "Permite agregar o actualizar una imagen en un paquete existente, especificando el tipo de foto (banner/itinerary)."
+    )
+    @ApiResponses(value = {
+            @ApiResponse(
+                    responseCode = "200", description = "Imagen agregada/actualizada exitosamente.",
+                    content = {
+                            @Content(mediaType = "application/json",
+                                    schema = @Schema(implementation = ExtendedBaseResponse.class))
+                    }),
+            @ApiResponse(responseCode = "400", description = "Bad request.", content = {@Content}),
+            @ApiResponse(responseCode = "401", description = "Unauthorized.", content = {@Content}),
+            @ApiResponse(responseCode = "403", description = "Forbidden access to this resource", content = {@Content}),
+            @ApiResponse(responseCode = "404", description = "Paquete no encontrado.", content = {@Content}),
+            @ApiResponse(responseCode = "500", description = "Internal Server Error", content = {@Content})
+    })
+    @PostMapping("/{packageId}/update-image")
+    public ExtendedBaseResponse<ImageResponseDTO> updateImage(
+            @PathVariable Long packageId,
+            @RequestParam("file") MultipartFile file,
+            @RequestParam("imageType") String imageType) throws Exception {
+
+        return imageService.updateSingleImage(packageId, file, imageType);
+    }
+
+    @Operation(
+            summary = "Agregar una imagen al Paquete.",
+            description = "Permite agregar una imagen a un paquete existente, especificando el tipo de foto (packageImages/destinyPhotos)."
+    )
+    @ApiResponses(value = {
+            @ApiResponse(
+                    responseCode = "200", description = "Imagen agregada exitosamente.",
+                    content = {
+                            @Content(mediaType = "application/json",
+                                    schema = @Schema(implementation = ExtendedBaseResponse.class))
+                    }),
+            @ApiResponse(responseCode = "400", description = "Bad request.", content = {@Content}),
+            @ApiResponse(responseCode = "401", description = "Unauthorized.", content = {@Content}),
+            @ApiResponse(responseCode = "403", description = "Forbidden access to this resource", content = {@Content}),
+            @ApiResponse(responseCode = "404", description = "Paquete no encontrado.", content = {@Content}),
+            @ApiResponse(responseCode = "500", description = "Internal Server Error", content = {@Content})
+    })
+    @PostMapping("/{packageId}/add-image")
+    @Transactional
+    public ResponseEntity<ExtendedBaseResponse<List<ImageResponseDTO>>> addImageToPackage(
+            @PathVariable Long packageId,
+            @RequestPart("file") MultipartFile file,
+            @RequestParam("imageType") String imageType
+    ) {
+        try {
+            // Llamar al servicio para agregar la imagen al paquete
+            ExtendedBaseResponse<List<ImageResponseDTO>> response = imageService.addImageinArray(packageId, file, imageType);
+
+            // Devolver la respuesta con la lista de imágenes asociadas
+            return ResponseEntity
+                    .status(200)
+                    .body(response);
+
+        } catch (Exception e) {
+            // Manejar excepciones (si es necesario, puedes personalizar los mensajes)
+            return ResponseEntity
+                    .status(500)
+                    .body(ExtendedBaseResponse.of(
+                            BaseResponse.ok("Ocurrió un error al agregar la imagen."),
+                            new ArrayList<>()
+                    ));
+        }
+    }
+
 }

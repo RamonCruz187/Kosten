@@ -17,14 +17,17 @@ import com.Kosten.Api_Rest.repository.ImageRepository;
 import com.Kosten.Api_Rest.repository.PackageRepository;
 import com.Kosten.Api_Rest.service.ImageService;
 import com.Kosten.Api_Rest.service.PackageService;
+import com.cloudinary.Cloudinary;
+import com.cloudinary.utils.ObjectUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import com.Kosten.Api_Rest.repository.IDepartureRepository;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
-import java.util.Optional;
 
 
 @Service
@@ -36,6 +39,8 @@ public class PackageServiceImpl implements PackageService {
     public final IDepartureRepository departureRepository;
     private final ImageRepository imageRepository;
     private final CategoryRepository categoryRepository;
+    private final ImageService imageService;
+    private final Cloudinary cloudinary;
 
     public ExtendedBaseResponse<PackageResponseDTO> createPackage(PackageRequestDTO packageRequestDTO, List<Image> images, List<Image> destinyImages, Image itineraryImage, Image bannerImage) {
 
