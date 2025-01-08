@@ -154,11 +154,14 @@ public class PackageServiceImpl implements PackageService {
     public ExtendedBaseResponse<PackageResponseDTO> update(PackageToUpdateDTO packageToUpdateDTO) {
 
         Package packageEntity = packageRepository.findByIdAndActiveIsTrue(packageToUpdateDTO.id());
+        Category category = categoryRepository.findById(packageToUpdateDTO.idCategory())
+                .orElseThrow(() -> new PackageNotFoundException("Categoría no encontrada."));
 
         if (packageEntity == null) {
             throw new PackageNotFoundException("Paquete no encontrado.");
         }
 
+        packageEntity.setCategory(category);
         PackageResponseDTO packageResponseDTO = packageMapper.packageToPackageResponseDTO(packageEntity.update(packageToUpdateDTO));
 
         return ExtendedBaseResponse.of(

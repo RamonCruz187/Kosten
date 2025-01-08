@@ -59,12 +59,6 @@ public class ImageServiceImpl implements ImageService {
             } catch (Exception e) {
                 throw new RuntimeException("No se ha podido subir la imagen: " + e.getMessage());
             }
-
-
-//            Image image = imageMapper.toEntity(imageRequestDTO);
-//
-//            return imageRepository.save(image);
-
     }
 
     @Override
@@ -153,7 +147,7 @@ public class ImageServiceImpl implements ImageService {
         }
 
         // Subir la nueva imagen a Cloudinary
-        Image newImage = createNewImage(file);
+        Image newImage = createNewImage1(file);
 
         // Asociar la nueva imagen al paquete según el tipo
         if ("banner".equalsIgnoreCase(imageType)) {
@@ -186,7 +180,7 @@ public class ImageServiceImpl implements ImageService {
         }
 
         // Subir la nueva imagen a Cloudinary
-        Image newImage = createNewImage(file);
+        Image newImage = createNewImage1(file);
 
         // Asociar la nueva imagen al paquete según el tipo
         if ("packageImages".equalsIgnoreCase(imageType)) {
@@ -211,5 +205,24 @@ public class ImageServiceImpl implements ImageService {
                 BaseResponse.ok("Imagen actualizada exitosamente."),
                 imageResponseDTOs
         );
+    }
+
+    private Image createNewImage1(MultipartFile file) {
+        try {
+            Map uploadResult = cloudinary
+                    .uploader()
+                    .upload(file.getBytes(), ObjectUtils.emptyMap());
+
+            ImageRequestDTO imageRequestDTO = new ImageRequestDTO(
+                    uploadResult.get("url").toString(),
+                    uploadResult.get("public_id").toString()
+            );
+
+            Image image = imageMapper.toEntity(imageRequestDTO);
+
+            return imageRepository.save(image);
+        } catch (IOException e) {
+            throw new RuntimeException("No se ha podido subir la imagen: " + e.getMessage());
+        }
     }
 }
