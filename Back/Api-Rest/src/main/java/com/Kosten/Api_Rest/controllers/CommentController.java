@@ -200,8 +200,8 @@ public class CommentController {
             @ApiResponse(responseCode = "500", description = "Error del servidor.", content = {@Content})
     })
     @GetMapping("/comments/visible-favorite")
-    public ResponseEntity<ExtendedBaseResponse<List<CommentDto>>> getVisibleAndFavoriteComments() {
-        List<CommentDto> comments = commentService.findVisibleAndFavoriteComments();
+    public ResponseEntity<ExtendedBaseResponse<List<CommentDtoResponse2>>> getVisibleAndFavoriteComments() {
+        List<CommentDtoResponse2> comments = commentService.findVisibleAndFavoriteComments();
         BaseResponse response = BaseResponse.ok("Comentarios visibles y favoritos obtenidos exitosamente.");
         return ResponseEntity.ok(ExtendedBaseResponse.of(response, comments));
     }

@@ -28,6 +28,12 @@ public interface CommentMapper {
     @Mapping(source = "packageRef.id", target = "packageId")
     CommentDtoResponse toDto1(Comment comment);
 
+    @Mapping(source = "user.id", target = "userId")
+    @Mapping(target = "username", expression = "java(comment.getUser() != null ? comment.getUser().getName() : null)")
+    @Mapping(source = "packageRef.id", target = "packageId")
+    @Mapping(source = "packageRef.name", target = "name")
+    CommentDtoResponse2 toDto2(Comment comment);
+
     @Mapping(source = "comment", target = "commentDto")
     @Mapping(source = "packageRef.name", target = "name")
     CPackageResponse toCPackageResponse(Comment comment);
@@ -37,6 +43,8 @@ public interface CommentMapper {
     List<Comment> dtoListToEntityList(List<CommentDto> commentDtoList);
 
     List<CommentDtoResponse> entityListToDtoList1(List<Comment> commentList1);
+
+    List<CommentDtoResponse2> entityListToDtoList2(List<Comment> commentList2);
 
     default PackageCResponse toPackageCResponse(List<Comment> commentList) {
         return new PackageCResponse(entityListToDtoList1(commentList));
