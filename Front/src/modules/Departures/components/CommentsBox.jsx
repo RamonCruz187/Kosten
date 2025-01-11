@@ -48,13 +48,12 @@ export default function CommentsBox({ comments }) {
                 user={comment.username}
                 text={comment.content}
                 date={comment.dateCreation}
-                packageName={packageName}
+                packageName={comment.name}
               />
             ))}
           </Box>
         )
         }
-
     </Box>
   );
 }

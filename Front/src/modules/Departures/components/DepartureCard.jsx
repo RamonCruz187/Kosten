@@ -60,7 +60,7 @@ export const DepartureCard = ({ pack, isAdmin = false }) => {
       {pack.active}
     </Label>
   );
-console.log(pack)
+
 
   return (
     <>

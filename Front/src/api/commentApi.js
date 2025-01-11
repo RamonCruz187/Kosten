@@ -4,7 +4,7 @@ import apiClient from "./apiClient";
 // Obtener los comentarios de un paquete por el id del mismo.
 export const getPackageCommentsById = (id) => {
     if (!id) throw new Error("El ID es obligatorio para obtener los comentarios");
-    return apiClient.get(`${COMMENT_ENDPOINT}/package/${id}`);
+    return apiClient.get(`${COMMENT_ENDPOINT}/packageId/${id}`);
   };
 
 // Obtener comentarios visibles y favoritos

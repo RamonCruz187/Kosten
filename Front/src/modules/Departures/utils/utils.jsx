@@ -4,7 +4,7 @@ import { useState } from "react";
 import dayjs from 'dayjs';
 import { getPackageById } from '../../../api/packageApi';
 import 'dayjs/locale/es'; 
-
+import { useEffect } from "react";
 
 dayjs.locale('es');
 export const iconsCardDepartures = [
@@ -160,6 +160,7 @@ export const usePackageById = (packageId) => {
 
   return { pack, isLoading, error };
 };
+
 
 export const formatPriceRange = (data) => {
 

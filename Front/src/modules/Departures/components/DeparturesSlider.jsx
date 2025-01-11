@@ -13,7 +13,7 @@ const DepartureSlider = ({ sharedPack }) => {
   const { state } = useContext(GlobalContext);
   const [openSessionRequestModal, setOpenSessionRequestModal] = useState(false);
   const [modalText, setModalText] = useState();
-  const images = sharedPack.images || [];
+  const images = sharedPack?.images || [];
   const theme = useTheme();
   const isXs = useMediaQuery(theme.breakpoints.down('sm'));
   const isSm = useMediaQuery(theme.breakpoints.between('sm', 'md'));
