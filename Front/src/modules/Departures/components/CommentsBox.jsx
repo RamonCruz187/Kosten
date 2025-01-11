@@ -6,15 +6,6 @@ import CommentsCards from "./CommentsCards";
 
 export default function CommentsBox({ comments }) { 
 
-  if (!comments || comments.length === 0) {
-    return (
-      <Box sx={{ p: 2, textAlign: 'center' }}>
-        <Typography variant="body1" color="text.secondary">
-          No hay comentarios disponibles
-        </Typography>
-      </Box>
-    );
-  }
 
   return (
     <Box sx={{ 
@@ -37,22 +28,33 @@ export default function CommentsBox({ comments }) {
       >
         OPINIONES DE QUIENES PARTICIPARON
       </Typography>
-      {/* <Box sx={{ 
-        display: 'grid', 
-        gridTemplateColumns: {sx: 'repeat(1, 1fr)', md: 'repeat(2, 1fr)', lg: 'repeat(3, 1fr)'}, 
-        gap: '2rem',
-      }}>
-        {comments.map((comment, index) => (
-          <CommentsCards
-            key={comment.id || index}
-            user={comment.user}
-            title={comment.title}
-            text={comment.text}
-            date={comment.date}
-            avatar={avatarImage}
-          />
-        ))}
-      </Box> */}
+
+        {(!comments || comments.length === 0) ?
+        (
+        <Box sx={{ p: 2, textAlign: 'center' }}>
+          <Typography variant="body1" color="#fff">
+            No hay comentarios disponibles aún.
+          </Typography>
+        </Box>
+        ) : (
+          <Box sx={{ 
+            display: 'grid', 
+            gridTemplateColumns: {sx: 'repeat(1, 1fr)', md: 'repeat(2, 1fr)', lg: 'repeat(3, 1fr)'}, 
+            gap: '2rem',
+          }}>
+            {comments.map((comment, index) => (
+              <CommentsCards
+                key={comment.id || index}
+                user={comment.username}
+                text={comment.content}
+                date={comment.dateCreation}
+                packageName={packageName}
+              />
+            ))}
+          </Box>
+        )
+        }
+
     </Box>
   );
 }

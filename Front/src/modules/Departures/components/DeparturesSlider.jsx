@@ -5,26 +5,24 @@ import { ChevronLeft as PrevIcon, ChevronRight as NextIcon } from '@mui/icons-ma
 import { processDepartures } from "../utils/utils.jsx";
 import {GlobalContext} from '../../../shared/context/GlobalContext.jsx';
 import SessionRequestModal from './SessionRequestModal.jsx';
-
+import ImageModal from './ImageModal.jsx';
 const DepartureSlider = ({ sharedPack }) => {
   const [currentDepartureIndex, setCurrentDepartureIndex] = useState(0);
-  const [currentImageIndex, setCurrentImageIndex] = useState(0);
+  const [currentImagePage, setCurrentImagePage] = useState(0);
   const [slides, setSlides] = useState(processDepartures([sharedPack]));
   const { state } = useContext(GlobalContext);
   const [openSessionRequestModal, setOpenSessionRequestModal] = useState(false);
   const [modalText, setModalText] = useState();
-
-  // Imágenes del sharedPack
   const images = sharedPack.images || [];
-  console.log(images);
   const theme = useTheme();
-  
   const isXs = useMediaQuery(theme.breakpoints.down('sm'));
   const isSm = useMediaQuery(theme.breakpoints.between('sm', 'md'));
   const isMd = useMediaQuery(theme.breakpoints.between('md', 'lg'));
   const isLg = useMediaQuery(theme.breakpoints.up('lg'));
-
-  const getVisibleCards = useMemo(() => {
+  const [currentPage, setCurrentPage] = useState(0);
+  const [modalOpen, setModalOpen] = useState(false);
+  const [selectedImageIndex, setSelectedImageIndex] = useState(0);
+  const getVisibleItems = useMemo(() => {
     if (isXs) return 1;
     if (isSm) return 2;
     if (isMd) return 3;
@@ -32,94 +30,139 @@ const DepartureSlider = ({ sharedPack }) => {
     return 1;
   }, [isXs, isSm, isMd, isLg]);
 
-  const totalSlides = slides.length;
-  const totalImages = images.length;
+  const totalDeparturePages = Math.ceil(slides.length / getVisibleItems);
+  const totalImagePages = Math.ceil(images.length / getVisibleItems);
+
 
   const nextDepartureSlide = () => {
-    setCurrentDepartureIndex((prevIndex) => 
-      prevIndex >= totalSlides - getVisibleCards ? 0 : prevIndex + 1
-    );
+    setCurrentPage((prevPage) => (prevPage + 1) % totalDeparturePages);
   };
 
   const prevDepartureSlide = () => {
-    setCurrentDepartureIndex((prevIndex) => 
-      prevIndex === 0 ? totalSlides - getVisibleCards : prevIndex - 1
-    );
+    setCurrentPage((prevPage) => (prevPage - 1 + totalDeparturePages) % totalDeparturePages);
   };
 
-  const nextImageSlide = () => {
-    setCurrentImageIndex((prevIndex) => 
-      prevIndex >= totalImages - 1 ? 0 : prevIndex + 1
-    );
+  
+  const nextImagePage = () => {
+    setCurrentImagePage((prevPage) => (prevPage + 1) % totalImagePages);
   };
 
-  const prevImageSlide = () => {
-    setCurrentImageIndex((prevIndex) => 
-      prevIndex === 0 ? totalImages - 1 : prevIndex - 1
-    );
+  const prevImagePage = () => {
+    setCurrentImagePage((prevPage) => (prevPage - 1 + totalImagePages) % totalImagePages);
+  };
+  const handlePrevImage = () => {
+    setSelectedImageIndex((prevIndex) => (prevIndex === 0 ? images.length - 1 : prevIndex - 1));
   };
 
-  const formatDate = (startDate) => {
-    if (Array.isArray(startDate) && startDate.length >= 3) {
-      const [year, month, day] = startDate;
-      const formattedDate = new Date(year, month - 1, day);
-      return `${formattedDate.getDate()}/${formattedDate.getMonth() + 1}/${formattedDate.getFullYear()}`;
-    }
-    return startDate;
+  const handleNextImage = () => {
+    setSelectedImageIndex((prevIndex) => (prevIndex + 1) % images.length);
+  };
+  const handleOpenModal = (index) => {
+    setSelectedImageIndex(index);
+    setModalOpen(true);
+  };
+
+  const handleCloseModal = () => {
+    setModalOpen(false);
+  };
+  
+  const visibleSlides = useMemo(() => {
+    const startIndex = currentPage * getVisibleItems;
+    return slides.slice(startIndex, startIndex + getVisibleItems);
+  }, [currentPage, getVisibleItems, slides]);
+  const visibleImages = useMemo(() => {
+    const startIndex = currentImagePage * getVisibleItems;
+    return images.slice(startIndex, startIndex + getVisibleItems);
+  }, [currentImagePage, getVisibleItems, images]);
+
+
+   // Estilo común para los contenedores de slides
+   const sliderContainerStyle = {
+    position: 'relative',
+    width: "98%",
+    margin: "0 auto",
+    paddingLeft: "50px",
+    paddingRight: "50px",
+    mb: 4,
+    overflow: 'hidden'
+  };
+
+  // Estilo común para los botones de navegación
+  const navigationButtonStyle = {
+    position: 'absolute',
+    top: '50%',
+    transform: 'translateY(-50%)',
+    color: 'white',
+    bgcolor: 'rgba(0, 0, 0, 0.3)',
+    '&:hover': {
+      bgcolor: 'rgba(0, 0, 0, 0.5)',
+    },
+    zIndex: 2
+  };
+
+  // Estilo común para los contenedores de items
+  const itemsContainerStyle = {
+    display: 'flex',
+    gap: { xs: 2, sm: 2, md: 3 },
+    transition: 'transform 0.3s ease-in-out',
   };
 
   return (
-    <Box sx={{ width: '100%', textAlign: 'center', backgroundColor: 'inherit', py: 2, }}>
-      <Typography variant="h5" sx={{textAlign:"center", color:"#f3f3f3", mt:"40px", mb:'40px', fontWeight:"600"}} >SALIDAS DISPONIBLES</Typography>
-      {/* Carrusel de Salidas */}
-      <Box sx={{ 
-        display: 'flex', 
-        justifyContent: 'center',
-        overflow: 'hidden',
-        position: 'relative',
-        width: "100%",
-        marginLeft: "0",
-        mb: 4
-      }}>
-        {totalSlides > getVisibleCards && (
-          <IconButton 
-            onClick={prevDepartureSlide} 
-            sx={{ 
-              position: 'absolute', 
-              zIndex: '1000',
-              top: '50%', 
-              transform: 'translateY(-50%)',
-              color: 'white'
-            }}
-          >
-            <PrevIcon />
-          </IconButton>
+    <Box sx={{ width: '100%', textAlign: 'center', backgroundColor: 'inherit', py: 2 }}>
+      {/* Sección de Salidas */}
+      <Typography variant="h5" sx={{textAlign:"center", color:"#f3f3f3", mt:"40px", mb:'40px', fontWeight:"600"}} >
+        SALIDAS DISPONIBLES
+      </Typography>
+      
+      <Box sx={sliderContainerStyle}>
+        {totalDeparturePages > 1 && (
+          <>
+            <IconButton 
+              onClick={prevDepartureSlide} 
+              sx={{ ...navigationButtonStyle, left: '0' }}
+            >
+              <PrevIcon />
+            </IconButton>
+
+            <IconButton 
+              onClick={nextDepartureSlide} 
+              sx={{ ...navigationButtonStyle, right: '0' }}
+            >
+              <NextIcon />
+            </IconButton>
+          </>
         )}
 
         <Box sx={{ 
-          display: 'flex', 
-          justifyContent:'center',
-          transition: 'transform 0.5s ease',
-          transform: `translateX(-${currentDepartureIndex * (100 / getVisibleCards)}%)`,
-          width: '90%',
-          gap: { xs: 1, sm: 2, md: 3 }
-        }}>
-          {slides.length > 1 ? (slides.map((departure, index) => (
-            
-            <Card 
-              key={index} 
-              sx={{ 
-                width: `calc(${100 / getVisibleCards}%)`, 
-                flexShrink: 0,
-                boxShadow: 2,
-                height: 'auto',
-                backgroundColor: "#908e8e"
-              }}
-            >
+            display: 'flex',
+            justifyContent: 'flex-start',
+            width: '95%',
+            gap: { xs: 2, sm: 2, md: 3 },
+          }}>
+            {slides.length > 1 ? (
+              visibleSlides.map((departure, index) => (
+                <Card 
+                  key={`${currentPage}-${index}`}
+                  sx={{ 
+                    width: {
+                      xs: 'calc(100% - 16px)',    // 1 card
+                      sm: 'calc(50% - 16px)',     // 2 cards
+                      md: 'calc(33.333% - 16px)', // 3 cards
+                      lg: 'calc(25% - 16px)'      // 4 cards
+                    },
+                    flexShrink: 0,
+                    flexGrow: 0,
+                    boxShadow: 2,
+                    backgroundColor: "#908e8e",
+                    margin: '8px'
+                  }}
+                >
               <CardContent>
-                <Typography variant="h6" component="div">
-                {departure.startDateFormatted || departure.message}
-                </Typography>
+              <Typography variant="h6" component="div">
+                {departure.startDateFormatted
+                  ? `${departure.startDateFormatted} - ${departure.endDateFormatted || ''}`
+                  : departure.message}
+              </Typography>
                 <Typography>
                   {typeof departure.price === "number" ? `$${departure.price}` : departure.price}
                 </Typography>
@@ -190,110 +233,87 @@ const DepartureSlider = ({ sharedPack }) => {
           onClose={() => setOpenSessionRequestModal(false)}
           text={modalText}
       />
-        {totalSlides > getVisibleCards && (
-          <IconButton 
-            onClick={nextDepartureSlide} 
-            sx={{ 
-              position: 'absolute', 
-              right: 0, 
-              top: '50%', 
-              transform: 'translateY(-50%)',
-              color: 'white'
-            }}
-          >
-            <NextIcon />
-          </IconButton>
-        )}
       </Box>
 
       {/* Carrusel de Imágenes */}
-      <Typography variant="h5" sx={{textAlign:"center", color:"#f3f3f3", mt:"40px", mb:'40px', fontWeight:"600"}} >GALERÍA DE FOTOS</Typography>
-        <Box sx={{ 
-          position: 'relative',
-          width: '100%',
-          overflow: 'hidden',
-          py: 2,
-          display: 'flex',
-          justifyContent: 'center'
-        }}>
-          {totalImages > 0 && (
-            <Box sx={{
-              display: 'flex',
-              flexDirection: 'column',
-              alignItems: 'center',
-              width: 'fit-content',
-              height: 'auto',
-              position: 'relative'
-            }}>
-              {images.map((image, index) => (
-                index === currentImageIndex && (
-                  <Card
-                    key={index}
-                    sx={{
-                      width: '272px',
-                      height:'272px',
-                      flexShrink: 0,
-                      boxShadow: 2,
-                      
-                      textAlign: 'center',
-                      borderRadius: 2,
-                      overflow: 'hidden',
-                    }}
-                  >
-                    <Box
-                      component="img"
-                      src={image.url}
-                      alt={`Slide ${index + 1}`}
-                      sx={{
-                        width: '100%',
-                        height: '272px',
-                        objectFit: 'cover',
-                      }}
-                    />
-                  </Card>
-                )
-              ))}
-
-        {/* Mostrar flechas solo si hay más de 4 imágenes */}
-        {totalImages > 4 && (
+      <Typography variant="h5" sx={{textAlign:"center", color:"#f3f3f3", mt:"40px", mb:'40px', fontWeight:"600"}} >
+        GALERÍA DE FOTOS
+      </Typography>
+      
+      <Box sx={sliderContainerStyle}>
+        {totalImagePages > 1 && (
           <>
-            <IconButton
-              onClick={prevImageSlide}
-              sx={{
-                position: 'absolute',
-                left: '-40px',
-                top: '50%',
-                transform: 'translateY(-50%)',
-                backgroundColor: 'rgba(255, 255, 255, 0.7)',
-                '&:hover': {
-                  backgroundColor: 'rgba(255, 255, 255, 0.9)',
-                },
-              }}
+            <IconButton 
+              onClick={prevImagePage}
+              sx={{ ...navigationButtonStyle, left: '0' }}
             >
               <PrevIcon />
             </IconButton>
 
-            <IconButton
-              onClick={nextImageSlide}
-              sx={{
-                position: 'absolute',
-                right: '-40px',
-                top: '50%',
-                transform: 'translateY(-50%)',
-                backgroundColor: 'rgba(255, 255, 255, 0.7)',
-                '&:hover': {
-                  backgroundColor: 'rgba(255, 255, 255, 0.9)',
-                },
-              }}
+            <IconButton 
+              onClick={nextImagePage}
+              sx={{ ...navigationButtonStyle, right: '0' }}
             >
               <NextIcon />
             </IconButton>
           </>
         )}
-      </Box>
-      )}
+
+        <Box sx={{ 
+          display: 'flex',
+          justifyContent: 'flex-start',
+          width: '95%',
+          gap: { xs: 2, sm: 2, md: 3 },
+        }}>
+          {visibleImages.map((image, index) => (
+            <Card
+              key={index}
+              onClick={() => handleOpenModal(currentImagePage * getVisibleItems + index)}
+              sx={{ 
+                width: {
+                  xs: 'calc(100% - 16px)',
+                  sm: 'calc(50% - 16px)',
+                  md: 'calc(33.333% - 16px)',
+                  lg: 'calc(25% - 16px)'
+                },
+                flexShrink: 0,
+                flexGrow: 0,
+                height: '272px',
+                boxShadow: 2,
+                borderRadius: 2,
+                overflow: 'hidden',
+                margin: '8px',
+                cursor: 'pointer',
+                '&:hover': {
+                  transform: 'scale(1.02)',
+                  transition: 'transform 0.2s ease-in-out',
+                }
+              }}
+            >
+              <Box
+                component="img"
+                src={image.url}
+                alt={`Imagen ${currentImagePage * getVisibleItems + index + 1}`}
+                sx={{
+                  width: '100%',
+                  height: '100%',
+                  objectFit: 'cover',
+                }}
+              />
+            </Card>
+          ))}
+        </Box>
       </Box>
 
+      {/* Modal de imágenes */}
+      <ImageModal
+        open={modalOpen}
+        handleClose={handleCloseModal}
+        currentImage={images[selectedImageIndex]}
+        images={images}
+        onPrev={handlePrevImage}
+        onNext={handleNextImage}
+      />
     </Box>
   );
 };

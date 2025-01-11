@@ -1,16 +1,29 @@
 import { Box, Typography, Button, Link, useMediaQuery, useTheme } from "@mui/material";
-
 import kosten from "../../assets/kosten.png";
 import DepartureGrid from "../../modules/Departures/components/DepartureGrid.jsx";
 import Carousel from "./Carousel.jsx";
 import CommentsBox from "../../modules/Departures/components/CommentsBox.jsx";
-import { commentsDeparture } from "../../shared/utils/comments.js";
-
+import { useEffect, useState } from "react";
+import {getVisibleAndFavoriteComments} from '../../api/commentApi.js';
 
 const LandingPage = () => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
   const isTablet = useMediaQuery(theme.breakpoints.down('md'));
+  const [comments, setComments] = useState();
+  useEffect(()=>{
+    const fetchComments = async ()=>{
+      try{
+        const response = await getVisibleAndFavoriteComments();
+        setComments(response.data.data);
+      }catch(err){
+        console.error("Error fetching comments:", err);
+
+      }
+    }
+    fetchComments();
+  },[])
+
 
   return (
     <>
@@ -116,7 +129,8 @@ const LandingPage = () => {
         }}
       >
         <DepartureGrid title="PRÓXIMAS SALIDAS" sx={{paddingBottom: "1rem"}} />
-        <CommentsBox comments={commentsDeparture} />
+
+        <CommentsBox comments={comments} />
       </Box>
     </>
   );

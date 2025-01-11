@@ -2,7 +2,11 @@ import {Hotel} from "@mui/icons-material";
 import { RiShareLine, RiCalendar2Line, RiTimeLine, RiWalkLine, RiCompass3Line, RiHome4Line } from 'react-icons/ri';
 import { useState } from "react";
 import dayjs from 'dayjs';
+import { getPackageById } from '../../../api/packageApi';
+import 'dayjs/locale/es'; 
 
+
+dayjs.locale('es');
 export const iconsCardDepartures = [
     <RiCalendar2Line sx={{ fontSize: '1rem' }} />,
     <RiTimeLine sx={{ fontSize: '1rem' }} />,
@@ -21,7 +25,7 @@ export const iconsCardPackages = [
 ];
 
 // Filtra las salidas de un paquete, que sean futuras y ordenadas por fecha
-export const processDepartures = (data) => {
+export const processDepartures = (data, limit = null) => {
   const now = dayjs();
 
   if (!Array.isArray(data)) {
@@ -69,9 +73,8 @@ export const processDepartures = (data) => {
           ...departure,
           startDate,
           endDate,
-          // Añadir versiones formateadas de las fechas
-          startDateFormatted: startDate.format('DD/MM/YYYY'),
-          endDateFormatted: endDate ? endDate.format('DD/MM/YYYY ') : null,
+          startDateFormatted: startDate.format("D [de] MMMM [de] YYYY"),
+          endDateFormatted: endDate ? endDate.format("D [de] MMMM [de] YYYY") : null,
           dataIndex,
           departureIndex,
         };
@@ -90,9 +93,9 @@ export const processDepartures = (data) => {
     }];
   }
 
-  const limitedDepartures = departures.slice(0, 3);
+  const processedDepartures = limit ? departures.slice(0, limit) : departures;
   return [
-    ...limitedDepartures,
+    ...processedDepartures,
     { message: "Consulta otras fechas" }
   ];
 };
@@ -108,14 +111,65 @@ export const useSharedPack = () => {
   return [pack, updatePack];
 };
 
-export const formatPricesRange = (data) => {
+
+export const usePackageById = (packageId) => {
+  const [pack, setPack] = useState(null);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const [, updateSharedPack] = useSharedPack();
+
+  useEffect(() => {
+    let isMounted = true;
+
+    const loadPackage = async () => {
+      if (!packageId) {
+        setIsLoading(false);
+        return;
+      }
+
+      try {
+        setIsLoading(true);
+        setError(null);
+        
+        const response = await getPackageById(packageId);
+        const packageData = response.data.data;
+        
+        if (isMounted && packageData) {
+          setPack(packageData);
+          // Solo actualizar shared pack si los datos son válidos
+          updateSharedPack(packageData);
+        }
+      } catch (err) {
+        console.error('Error al cargar el paquete:', err);
+        if (isMounted) {
+          setError('Error al cargar el paquete');
+        }
+      } finally {
+        if (isMounted) {
+          setIsLoading(false);
+        }
+      }
+    };
+
+    loadPackage();
+
+    return () => {
+      isMounted = false;
+    };
+  }, [packageId]); // updateSharedPack removido de las dependencias
+
+  return { pack, isLoading, error };
+};
+
+export const formatPriceRange = (data) => {
+
   const now = dayjs();
 
   if (!Array.isArray(data)) {
     throw new Error("Los datos de entrada deben ser un array");
   }
 
-  // Filtrar y validar las salidas con startDate válido y posterior a la fecha actual
+  // Filtrar y validar las salidas con startDate válido y posterior a la fecha actual para devolver el rando de precios ordenado
   const validDepartures = data
     .filter(
       (departure) =>
@@ -155,5 +209,27 @@ export const formatPricesRange = (data) => {
       $ {minPrice}   <br /> a <br />  $ {maxPrice}
     </>
     );
+
+};
+
+export const formatDateAndHour = (date) =>{
+  const dateFormatless = new Date(
+    date[0], // Año
+    date[1] - 1, // Mes (ajustar 0-indexado)
+    date[2], // Día
+    date[3], // Hora
+    date[4], // Minutos
+    date[5]  // Segundos
+  );
+const options = {
+  day: '2-digit',
+  month: '2-digit',
+  year: 'numeric',
+  hour: '2-digit',
+  minute: '2-digit',
+  second: '2-digit',
+};
+const dateFormat = dateFormatless.toLocaleString('es-ES', options);
+return dateFormat;
 };
 

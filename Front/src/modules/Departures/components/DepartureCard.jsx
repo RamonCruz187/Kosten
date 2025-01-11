@@ -1,5 +1,5 @@
 import { Label } from "@mui/icons-material";
-import { Button, Card, Stack, Typography, Box } from "@mui/material";
+import { Button, Card, Stack, Typography, Box} from "@mui/material";
 import { fCurrency } from "../../../shared/utils/formatNumber.js";
 import { iconsCardDepartures, iconsCardPackages } from "../utils/utils.jsx";
 import { processDepartures, useSharedPack } from "../utils/utils.jsx";
@@ -7,10 +7,15 @@ import { useState, useContext } from "react";
 import {GlobalContext} from '../../../shared/context/GlobalContext.jsx';
 import SessionRequestModal from './SessionRequestModal.jsx';
 import { useNavigate } from "react-router-dom";
-import { formatPricesRange } from '../utils/utils.jsx';
+import { formatPriceRange } from '../utils/utils.jsx';
+import dayjs from 'dayjs';
+import 'dayjs/locale/es';
+
+dayjs.locale('es');
 
 export const DepartureCard = ({ pack, isAdmin = false }) => {
-  const processedDepartures = processDepartures([pack]);
+  const processedDeparturesToShowInCard = processDepartures([pack],3);
+  const processedDeparturesToShowModal = processDepartures([pack]);
   const [openModal, setOpenModal] = useState(false);
   const [openSecondModal, setOpenSecondModal] = useState(false);
   const [openThirdModal, setOpenThirdModal] = useState(false);
@@ -19,14 +24,12 @@ export const DepartureCard = ({ pack, isAdmin = false }) => {
   const { state } = useContext(GlobalContext);
   const [openSessionRequestModal, setOpenSessionRequestModal] = useState(false);
   const navigate = useNavigate();
-  console.log(pack)
-  
+
   const handleCardClick = () => {
-    updatePack(pack);  // Guardar el pack en el estado compartido
-    navigate(`/salidas/${pack.id}`);  // Navegar programáticamente
+    updatePack(pack);  
+    navigate(`/salidas/${pack.id}`);  
   };  
 
-//-------------------------------------------------------------------------
   const handleOpenSecondModal = (info) => {
     setSelectedInfo(info);
     setOpenSecondModal(true);
@@ -36,13 +39,10 @@ export const DepartureCard = ({ pack, isAdmin = false }) => {
   const getDepartureInfo = (departure) => {
     if (departure.message) return departure.message;
 
-    return departure.duration > 1
-      ? `${departure.startDate.format('DD/MM/YYYY')} - ${departure.endDate.format('DD/MM/YYYY')} - Precio: ${departure.price}`
-      : `${departure.startDate.format('DD/MM/YYYY')} - Precio: ${departure.price}`;
+    return (departure.endDate)
+      ? `${departure.startDateFormatted} - ${departure.endDateFormatted} - Precio: ${departure.price}`
+      : `${departure.startDateFormatted} - Precio: ${departure.price}`;
   };
-//-------------------------------------------------------------------------
-
-
 
   // el estatus para el admin
   const renderStatus = (
@@ -60,8 +60,7 @@ export const DepartureCard = ({ pack, isAdmin = false }) => {
       {pack.active}
     </Label>
   );
-
-
+console.log(pack)
 
   return (
     <>
@@ -75,57 +74,54 @@ export const DepartureCard = ({ pack, isAdmin = false }) => {
           marginX: "auto", 
           position: "relative"
         }}
-
       >
-
-          {isAdmin 
-          ? renderStatus 
-          : 
-          <Box
-            sx={{
-              position: "absolute", 
-              top: '16px', 
-              right: '16px', 
-              display: "grid",
-              placeItems: "center",
-              backgroundColor: "white", 
-              fontSize: "1.5rem", 
-              cursor: "pointer", 
-              zIndex: 10,
-              padding: "4px",
-              borderRadius: "5px"
+        {isAdmin 
+        ? renderStatus 
+        : 
+        <Box
+          sx={{
+            position: "absolute", 
+            top: '16px', 
+            right: '16px', 
+            display: "grid",
+            placeItems: "center",
+            backgroundColor: "white", 
+            fontSize: "1.5rem", 
+            cursor: "pointer", 
+            zIndex: 10,
+            padding: "4px",
+            borderRadius: "5px"
           }}
-          >
+        >
           {iconsCardPackages[0]}
-          </Box>
-          } 
-          <Box
-            component="img"
-            alt={pack.name}
-            src={pack.images[0].url}
-            sx={{
-              top: 0,
-              width: "100%",
-              height: 200,
-              objectFit: "cover",
-            }}
-          />
-
-        <Stack spacing={2} sx={{ p: 3, flexGrow: 1,  }}> 
-            <Typography variant="titleH2" style={{ color: "inherit" }}
+        </Box>
+        } 
+        <Box
+          component="img"
+          alt={pack.name}
+          src={pack.images[0].url}
+          sx={{
+            top: 0,
+            width: "100%",
+            height: 200,
+            objectFit: "cover",
+          }}
+        />
+          <Stack spacing={2} sx={{ p: 3, flexGrow: 1,  }}> 
+            <Typography variant="titleH2" style={{ color: "inherit", cursor:'pointer' }}
             onClick={handleCardClick} >
               {pack.name}
             </Typography>
-          <Box display="flex" alignItems="center" justifyContent="space-between">
-            <Stack
-              spacing={1}
-              sx={{
-                display: "flex",
-                flexDirection: "column",
-                flexGrow: 1,
-                overflow: "hidden",
-              }}
-            >
+            <Box display="flex" alignItems="center" justifyContent="space-between">
+              <Stack
+                spacing={1}
+                sx={{
+                  display: "flex",
+                  flexDirection: "column",
+                  flexGrow: 1,
+                  overflow: "hidden",
+                }}
+              >
               <Box
                 sx={{
                   display: "flex",
@@ -137,12 +133,12 @@ export const DepartureCard = ({ pack, isAdmin = false }) => {
                 {/* Salidas  dentro de cada paquete*/}
                 <Box sx={{ display: "flex", pt:"5px" }}>{iconsCardPackages[1]}</Box>
                 <Box sx={{width:"100%"}}>
-                  {processedDepartures.map((departure,index) =>
+                  {processedDeparturesToShowInCard.map((departure,index) =>
                     departure.message ? (
                       <div key={index}>{departure.message}</div>
                     ) : (
                       <div key={index}>
-                        {departure.startDate.format('DD/MM/YYYY')} - Precio: {departure.price}
+                        {departure.startDateFormatted} - Precio: {departure.price}
                         
                       </div>
                     )
@@ -186,7 +182,7 @@ export const DepartureCard = ({ pack, isAdmin = false }) => {
                 <Typography variant="caption" noWrap>
                 Nivel técnico: {pack.technical_level}
                 </Typography>
-              </Box>
+            </Box>
             </Stack>
             <Box
               sx={{
@@ -200,7 +196,7 @@ export const DepartureCard = ({ pack, isAdmin = false }) => {
               <Typography variant="titleH3" textAlign={'center'}>
 
                 { 
-                  formatPricesRange(pack.departures) 
+                  formatPriceRange(pack.departures) 
                   }
               </Typography>
 
@@ -255,7 +251,7 @@ export const DepartureCard = ({ pack, isAdmin = false }) => {
             }}
           >
             <Typography variant="h6">Selecciona la fecha:</Typography>
-            {processedDepartures.map((departure, index) => (
+            {processedDeparturesToShowModal.map((departure, index) => (
               <Box
                 sx={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}
                 key={index}
@@ -268,6 +264,7 @@ export const DepartureCard = ({ pack, isAdmin = false }) => {
                     minWidth: "100px",
                     height: "18px",
                     fontSize: "12px",
+                    marginLeft:"10px"
                   }}
                   color="brownButton"
                 >
@@ -324,7 +321,7 @@ export const DepartureCard = ({ pack, isAdmin = false }) => {
               backgroundColor: 'white',
               boxShadow: 14,
               p: 4,
-              width: '80%',
+              width: '90%',
               maxWidth: '400px',
               borderRadius: '8px',
               textAlign:"center"
@@ -332,12 +329,12 @@ export const DepartureCard = ({ pack, isAdmin = false }) => {
           >
             {selectedInfo === "Consulta otras fechas" || selectedInfo === "Aún no hay salidas establecidas, sé el primero en acordar una!"
                 ? 
-                  <Typography variant="p" sx={{ fontSize: "12px",  }}>Si desea obtener información sobre fechas para esta excusrsión haga click en "Confirmar" para ponerse en contacto con nuestros guías.
+                  <Typography variant="p" sx={{ fontSize: "14px",  }}>Si desea obtener información sobre fechas para esta excusrsión haga click en "Confirmar" para ponerse en contacto con nuestros guías.
                   <br />
                   Uno de ellos se comunicará con usted <b>vía mail</b>.
                   </Typography>
                 : 
-                    <Typography variant="p" sx={{ fontSize: "12px",  }}>¿Está seguro que quiere reservar un lugar para esta fecha?
+                    <Typography variant="p" sx={{ fontSize: "14px",  }}>¿Está seguro que quiere reservar un lugar para esta fecha?
                     <br />
                     La reserva quedará confirmada una vez realizado el pago de la salida correspondiente.
                     <br />
@@ -360,7 +357,9 @@ export const DepartureCard = ({ pack, isAdmin = false }) => {
                     height: "18px",
                     fontSize: "12px",
                     bgcolor:"#e9e9e9"
-                  }}>confirmar</Button>
+                  }}
+                  onClick={()=>{alert("Verifique su email para confirmar la reserva")}}>
+                    confirmar</Button>
                 </Box>
             </Box>
           )

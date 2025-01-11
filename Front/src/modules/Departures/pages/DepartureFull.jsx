@@ -1,20 +1,53 @@
 import { useEffect, useState, useContext } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import Box from "@mui/material/Box";
-import { Button, Typography,  Alert,
-  CircularProgress  } from "@mui/material";
-import { _price, _departureInfo, _departureNames } from "../mock/_data.js";
-import { iconsCardDepartures } from "../utils/utils.jsx";
-import { fCurrency } from "../../../shared/utils/formatNumber.js";
-import CommentsBox from "../components/CommentsBox.jsx";
-// import {commentsDeparture} from "../../../shared/utils/comments.js";
-import { useSharedPack } from "../utils/utils.jsx";
-import DeparturesSlider from "../components/DeparturesSlider.jsx";
-import TruncatedText from "../components/TruncatedText.jsx";
-import SessionRequestModal from '../components/SessionRequestModal.jsx';
-import {GlobalContext} from '../../../shared/context/GlobalContext.jsx';
-import CommentModal from '../components/CommentModal.jsx';
-import { getPackageCommentsById } from "../../../api/commentApi.js";
+import { 
+  Box,
+  Button, 
+  Typography,
+  Alert,
+  CircularProgress
+} from "@mui/material";
+import { iconsCardDepartures } from "../utils/utils";
+import { useSharedPack, usePackageById } from "../utils/utils";
+import DeparturesSlider from "../components/DeparturesSlider";
+import TruncatedText from "../components/TruncatedText";
+import SessionRequestModal from '../components/SessionRequestModal';
+import { GlobalContext } from '../../../shared/context/GlobalContext';
+import CommentModal from '../components/CommentModal';
+import { getPackageCommentsById } from "../../../api/commentApi";
+import  CommentsBox  from '../components/CommentsBox';
+
+const styles = {
+  mainContainer: {
+    display: "flex",
+    justifyContent: "center",
+    width: "100%",
+    backgroundRepeat: "no-repeat",
+    backgroundSize: "cover",
+    backgroundPosition: "center",
+  },
+  heightResponsive: {
+    xs: 390,
+    sm: 400,
+    md: 420,
+    lg: 440,
+    xl: 550,
+  },
+  contentBox: {
+    height: { xs: "250px", sm: "250px", md: "300px", lg: "372px", xl: "450px" },
+  },
+  infoText: {
+    fontSize: { xs: ".6rem", sm: ".8rem", md: "1rem" },
+    paddingRight:"20px"
+  }
+};
+
+const InfoItem = ({ icon, text }) => (
+  <Box sx={{ display: "flex", gap: 1,  }}>
+    <Box sx={{ display: "flex", pt:'5px' }}>{icon}</Box>
+    <Typography sx={styles.infoText}>{text}</Typography>
+  </Box>
+);
 
 
 export const DepartureFull = () => {
@@ -41,11 +74,10 @@ export const DepartureFull = () => {
       if (!params.id) return;
       
       try {
-        setIsLoading(true);
-        setError(null);
-        setId(params.id);
-        const response = await getPackageCommentsById(params.id);
-        setPackageComments(response.data || []);
+        setIsLoadingComments(true);
+        setCommentsError(null);
+        const response = await getPackageCommentsById(id);
+        setPackageComments(response.data.data.commentDtoList || []);
       } catch (err) {
         console.error("Error al obtener comentarios:", err);
         setError('No se pudieron cargar los comentarios');
@@ -63,17 +95,15 @@ export const DepartureFull = () => {
     }
   }, [params.id]);
 
-  const {
-    id: packageId,
-    name = '',
-    description = '',
-    duration = '',
-    physical_level = '',
-    technical_level = '',
-    included_services = '',
-    images = [],
-    departures = []
-  } = sharedPack;
+
+  if (isLoading) {
+    return (
+      <Box sx={{ display: 'flex', justifyContent: 'center', p: 3 }}>
+        <CircularProgress />
+      </Box>
+    );
+  }
+
 
   const mainImage = images[0]?.url || '';
 
@@ -83,34 +113,15 @@ export const DepartureFull = () => {
   }
 
   return (
-      <>
-        <Box
-          sx={{
-            display: { xs: "flex" },
-            justifyContent: "center",
-            width: "100%",
-            height: {
-              xs: 390, //phones 300
-              sm: 400, //tablets 600
-              md: 420, //small laptop 900
-              lg: 440, //desktop 1024
-              xl: 550, //large screens 1536
-            },
-            backgroundImage: `url(${img || mainImage})`,
-            backgroundRepeat: "no-repeat",
-            backgroundSize: "cover",
-            backgroundPosition: "center",
-          }}
-        >
-          <Box
-            sx={{
-              textAlign:"center",
-              color: "white",
-              display:"flex",
-              flexDirection:"column",
-              justifyContent:"center"
-            }}
-          >
+    <>
+      <Box
+        sx={{
+          ...styles.mainContainer,
+          height: styles.heightResponsive,
+          backgroundImage: `url(${img})`
+        }}
+      >
+        <Box sx={{ textAlign: "center", color: "white", display: "flex", flexDirection: "column", justifyContent: "center" }}>
             <Typography
               fontWeight="700"
               variant="h2"
@@ -289,26 +300,62 @@ export const DepartureFull = () => {
 
         </Box>
       
-        {/* slider salidas: */}
-      
-        <div style={{ display: 'flex', flexDirection: 'column', width: '100%' }}>
-          
-        {/* {departures.length > 0 && (
-        <DeparturesSlider sharedPack={sharedPack} />
-      )} */}
-        </div>
-        {isLoading ? (
-      <Box sx={{ display: 'flex', justifyContent: 'center', p: 3 }}>
-        <CircularProgress />
+      <SessionRequestModal
+        openSessionRequestModal={openSessionRequestModal}
+        onClose={() => setOpenSessionRequestModal(false)}
+        text="Para dejar un comentario inicia sesion."
+      />
+
+      <Box sx={{ display: "grid", gridTemplateColumns: { xs: "1fr", sm: "1fr 1fr" } }}>
+        {/* Description Box */}
+        <Box sx={{ ...styles.contentBox, textAlign: "center", paddingTop: "5%", bgcolor: "#F3F3F3" }}>
+          <Typography variant="h5">¿De qué se trata?</Typography>
+          <Typography variant="body1"
+          sx={{ padding:'10px'}}
+          >{packToUse.description || 'Sin descripción disponible'}</Typography>
+        </Box>
+
+        {/* Info Box */}
+        <Box sx={{ ...styles.contentBox, display: "flex", flexDirection: "column", justifyContent: "center", marginLeft: "25%", color: '#fff' }}>
+          <InfoItem sx={{ padding:'10px'}} icon={iconsCardDepartures[1]} text={packToUse.duration} />
+          <InfoItem icon={iconsCardDepartures[2]} text={packToUse.physical_level || "dificultad no establecida"} />
+          <InfoItem icon={iconsCardDepartures[3]} text={packToUse.technical_level || "nivel técnico no establecido"} />
+          <InfoItem sx={{ padding:'10px'}} icon={iconsCardDepartures[4]} text={packToUse.included_services || "servicios no establecidos"} />
+        </Box>
+
+        {/* Image Box */}
+        <Box sx={{ ...styles.contentBox, display: "flex", justifyContent: "center", alignItems: "center", overflow: "hidden" }}>
+          {packToUse.itineraryPhoto.url && (
+            <img
+              src={packToUse.itineraryPhoto.url}
+              alt={`Imagen de ${packToUse.name}`}
+              style={{ width: "100%", height: "100%", objectFit: "cover" }}
+            />
+          )}
+        </Box>
+
+        {/* Itinerary Box */}
+        <Box sx={{ ...styles.contentBox, textAlign: "center", paddingTop: "5%", bgcolor: "#F3F3F3", paddingX: "70px" }}>
+          <Typography variant="h5">Itinerario</Typography>
+          <TruncatedText text={packToUse.itinerary || "Itinerario no disponible"} />
+        </Box>
       </Box>
-    ) : error ? (
-      <Alert severity="error" sx={{ mb: 2 }}>
-        {error}
-      </Alert>
-    ) : (
-      <p>asd</p>
-      // <CommentsBox comments={packageComments} />
-    )}
-      </>
-    )
+
+       {/* slider salidas: */}
+      
+      <div style={{ display: 'flex', flexDirection: 'column', width: '100%' }}>
+          
+          <DeparturesSlider sharedPack={sharedPack}></DeparturesSlider>
+        </div>
+
+      {isLoadingComments ? (
+        <Box sx={{ display: 'flex', justifyContent: 'center', p: 3 }}>
+          <CircularProgress />
+        </Box>
+      ) 
+      : (
+        <CommentsBox comments={packageComments} packageName={packToUse.name} />
+      )}
+    </>
+  );
 };
