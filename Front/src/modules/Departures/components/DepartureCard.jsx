@@ -72,7 +72,7 @@ export const DepartureCard = ({ pack, isAdmin = false }) => {
           display: "flex", 
           flexDirection: "column", 
           marginX: "auto", 
-          position: "relative"
+          position: "relative",
         }}
       >
         {isAdmin 

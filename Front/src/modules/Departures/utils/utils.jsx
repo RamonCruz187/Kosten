@@ -95,9 +95,10 @@ export const processDepartures = (data, limit = null) => {
 
   const processedDepartures = limit ? departures.slice(0, limit) : departures;
   return [
-    ...processedDepartures,
-    { message: "Consulta otras fechas" }
+    { message: "¿Buscás otras fechas?" },
+    ...processedDepartures
   ];
+  
 };
 
 

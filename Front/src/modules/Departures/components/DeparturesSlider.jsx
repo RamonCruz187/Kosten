@@ -154,40 +154,42 @@ const DepartureSlider = ({ sharedPack }) => {
                     flexShrink: 0,
                     flexGrow: 0,
                     boxShadow: 2,
-                    backgroundColor: "#908e8e",
+                    backgroundColor: "#fff",
                     margin: '8px'
                   }}
                 >
-              <CardContent>
+              <CardContent >
               <Typography variant="h6" component="div">
                 {departure.startDateFormatted
                   ? `${departure.startDateFormatted} - ${departure.endDateFormatted || ''}`
-                  : departure.message}
+                  : departure.message 
+                  }
               </Typography>
+              { departure.message && 
+              <p>Consultanos por otras opciones</p>}
               <Typography>
                 {typeof departure.price === "number" ? fCurrency(departure.price, { minimumFractionDigits: 0 }) : departure.price}
               </Typography>
 
-                <Button
-                  onClick={ ()=>{
-                    if (state.user_auth.token) {
-                      if (typeof departure.price !== "number") {
-                        // Al cambiar este texto se deberá cambiar la validación en SessionRequestModal.jsx línea 40
-                        setModalText("Al 'enviar' uno de nuestros Guías se pondrá en contacto con usted vía mail.");
-                        
-                      } else {
-                        setModalText("Al 'enviar' uno de nuestros Guías se pondrá en contacto con usted vía mail.");
-                        
-                      }
-                    } else {
-                      setModalText("Para reservar o hacer consultas inicia sesion.");
-                      
-                    }
-                    setOpenSessionRequestModal(true);
-                  }}
-                >
-                  {typeof departure.price === "number" ? 'RESERVAR' : 'CONTACTANOS'}
-                </Button>
+              <Button
+                onClick={() => {
+                  if (state.user_auth.token) {
+                    setModalText(
+                      "Al 'enviar' uno de nuestros Guías se pondrá en contacto con usted vía mail."
+                    );
+                  } else {
+                    setModalText("Para reservar o hacer consultas inicia sesión.");
+                  }
+                  setOpenSessionRequestModal(true);
+                }}
+                style={{
+                  backgroundColor: typeof departure.price !== "number" ? "green" : "default",
+                  color: typeof departure.price !== "number" ? "white" : "black",
+                }}
+              >
+                {typeof departure.price === "number" ? "RESERVAR" : "CONTACTANOS"}
+              </Button>
+
               </CardContent>
             </Card>
           ))) : (
