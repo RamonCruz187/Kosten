@@ -8,9 +8,7 @@ import { formatDateAndHour } from '../utils/utils.jsx';
 export default function CommentsCards({ user, text, date, packageName }) {
 
   CommentsCards.propTypes = {
-    avatar: PropTypes.string.isRequired,
     user: PropTypes.string.isRequired,
-    title: PropTypes.string.isRequired,
     text: PropTypes.string.isRequired,
     date: PropTypes.array.isRequired,
   };

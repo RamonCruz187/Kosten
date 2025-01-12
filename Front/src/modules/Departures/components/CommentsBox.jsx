@@ -6,7 +6,7 @@ import CommentsCards from "./CommentsCards";
 
 export default function CommentsBox({ comments, packageName }) { 
 
-console.log(comments)
+
   return (
     <Box sx={{ 
       display: 'flex', 

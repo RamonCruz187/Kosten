@@ -117,7 +117,7 @@ const DepartureFull = () => {
     navigate("/salidas");
     return null;
   }
-console.log(packageComments);
+
   return (
     <>
       <Box

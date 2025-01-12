@@ -194,9 +194,15 @@ const CommentModal = ({ open, onClose, packageId }) => {
 
       <Snackbar
         open={showSuccessMessage}
-        autoHideDuration={1500}
+        autoHideDuration={3000}
         message="¡Comentario enviado con éxito!"
-        anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
+        anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+        sx={{
+          '& .MuiSnackbarContent-root': {  
+            backgroundColor: '#4CAF50',     
+            color: 'white'                  
+          }
+        }}
       />
     </>
   );
