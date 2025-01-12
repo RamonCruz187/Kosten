@@ -6,6 +6,7 @@ import { processDepartures } from "../utils/utils.jsx";
 import {GlobalContext} from '../../../shared/context/GlobalContext.jsx';
 import SessionRequestModal from './SessionRequestModal.jsx';
 import ImageModal from './ImageModal.jsx';
+import { fCurrency } from "../../../shared/utils/formatNumber.js";
 const DepartureSlider = ({ sharedPack }) => {
   const [currentDepartureIndex, setCurrentDepartureIndex] = useState(0);
   const [currentImagePage, setCurrentImagePage] = useState(0);
@@ -163,9 +164,10 @@ const DepartureSlider = ({ sharedPack }) => {
                   ? `${departure.startDateFormatted} - ${departure.endDateFormatted || ''}`
                   : departure.message}
               </Typography>
-                <Typography>
-                  {typeof departure.price === "number" ? `$${departure.price}` : departure.price}
-                </Typography>
+              <Typography>
+                {typeof departure.price === "number" ? fCurrency(departure.price, { minimumFractionDigits: 0 }) : departure.price}
+              </Typography>
+
                 <Button
                   onClick={ ()=>{
                     if (state.user_auth.token) {

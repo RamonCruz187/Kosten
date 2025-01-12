@@ -4,9 +4,9 @@ import { customPalette } from "../../../../customStyle";
 import avatarImage from "../../../assets/avatar.svg";
 import CommentsCards from "./CommentsCards";
 
-export default function CommentsBox({ comments }) { 
+export default function CommentsBox({ comments, packageName }) { 
 
-
+console.log(comments)
   return (
     <Box sx={{ 
       display: 'flex', 
@@ -48,7 +48,7 @@ export default function CommentsBox({ comments }) {
                 user={comment.username}
                 text={comment.content}
                 date={comment.dateCreation}
-                packageName={comment.name}
+                packageName={comment.name ? (`Trekking en ${comment.name}`) : (packageName) }
               />
             ))}
           </Box>

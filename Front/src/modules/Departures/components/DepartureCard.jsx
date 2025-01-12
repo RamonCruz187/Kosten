@@ -1,7 +1,7 @@
 import { Label } from "@mui/icons-material";
 import { Button, Card, Stack, Typography, Box} from "@mui/material";
 import { fCurrency } from "../../../shared/utils/formatNumber.js";
-import { iconsCardDepartures, iconsCardPackages } from "../utils/utils.jsx";
+import { iconsCardPackages } from "../utils/utils.jsx";
 import { processDepartures, useSharedPack } from "../utils/utils.jsx";
 import { useState, useContext } from "react";
 import {GlobalContext} from '../../../shared/context/GlobalContext.jsx';
@@ -40,9 +40,9 @@ export const DepartureCard = ({ pack, isAdmin = false }) => {
     if (departure.message) return departure.message;
 
     return (departure.endDate)
-      ? `${departure.startDateFormatted} - ${departure.endDateFormatted} - Precio: ${departure.price}`
-      : `${departure.startDateFormatted} - Precio: ${departure.price}`;
-  };
+        ? `${departure.startDateFormatted} - ${departure.endDateFormatted} - Precio: ${fCurrency(departure.price, { minimumFractionDigits: 0 })}`
+        : `${departure.startDateFormatted} - Precio: ${fCurrency(departure.price, { minimumFractionDigits: 0 })}`;
+};
 
   // el estatus para el admin
   const renderStatus = (
@@ -138,7 +138,7 @@ export const DepartureCard = ({ pack, isAdmin = false }) => {
                       <div key={index}>{departure.message}</div>
                     ) : (
                       <div key={index}>
-                        {departure.startDateFormatted} - Precio: {departure.price}
+                        {departure.startDateFormatted} - Precio: {fCurrency(departure.price, { minimumFractionDigits: 0 })}
                         
                       </div>
                     )

@@ -37,7 +37,7 @@ export default function CommentsCards({ user, text, date, packageName }) {
         
       </Box>
       
-          <Typography fontWeight={'bold'}>Trekking en {packageName}</Typography>
+          <Typography fontWeight={'bold'}> {packageName}</Typography>
       
       <Typography variant="p" >{text}</Typography>
 
