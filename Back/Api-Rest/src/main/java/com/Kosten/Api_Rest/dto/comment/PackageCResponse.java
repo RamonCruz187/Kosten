@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.List;
 
 public record PackageCResponse(
-        List<CommentDto> commentDtoList
+        List<CommentDtoResponse> commentDtoList
+
 ) implements Serializable {
 }

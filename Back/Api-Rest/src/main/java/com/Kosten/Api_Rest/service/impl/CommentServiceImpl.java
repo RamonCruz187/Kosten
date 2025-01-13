@@ -110,9 +110,9 @@ public class CommentServiceImpl implements CommentService {
 
     @Override
     @Transactional(readOnly = true)
-    public List<CommentDto> findVisibleAndFavoriteComments() {
+    public List<CommentDtoResponse2> findVisibleAndFavoriteComments() {
         List<Comment> comments = commentRepository.findByIsVisibleTrueAndIsFavoriteTrue();
-        return commentMapper.entityListToDtoList(comments);
+        return commentMapper.entityListToDtoList2(comments);
     }
 
     @Override
