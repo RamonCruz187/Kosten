@@ -4,7 +4,8 @@ import { customPalette } from "../../../../customStyle";
 import avatarImage from "../../../assets/avatar.svg";
 import CommentsCards from "./CommentsCards";
 
-export default function CommentsBox({ comments }) { 
+export default function CommentsBox({ comments, packageName }) { 
+
 
   return (
     <Box sx={{ 
@@ -27,22 +28,32 @@ export default function CommentsBox({ comments }) {
       >
         OPINIONES DE QUIENES PARTICIPARON
       </Typography>
-      <Box sx={{ 
-        display: 'grid', 
-        gridTemplateColumns: {sx: 'repeat(1, 1fr)', md: 'repeat(2, 1fr)', lg: 'repeat(3, 1fr)'}, 
-        gap: '2rem',
-      }}>
-        {comments && comments?.map((comment, index) => (
-            <CommentsCards
-              key={index}
-              user={comment.user}
-              title={comment.title}
-              text={comment.text}
-              date={comment.date}
-              avatar={avatarImage}
-            />
-        ))}
-      </Box>
+
+        {(!comments || comments.length === 0) ?
+        (
+        <Box sx={{ p: 2, textAlign: 'center' }}>
+          <Typography variant="body1" color="#fff">
+            No hay comentarios disponibles aún.
+          </Typography>
+        </Box>
+        ) : (
+          <Box sx={{ 
+            display: 'grid', 
+            gridTemplateColumns: {sx: 'repeat(1, 1fr)', md: 'repeat(2, 1fr)', lg: 'repeat(3, 1fr)'}, 
+            gap: '2rem',
+          }}>
+            {comments.map((comment, index) => (
+              <CommentsCards
+                key={comment.id || index}
+                user={comment.username}
+                text={comment.content}
+                date={comment.dateCreation}
+                packageName={comment.name ? (`Trekking en ${comment.name}`) : (packageName) }
+              />
+            ))}
+          </Box>
+        )
+        }
     </Box>
   );
 }
