@@ -44,9 +44,11 @@ export const MenuAdmin = () => {
   };
 
   return (
-    <Box>
+    <Box
+      sx={{ display: "flex",}}
+    >
       {/* Sidebar */}
-      <Sidebar open={open}>
+      <Sidebar open={open} sx={{ height: '100%', }}>
         {/* Botón para abrir/cerrar */}
         <Box
           sx={{
