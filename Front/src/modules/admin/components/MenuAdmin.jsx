@@ -1,3 +1,4 @@
+// Front/src/modules/admin/components/MenuAdmin.jsx
 import { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import {
@@ -44,9 +45,11 @@ export const MenuAdmin = () => {
   };
 
   return (
-    <Box>
+    <Box
+      sx={{ display: "flex",}}
+    >
       {/* Sidebar */}
-      <Sidebar open={open}>
+      <Sidebar open={open} sx={{ height: '100%', }}>
         {/* Botón para abrir/cerrar */}
         <Box
           sx={{
