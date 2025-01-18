@@ -4,26 +4,28 @@ import {
   AlertTitle,
   Box,
   CircularProgress,
-  Typography,
 } from "@mui/material";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useContext, useEffect, useState } from "react";
 import { NotificationService } from "@shared/services/notistack.service";
-import { getAllPackages } from "@api/packageApi";
 import TourDestinationCard from "@components/TourDestination/TourDestinationCard";
 import { getAllCategories } from "@/api/categoryApi";
+import { types_reducer } from "@/shared/types";
+import { GlobalContext } from "@/shared/context/GlobalContext";
 
 export const AdminPackages = () => {
+  const { dispatch } = useContext(GlobalContext);
+  
   const [isFetching, setIsFetching] = useState(true);
-  const [packages, setPackages] = useState();
+  const [allCategories, setAllCategories] = useState();
+  const [categories, setCategories] = useState([]);
+  const [isCategoriesReady, setIsCategoriesReady] = useState(false);
 
-  const fetchPackages = useCallback(async () => {
+  const fetchCategories = useCallback(async () => {
     setIsFetching(true);
     try {
-      const response = await getAllPackages();
-      console.log("data", response);
-      // const response = await getAllCategories();
-      // setPackages(response?.data?.data?);
-      setPackages(response?.data?.data?.content);
+      const response = await getAllCategories();
+      console.log("data", response?.data?.data);
+      setAllCategories(response?.data?.data);
       NotificationService.success("Las salidas fueron cargadas con éxito");
       console.log("Las salidas fueron cargadas con éxito");
     } catch (error) {
@@ -35,8 +37,26 @@ export const AdminPackages = () => {
   }, []);
 
   useEffect(() => {
-      fetchPackages();
+      fetchCategories();
   }, []);
+
+  // se guarda el listado de categorias/regiones en el state
+  useEffect(() => {
+    if (!isCategoriesReady && allCategories) {
+      const categories = allCategories.map(({ id, name }) => ({
+        id,
+        value: name,
+      }));
+      console.log("categories", categories);
+      setCategories(categories);
+      setIsCategoriesReady(true);
+
+      dispatch({
+          type: types_reducer.SET_CATEGORIES,
+          payload: categories,
+      });
+    }
+  }, [allCategories]);
 
   if (isFetching) {
     return (
@@ -56,52 +76,34 @@ export const AdminPackages = () => {
   return (
     <Box
       component="main"
-      sx={{ display: "flex", flexDirection: "column", gap: 2, padding: '2rem 3rem' }}
+      sx={{ display: "flex", flexDirection: "column", gap: 2, padding: '2rem 3rem', minHeight: '100vh' }}
     >
-      {/* <Box sx={{ display: "flex", justifyContent: "space-between" }}>
-        <Typography variant="h4">Paquetes</Typography>
-
-        <Box>
-          <Button
-            variant="contained"
-            color="primary"
-            onClick={handleNewPackage}
-          >
-            Nuevo Paquete
-          </Button>
-        </Box>
-      </Box>
-			<Box> */}
-      {/* 
-      organizar por category????????
-      dejarlo preparado
-      <Typography
-        variant="h6"
-        gutterBottom
-        sx={{
-          textAlign: "center",
-          mb: "2rem",
-          color: "#F3F3F3",
-          fontFamily: "Oswald",
-          fontWeight: "regular",
-          fontSize: "24px",
-        }}
-      >
-        {title}
-      </Typography> */}
-      {packages ? (
+      {allCategories ? (
 				<Box sx={{ 
 					display: 'grid', 
 					gridTemplateColumns: {sx: 'repeat(1, 1fr)', md: 'repeat(2, 1fr)', lg: 'repeat(3, 1fr)'}, 
 					gap: '2rem' 
 
 				}}>
-          <TourDestinationCard blank={true} route='/admin/paquetes/nuevo' />
-          {packages.map((item) => (
-            <TourDestinationCard destination={item} key={item.id} route='/admin/paquetes/' />
+          <TourDestinationCard blank={true} route='/admin/paquetes/nuevo' categories={categories} />
+          {allCategories.map((packageItems, index) => (
+            packageItems && packageItems.packages.length > 0 &&
+            packageItems.packages.map((item) => (
+              <TourDestinationCard 
+                categories={categories}
+                category={categories[index]} 
+                destination={item} 
+                key={item.id} 
+                route='/admin/paquetes/' 
+              />
+            ))
           ))}
         </Box>
       ) : (
+        <>
+        <Box sx={{ display: 'grid', gridTemplateColumns: {sx: 'repeat(1, 1fr)', md: 'repeat(2, 1fr)', lg: 'repeat(3, 1fr)', xl: 'repeat(4, 1fr)'}, gap: '2rem' }}>
+          <TourDestinationCard blank={true} route='/admin/paquetes/nuevo' />
+        </Box>
         <Box
           sx={{
             display: "flex",
@@ -115,8 +117,8 @@ export const AdminPackages = () => {
             No hay paquetes para mostrar.
           </Alert>
         </Box>
+        </>
 				)}
-			{/* </Box> */}
     </Box>
   );
 };
