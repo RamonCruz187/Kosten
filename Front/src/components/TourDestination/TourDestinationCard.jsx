@@ -5,11 +5,16 @@ import { RiImage2Line } from 'react-icons/ri';
 import { useNavigate } from "react-router-dom";
 
 /* eslint-disable react/prop-types */
-export default function TourDestinationCard({ destination = {}, blank = false, route = '/destinos/' }) {
+export default function TourDestinationCard({ 
+  category = {}, 
+  destination = {}, 
+  blank = false, 
+  route = '/destinos/' 
+}) {
   const navigate = useNavigate();
-  const handleClick = (id = null) => {
+  const handleClick = (id = null, destination = {}) => {
     if (id) {
-      navigate(`${route}${id}`);
+      navigate(`${route}${id}`, { state: { category, destination }});
     } else {
       navigate(route);
     }
@@ -27,7 +32,7 @@ export default function TourDestinationCard({ destination = {}, blank = false, r
       flexDirection: "column",
       backgroundColor: "#c9c9c9",
     }}
-    onClick={() => handleClick(blank ? null : destination?.id)}
+    onClick={() => handleClick(blank ? null : destination?.id, destination)}
   >
     {/* Imagen */}
     {blank 
