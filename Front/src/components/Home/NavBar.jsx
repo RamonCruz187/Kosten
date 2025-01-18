@@ -10,7 +10,7 @@ import { useAuth } from "../../shared/hooks/useAuth.jsx";
 import { UserPopover } from "../../shared/components/UserPopover.jsx";
 import PopoverLogin from "../Auth/PopoverLogin.jsx";
 
-const NavBar = ({ isAdmin = false, setIsOpenDrawer, isOpenDrawer = false, isDrawer = false }) => {
+const NavBar = ({ isAdmin = false, setIsOpenDrawer, isOpenDrawer = false, isDrawer = false, sx = {} }) => {
   const { isAuthenticated } = useAuth();
   const location = useLocation().pathname;
   const navigate = useNavigate();
@@ -56,6 +56,7 @@ const NavBar = ({ isAdmin = false, setIsOpenDrawer, isOpenDrawer = false, isDraw
         background: "#080808",
         height: isDrawer ? "auto" : {xs: "80px", md: "100px", xl: "120px" },
         paddingTop: isDrawer ? "1rem" : "0",
+        ...sx,
       }}
     >
       {/* menu retraible cuando es mobile y tablet */}
