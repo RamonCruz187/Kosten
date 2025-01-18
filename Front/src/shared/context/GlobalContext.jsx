@@ -1,4 +1,5 @@
-import {createContext, useCallback, useEffect, useMemo, useReducer} from 'react';
+// Front/src/shared/context/GlobalContext.jsx
+import { createContext, useEffect, useMemo, useReducer } from 'react';
 import { initialState, reducer } from "./GlobalStoreReducer.jsx";
 
 export const GlobalContext = createContext(null);
