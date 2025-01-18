@@ -73,7 +73,7 @@ const Layout = () => {
       >
 
         <Box
-          component={"content"}
+          component={"div"}
           sx={{
             position: "relative",
             width: "100%",
