@@ -1,5 +1,5 @@
 // Front/src/modules/Departures/components/DepartureGrid.jsx
-import { CircularProgress, Typography } from "@mui/material";
+import { Alert, AlertTitle, CircularProgress, Typography } from "@mui/material";
 import Box from "@mui/material/Box";
 import { DepartureCard } from "./DepartureCard.jsx";
 import { customPalette } from "../../../../customStyle.jsx";
@@ -43,18 +43,33 @@ const DepartureGrid = ({ title="PRÓXIMAS SALIDAS", sx={}}) => {
         <Typography variant='titleH1' gutterBottom sx={{ textAlign: 'center', color: customPalette.text.light }}>
           {title}
         </Typography>
-        <Box sx={{ 
-          display: 'grid', 
-          gridTemplateColumns: {sx: 'repeat(1, 1fr)', md: 'repeat(2, 1fr)', lg: 'repeat(3, 1fr)'}, 
-          gap: '2rem' 
-
-        }}>
-          {isFetching ? <CircularProgress />
+        {isFetching ? <CircularProgress />
+        :
+          allPackages ?
+            <Box sx={{ 
+              display: 'grid', 
+              gridTemplateColumns: {sx: 'repeat(1, 1fr)', md: 'repeat(2, 1fr)', lg: 'repeat(3, 1fr)'}, 
+              gap: '2rem' 
+            }}>
+              {allPackages.length !== 0 && allPackages?.map((pack) => (
+                pack?.active && <DepartureCard key={`departure-${pack.id}`} pack={pack} />
+              ))}
+            </Box>
           :
-          allPackages.length !== 0 && allPackages?.map((pack) => (
-            pack?.active && <DepartureCard key={`departure-${pack.id}`} pack={pack} />
-          ))}
-        </Box>
+            <Box
+              sx={{
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+                height: "30dvh",
+              }}
+            >
+              <Alert severity="info" sx={{ width: "90dvw" }}>
+                <AlertTitle>Sin salidas</AlertTitle>
+                No hay salidas para mostrar.
+              </Alert>
+            </Box>
+        }
       </Box>
     </Box>
   );
