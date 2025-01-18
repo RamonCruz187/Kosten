@@ -1,3 +1,4 @@
+// Front/src/shared/components/UserPopover.jsx
 import {useState, useCallback, useEffect} from 'react';
 
 import Box from '@mui/material/Box';
@@ -100,7 +101,7 @@ export function UserPopover({ setIsOpenDrawer = () => {} }) {
   return (
     <>
       <IconButton
-          color='inherit'
+        color='inherit'
         onClick={handleOpenPopover}
         sx={{
           p: 0,
@@ -113,7 +114,7 @@ export function UserPopover({ setIsOpenDrawer = () => {} }) {
             },
         }}
       >
-          <AccountCircle />
+          <AccountCircle sx={{fontSize:{xs: "24px", md: "30px", lg: "40px", xl: "50px"} }} />
       </IconButton>
 
       <Popover

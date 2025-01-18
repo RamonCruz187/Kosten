@@ -1,3 +1,4 @@
+// Front/src/shared/context/GlobalStoreReducer.jsx
 import {ROLES, types_reducer} from "../types/index.js";
 
 export const USER_AUTH = {
@@ -14,13 +15,14 @@ export const USER_DATA = {
     role: undefined
 }
 
-const initialState = {
+export const initialState = {
     user_auth: USER_AUTH,
     user_data: USER_DATA,
     packages: [],
+    categories: [],
 };
 
-const reducer = (state, action) => {
+export const reducer = (state, action) => {
     switch (action.type) {
         case types_reducer.AUTH_LOGIN:
             return {
@@ -43,9 +45,12 @@ const reducer = (state, action) => {
                 ...state,
                 packages: action.payload,
             };
+        case types_reducer.SET_CATEGORIES:
+            return {
+                ...state,
+                categories: action.payload,
+            };
         default:
             return state;
     }
 };
-
-export { initialState, reducer }
