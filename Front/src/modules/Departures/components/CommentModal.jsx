@@ -175,8 +175,23 @@ const CommentModal = ({ open, onClose, packageId }) => {
         <Box sx={{ display: 'flex', justifyContent: 'flex-end', gap: 2 }}>
           <Button 
             onClick={handleClose} 
-            variant="outlined"
             disabled={isLoading}
+            sx={{
+              color: "#323232",
+              backgroundColor: '#fff',
+              '&:hover': {
+                color: '#630000',
+              },
+              '&:active': {
+                color: '#4C0000',
+              },
+              boxShadow: 'none',
+              fontFamily:'Catamaran',
+              fontSize:'14px',
+            
+            }}
+            disableElevation
+            disableRipple
           >
             Cancelar
           </Button>
@@ -186,6 +201,22 @@ const CommentModal = ({ open, onClose, packageId }) => {
             color="primary"
             disabled={isLoading}
             startIcon={isLoading ? <CircularProgress size={20} /> : null}
+            sx={{
+              color: "#323232",
+              backgroundColor: '#fff',
+              '&:hover': {
+                color: '#630000',
+              },
+              '&:active': {
+                color: '#4C0000',
+              },
+              boxShadow: 'none',
+              fontFamily:'Catamaran',
+              fontSize:'14px',
+            
+            }}
+            disableElevation
+            disableRipple
           >
             {isLoading ? 'Enviando...' : 'Enviar'}
           </Button>
