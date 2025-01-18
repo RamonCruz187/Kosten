@@ -1,7 +1,7 @@
 /* eslint-disable react/prop-types */
-import { Box, Typography } from "@mui/material";
+import { Alert, AlertTitle, Box, Typography } from "@mui/material";
 import { customPalette } from "../../../../customStyle";
-import avatarImage from "../../../assets/avatar.svg";
+// import avatarImage from "../../../assets/avatar.svg";
 import CommentsCards from "./CommentsCards";
 
 export default function CommentsBox({ comments, packageName }) { 
@@ -31,11 +31,19 @@ export default function CommentsBox({ comments, packageName }) {
 
         {(!comments || comments.length === 0) ?
         (
-        <Box sx={{ p: 2, textAlign: 'center' }}>
-          <Typography variant="body1" color="#fff">
-            No hay comentarios disponibles aún.
-          </Typography>
-        </Box>
+          <Box
+            sx={{
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              height: "30dvh",
+            }}
+          >
+            <Alert severity="info" sx={{ width: "90dvw" }}>
+              <AlertTitle>Sin comentarios</AlertTitle>
+              No hay comentarios disponibles aún.
+              </Alert>
+          </Box>
         ) : (
           <Box sx={{ 
             display: 'grid', 
