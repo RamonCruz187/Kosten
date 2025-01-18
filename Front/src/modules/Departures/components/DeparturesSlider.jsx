@@ -1,19 +1,22 @@
 import React, { useState, useMemo, useContext } from 'react';
 import { 
   Box, IconButton, Typography, Card, CardContent,useMediaQuery,useTheme,Button} from '@mui/material';
-import { ChevronLeft as PrevIcon, ChevronRight as NextIcon } from '@mui/icons-material';
+import { ChevronLeft as PrevIcon, ChevronRight as NextIcon, Close as CloseIcon } from '@mui/icons-material';
 import { processDepartures } from "../utils/utils.jsx";
 import {GlobalContext} from '../../../shared/context/GlobalContext.jsx';
 import SessionRequestModal from './SessionRequestModal.jsx';
 import ImageModal from './ImageModal.jsx';
 import { fCurrency } from "../../../shared/utils/formatNumber.js";
+import { useNavigate } from "react-router-dom";
+import { iconsCardPackages } from "../utils/utils.jsx";
+import { ConfirmationModal } from "./ConfirmationModal.jsx";
+
 const DepartureSlider = ({ sharedPack }) => {
   const [currentDepartureIndex, setCurrentDepartureIndex] = useState(0);
   const [currentImagePage, setCurrentImagePage] = useState(0);
   const [slides, setSlides] = useState(processDepartures([sharedPack]));
   const { state } = useContext(GlobalContext);
   const [openSessionRequestModal, setOpenSessionRequestModal] = useState(false);
-  const [modalText, setModalText] = useState();
   const images = sharedPack?.images || [];
   const theme = useTheme();
   const isXs = useMediaQuery(theme.breakpoints.down('sm'));
@@ -22,7 +25,10 @@ const DepartureSlider = ({ sharedPack }) => {
   const isLg = useMediaQuery(theme.breakpoints.up('lg'));
   const [currentPage, setCurrentPage] = useState(0);
   const [modalOpen, setModalOpen] = useState(false);
+  const [openBookModal, setOpenBookModal] = useState(false);
   const [selectedImageIndex, setSelectedImageIndex] = useState(0);
+  const [openConfirmationModal, setOpenConfirmationModal] = useState(false);
+  const navigate = useNavigate();
   const getVisibleItems = useMemo(() => {
     if (isXs) return 1;
     if (isSm) return 2;
@@ -82,8 +88,8 @@ const DepartureSlider = ({ sharedPack }) => {
     position: 'relative',
     width: "98%",
     margin: "0 auto",
-    paddingLeft: "50px",
-    paddingRight: "50px",
+    paddingLeft: { xs: "16px", sm: "50px" }, // Hacer responsive el padding
+    paddingRight: { xs: "16px", sm: "50px" },
     mb: 4,
     overflow: 'hidden'
   };
@@ -93,20 +99,10 @@ const DepartureSlider = ({ sharedPack }) => {
     position: 'absolute',
     top: '50%',
     transform: 'translateY(-50%)',
-    color: 'white',
-    bgcolor: 'rgba(0, 0, 0, 0.3)',
-    '&:hover': {
-      bgcolor: 'rgba(0, 0, 0, 0.5)',
-    },
+    color: '#F3F3F3',
     zIndex: 2
   };
 
-  // Estilo común para los contenedores de items
-  const itemsContainerStyle = {
-    display: 'flex',
-    gap: { xs: 2, sm: 2, md: 3 },
-    transition: 'transform 0.3s ease-in-out',
-  };
 
   return (
     <Box sx={{ width: '100%', textAlign: 'center', backgroundColor: 'inherit', py: 2 }}>
@@ -136,9 +132,11 @@ const DepartureSlider = ({ sharedPack }) => {
 
         <Box sx={{ 
             display: 'flex',
-            justifyContent: 'flex-start',
-            width: '95%',
-            gap: { xs: 2, sm: 2, md: 3 },
+            justifyContent: slides.length > 1 ? 'flex-start' : 'center',
+            width: '90%',
+            marginX:'5%',
+            gap: { xs: 0, sm: 2, md: 3 },
+            
           }}>
             {slides.length > 1 ? (
               visibleSlides.map((departure, index) => (
@@ -151,44 +149,94 @@ const DepartureSlider = ({ sharedPack }) => {
                       md: 'calc(33.333% - 16px)', // 3 cards
                       lg: 'calc(25% - 16px)'      // 4 cards
                     },
+                    display:'flex',
+                    justifyContent:'center',
                     flexShrink: 0,
                     flexGrow: 0,
                     boxShadow: 2,
                     backgroundColor: "#fff",
-                    margin: '8px'
+                    margin: '0 auto',
+                    height:'200px'
                   }}
                 >
-              <CardContent >
-              <Typography variant="h6" component="div">
+              <CardContent sx={{width:'200px', display:'flex',flexDirection:'column', justifyContent:'space-between', alignItems:'center'}} >
+              <Typography variant="h6" component="div" sx={{fontFamily:'Oswald',  fontWeight:'600', fontSize:'20px'}}>
                 {departure.startDateFormatted
                   ? `${departure.startDateFormatted} - ${departure.endDateFormatted || ''}`
                   : departure.message 
                   }
               </Typography>
               { departure.message && 
-              <p>Consultanos por otras opciones</p>}
-              <Typography>
+              <Typography sx={{fontFamily:'Oswald', fontSize:'16px', fontWeight:'400'}}>Consultanos por otras opciones</Typography>}
+              <Typography sx={{fontFamily:'Oswald', fontWeight:'600', fontSize:'24px'}}>
                 {typeof departure.price === "number" ? fCurrency(departure.price, { minimumFractionDigits: 0 }) : departure.price}
               </Typography>
-
-              <Button
+                
+              { !departure.price ? 
+              (<Button
                 onClick={() => {
-                  if (state.user_auth.token) {
-                    setModalText(
-                      "Al 'enviar' uno de nuestros Guías se pondrá en contacto con usted vía mail."
-                    );
-                  } else {
-                    setModalText("Para reservar o hacer consultas inicia sesión.");
-                  }
-                  setOpenSessionRequestModal(true);
-                }}
+                  navigate('/contacto')
+                  }}
                 style={{
-                  backgroundColor: typeof departure.price !== "number" ? "green" : "default",
-                  color: typeof departure.price !== "number" ? "white" : "black",
+                  backgroundColor: typeof departure.price !== "number" ? "green" : "#73400C",
+                  color:"white",
+                  fontFamily:'Catamaran',
+                  fontWeight:'400',
+                  fontSize:'14px',
+                  height:'30px',
                 }}
               >
-                {typeof departure.price === "number" ? "RESERVAR" : "CONTACTANOS"}
+                CONTACTANOS
+              </Button>) :
+              (
+                <Box sx={{ display:'flex', alignItems:'center' }}>
+                <Box 
+                sx={{
+                  bgcolor:'#F3F3F3',
+                  width:'30px',
+                  height:'30px',
+                  color:'#000',
+                  paddingX:'0',
+                  display:'flex',
+                  alignItems:'center',
+                  justifyContent:'center',
+                  borderRadius:'4px',
+                  boxShadow: `
+                  0px 2px 1px -1px #00000033,
+                  0px 1px 1px 0px #00000024,
+                  0px 1px 3px 0px #0000001F
+                `,
+
+                  
+                  
+                }}>
+                  {iconsCardPackages[0]}
+                </Box>
+                <Button
+                onClick={ ()=>{
+                  state.user_auth.token ? 
+                    (
+                      setOpenBookModal(true)
+                    ) :
+                    (
+                      setOpenSessionRequestModal(true)
+                    )
+                  }}
+                  sx={{
+                    backgroundColor: typeof departure.price !== "number" ? "green" : "#73400C",
+                    color: "white",
+                    fontFamily: "Catamaran",
+                    fontWeight: "400",
+                    fontSize: "14px",
+                    height:'30px',
+                  }}
+              >
+                RESERVAR
               </Button>
+              </Box>
+              )
+              }
+              
 
               </CardContent>
             </Card>
@@ -212,17 +260,8 @@ const DepartureSlider = ({ sharedPack }) => {
                   color="brownButton" 
                   sx={{marginTop:'12%'}}
                   onClick={ ()=>{
-                    state.user_auth.token ? 
-                      (
-                        // Al cambiar este texto se deberá cambiar la validación en SessionRequestModal.jsx línea 40
-                        setModalText("Al 'enviar' uno de nuestros Guías se pondrá en contacto con usted vía mail."),
+                    state.user_auth.token &&
                         setOpenSessionRequestModal(true)
-                        
-                      ) :
-                      (
-                        setModalText("Para reservar o hacer consultas inicia sesion."),
-                        setOpenSessionRequestModal(true)
-                      )
                   }}
                 >
                   CONSULTAR POR SALIDAS FUTURAS
@@ -232,10 +271,98 @@ const DepartureSlider = ({ sharedPack }) => {
           )
         }
         </Box>
+        {openBookModal && (
+        <Box
+          sx={{
+            position: 'fixed',
+            top: '50%',
+            left: '50%',
+            transform: 'translate(-50%, -50%)',
+            zIndex: 1400,
+            backgroundColor: 'white',
+            boxShadow: 14,
+            p: 4,
+            width: '80%',
+            maxWidth: '500px',
+            borderRadius: '4px',
+            textAlign: 'center',
+          }}
+        >
+          <Box sx={{ position: 'relative' }}>
+            <Typography variant="h6" sx={{ fontFamily: 'Oswald' }}>
+              RESERVAR SALIDA
+            </Typography>
+            <IconButton
+              aria-label="close"
+              onClick={() => setOpenBookModal(false)}
+              sx={{
+                position: 'absolute',
+                top: -25,
+                right: -25,
+                color: '#080808',
+              }}
+            >
+              <CloseIcon />
+            </IconButton>
+          </Box>
+          <Typography sx={{ mt: 2, fontFamily: 'Catamaran', fontSize:'14px', fontWeight:'400', lineHeight:'15px' }}>
+          Está seguro que quiere reservar un lugar para esta fecha?
+          <br /> <br />
+          La reserva quedará confirmada una vez realizado el pago.
+          <br /> <br />
+          Desde Kosten nos estaremos comunicando contigo a la brevedad por Whatsapp para pasarte la información necesaria para realizar el pago.
+          </Typography>
+          <Box sx={{display:'flex', justifyContent:'end', mt:'20px'}}
+                    >
+                      <Button  
+                            sx={{
+                              color: "#323232",
+                              backgroundColor: '#fff',
+                              '&:hover': {
+                                color: '#630000',
+                              },
+                              '&:active': {
+                                color: '#4C0000',
+                              },
+                              boxShadow: 'none',
+                              fontFamily:'Catamaran',
+                              fontSize:'14px',
+                            
+                            }}
+                            disableElevation
+                            disableRipple
+                            onClick={()=>{setOpenBookModal(false)}}
+                            >cancelar
+                            </Button>
+                            <Button  
+                            sx={{
+                              color: "#323232",
+                              backgroundColor: '#fff',
+                              '&:hover': {
+                                color: '#630000',
+                              },
+                              '&:active': {
+                                color: '#4C0000',
+                              },
+                              boxShadow: 'none',
+                              fontFamily:'Catamaran',
+                              fontSize:'14px',
+                            }}
+                            disableElevation
+                            disableRipple
+                            onClick={()=>{setOpenConfirmationModal(true)}}
+                            >
+                              RESERVAR
+                            </Button>
+                    </Box>
+        </Box>
+      )}
+
+      {openConfirmationModal &&
+      <ConfirmationModal setOpenConfirmationModal={setOpenConfirmationModal}/>}
         <SessionRequestModal
           openSessionRequestModal={openSessionRequestModal}
           onClose={() => setOpenSessionRequestModal(false)}
-          text={modalText}
       />
       </Box>
 
@@ -265,9 +392,10 @@ const DepartureSlider = ({ sharedPack }) => {
 
         <Box sx={{ 
           display: 'flex',
-          justifyContent: 'flex-start',
+          justifyContent: visibleImages.length > 1 ? 'flex-start' : 'center',
           width: '95%',
           gap: { xs: 2, sm: 2, md: 3 },
+          
         }}>
           {visibleImages.map((image, index) => (
             <Card

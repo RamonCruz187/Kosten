@@ -39,8 +39,17 @@ export default function CommentsBox({ comments, packageName }) {
         ) : (
           <Box sx={{ 
             display: 'grid', 
-            gridTemplateColumns: {sx: 'repeat(1, 1fr)', md: 'repeat(2, 1fr)', lg: 'repeat(3, 1fr)'}, 
+            gridTemplateColumns: {
+              xs: 'minmax(250px, 1fr)',
+              sm: `repeat(auto-fit, minmax(250px, ${comments.length === 1 ? '400px' : '1fr'}))`,
+            },
             gap: '2rem',
+            justifyContent: 'center',
+            justifyItems: 'center',
+            width: '100%',
+            maxWidth: '1100px', // Limita el ancho máximo del contenedor
+            margin: '0 auto',
+            paddingX: 2 // Opcional: para dar algo de espacio en los laterales
           }}>
             {comments.map((comment, index) => (
               <CommentsCards

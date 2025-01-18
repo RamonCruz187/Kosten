@@ -44,16 +44,29 @@ const DepartureGrid = ({ title="PRÓXIMAS SALIDAS", sx={}}) => {
           {title}
         </Typography>
         <Box sx={{ 
-          display: 'grid', 
-          gridTemplateColumns: {sx: 'repeat(1, 1fr)', md: 'repeat(2, 1fr)', lg: 'repeat(3, 1fr)'}, 
-          gap: '2rem' 
-
+          display: 'grid',
+          gridTemplateColumns:
+            Array.isArray(allPackages) && allPackages.length > 0
+              ? { sx: 'repeat(1, 1fr)', md: 'repeat(2, 1fr)', lg: 'repeat(3, 1fr)' }
+              : '1fr', // Una sola columna si no hay datos
+          gap: '2rem',
+          alignItems: allPackages?.length === 0 ? 'center' : 'start', // Centrar verticalmente si no hay datos
+          justifyContent: allPackages?.length === 0 ? 'center' : 'start', // Centrar horizontalmente si no hay datos
+          height: isFetching || !allPackages?.length ? '100%' : 'auto',
         }}>
-          {isFetching ? <CircularProgress />
-          :
-          allPackages.length !== 0 && allPackages?.map((pack) => (
-            pack?.active && <DepartureCard key={`departure-${pack.id}`} pack={pack} />
-          ))}
+          {isFetching ? (
+          <CircularProgress />
+        ) : (
+          Array.isArray(allPackages) && allPackages.length > 0 ? (
+            
+            allPackages.map(
+              (pack) =>
+                pack?.active && <DepartureCard key={`departure-${pack.id}`} pack={pack} />
+            )
+          ) : (
+            <Typography sx={{textAlign:'center'}}>No hay paquetes disponibles.</Typography>
+          )
+        )}
         </Box>
       </Box>
     </Box>

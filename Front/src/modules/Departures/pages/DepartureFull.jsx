@@ -21,7 +21,8 @@ const styles = {
   mainContainer: {
     display: "flex",
     justifyContent: "center",
-    width: "100%",
+    width: "100%", 
+    maxWidth: '100vw',
     backgroundRepeat: "no-repeat",
     backgroundSize: "cover",
     backgroundPosition: "center",
@@ -62,6 +63,7 @@ const DepartureFull = () => {
   const [commentsError, setCommentsError] = useState(null);
 
   const packToUse = currentPack;
+
 
   useEffect(() => {
     if (id) {
@@ -120,11 +122,12 @@ const DepartureFull = () => {
 
   return (
     <>
+      <Box sx={{ overflowX: 'hidden', width: '100%' }}>
       <Box
         sx={{
           ...styles.mainContainer,
           height: styles.heightResponsive,
-          backgroundImage: `url(${img})`
+          backgroundImage: `url(${packToUse.bannerPhoto.url})`,
         }}
       >
         <Box sx={{ textAlign: "center", color: "white", display: "flex", flexDirection: "column", justifyContent: "center" }}>
@@ -137,7 +140,14 @@ const DepartureFull = () => {
           </Typography>
           <Button 
             variant="contained" 
-            sx={{ bgcolor: "#72CCA0", alignSelf: "center", height: "25px", fontSize: "small" }}
+            sx={{ bgcolor: "#72CCA0", alignSelf: "center", height: "25px", fontSize: "small",
+              '&:hover': {
+                backgroundColor: '#00BD7E',
+              },
+              '&:active': {
+                backgroundColor: '#00BD7E',
+              },
+            }}
             onClick={handleCommentClick}
           >
             Comenta tu experiencia
@@ -157,7 +167,12 @@ const DepartureFull = () => {
         text="Para dejar un comentario inicia sesion."
       />
 
-      <Box sx={{ display: "grid", gridTemplateColumns: { xs: "1fr", sm: "1fr 1fr" } }}>
+        <Box sx={{ 
+          display: "grid", 
+          gridTemplateColumns: { xs: "1fr", sm: "1fr 1fr" },
+          width: '100%',
+          maxWidth: '100vw'
+        }}>
         {/* Description Box */}
         <Box sx={{ ...styles.contentBox, textAlign: "center", paddingTop: "5%", bgcolor: "#F3F3F3" }}>
           <Typography variant="h5">¿De qué se trata?</Typography>
@@ -167,8 +182,16 @@ const DepartureFull = () => {
         </Box>
 
         {/* Info Box */}
-        <Box sx={{ ...styles.contentBox, display: "flex", flexDirection: "column", justifyContent: "center", marginLeft: "25%", color: '#fff' }}>
-          <InfoItem sx={{ padding:'10px'}} icon={iconsCardDepartures[1]} text={packToUse.duration} />
+        <Box sx={{ 
+          ...styles.contentBox, 
+          display: "flex", 
+          flexDirection: "column", 
+          justifyContent: "center", 
+          marginLeft: { xs: "16px", sm: "25%" }, // Hacer responsive el margen
+          color: '#fff',
+          pr: 2 // Añadir padding right para evitar desbordamiento
+        }}>
+          <InfoItem sx={{ padding:'10px'}} icon={iconsCardDepartures[1]} text={packToUse.duration || "duración no establecida"}/>
           <InfoItem icon={iconsCardDepartures[2]} text={packToUse.physical_level || "dificultad no establecida"} />
           <InfoItem icon={iconsCardDepartures[3]} text={packToUse.technical_level || "nivel técnico no establecido"} />
           <InfoItem sx={{ padding:'10px'}} icon={iconsCardDepartures[4]} text={packToUse.included_services || "servicios no establecidos"} />
@@ -199,8 +222,12 @@ const DepartureFull = () => {
 
        {/* slider salidas: */}
       
-      <div style={{ display: 'flex', flexDirection: 'column', width: '100%' }}>
-          
+        <div style={{ 
+          display: 'flex', 
+          flexDirection: 'column',
+          width: '100%',
+          overflow: 'hidden'
+        }}>
           <DeparturesSlider sharedPack={packToUse}></DeparturesSlider>
         </div>
 
@@ -212,6 +239,7 @@ const DepartureFull = () => {
       : (
         <CommentsBox comments={packageComments} packageName={packToUse.name} />
       )}
+      </Box>
     </>
   );
 };
