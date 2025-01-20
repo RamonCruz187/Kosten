@@ -1,6 +1,8 @@
+import AdminDepartureGrid from "../components/AdminDepartureGrid"
+
 const AdminDepartures = () => {
   return (
-    <div>AdminDepartures</div>
+    <AdminDepartureGrid />
   )
 }
 
