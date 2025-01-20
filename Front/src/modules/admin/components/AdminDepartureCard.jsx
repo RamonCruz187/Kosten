@@ -6,6 +6,7 @@ import { fCurrency } from "@/shared/utils/formatNumber";
 import { RiAddLargeLine, RiEditLine } from "react-icons/ri";
 
 export const AdminDepartureCard = ({ departure }) => {
+  console.log('departure', departure)
   const navigate = useNavigate();
 
   const goToPackage = () => navigate(`/admin/salidas/${departure.id}`, {state: {departure: departure}});
@@ -71,9 +72,14 @@ export const AdminDepartureCard = ({ departure }) => {
                 <Typography variant="caption" sx={{ color: "red" }}>
                   SIN SALIDAS DISPONIBLES
                 </Typography> :
-                departure?.departures?.map((departure, index) => (
-                  <Typography key={index} variant="caption">{departure?.date}-{fCurrency(departure?.price)}</Typography>
-                ))
+                <Box>
+                  {departure?.departures?.map((departure, index) => (
+                    <Box key={index} >
+                      <Typography variant="caption">{departure?.startDate[2]} al {departure?.endDate[2]}/{departure?.endDate[1]}/{departure?.endDate[0]} -{fCurrency(departure?.price)}</Typography>
+                    </Box>
+                  ))}
+                
+                </Box>
               }
               
             </Box>
@@ -123,7 +129,7 @@ export const AdminDepartureCard = ({ departure }) => {
                 justifyContent: "center",
                 alignItems: "center",
                 gap: '0.5rem',
-                backgroundColor: "#F3F3F3",
+                backgroundColor: '#D9D9D9',
                 boxShadow: "0px 4px 4px rgba(0, 0, 0, 0.25)",
               }}
             >
