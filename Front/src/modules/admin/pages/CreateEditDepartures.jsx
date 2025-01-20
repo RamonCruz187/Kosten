@@ -6,6 +6,7 @@ import { useCallback, useEffect, useState } from "react";
 import { getAllStaff } from "@/api/staffApi";
 import { NotificationService } from "@/shared/services/notistack.service";
 import { RiAddLargeLine } from "react-icons/ri";
+import { ModalInscripts } from "../components/ModalInscripts";
 
 
 export const CreateEditDepartures = () => {
@@ -14,9 +15,12 @@ export const CreateEditDepartures = () => {
 
   const [isFetching, setIsFetching] = useState(true);
   const [allStaff, setAllStaff] = useState(null);
-  const [openModal, setOpenModal] = useState(false);
+  const [openModal, setOpenModal] = useState(null);
   const [showCreateForm, setShowCreateForm] = useState(false);
   
+  const handleOpenModal = (data) => {
+    setOpenModal(data);
+  }
   const fetchAllStaff = useCallback( async () => {
     setIsFetching(true);
     try {
@@ -78,13 +82,14 @@ export const CreateEditDepartures = () => {
           <>
             {/* Mapea las salidas existentes */}
             {packageData?.departures?.length > 0 &&
-              packageData.departures.map((departure) => (
+              packageData.departures.map((departure, index) => (
                 <DepartureForm
                   key={`departure-${departure.id}`}
                   departureData={departure}
                   package_Id={packageData.id}
                   allStaff={allStaff}
-                  setOpenModal={setOpenModal}
+                  setOpenModal={handleOpenModal}
+                  index={index}
                 />
               ))}
             {/* Botón para crear nueva */}
@@ -121,6 +126,7 @@ export const CreateEditDepartures = () => {
             onClose={() => setShowCreateForm(false)} // Prop para cerrar el formulario (opcional)
           />
         )}
+        <ModalInscripts openModal={openModal} setOpenModal={handleOpenModal} />
     </Box>
   )
 }
