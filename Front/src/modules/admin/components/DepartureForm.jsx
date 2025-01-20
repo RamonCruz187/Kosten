@@ -15,19 +15,20 @@ import { StyledLabel } from "./styles";
 
 export const DepartureForm = ({ 
 	departureData = {}, 
-	package_Id = "", 
+	package_Id = '', 
 	allStaff = [],
 	setOpenModal = () => {},
 	isCreate = false,
+	index = '',
 }) => {
 	const { startDate, endDate } = departureData;
   const [formData, setFormData] = useState({
     packageId: departureData?.id || package_Id,
-		startDate: startDate ? `${startDate[2]}-${startDate[1] < 10 ? "0": ""}${startDate[1]}-${startDate[0]}` : null,
-    endDate: endDate ? `${endDate[2]}-${startDate[1] < 10 ? "0": ""}${endDate[1]}-${endDate[0]}` : null,
+	startDate: startDate ? `${startDate[2]}-${startDate[1] < 10 ? "0": ""}${startDate[1]}-${startDate[0]}` : '',
+    endDate: endDate ? `${endDate[2]}-${startDate[1] < 10 ? "0": ""}${endDate[1]}-${endDate[0]}` : '',
     price: departureData?.price || '',
     quota: departureData?.quota || '',
-		guide: departureData?.guide || null,
+	guide: departureData?.guide || '',
     meetingPlace: departureData?.meetingPlace || 'string',
     finishPlace: departureData?.finishPlace || 'string',
     isActive: departureData?.isActive || true,
@@ -59,7 +60,7 @@ export const DepartureForm = ({
 		<Box component="form" onSubmit={handleSubmit} sx={{backgroundColor: '#F3F3F3', padding: '20px',}}>
 			<Box sx={{ marginBottom: '20px'}}>
 			<Typography variant="titleH3" sx={{ color: '#000' }}>
-				{!isCreate ? `Salida ${departureData.id}` : 'Nueva Salida'}
+				{!isCreate ? `Salida ${index+1}` : 'Nueva Salida'}
 			</Typography>
 			</Box>
 			<Box sx={{ 
@@ -166,9 +167,8 @@ export const DepartureForm = ({
 			<Box sx={{ display: 'flex', gap: '1rem', alignItems: 'center', justifyContent: 'end' }}>
 				{!isCreate &&
 				<Button
-					// type="submit"
 					type="button"
-					onClick={() => setOpenModal(true)}
+					onClick={() => setOpenModal(departureData)}
 					fullWidth
 					variant="contained"
 					
