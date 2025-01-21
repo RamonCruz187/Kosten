@@ -29,5 +29,7 @@ public interface UserMapper {
 
     List<UserResponseDto> entityListToDtoList(List<User> userList);
 
+    List<UserToBeListed> entityListToDtoList1(List<User> userList1);
+
     default String mapUsername(User user) {return user.getName();}
 }
