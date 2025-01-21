@@ -1,10 +1,13 @@
 package com.Kosten.Api_Rest.dto.staff;
 
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 
-import java.io.Serializable;
+public record StaffToUpdateDto(
 
-public record StaffRequestDto(
+        @NotNull(message = "El ID es requerido")
+        Long id,
+
         @NotBlank(message = "Name cannot be blank")
         String name,
 
@@ -13,8 +16,6 @@ public record StaffRequestDto(
 
         String rol,
 
-        String contact
-
-
-)  {
+        int contact
+) {
 }

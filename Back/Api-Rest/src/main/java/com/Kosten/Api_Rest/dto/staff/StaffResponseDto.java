@@ -14,7 +14,7 @@ public record StaffResponseDto(
 
         String rol,
 
-        int contact,
+        String contact,
 
         String photo
 ) implements Serializable {
