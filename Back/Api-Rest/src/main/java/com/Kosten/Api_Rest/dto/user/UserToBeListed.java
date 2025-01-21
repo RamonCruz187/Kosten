@@ -1,9 +1,8 @@
 package com.Kosten.Api_Rest.dto.user;
 
-import com.Kosten.Api_Rest.model.Departure;
-
 import java.io.Serializable;
 import java.util.List;
+import java.util.stream.Collector;
 
 public record UserToBeListed(
         Long id,

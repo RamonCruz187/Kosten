@@ -1,6 +1,9 @@
 package com.Kosten.Api_Rest.dto.Departure;
 
+import com.Kosten.Api_Rest.dto.user.UserToBeListed;
+
 import java.time.LocalDateTime;
+import java.util.List;
 
 public record DepartureToBeListed(
         int id,
@@ -11,6 +14,7 @@ public record DepartureToBeListed(
         String meetingPlace,
         String finishPlace,
         int quota,
-        Boolean isActive
+        Boolean isActive,
+        List<UserToBeListed> usersList
 ) {
 }

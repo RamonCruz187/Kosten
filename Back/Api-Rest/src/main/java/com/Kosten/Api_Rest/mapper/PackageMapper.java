@@ -7,7 +7,7 @@ import com.Kosten.Api_Rest.dto.packageDTO.PackageToUpdateDTO;
 import com.Kosten.Api_Rest.model.Package;
 import org.mapstruct.*;
 
-@Mapper(unmappedTargetPolicy = ReportingPolicy.IGNORE, componentModel = MappingConstants.ComponentModel.SPRING)
+@Mapper(unmappedTargetPolicy = ReportingPolicy.IGNORE, componentModel = MappingConstants.ComponentModel.SPRING, uses = {DepartureMapper.class})
 public interface PackageMapper {
 
     @Mappings({
