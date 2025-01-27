@@ -291,7 +291,7 @@ const Perfil = () => {
                                 </Typography>
                                 <InputPassword 
                                     label="Contraseña actual"
-                                    // value={password}
+                                    value={password}
                                     toggleVar={showPassword}
                                     fxIcon={handleClickShowPassword}
                                 />
