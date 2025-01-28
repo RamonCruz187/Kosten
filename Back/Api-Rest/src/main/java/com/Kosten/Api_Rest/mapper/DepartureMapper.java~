@@ -45,8 +45,7 @@ public interface DepartureMapper {
                         user.getEmail(),
                         user.getContact(),
                         user.getRole1(),
-                        user.getIsActive(),
-                        user.getPayment()
+                        user.getIsActive()
                 ))
                 .collect(Collectors.toList());
     }
