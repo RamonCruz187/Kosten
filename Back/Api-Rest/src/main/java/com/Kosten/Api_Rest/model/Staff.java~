@@ -19,7 +19,7 @@ public class Staff {
     @Column(name = "last_name")
     private String lastName;
     private String rol;
-    private String contact;
+    private int contact;
 
     @OneToOne
     @JoinColumn(name = "photo_id", referencedColumnName = "id")
