@@ -38,7 +38,7 @@ public class SecurityConfiguration {
                         .requestMatchers("/test")
                             .permitAll()
                         .requestMatchers("/user/**")
-                            .permitAll()
+                        .hasAnyAuthority(Role.ADMIN.name(), Role.USER.name())
                         .requestMatchers(HttpMethod.POST, "/packages")
                             .hasAnyAuthority(Role.ADMIN.name(), Role.USER.name())
                         .requestMatchers(HttpMethod.PUT, "/packages")

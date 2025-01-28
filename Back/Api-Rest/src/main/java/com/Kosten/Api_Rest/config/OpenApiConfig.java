@@ -14,5 +14,6 @@ public class OpenApiConfig {
         return new OpenAPI()
                 .info(new Info().title("API Documentation").version("1.0"))
                 .addServersItem(new Server().url("https://kosten.up.railway.app"));
+//                .addServersItem(new Server().url("http://localhost:8080/"));
     }
 }

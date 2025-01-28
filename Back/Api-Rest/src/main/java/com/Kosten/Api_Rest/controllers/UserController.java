@@ -5,12 +5,15 @@ import com.Kosten.Api_Rest.dto.ExtendedBaseResponse;
 import com.Kosten.Api_Rest.dto.user.*;
 import com.Kosten.Api_Rest.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -24,17 +27,25 @@ public class UserController {
 
     private final UserService userService;
 
-
-    @Operation(summary = "Actualizar usuario", description = "Actualiza los datos de un usuario existente.")
+    @Operation(
+            summary = "Actualizar usuario",
+            description = "Actualiza los datos de un usuario existente."
+    )
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Usuario actualizado exitosamente"),
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "Usuario actualizado exitosamente",
+                    content = @Content(
+                            mediaType = MediaType.APPLICATION_JSON_VALUE,
+                            schema = @Schema(implementation = UserResponseDto.class)
+                    )
+            ),
             @ApiResponse(responseCode = "400", description = "Solicitud inválida"),
-            @ApiResponse(responseCode = "404", description = "Usuario no encontrado")
+            @ApiResponse(responseCode = "500", description = "Error del servidor")
     })
-    @PutMapping("/update")
-    @Transactional
+    @PutMapping(value = "/update", consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<ExtendedBaseResponse<UserResponseDto>> updateUser(
-            @RequestBody @Valid UpdateUserRequestDto updateUser){
+            @RequestBody @Valid UpdateUserRequestDto updateUser) {
 
         return ResponseEntity.status(200).body(userService.update(updateUser));
     }
