@@ -35,6 +35,8 @@ public class User implements UserDetails {
     private Boolean isActive;
     private String resetToken;
 
+    private Boolean payment;
+
     @ManyToMany(fetch = FetchType.LAZY)
     @JsonManagedReference
     @JoinTable(
@@ -87,6 +89,9 @@ public class User implements UserDetails {
 
         if (updateUserRequestDto.contact() != null)
             this.contact = updateUserRequestDto.contact();
+
+        if (updateUserRequestDto.payment() != null)
+            this.payment = updateUserRequestDto.payment();
 
         return this;
     }

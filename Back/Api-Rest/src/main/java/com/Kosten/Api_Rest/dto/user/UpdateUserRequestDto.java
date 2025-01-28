@@ -36,5 +36,8 @@ public record UpdateUserRequestDto(
                         contener al menos un dígito, una letra minúscula, una letra mayúscula,
                         un carácter especial (@#$%^&+=) y no debe tener espacios."""
         )
-        String password
+        String password,
+
+        @Schema(description = "Confirmación del pago, el valor debe ser true o false")
+        Boolean payment
 ) implements Serializable {}

@@ -1,0 +1,2 @@
+ALTER TABLE app_user
+    ADD COLUMN payment BOOLEAN DEFAULT FALSE;
