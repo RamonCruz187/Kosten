@@ -1,46 +1,63 @@
 // Front/src/modules/admin/components/CreateEditDepartures.jsx
 import { Box, Button, CircularProgress, Typography } from "@mui/material"
-import { useLocation } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { DepartureForm } from "../components/DepartureForm";
-import { useCallback, useEffect, useState } from "react";
-import { getAllStaff } from "@/api/staffApi";
-import { NotificationService } from "@/shared/services/notistack.service";
 import { RiAddLargeLine } from "react-icons/ri";
 import { ModalInscripts } from "../components/ModalInscripts";
+import { useCallback, useEffect, useState } from "react";
+import { getPackageById } from "@/api/packageApi";
+import { NotificationService } from "@/shared/services/notistack.service";
 
 
 export const CreateEditDepartures = () => {
-  const location = useLocation();
-  const packageData = location.state.departure;
+  const params = useParams();
+  const packageFromCategory = +params.id || null;
 
   const [isFetching, setIsFetching] = useState(true);
-  const [allStaff, setAllStaff] = useState(null);
+  const [packageData, setPackageData] = useState(true);
+  // const [allStaff, setAllStaff] = useState(null);
   const [openModal, setOpenModal] = useState(null);
+  const [indexDepartures, setIndexDepartures] = useState(null);
   const [showCreateForm, setShowCreateForm] = useState(false);
   
-  const handleOpenModal = (data) => {
+  const handleOpenModal = (data, index) => {
     setOpenModal(data);
+    setIndexDepartures(index);
   }
-  const fetchAllStaff = useCallback( async () => {
+
+  const fetchPackageById = useCallback( async () => {
     setIsFetching(true);
     try {
-        const response = await getAllStaff(); // Axios devuelve 'data' directamente
+        const response = await getPackageById(packageFromCategory); // Axios devuelve 'data' directamente
         console.log('data', response?.data?.data);
-        setAllStaff(response?.data?.data);
-        NotificationService.success('El staff fue cargado con éxito');
-        console.log('El staff fue cargado con éxito');
+        setPackageData(response?.data?.data);
+        NotificationService.success('El paquete fue cargado con éxito');
+        console.log('El paquete fue cargado con éxito');
     } catch (error) {
         console.error(error);
-        NotificationService.error('Error al cargar al staff');
+        NotificationService.error('Error al cargar el paquete');
     } finally {
         setIsFetching(false);
     }
   }, [])
 
   useEffect(() => {
-    fetchAllStaff();
+    fetchPackageById();
   }, [])
 
+  if (isFetching) {
+    return (
+      <Box
+        sx={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+        }}
+      >
+        <CircularProgress />
+      </Box>
+    );
+  }
   return (
     <Box sx={{maxWidth: '1100px', margin: '1rem auto', paddingBottom: '2rem', backgroundColor: "#F3F3F3"}} >
       {/* imagen con titulo */}
@@ -76,57 +93,50 @@ export const CreateEditDepartures = () => {
 
       {/* formularios */}
       {/* hacer los maps */}
-      {isFetching 
-        ? <CircularProgress /> 
-        : (
-          <>
-            {/* Mapea las salidas existentes */}
-            {packageData?.departures?.length > 0 &&
-              packageData.departures.map((departure, index) => (
-                <DepartureForm
-                  key={`departure-${departure.id}`}
-                  departureData={departure}
-                  package_Id={packageData.id}
-                  allStaff={allStaff}
-                  setOpenModal={handleOpenModal}
-                  index={index}
-                />
-              ))}
-            {/* Botón para crear nueva */}
-            {packageData?.departures?.length > 0 &&
-              <Button
-                variant="contained"
-                color="#D9D9D9"
-                onClick={() => setShowCreateForm(true)}
-                sx={{ margin: 2, 
-                  boxShadow: '0px 4px 4px rgba(0, 0, 0, 0.25)',
-                  borderRadius: '7px',
-                  display: 'flex',
-                  gap: '.5rem',
-                  alignItems: 'center',
-                  backgroundColor: '#D9D9D9'
-                }}
-              >
-                <RiAddLargeLine />
-                <Typography sx={{fontSize: '0.9rem'}}>
-                AGREGAR SALIDA
-                </Typography>
-              </Button>
-            }
-          </>
-        )}
-  
+        {/* Mapea las salidas existentes */}
+        {packageData?.departures?.length > 0 &&
+          packageData.departures.map((departure, index) => (
+            <DepartureForm
+              key={`departure-${departure.id}`}
+              departureData={departure}
+              package_Id={packageData.id}
+              // allStaff={allStaff}
+              setOpenModal={()=>handleOpenModal(departure, index)}
+              index={index}
+              onActionComplete={fetchPackageById}
+            />
+          ))}
+        {/* Botón para crear nueva */}
+        {packageData?.departures?.length > 0 &&
+          <Button
+            variant="contained"
+            color="#D9D9D9"
+            onClick={() => setShowCreateForm(true)}
+            sx={{ margin: 2, 
+              boxShadow: '0px 4px 4px rgba(0, 0, 0, 0.25)',
+              borderRadius: '7px',
+              display: 'flex',
+              gap: '.5rem',
+              alignItems: 'center',
+              backgroundColor: '#D9D9D9'
+            }}
+          >
+            <RiAddLargeLine />
+            <Typography sx={{fontSize: '0.9rem'}}>
+            AGREGAR SALIDA
+            </Typography>
+          </Button>
+        }
         {/* Formulario para crear nueva salida */}
         {(showCreateForm || packageData?.departures?.length === 0) && (
           <DepartureForm
             package_Id={packageData.id}
-            allStaff={allStaff}
-            setOpenModal={setOpenModal}
+            setOpenModal={()=>handleOpenModal(departure, index)}
             isCreate={true}
-            onClose={() => setShowCreateForm(false)} // Prop para cerrar el formulario (opcional)
+            onActionComplete={fetchPackageById} // Refetch tras completar la acción
           />
         )}
-        <ModalInscripts openModal={openModal} setOpenModal={handleOpenModal} />
+        <ModalInscripts openModal={openModal} setOpenModal={handleOpenModal} indexDepartures={indexDepartures} />
     </Box>
   )
 }
