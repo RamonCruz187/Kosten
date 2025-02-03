@@ -10,10 +10,10 @@ export default function useAutoLogin() {
   const autologin = async (email, password) => {
     try {
       const { data: dataAuth } = await login({ email, password });
-      const { data: dataUser } = await getUserById(dataAuth.data.id);
-
-      setUserData(dataUser.data);
       handleLogin(dataAuth.data);
+      
+      const { data: dataUser } = await getUserById(dataAuth.data.id);
+      setUserData(dataUser.data);
 
       NotificationService.success(`Bienvenido`, 3000);
     } catch (error) {
