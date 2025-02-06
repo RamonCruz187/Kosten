@@ -1,3 +1,4 @@
+// src/api/packageApi.js
 import { PACKAGES_ENDPOINT } from "../constants";
 import apiClient from "./apiClient";
 
@@ -39,3 +40,21 @@ export const deleteDepartureFromPackage = ( packageId, departureId ) => {
 export const getAllActivesPackages = (paginated = {}) => {
     return apiClient.get(`${PACKAGES_ENDPOINT}/actives`, { skipAuth: true , params: paginated });
 };
+
+// Enviar una imagen para Banner o Itinerary de un paquete.       POST /packages/{packageId}/update-image
+export const postSimpleImagePackages = (packageId, formData) => {
+    return apiClient.post(`${PACKAGES_ENDPOINT}/${packageId}/update-image`, formData, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    });
+  };
+
+// Enviar una imagen para Banner o Itinerary de un paquete.       POST /packages/{packageId}/update-image
+export const postImagesPackages = (packageId, formData) => {
+    return apiClient.post(`${PACKAGES_ENDPOINT}/${packageId}/add-image`, formData, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    });
+  };
