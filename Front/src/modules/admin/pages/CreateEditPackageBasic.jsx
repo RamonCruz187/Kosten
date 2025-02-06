@@ -50,6 +50,7 @@ export const CreateEditPackageBasic = () => {
     bannerPhoto: {},
   });
   const [formModified, setFormModified] = useState(false);
+  const [newIdPackage, setNewIdPackage] = useState(null);
 
   const params = useParams();
   const navigate = useNavigate();
@@ -139,7 +140,7 @@ export const CreateEditPackageBasic = () => {
     }
   }, []);
 
-  const sendPackages = useCallback(async (values) => {
+  const sendCreatePackages = useCallback(async (values) => {
     setDisabledButton(true);
     try {
       const formData = new FormData();
@@ -157,27 +158,51 @@ export const CreateEditPackageBasic = () => {
         formData.append("filesImages", imagen);
       });
       
-      const { data: dataPackage } = params.id
-        ? await updatePackage(params.id, formData)
-        : await createPackage(formData);
+      const { data: dataPackage } = await createPackage(formData);
+      const newId = dataPackage.data.id;
+      setNewIdPackage(newId); // Actualiza el estado
+      NotificationService.success(`Paquete creado exitosamente`, 1000);
       
-      NotificationService.success(
-        `Paquete ${params.id ? "actualizado" : "creado"} exitosamente`,
-        1000
-      );
+      return newId; // Devuelve el ID del paquete creado
     } catch (error) {
-      console.error(
-        `Error al ${params.id ? "actualizar" : "crear"} el paquete:`,
-        error
-      );
-      NotificationService.error(
-        `Error al ${params.id ? "actualizar" : "crear"} el paquete`,
-        2200
-      );
+      console.error(`Error al crear el paquete:`,  error);
+      NotificationService.error(`Error al crear el paquete`, 2200);
+      return null;
     } finally {
       setDisabledButton(false);
     }
-  }, [filesImages, params.id]);
+  }, [filesImages]);
+
+  
+  const sendEditPackages = useCallback(async (values) => {
+    setDisabledButton(true);
+    try {
+      const formData = new FormData();
+      
+      formData.append(
+        "packageData",
+        new Blob([JSON.stringify(values)], { type: "application/json" })
+      );
+      const { data: dataPackage } = await updatePackage(params.id, formData)
+      
+      NotificationService.success(`Paquete actualizado exitosamente`, 1000);
+    } catch (error) {
+      console.error(`Error al actualizar el paquete:`, error);
+      NotificationService.error(`Error al actualizar el paquete`, 2200);
+    } finally {
+      setDisabledButton(false);
+    }
+  }, [params.id]);
+
+  const sendPackages = (values) => {
+    if(params.id){
+      sendEditPackages(values)
+      return params.id
+    } else{ 
+      const newId = sendCreatePackages(values);
+      return newId
+    }
+  };
 
   const handleGuardar = async (e) => {
     e.preventDefault();
@@ -189,11 +214,16 @@ export const CreateEditPackageBasic = () => {
     }
   };
 
-  const handleSiguiente = async(e) => {
+  const handleSiguiente = async (e) => {
     e.preventDefault();
-    try { 
-      await formik.handleSubmit();
-      navigate(params.id ? `/admin/paquetes/detalles/${params.id}` : "/admin/paquetes/detalles");
+    try {
+      const values = await formik.validateForm();
+      if (Object.keys(values).length === 0) {
+        const newId = await sendPackages(formik.values);
+        if (newId) {
+          navigate(`/admin/paquetes/detalles/${newId}`);
+        }
+      }
     } catch (error) {
       console.error(error);
     }
