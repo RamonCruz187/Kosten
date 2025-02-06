@@ -26,16 +26,11 @@ import { RiEditLine, RiAddBoxLine } from 'react-icons/ri';
 
 import { GlobalContext } from "@/shared/context/GlobalContext";
 import { PackagesBreadCrumbs } from "../components/PackagesBreadCrumbs";
+import { hasChanges } from "@/shared/utils/compareObj";
 
 export const CreateEditPackageBasic = () => {
   const { state: stateContext } = useContext(GlobalContext);
   const categories = stateContext.categories;
-
-  // const location = useLocation();
-  // const {category, destination} = location.state || {};
-  
-  // console.log('category', category);
-  // console.log('destination', destination);
 
   const [disabledButton, setDisabledButton] = useState(false);
   const [filesImages, setFilesImages] = useState([]);
@@ -47,6 +42,14 @@ export const CreateEditPackageBasic = () => {
     images: [],
     bannerPhoto: { url: "" }
   });
+  const [initialValues, setInitialValues] = useState({
+    name: "",
+    active: "",
+    category: "",
+    images: [],
+    bannerPhoto: {},
+  });
+  const [formModified, setFormModified] = useState(false);
 
   const params = useParams();
   const navigate = useNavigate();
@@ -68,16 +71,21 @@ export const CreateEditPackageBasic = () => {
     category: Yup.string()
       .oneOf(categories.map(c => c.value), 'Región inválida')
       .required('La región es requerida'),
-    bannerPhoto: Yup.mixed()
-      .required('La imagen de portada es requerida')
-      .test('fileType', 'Solo se permiten archivos JPG, PNG y WebP', (value) => {
-        if (!value) return false;
-        return ['image/jpeg', 'image/png', 'image/webp'].includes(value.type);
-      })
-      .test('fileSize', 'La imagen no debe superar los 5MB', (value) => {
-        if (!value) return false;
-        return value.size <= 5 * 1024 * 1024;
-      }),
+    bannerPhoto: Yup.mixed().when([], {
+      is: () => !params.id, // Si params.id NO existe (es creación)
+      then: (schema) =>
+        schema
+          .required('La imagen de portada es requerida')
+          .test('fileType', 'Solo se permiten archivos JPG, PNG y WebP', (value) => {
+            if (!value) return false;
+            return ['image/jpeg', 'image/png', 'image/webp'].includes(value.type);
+          })
+          .test('fileSize', 'La imagen no debe superar los 5MB', (value) => {
+            if (!value) return false;
+            return value.size <= 5 * 1024 * 1024;
+          }),
+      otherwise: (schema) => schema.nullable(), // Si params.id existe (es edición), bannerPhoto puede ser null
+    }),
   });
 
   const formik = useFormik({
@@ -86,12 +94,12 @@ export const CreateEditPackageBasic = () => {
       active: "",
       category: "",
       bannerPhoto: null,
-      images: [],
     },
     validationSchema: paqueteSchema,
     onSubmit: (values) => {
-      requestPackages(values);
+      sendPackages(values);
     },
+    enableReinitialize: true,
   });
 
   // Separate function to handle fetching and updating data
@@ -109,10 +117,15 @@ export const CreateEditPackageBasic = () => {
         name: packageInfo.name || "",
         active: packageInfo.active || "",
         category: packageInfo.category.name || "",
-        bannerPhoto: null,
-        images: [],
+        bannerPhoto: {},
       });
-      
+      setInitialValues({
+        name: packageInfo.name || "",
+        active: packageInfo.active || "",
+        category: packageInfo.category.name || "",
+        // bannerPhoto: packageInfo.bannerPhoto || null,
+        // images: packageInfo.images || [],
+      });
     } catch (error) {
       console.error("Error al obtener el paquete:", error);
       NotificationService.error("Error al cargar los datos del paquete", 2200);
@@ -124,9 +137,9 @@ export const CreateEditPackageBasic = () => {
     if (params.id) {
       fetchAndUpdatePackageData(params.id);
     }
-  }, [params.id, fetchAndUpdatePackageData]);
+  }, []);
 
-  const requestPackages = useCallback(async (values) => {
+  const sendPackages = useCallback(async (values) => {
     setDisabledButton(true);
     try {
       const formData = new FormData();
@@ -152,7 +165,6 @@ export const CreateEditPackageBasic = () => {
         `Paquete ${params.id ? "actualizado" : "creado"} exitosamente`,
         1000
       );
-      navigate("/admin/paquetes");
     } catch (error) {
       console.error(
         `Error al ${params.id ? "actualizar" : "crear"} el paquete:`,
@@ -165,9 +177,29 @@ export const CreateEditPackageBasic = () => {
     } finally {
       setDisabledButton(false);
     }
-  }, [filesImages, params.id, navigate]);
+  }, [filesImages, params.id]);
 
-  // Rest of your handlers
+  const handleGuardar = async (e) => {
+    e.preventDefault();
+    try { 
+      await formik.handleSubmit();
+      navigate("/admin/paquetes");
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const handleSiguiente = async(e) => {
+    e.preventDefault();
+    try { 
+      await formik.handleSubmit();
+      navigate(params.id ? `/admin/paquetes/detalles/${params.id}` : "/admin/paquetes/detalles");
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  // Rest of handlers
   const handleImageChange = (event) => {
     setFilesImages((prev) => [...prev, ...event.target.files]);
   };
@@ -186,11 +218,6 @@ export const CreateEditPackageBasic = () => {
       newImagenes.splice(index, 1);
       setFilesImages(newImagenes);
   }
-  const handleClearForm = () => {
-    formik.resetForm();
-    setFilesImages([]);
-    setImagePreview("");
-  };
 
   // Cleanup effect
   useEffect(() => {
@@ -201,7 +228,12 @@ export const CreateEditPackageBasic = () => {
     };
   }, [imagePreview]);
 
-  // In your render, replace packageValues with packageData
+  useEffect(() => {
+    // Verifica si algún campo ha cambiado comparando con los valores iniciales
+    const isModified = hasChanges(initialValues, formik.values);
+    setFormModified(isModified);
+
+  }, [formik.values]);
 
   return (
     <Container
@@ -461,7 +493,8 @@ export const CreateEditPackageBasic = () => {
           <Button
             type="button"
             variant="contained"
-            onClick={handleClearForm}
+            disabled={!formik.isValid || !formModified || disabledButton}
+            onClick={handleGuardar}
             sx={{
               backgroundColor: "#fff",
               width: {xs:'100%', md:'130px', xl:'150px'},
@@ -472,9 +505,9 @@ export const CreateEditPackageBasic = () => {
           </Button>
           <Button
             variant="contained"
-            disabled={disabledButton}
-            type="submit"
-            // onClick={() => navigate("/admin/paquetes/detalles")}
+            disabled={!formik.isValid || !formModified || disabledButton}
+            type="button"
+            onClick={handleSiguiente}
             sx={{
               backgroundColor: "#72CCA0",
               width: {xs:'100%', md:'130px', xl:'150px'},
