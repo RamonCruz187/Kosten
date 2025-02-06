@@ -5,13 +5,13 @@ import { Suspense, lazy } from "react";
 import Layout from "../shared/pages/layout/Layout.jsx"
 import LandingPage from "../components/Home/LandingPage"
 import Loading from "../shared/components/Loading.jsx";
+
+import AdminDashboard from "../components/Dashboard/AdminDashboard";
 const Login = lazy(() => import("../components/Auth/Login"));
 const Register = lazy(() => import("../components/Auth/Register"));
 
-const UserGuestRoutes = lazy(() => import("./UserGuestRoutes.jsx"));
 import { UserAdminPrivateRoutes } from "./UserAdminPrivateRoutes.jsx";
-
-import AdminDashboard from "../components/Dashboard/AdminDashboard";
+const UserGuestRoutes = lazy(() => import("./UserGuestRoutes.jsx"));
 const Muestras = lazy(() => import("../components/muestras"));
 
 
@@ -20,7 +20,6 @@ const DepartureGrid = lazy(() => import("../modules/Departures/components/Depart
 const DepartureFull = lazy(() => import("../modules/Departures/pages/DepartureFull.jsx"));
 const Gallery = lazy(() => import("../components/PhotosGallery/Gallery.jsx"));
 import { AdminPackages } from "../modules/admin/pages/AdminPackages.jsx";
-// import { CreateEditPackage } from "../modules/admin/components/CreateEditPackage.jsx";
 import { AdminLayout } from "../modules/admin/layout/AdminLayout.jsx";
 import AdminDepartures from "../modules/admin/pages/AdminDepartures.jsx";
 import AdminComments from "../modules/admin/pages/AdminComments.jsx";
@@ -56,11 +55,10 @@ const AppRoutes = () => (
             <Route index element={<Navigate to="usuarios" replace />} />
             <Route path="usuarios" element={<AdminDashboard />} />
             <Route path="paquetes" element={<AdminPackages />} />
-            <Route path="paquetes/:id" element={<CreateEditPackageBasic />} />
-            {/* <Route path="paquetes/nuevo" element={<CreateEditPackage />} /> */}
             <Route path="paquetes/nuevo" element={<CreateEditPackageBasic />} />
-            <Route path="paquetes/detalles" element={<CreateEditPackageDetails />} />
-            <Route path="paquetes/destinos" element={<CreateEditPackageDestination />} />
+            <Route path="paquetes/basico/:id" element={<CreateEditPackageBasic />} />
+            <Route path="paquetes/detalles/:id" element={<CreateEditPackageDetails />} />
+            <Route path="paquetes/destinos/:id" element={<CreateEditPackageDestination />} />
             {/* <Route path="paquetes/:id" element={<PackageFullView />} /> */}
             {/* <Route path="paquetes/editar/:id" element={<CreateEditPackage />} /> */}
             <Route path="salidas" element={<AdminDepartures />} />
