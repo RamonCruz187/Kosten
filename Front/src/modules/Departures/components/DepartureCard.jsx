@@ -57,7 +57,6 @@ export const DepartureCard = ({ pack, isAdmin = false }) => {
     </Label>
   );
 
-console.log(pack)
   return (
     <>
       <Card
