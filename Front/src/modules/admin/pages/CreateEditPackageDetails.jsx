@@ -17,6 +17,7 @@ import {
 import {
   createPackage,
   getPackageById,
+  postSimpleImagePackages,
   updatePackage,
 } from "@api/packageApi.js";
 import Container from "@mui/material/Container";
@@ -24,22 +25,6 @@ import { useNavigate, useParams } from "react-router-dom";
 import { NotificationService } from "@shared/services/notistack.service.jsx";
 import { RiEditLine } from 'react-icons/ri';
 import { PackagesBreadCrumbs } from "../components/PackagesBreadCrumbs";
-
-
-const meses = [
-  "Enero",
-  "Febrero",
-  "Marzo",
-  "Abril",
-  "Mayo",
-  "Junio",
-  "Julio",
-  "Agosto",
-  "Septiembre",
-  "Octubre",
-  "Noviembre",
-  "Diciembre",
-];
 
 const niveles = [
   "Principiante",
@@ -49,10 +34,14 @@ const niveles = [
 ];
 
 const paqueteSchema = Yup.object().shape({
-  name: Yup.string().required("El nombre es requerido"),
   description: Yup.string().required("La descripción es requerida"),
-  punctuation: Yup.number().min(0).max(10),
-  all_months: Yup.array().of(Yup.number()).min(1, "Selecciona al menos un mes"),
+  itinerary: Yup.string(),
+  duration: Yup.string(),
+  physical_level: Yup.string(),
+  technical_level: Yup.string(),
+  included_services: Yup.string(),
+  // itineraryPhoto: Yup.string(),
+  // all_months: Yup.array().of(Yup.number()).min(1, "Selecciona al menos un mes"),
 });
 
 export const CreateEditPackageDetails = () => {
@@ -60,18 +49,16 @@ export const CreateEditPackageDetails = () => {
   const [imagenes, setImagenes] = useState([]);
   const [package_, setPackage] = useState(null);
   const [imagePreview, setImagePreview] = useState("");
-  const [packageValues, setPackageValues] = useState({
-    name: "",
+  const [initialValues, setInitialValues] = useState({
+  // const [packageValues, setPackageValues] = useState({
     description: "",
-    punctuation: "",
-    duration: "",
     itinerary: "",
+    duration: "",
     physical_level: "",
     technical_level: "",
     included_services: "",
-    all_months: [],
-    state: "",
-    region: "",
+    // itineraryPhoto: "",
+    // all_months: [],
   });
 
   const params = useParams();
@@ -82,29 +69,35 @@ export const CreateEditPackageDetails = () => {
       try {
         const { data: dataPackages } = await getPackageById(id);
         setPackage(dataPackages.data);
-        setPackageValues({
-          name: dataPackages.data.name,
+        formik.setValues({
           description: dataPackages.data.description,
-          punctuation: dataPackages.data.punctuation,
-          duration: dataPackages.data.duration,
           itinerary: dataPackages.data.itinerary,
+          duration: dataPackages.data.duration,
           physical_level: dataPackages.data.physical_level,
           technical_level: dataPackages.data.technical_level,
           included_services: dataPackages.data.included_services,
-          all_months: dataPackages.data.months.map((month) => month.name),
-          state: dataPackages.data.state || "Activo",
-          region: dataPackages.data.region || "Costa",
+          // itineraryPhoto: dataPackages.data.itineraryPhoto,
+          // all_months: dataPackages.data.months.map((month) => month.name),
+        });
+        setInitialValues({
+          description: dataPackages.data.description,
+          itinerary: dataPackages.data.itinerary,
+          duration: dataPackages.data.duration,
+          physical_level: dataPackages.data.physical_level,
+          technical_level: dataPackages.data.technical_level,
+          included_services: dataPackages.data.included_services,
+          // itineraryPhoto: dataPackages.data.itineraryPhoto,
+          // all_months: dataPackages.data.months.map((month) => month.name),
         });
       } catch (error) {
         console.error("Error al obtener los departures: ", error);
       }
     },
-    [setPackage, setPackageValues]
+    [setPackage, setInitialValues]
   );
 
   const requestPackages = useCallback(
     async (values) => {
-      console.log("Valores del formulario: ", values);
       setDisabledButton(true);
 
       const formData = new FormData();
@@ -112,20 +105,6 @@ export const CreateEditPackageDetails = () => {
         "packageData",
         new Blob([JSON.stringify(values)], { type: "application/json" })
       );
-      imagenes.forEach((imagen) => {
-        formData.append("filesImages", imagen, imagen.name);
-      });
-
-      if (imagenes.length === 0)
-        formData.append(
-          "filesImages",
-          new Blob([JSON.stringify([])], { type: "application/json" }),
-          "[]"
-        );
-
-      for (let [key, value] of formData.entries()) {
-        console.log(key, value);
-      }
 
       try {
         const { data: dataPackage } = params.id
@@ -162,17 +141,13 @@ export const CreateEditPackageDetails = () => {
 
   const formik = useFormik({
     initialValues: {
-      name: packageValues.name,
-      description: packageValues.description,
-      punctuation: packageValues.punctuation,
-      duration: packageValues.duration,
-      itinerary: packageValues.itinerary,
-      physical_level: packageValues.physical_level,
-      technical_level: packageValues.technical_level,
-      included_services: packageValues.included_services,
-      all_months: packageValues.all_months.map((mes) => meses.indexOf(mes)),
-      state: packageValues.state || "Activo",
-      region: packageValues.region || "",
+      description: "",
+      itinerary: "",
+      duration: "",
+      physical_level: "",
+      technical_level: "",
+      included_services: "",
+      itineraryPhoto: "",
     },
     enableReinitialize: true,
     validationSchema: paqueteSchema,
@@ -181,31 +156,52 @@ export const CreateEditPackageDetails = () => {
     },
   });
 
+  const handleGuardar = async (e) => {
+    e.preventDefault();
+    try { 
+      await formik.handleSubmit();
+      navigate("/admin/paquetes");
+    } catch (error) {
+      console.error(error);
+      NotificationService.error('Error al guardar el paquete', 2500);
+    }
+  };
+
+  const handleSiguiente = async(e) => {
+    e.preventDefault();
+    try { 
+      await formik.handleSubmit();
+      navigate(params.id ? `/admin/paquetes/destinos/${params.id}` : "/admin/paquetes/destinos");
+    } catch (error) {
+      console.error(error);
+      NotificationService.error('Error al guardar el paquete', 2500);
+    }
+  };
+
+  const postItineraryImage = useCallback( async (imgFile) => {
+    setDisabledButton(true);
+    const formData = new FormData();
+    formData.append("imageType", "itinerary");
+    formData.append("file", imgFile); // Archivo
+  
+    try {
+      // Pasar el packageId y formData
+      const response = await postSimpleImagePackages(params.id, formData); // Axios devuelve 'data' directamente
+        console.log('response', response);
+        NotificationService.success('La imagen fue cargada con éxito');
+    } catch (error) {
+        console.error(error);
+        NotificationService.error('Error al cargar la imagen');
+    } finally {
+      setDisabledButton(false);
+    }
+    }, [])
   const handleImageChange = (event) => {
-    setImagenes((prev) => [...prev, ...event.target.files]);
-  };
-
-  const handleImageTitle = (event) => {
-    const file = event.target.files[0];
-
-    if (file) {
-      const previewUrl = URL.createObjectURL(file);
-      setImagePreview(previewUrl);
-    }
-
-    if (imagenes.length > 0) {
-      const newImagenes = [...imagenes];
-      newImagenes[0] = file;
-      setImagenes(newImagenes);
-      return;
-    }
-
-    setImagenes([file]);
-  };
-
-  const handleClearForm = () => {
-    formik.resetForm();
-    setImagenes([]);
+    console.log('event', event);
+    //muestra el preview de la imagen
+    setImagenes(event.target.files);
+    //envia la imagen al backend
+    postItineraryImage(event.target.files[0]);
   };
 
   useEffect(() => {
@@ -434,7 +430,7 @@ export const CreateEditPackageDetails = () => {
                   justifyContent: 'center',
                   alignItems: 'center',
                   position: 'relative',
-                  backgroundImage: `url(${imagePreview || (package_ && package_.images.length > 0 ? package_.images[0].url : '')})`,
+                  backgroundImage: `url(${imagePreview || (package_ && package_.itineraryPhoto ? package_.itineraryPhoto.url : '')})`,
                   backgroundSize: 'cover',
                   backgroundPosition: 'center',
                   backgroundRepeat: 'no-repeat',
@@ -445,7 +441,7 @@ export const CreateEditPackageDetails = () => {
                   style={{ display: 'none' }}
                   id="raised-button-file"
                   type="file"
-                  onChange={handleImageTitle}
+                  onChange={handleImageChange}
                 />
                 <label
                   htmlFor="raised-button-file"
@@ -471,7 +467,7 @@ export const CreateEditPackageDetails = () => {
               <Button
                 type="button"
                 variant="contained"
-                onClick={handleClearForm}
+                onClick={handleGuardar}
                 sx={{
                   backgroundColor: "#fff",
                   width: "100%",
@@ -483,9 +479,8 @@ export const CreateEditPackageDetails = () => {
               <Button
                 variant="contained"
                 disabled={disabledButton}
-                // type="submit"
                 type="button"
-                onClick={() => navigate("/admin/paquetes/destinos")}
+                onClick={handleSiguiente}
                 sx={{
                   backgroundColor: "#72CCA0",
                   width: "100%",
