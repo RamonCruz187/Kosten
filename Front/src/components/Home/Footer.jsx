@@ -1,12 +1,11 @@
-import React, { forwardRef } from "react";
+// Front/src/components/Home/Footer.jsx
+import { forwardRef } from "react";
 import { Box, Divider, Typography, Grid2, Link } from "@mui/material";
-import logo from "../../assets/logo.png";
+import logo from "@/assets/logo.png";
 import { RiInstagramFill, RiTiktokFill, RiWhatsappFill } from "react-icons/ri";
 
 const Footer = forwardRef((props, ref) => {
 const currentYear = new Date().getFullYear();
-
-console.log('ref', ref)
 
   return (
       <Box

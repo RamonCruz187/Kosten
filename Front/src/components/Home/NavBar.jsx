@@ -121,7 +121,7 @@ const NavBar = ({ isAdmin = false, setIsOpenDrawer, isOpenDrawer = false, isDraw
           <Typography variant="paragraphLight" onClick={()=>navigate("/salidas")} sx={{...styledMenuItem, color: location.split('/')[1] === "salidas" ? '#FFC800' : 'fff',}}>Salidas</Typography>
           <Typography variant="paragraphLight" onClick={()=>navigate("/about")} sx={{...styledMenuItem, color: location.split('/')[1] === "about" ? '#FFC800' : 'fff',}}>Quienes somos</Typography>
           <Typography variant="paragraphLight" onClick={()=>navigate("/destinos")} sx={{...styledMenuItem, color : location.split('/')[1] === "destinos" ? '#FFC800' : 'fff',}}>Destinos</Typography>
-          <Typography variant="paragraphLight" onClick={()=>navigate("/gallery")} sx={{...styledMenuItem, color: location.split('/')[1] === "gallery" ? '#FFC800' : 'fff',}}>Galería</Typography>
+          {/* <Typography variant="paragraphLight" onClick={()=>navigate("/gallery")} sx={{...styledMenuItem, color: location.split('/')[1] === "gallery" ? '#FFC800' : 'fff',}}>Galería</Typography> */}
           <Typography variant="paragraphLight" onClick={()=>navigate("/contacto")} sx={{...styledMenuItem, color : location.split('/')[1] === "contacto" ? '#FFC800' : 'fff',}}>Contacto</Typography>
 
           {isAdmin && (
@@ -153,7 +153,7 @@ const NavBar = ({ isAdmin = false, setIsOpenDrawer, isOpenDrawer = false, isDraw
           <Typography onClick={()=>handleNavigation("/salidas")} variant="paragraphLight" sx={{...styledMenuItem, color: location.split('/')[1] === "salidas" ? '#FFC800' : 'fff',}}>Salidas</Typography>
           <Typography onClick={()=>handleNavigation("/about")} variant="paragraphLight" sx={{...styledMenuItem, color: location.split('/')[1] === "about" ? '#FFC800' : 'fff',}}>Quienes somos</Typography>
           <Typography onClick={()=>handleNavigation("/destinos")} variant="paragraphLight" sx={{...styledMenuItem, color : location.split('/')[1] === "destinos" ? '#FFC800' : 'fff',}}>Destinos</Typography>
-          <Typography onClick={()=>handleNavigation("/gallery")} variant="paragraphLight" sx={{...styledMenuItem, color: location.split('/')[1] === "gallery" ? '#FFC800' : 'fff',}}>Galería</Typography>
+          {/* <Typography onClick={()=>handleNavigation("/gallery")} variant="paragraphLight" sx={{...styledMenuItem, color: location.split('/')[1] === "gallery" ? '#FFC800' : 'fff',}}>Galería</Typography> */}
           <Typography onClick={()=>handleNavigation("/contacto")} variant="paragraphLight" sx={{...styledMenuItem, color : location.split('/')[1] === "contacto" ? '#FFC800' : 'fff',}}>Contacto</Typography>
 
           {isAdmin && (

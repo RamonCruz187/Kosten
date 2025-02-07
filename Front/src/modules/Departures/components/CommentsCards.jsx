@@ -1,16 +1,15 @@
+// Front/src/modules/Departures/components/CommentsCards.jsx
 import { Stack, Typography, Box } from "@mui/material";
-import { customPalette } from "../../../../customStyle";
 import PropTypes from "prop-types"; 
 
 import {AccountCircle} from "@mui/icons-material";
-import IconButton from '@mui/material/IconButton';
-import { formatDateAndHour } from '../utils/utils.jsx';
+import { formatDateAndHour } from '@modules/Departures/utils/utils.jsx';
 export default function CommentsCards({ user, text, date, packageName }) {
 
   CommentsCards.propTypes = {
     user: PropTypes.string.isRequired,
     text: PropTypes.string.isRequired,
-    date: PropTypes.array.isRequired,
+    date: PropTypes.string.isRequired,
   };
 
 
@@ -18,7 +17,7 @@ export default function CommentsCards({ user, text, date, packageName }) {
     <Stack
       sx={{
         padding: "1rem",
-        backgroundColor: customPalette.text.light,
+        backgroundColor: "#F3F3F3",
         borderRadius: "8px",
         width: "95%",
         height: "fit-content",
