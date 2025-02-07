@@ -21,6 +21,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -172,7 +173,7 @@ public class PackageController {
             @ApiResponse(responseCode = "404", description = "Paquete no encontrado.", content = {@Content}),
             @ApiResponse(responseCode = "500", description = "Server error.", content = {@Content})
     })
-    @PutMapping
+    @PutMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
     @Transactional
     public ResponseEntity<ExtendedBaseResponse<PackageResponseDTO>> updateNote(
             @RequestBody @Valid PackageToUpdateDTO packageToUpdateDTO
@@ -249,7 +250,10 @@ public class PackageController {
             @ApiResponse(responseCode = "404", description = "Paquete no encontrado.", content = {@Content}),
             @ApiResponse(responseCode = "500", description = "Internal Server Error", content = {@Content})
     })
-    @PostMapping("/{packageId}/update-image")
+    @PostMapping(
+            path = "/{packageId}/update-image",
+            consumes = MediaType.MULTIPART_FORM_DATA_VALUE
+    )
     public ExtendedBaseResponse<ImageResponseDTO> updateImage(
             @PathVariable Long packageId,
             @RequestParam("file") MultipartFile file,
@@ -258,6 +262,7 @@ public class PackageController {
         return imageService.updateSingleImage(packageId, file, imageType);
     }
 
+    @Transactional
     @Operation(
             summary = "Agregar una imagen al Paquete.",
             description = "Permite agregar una imagen a un paquete existente, especificando el tipo de foto (packageImages/destinyPhotos)."
@@ -275,8 +280,10 @@ public class PackageController {
             @ApiResponse(responseCode = "404", description = "Paquete no encontrado.", content = {@Content}),
             @ApiResponse(responseCode = "500", description = "Internal Server Error", content = {@Content})
     })
-    @PostMapping("/{packageId}/add-image")
-    @Transactional
+    @PostMapping(
+            path = "/{packageId}/add-image",
+            consumes = MediaType.MULTIPART_FORM_DATA_VALUE
+    )
     public ResponseEntity<ExtendedBaseResponse<List<ImageResponseDTO>>> addImageToPackage(
             @PathVariable Long packageId,
             @RequestPart("file") MultipartFile file,
@@ -301,5 +308,4 @@ public class PackageController {
                     ));
         }
     }
-
 }

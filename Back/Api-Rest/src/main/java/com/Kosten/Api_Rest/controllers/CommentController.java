@@ -14,6 +14,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -27,20 +28,26 @@ public class CommentController {
 
     private final CommentService commentService;
 
-    @Operation(summary = "Crear un comentario",
-            description = "Permite a un usuario crear un nuevo comentario.")
+    @Operation(
+            summary = "Crear un comentario",
+            description = "Permite a un usuario crear un nuevo comentario."
+    )
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "201",
+            @ApiResponse(
+                    responseCode = "201",
                     description = "Comentario creado exitosamente.",
                     content = {
                             @Content(mediaType = "application/json",
                                     schema = @Schema(implementation = ExtendedBaseResponse.class))
-                    }),
+                    }
+            ),
             @ApiResponse(responseCode = "400", description = "Solicitud no válida.", content = {@Content}),
             @ApiResponse(responseCode = "500", description = "Error del servidor.", content = {@Content})
     })
-    @PostMapping("/save")
-    public ResponseEntity<ExtendedBaseResponse<CommentDto>> createComment(@Valid @RequestBody CommentRequestDto commentRequestDto) {
+    @PostMapping(value = "/save", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<ExtendedBaseResponse<CommentDto>> createComment(
+            @Valid @RequestBody CommentRequestDto commentRequestDto
+    ) {
         CommentDto savedComment = commentService.createComment(commentRequestDto);
         BaseResponse response = BaseResponse.created("Comentario creado exitosamente.");
         return ResponseEntity.status(HttpStatus.CREATED)
