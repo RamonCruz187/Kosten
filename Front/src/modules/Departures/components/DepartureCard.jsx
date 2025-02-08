@@ -94,7 +94,7 @@ export const DepartureCard = ({ pack, isAdmin = false }) => {
         <Box
           component="img"
           alt={pack.name}
-          src={pack.images[0].url}
+          src={pack.bannerPhoto.url}
           sx={{
             top: 0,
             width: "100%",
