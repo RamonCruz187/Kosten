@@ -24,10 +24,8 @@ export const AdminPackages = () => {
     setIsFetching(true);
     try {
       const response = await getAllCategories();
-      console.log("data", response?.data?.data);
       setAllCategories(response?.data?.data);
       NotificationService.success("Las salidas fueron cargadas con éxito");
-      console.log("Las salidas fueron cargadas con éxito");
     } catch (error) {
       console.error(error);
       NotificationService.error("Error al cargar las salidas");
@@ -47,7 +45,6 @@ export const AdminPackages = () => {
         id,
         value: name,
       }));
-      console.log("categories", categories);
       setCategories(categories);
       setIsCategoriesReady(true);
 
