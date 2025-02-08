@@ -49,7 +49,7 @@ export default function TourDestinationCard({
       </Box>
     : <Box
       component="img"
-      src={destination?.images[0].url}
+      src={destination?.bannerPhoto.url}
       alt={destination?.name}
       sx={{
         width: "100%",
