@@ -17,16 +17,19 @@ import {
 import {
   createPackage,
   getPackageById,
+  postImagesPackages,
+  postSimpleImagePackages,
   updatePackage,
 } from "@api/packageApi.js";
 import Container from "@mui/material/Container";
 import { useNavigate, useParams } from "react-router-dom";
 import { NotificationService } from "@shared/services/notistack.service.jsx";
-import { RiEditLine, RiAddBoxLine } from 'react-icons/ri';
+import { RiEditLine, RiAddBoxLine, RiDeleteBin6Line } from 'react-icons/ri';
 
 import { GlobalContext } from "@/shared/context/GlobalContext";
 import { PackagesBreadCrumbs } from "../components/PackagesBreadCrumbs";
 import { hasChanges } from "@/shared/utils/compareObj";
+import { ModalWarning } from "../components/ModalWarning";
 
 export const CreateEditPackageBasic = () => {
   const { state: stateContext } = useContext(GlobalContext);
@@ -34,6 +37,7 @@ export const CreateEditPackageBasic = () => {
 
   const [disabledButton, setDisabledButton] = useState(false);
   const [filesImages, setFilesImages] = useState([]);
+  const [bannerPhoto, setBannerPhoto] = useState(null);
   const [imagePreview, setImagePreview] = useState("");
   const [packageData, setPackageData] = useState({
     name: "",
@@ -51,6 +55,8 @@ export const CreateEditPackageBasic = () => {
   });
   const [formModified, setFormModified] = useState(false);
   const [newIdPackage, setNewIdPackage] = useState(null);
+  const [openDialog, setOpenDialog] = useState(false);
+  const [idToDelete, setIdToDelete] = useState(null);
 
   const params = useParams();
   const navigate = useNavigate();
@@ -177,13 +183,14 @@ export const CreateEditPackageBasic = () => {
   const sendEditPackages = useCallback(async (values) => {
     setDisabledButton(true);
     try {
-      const formData = new FormData();
-      
-      formData.append(
-        "packageData",
-        new Blob([JSON.stringify(values)], { type: "application/json" })
-      );
-      const { data: dataPackage } = await updatePackage(params.id, formData)
+      const selectedCategory = categories.find((c) => c.value === values.category);
+      const dataToSend = {
+        id: +params.id,
+        active: values.active,
+        idCategory: selectedCategory?.id,
+        name: values.name,
+      }
+      const { data: dataPackage } = await updatePackage(dataToSend)
       
       NotificationService.success(`Paquete actualizado exitosamente`, 1000);
     } catch (error) {
@@ -196,7 +203,17 @@ export const CreateEditPackageBasic = () => {
 
   const sendPackages = (values) => {
     if(params.id){
-      sendEditPackages(values)
+      // funcion para enviar formulario de texto
+      console.log("formModified", formModified)
+      if(formModified){
+        if(!formik.validateForm()) return
+        sendEditPackages(values)
+      }
+      // funcion para enviar img bannerPhoto
+      if(bannerPhoto){postBannerPhotoImage(values.bannerPhoto)}
+      // funcion para enviar imgs images
+      console.log("filesImages", filesImages)
+      if(filesImages.length > 0){postImages(filesImages)}
       return params.id
     } else{ 
       const newId = sendCreatePackages(values);
@@ -204,25 +221,16 @@ export const CreateEditPackageBasic = () => {
     }
   };
 
-  const handleGuardar = async (e) => {
-    e.preventDefault();
-    try { 
-      await formik.handleSubmit();
-      navigate("/admin/paquetes");
-    } catch (error) {
-      console.error(error);
-    }
-  };
-
-  const handleSiguiente = async (e) => {
+  const handleSiguiente = async (e, moveForward = false) => {
     e.preventDefault();
     try {
-      const values = await formik.validateForm();
-      if (Object.keys(values).length === 0) {
-        const newId = await sendPackages(formik.values);
-        if (newId) {
-          navigate(`/admin/paquetes/detalles/${newId}`);
-        }
+      const newId = await sendPackages(formik.values);
+      if (moveForward) {
+        if (params.id) {
+        navigate(`/admin/paquetes/detalles/${params.id}`, {state: {isNewPackage: false}});
+      } else {
+        navigate(`/admin/paquetes/detalles/${newId}`, {state: {isNewPackage: true}}); 
+      }
       }
     } catch (error) {
       console.error(error);
@@ -237,13 +245,49 @@ export const CreateEditPackageBasic = () => {
   const handleImageTitle = (event) => {
     const file = event.target.files[0];
     if (file) {
+      setBannerPhoto(file);
       const previewUrl = URL.createObjectURL(file);
       setImagePreview(previewUrl);
       formik.setFieldValue("bannerPhoto", file);
     }
   };
 
-  const handleDeleteImg = (index) => {
+  const postBannerPhotoImage = useCallback( async (imgFile) => {
+    const formData = new FormData();
+    formData.append("imageType", "banner");
+    formData.append("file", imgFile); // Archivo
+  
+    try {
+      // Pasar el packageId y formData
+      const response = await postSimpleImagePackages(params.id, formData); // Axios devuelve 'data' directamente
+        console.log('response', response);
+        NotificationService.success('La imagen fue cargada con éxito');
+    } catch (error) {
+        console.error(error);
+        NotificationService.error('Error al cargar la imagen');
+    }
+  }, [])
+
+  const postImages = useCallback( async (imgsFiles) => {
+    const formData = new FormData();
+    formData.append("imageType", "packageImages");
+    formData.append("file", imgsFiles); // Archivo
+    // imgsFiles.forEach((imagen) => {
+    //   formData.append("file", imagen);
+    // });
+    const isManyImgs = imgsFiles.length > 1
+    try {
+      // Pasar el packageId y formData
+      const response = await postImagesPackages(params.id, formData); // Axios devuelve 'data' directamente
+        console.log('response', response);
+        NotificationService.success(isManyImgs ? `Las imágenes fueron cargadas con éxito` : `La imagen fue cargada con éxito`);
+    } catch (error) {
+        console.error(error);
+        NotificationService.error(isManyImgs ? 'Error al cargar las imágenes' : 'Error al cargar la imagen');
+    }
+  }, [])
+
+  const handleDeleteNewImg = (index) => {
       const newImagenes = [...filesImages];
       newImagenes.splice(index, 1);
       setFilesImages(newImagenes);
@@ -450,6 +494,67 @@ export const CreateEditPackageBasic = () => {
                   type="file"
                   onChange={handleImageChange}
                 />
+
+              {/* Mostrar las fotos del paquete */}
+              {packageData &&
+                packageData.images.length > 0 &&
+                packageData.images.map((img) => {
+                  if (img.id === packageData.bannerPhoto.id) {
+                    return null;
+                  }
+                  return (
+                  <Box
+                    key={`img-card-${img.id}`}
+                    sx={{
+                      width: {xs: '100px', md: '150px', xl: '180px'},
+                      height: {xs: '100px', md: '150px', xl: '180px'},
+                      borderRadius: '8px',
+                      zIndex: 10,
+                      overflow: 'hidden',
+                      position: 'relative',
+                      "&:hover .delete-button": {
+                        opacity: 1, 
+                      },
+                    }}
+                  >
+                      <Box
+                        className="delete-button"
+                        onClick={() => {
+                          setOpenDialog(true)
+                          setIdToDelete(img.id)
+                        }}
+                        sx={{
+                          position: 'absolute',
+                          top: '15px',
+                          right: '15px',
+                          display: 'flex',
+                          justifyContent: 'center',
+                          alignItems: 'center',
+                          cursor: 'pointer',
+                          zIndex: 5,
+                          borderRadius: '5px',
+                          width: '30px',
+                          height: '30px',
+                          backgroundColor: '#fff',
+                          opacity: {xs: 1, lg: 0},
+                          transition: 'opacity 0.3s ease-in-out',
+                        }}
+                      >
+                        <RiDeleteBin6Line size={18} color="#323232" />
+                      </Box>
+                    <Box
+                      sx={{
+                        width: '100%',
+                        height: '100%',
+                        background: `url(${img.url})`,
+                        backgroundSize: 'cover',
+                      }}
+                    >
+                    </Box>
+                  </Box>
+                )}
+              )}
+              {/* boton de nueva imagen */}
                 <label htmlFor="multiple-images-input">
                   <Button 
                     variant="contained"
@@ -472,46 +577,58 @@ export const CreateEditPackageBasic = () => {
                   </Button>
                 </label>
 
+              {/* Mostrar las fotos que se agregan */}
+              {filesImages &&
+                filesImages.length > 0 &&
+                filesImages.map((img, index) => (
 
-
-                {/* <Box
-                  mt={2}
-                  sx={{
-                    display: 'flex',
-                    flexWrap: 'wrap',
-                    gap: 2,
-                    minHeight: '40px',
-                    overflow: 'hidden',
-                    overflowY: 'auto',
-                  }}
-                >
-                  {filesImages.map((imagen, index) => (
-                    <Chip
-                      key={`fileImage-${index}`}
-                      label={imagen.name}
-                      onDelete={() => {
-                        const newImagenes = [...filesImages];
-                        newImagenes.splice(index, 1);
-                        setFilesImages(newImagenes);
-                      }}
-                    />
-                  ))}
-                </Box> */}
-
-
-              {packageData &&
-                packageData.images.length > 0 &&
-                packageData.images.map((img) => (
                 <Box
-                  key={`img-card-${img.id}`}
-                  sx={{
-                    width: {xs: '100px', md: '150px', xl: '180px'},
-                    height: {xs: '100px', md: '150px', xl: '180px'},
-                    background: `url(${img.url})`,
-                    backgroundSize: 'cover',
-                    borderRadius: '8px',
-                  }}
-                />
+                key={`new-img-card-${index}`}
+                sx={{
+                  width: {xs: '100px', md: '150px', xl: '180px'},
+                  height: {xs: '100px', md: '150px', xl: '180px'},
+                  borderRadius: '8px',
+                  zIndex: 10,
+                  overflow: 'hidden',
+                  position: 'relative',
+                  "&:hover .delete-button": {
+                    opacity: 1, 
+                  },
+                }}
+                >
+                    <Box
+                      className="delete-button"
+                      onClick={() => handleDeleteNewImg(index)}
+                      // onClick={() => handleRemoveImage(index)}
+                      sx={{
+                        position: 'absolute',
+                        top: '15px',
+                        right: '15px',
+                        display: 'flex',
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                        cursor: 'pointer',
+                        zIndex: 5,
+                        borderRadius: '5px',
+                        width: '30px',
+                        height: '30px',
+                        backgroundColor: '#fff',
+                        opacity: {xs: 1, lg: 0},
+                        transition: 'opacity 0.3s ease-in-out',
+                      }}
+                    >
+                      <RiDeleteBin6Line size={18} color="#323232" />
+                    </Box>
+                  <Box
+                    sx={{
+                      width: '100%',
+                      height: '100%',
+                      background: `url(${URL.createObjectURL(img)})`,
+                      backgroundSize: 'cover',
+                    }}
+                  >
+                  </Box>
+                </Box>
               ))}
               </Box>
             </Box>
@@ -523,8 +640,13 @@ export const CreateEditPackageBasic = () => {
           <Button
             type="button"
             variant="contained"
-            disabled={!formik.isValid || !formModified || disabledButton}
-            onClick={handleGuardar}
+            disabled={
+              !formik.isValid || // Si el formulario no es válido
+              disabledButton ||  // Si el fetch está en progreso
+              (Boolean(!params.id) && !formik.dirty) || // Si está en modo edición pero no hubo cambios
+              (Boolean(params.id) && !formModified && bannerPhoto === null && filesImages.length === 0) // Si está en modo edición pero no hubo cambios
+            }
+            onClick={(e) => handleSiguiente(e, false)}
             sx={{
               backgroundColor: "#fff",
               width: {xs:'100%', md:'130px', xl:'150px'},
@@ -535,9 +657,13 @@ export const CreateEditPackageBasic = () => {
           </Button>
           <Button
             variant="contained"
-            disabled={!formik.isValid || !formModified || disabledButton}
-            type="button"
-            onClick={handleSiguiente}
+            disabled={
+              !formik.isValid || // Si el formulario no es válido
+              disabledButton ||  // Si el fetch está en progreso
+              (Boolean(!params.id) && !formik.dirty) || // Si es nuevo pero no hubo cambios
+              (Boolean(params.id) && !formModified && bannerPhoto === null && filesImages.length === 0) // Si está en modo edición pero no hubo cambios
+            }            type="button"
+            onClick={(e) => handleSiguiente(e, true)}
             sx={{
               backgroundColor: "#72CCA0",
               width: {xs:'100%', md:'130px', xl:'150px'},
@@ -550,6 +676,7 @@ export const CreateEditPackageBasic = () => {
         </Box>
         
       </Box>
+      <ModalWarning openDialog={openDialog} setOpenDialog={setOpenDialog} idToDelete={idToDelete} setIdToDelete={setIdToDelete} />
     </Container>
   );
 };

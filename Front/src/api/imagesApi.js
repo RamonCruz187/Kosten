@@ -1,3 +1,4 @@
+// src/api/imagesApi.js
 import { IMAGES_ENDPOINT } from "../constants";
 import apiClient from "./apiClient";
 
@@ -9,5 +10,10 @@ export const getAllImages = () => {
 // Carga una nueva imagen               body: {"image": "string"}
 export const uploadImage = (body) => {
     return apiClient.post(`${IMAGES_ENDPOINT}/upload`, body);
+}
+
+// Borra una imagen por ID               params: "imageId"
+export const deleteImage = (imageId) => {
+    return apiClient.delete(`${IMAGES_ENDPOINT}/${ imageId }`);
 }
 
