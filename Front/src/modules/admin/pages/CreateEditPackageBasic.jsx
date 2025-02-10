@@ -204,15 +204,13 @@ export const CreateEditPackageBasic = () => {
   const sendPackages = (values) => {
     if(params.id){
       // funcion para enviar formulario de texto
-      console.log("formModified", formModified)
       if(formModified){
         if(!formik.validateForm()) return
         sendEditPackages(values)
       }
       // funcion para enviar img bannerPhoto
-      if(bannerPhoto){postBannerPhotoImage(values.bannerPhoto)}
+      if(bannerPhoto){postBannerPhotoImage(values.bannerPhoto, params.id)}
       // funcion para enviar imgs images
-      console.log("filesImages", filesImages)
       if(filesImages.length > 0){postImages(filesImages)}
       return params.id
     } else{ 
@@ -252,15 +250,14 @@ export const CreateEditPackageBasic = () => {
     }
   };
 
-  const postBannerPhotoImage = useCallback( async (imgFile) => {
+  const postBannerPhotoImage = useCallback( async (imgFile, packID) => {
     const formData = new FormData();
     formData.append("imageType", "banner");
     formData.append("file", imgFile); // Archivo
   
     try {
       // Pasar el packageId y formData
-      const response = await postSimpleImagePackages(params.id, formData); // Axios devuelve 'data' directamente
-        console.log('response', response);
+      const response = await postSimpleImagePackages(packID, formData); // Axios devuelve 'data' directamente
         NotificationService.success('La imagen fue cargada con éxito');
     } catch (error) {
         console.error(error);
@@ -279,7 +276,6 @@ export const CreateEditPackageBasic = () => {
     try {
       // Pasar el packageId y formData
       const response = await postImagesPackages(params.id, formData); // Axios devuelve 'data' directamente
-        console.log('response', response);
         NotificationService.success(isManyImgs ? `Las imágenes fueron cargadas con éxito` : `La imagen fue cargada con éxito`);
     } catch (error) {
         console.error(error);
@@ -358,6 +354,7 @@ export const CreateEditPackageBasic = () => {
                     <Typography variant="caption" color="error">
                       {formik.errors.category}
                     </Typography>
+                    
                   )}
                 </FormControl>
               </Box>
@@ -464,7 +461,10 @@ export const CreateEditPackageBasic = () => {
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
                   error={formik.touched.name && Boolean(formik.errors.name)}
-                  helperText={formik.touched.name && formik.errors.name}
+                  helperText={
+										(formik.errors.name ? formik.touched.name && formik.errors.name :
+										`${formik.values.name.length} / 55 caracteres`)
+									}
                 />
               </Box>
             </Box>
