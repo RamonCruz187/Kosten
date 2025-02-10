@@ -262,6 +262,38 @@ public class PackageController {
         return imageService.updateSingleImage(packageId, file, imageType);
     }
 
+    @Operation(
+            summary = "actualizar una imagen de un Paquete.",
+            description = "Permite actualizar una imagen en un paquete existente, especificando el id de la imagen."
+    )
+    @ApiResponses(value = {
+            @ApiResponse(
+                    responseCode = "200", description = "Imagen actualizada exitosamente.",
+                    content = {
+                            @Content(mediaType = "application/json",
+                                    schema = @Schema(implementation = ExtendedBaseResponse.class))
+                    }),
+            @ApiResponse(responseCode = "400", description = "Bad request.", content = {@Content}),
+            @ApiResponse(responseCode = "401", description = "Unauthorized.", content = {@Content}),
+            @ApiResponse(responseCode = "403", description = "Forbidden access to this resource", content = {@Content}),
+            @ApiResponse(responseCode = "404", description = "Paquete no encontrado.", content = {@Content}),
+            @ApiResponse(responseCode = "500", description = "Internal Server Error", content = {@Content})
+    })
+    @PutMapping(
+            path = "/update-image/{imageId}",
+            consumes = MediaType.MULTIPART_FORM_DATA_VALUE
+    )
+    public ExtendedBaseResponse<ImageResponseDTO> updateImage(
+            @Parameter(description = "ID de la imagen a actualizar", required = true)
+            @PathVariable Long imageId,
+
+            @Parameter(description = "Imagen del paquete", required = true)
+            @RequestPart("image") MultipartFile image) {
+
+        ExtendedBaseResponse<ImageResponseDTO> response = packageService.updateImage(imageId, image);
+        return response;
+    }
+
     @Transactional
     @Operation(
             summary = "Agregar una imagen al Paquete.",

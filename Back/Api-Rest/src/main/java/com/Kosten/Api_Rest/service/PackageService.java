@@ -2,6 +2,7 @@ package com.Kosten.Api_Rest.service;
 
 import com.Kosten.Api_Rest.dto.BaseResponse;
 import com.Kosten.Api_Rest.dto.ExtendedBaseResponse;
+import com.Kosten.Api_Rest.dto.images.ImageResponseDTO;
 import com.Kosten.Api_Rest.dto.packageDTO.PackageRequestDTO;
 import com.Kosten.Api_Rest.dto.packageDTO.PackageResponseDTO;
 import com.Kosten.Api_Rest.dto.packageDTO.PackageToUpdateDTO;
@@ -20,5 +21,6 @@ public interface PackageService {
     ExtendedBaseResponse<Page<PackageResponseDTO>> getAllPackages(Pageable pageable);
     ExtendedBaseResponse<PackageResponseDTO> update(PackageToUpdateDTO packageToUpdateDTO);
     BaseResponse delete(Long id);
+    ExtendedBaseResponse<ImageResponseDTO> updateImage(Long imageId, MultipartFile image);
 
 }

@@ -4,9 +4,11 @@ import com.Kosten.Api_Rest.Exception.DepartureNotFoundException;
 import com.Kosten.Api_Rest.Exception.packagesExc.PackageNotFoundException;
 import com.Kosten.Api_Rest.dto.BaseResponse;
 import com.Kosten.Api_Rest.dto.ExtendedBaseResponse;
+import com.Kosten.Api_Rest.dto.images.ImageResponseDTO;
 import com.Kosten.Api_Rest.dto.packageDTO.PackageRequestDTO;
 import com.Kosten.Api_Rest.dto.packageDTO.PackageResponseDTO;
 import com.Kosten.Api_Rest.dto.packageDTO.PackageToUpdateDTO;
+import com.Kosten.Api_Rest.mapper.ImageMapper;
 import com.Kosten.Api_Rest.mapper.PackageMapper;
 import com.Kosten.Api_Rest.model.Category;
 import com.Kosten.Api_Rest.model.Departure;
@@ -18,6 +20,9 @@ import com.Kosten.Api_Rest.repository.PackageRepository;
 import com.Kosten.Api_Rest.service.CategoryService;
 import com.Kosten.Api_Rest.service.ImageService;
 import com.Kosten.Api_Rest.service.PackageService;
+import com.Kosten.Api_Rest.service.apis.ImageServiceApi;
+import com.cloudinary.Cloudinary;
+import com.cloudinary.utils.ObjectUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -26,6 +31,7 @@ import com.Kosten.Api_Rest.repository.IDepartureRepository;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -41,6 +47,8 @@ public class PackageServiceImpl implements PackageService {
     private final ImageService imageService;
     private final CategoryService categoryService;
     private final CategoryRepository categoryRepository;
+    private final ImageServiceApi imageServiceApi;
+    private final ImageMapper imageMapper;
 
 
     @Transactional
@@ -179,6 +187,25 @@ public class PackageServiceImpl implements PackageService {
         packageRepository.delete(packageEntity);
 
         return BaseResponse.ok("Paquete eliminado exitosamente.");
+    }
+
+    @Override
+    @Transactional
+    public ExtendedBaseResponse<ImageResponseDTO> updateImage(Long imageId, MultipartFile image) {
+        Image image2 = imageRepository.findById(imageId).orElseThrow(
+                PackageNotFoundException::new);
+        imageServiceApi.deleteImage(image2.getUrl());
+        try {
+            String newUrl = imageServiceApi.uploadImage(image);
+            image2.setUrl(newUrl);
+            imageRepository.save(image2);
+            return ExtendedBaseResponse.of(
+                    BaseResponse.ok("Imagen actualizada exitosamente."),
+                    imageMapper.imageToImageResponseDTO(image2)
+            );
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
 
