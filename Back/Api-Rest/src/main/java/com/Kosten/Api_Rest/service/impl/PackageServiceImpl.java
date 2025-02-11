@@ -109,7 +109,7 @@ public class PackageServiceImpl implements PackageService {
 
     public ExtendedBaseResponse<PackageResponseDTO> getPackageById(Long id) {
 
-        Package packageEntity = packageRepository.findByIdAndActiveIsTrue(id);
+        Package packageEntity = packageRepository.findById(id).orElse(null);
 
         if (packageEntity == null) {
             throw new PackageNotFoundException("Paquete no encontrado.");
