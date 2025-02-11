@@ -18,6 +18,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
@@ -167,42 +168,52 @@ public class ImageServiceImpl implements ImageService {
         );
     }
     @Override
-    public ExtendedBaseResponse<List<ImageResponseDTO>> addImageinArray(Long packageId, MultipartFile file, String imageType) throws Exception {
+    public ExtendedBaseResponse<List<ImageResponseDTO>> addImageinArray(Long packageId, List<MultipartFile> files, String imageType) throws Exception {
         // Verificar si el paquete existe y está activo
         Package packageEntity = packageRepository.findByIdAndActiveIsTrue(packageId);
         if (packageEntity == null) {
             throw new IllegalArgumentException("Paquete no encontrado");
         }
 
-        // Verificar si se ha proporcionado un archivo válido
-        if (file.isEmpty()) {
-            throw new IllegalArgumentException("No se ha encontrado la imagen");
+        // Verificar si se ha proporcionado una lista de archivos válida
+        if (files == null || files.isEmpty()) {
+            throw new IllegalArgumentException("No se han encontrado imágenes");
         }
 
-        // Subir la nueva imagen a Cloudinary
-        Image newImage = createNewImage1(file);
+        List<Image> newImages = new ArrayList<>();
 
-        // Asociar la nueva imagen al paquete según el tipo
-        if ("packageImages".equalsIgnoreCase(imageType)) {
-            packageEntity.getImages().add(newImage); // Agregar a la lista de imágenes
-            newImage.setPackageRef(packageEntity); // Asignar la relación bidireccional
-        } else if ("destinyPhotos".equalsIgnoreCase(imageType)) {
-            packageEntity.getDestinyPhotos().add(newImage); // Agregar a la lista de fotos de destino
-            newImage.setPackageDestinyRef(packageEntity); // Asignar la relación bidireccional
-        } else {
-            throw new IllegalArgumentException("Tipo de imagen no válido");
+        // Iterar sobre la lista de archivos
+        for (MultipartFile file : files) {
+            if (file.isEmpty()) {
+                throw new IllegalArgumentException("Uno o más archivos están vacíos");
+            }
+
+            // Subir la nueva imagen a Cloudinary
+            Image newImage = createNewImage1(file);
+            newImages.add(newImage);
+
+            // Asociar la nueva imagen al paquete según el tipo
+            if ("packageImages".equalsIgnoreCase(imageType)) {
+                packageEntity.getImages().add(newImage); // Agregar a la lista de imágenes
+                newImage.setPackageRef(packageEntity); // Asignar la relación bidireccional
+            } else if ("destinyPhotos".equalsIgnoreCase(imageType)) {
+                packageEntity.getDestinyPhotos().add(newImage); // Agregar a la lista de fotos de destino
+                newImage.setPackageDestinyRef(packageEntity); // Asignar la relación bidireccional
+            } else {
+                throw new IllegalArgumentException("Tipo de imagen no válido");
+            }
         }
 
         // Guardar las nuevas imágenes en la base de datos
-        imageRepository.save(newImage);
+        imageRepository.saveAll(newImages);
 
-        // Guardar el paquete con la nueva imagen asociada
+        // Guardar el paquete con las nuevas imágenes asociadas
         packageRepository.save(packageEntity);
 
         // Mapear y devolver la respuesta
-        List<ImageResponseDTO> imageResponseDTOs = imageMapper.imageListToImageResponseDTOList(Arrays.asList(newImage));
+        List<ImageResponseDTO> imageResponseDTOs = imageMapper.imageListToImageResponseDTOList(newImages);
         return ExtendedBaseResponse.of(
-                BaseResponse.ok("Imagen actualizada exitosamente."),
+                BaseResponse.ok("Imágenes actualizadas exitosamente."),
                 imageResponseDTOs
         );
     }

@@ -14,5 +14,5 @@ public interface ImageService {
     ExtendedBaseResponse<List<ImageResponseDTO>> getPackageImages();
     ExtendedBaseResponse<Void> deleteImageById(Long imageId);
     ExtendedBaseResponse<ImageResponseDTO> updateSingleImage(Long packageId, MultipartFile file, String imageType) throws Exception;
-    ExtendedBaseResponse<List<ImageResponseDTO>> addImageinArray(Long packageId, MultipartFile file, String imageType) throws Exception;
+    ExtendedBaseResponse<List<ImageResponseDTO>> addImageinArray(Long packageId, List<MultipartFile> files, String imageType) throws Exception;
 }
