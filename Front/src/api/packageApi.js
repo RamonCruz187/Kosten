@@ -58,3 +58,12 @@ export const postImagesPackages = (packageId, formData) => {
       },
     });
   };
+
+// Actualizar una imagen de un paquete por ID.       PUT /packages/{packageId}/update-image
+export const putImagePackagesById = (packageId, formData) => {
+  return apiClient.post(`${PACKAGES_ENDPOINT}/update-image/${packageId}`, formData, {
+    headers: {
+      "Content-Type": "multipart/form-data",
+    },
+  });
+};
