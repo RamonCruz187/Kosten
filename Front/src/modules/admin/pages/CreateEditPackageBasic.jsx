@@ -494,6 +494,28 @@ export const CreateEditPackageBasic = () => {
                   type="file"
                   onChange={handleImageChange}
                 />
+              {/* boton de nueva imagen */}
+                <label htmlFor="multiple-images-input">
+                  <Button 
+                    variant="contained"
+                    component="span"
+                    sx={{
+                      width: {xs: '100px', md: '150px', xl: '180px'},
+                      height: {xs: '100px', md: '150px', xl: '180px'},
+                      backgroundColor: '#C9C9C9',
+                      display: 'flex',
+                      flexDirection: 'column',
+                      justifyContent: 'center',
+                      alignItems: 'center',
+                      gap: '8px',
+                    }}
+                  >
+                    <RiAddBoxLine size={50} color= "#323232"/>
+                    <Typography sx={{ color: "#323232", fontSize: '14px', width: '50%', textAlign: 'center'}}>
+                      Agregar imágenes
+                    </Typography>
+                  </Button>
+                </label>
 
               {/* Mostrar las fotos del paquete */}
               {packageData &&
@@ -554,28 +576,6 @@ export const CreateEditPackageBasic = () => {
                   </Box>
                 )}
               )}
-              {/* boton de nueva imagen */}
-                <label htmlFor="multiple-images-input">
-                  <Button 
-                    variant="contained"
-                    component="span"
-                    sx={{
-                      width: {xs: '100px', md: '150px', xl: '180px'},
-                      height: {xs: '100px', md: '150px', xl: '180px'},
-                      backgroundColor: '#C9C9C9',
-                      display: 'flex',
-                      flexDirection: 'column',
-                      justifyContent: 'center',
-                      alignItems: 'center',
-                      gap: '8px',
-                    }}
-                  >
-                    <RiAddBoxLine size={50} color= "#323232"/>
-                    <Typography sx={{ color: "#323232", fontSize: '14px', width: '50%', textAlign: 'center'}}>
-                      Agregar imágenes
-                    </Typography>
-                  </Button>
-                </label>
 
               {/* Mostrar las fotos que se agregan */}
               {filesImages &&
