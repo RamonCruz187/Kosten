@@ -13,190 +13,232 @@ import {
   Container,
 } from "@mui/material";
 import {
-  createPackage,
   getPackageById,
+  postImagesPackages,
+  putImagePackagesById,
   updatePackage,
 } from "@api/packageApi.js";
 import { RiEditLine } from 'react-icons/ri';
 
-import { useNavigate, useParams } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { NotificationService } from "@shared/services/notistack.service.jsx";
 import { PackagesBreadCrumbs } from "../components/PackagesBreadCrumbs";
-
-const niveles = [
-  "Principiante",
-  "Intermedio",
-  "Intermedio-Avanzado",
-  "Avanzado",
-];
+import { hasChanges } from "@/shared/utils/compareObj";
 
 const paqueteSchema = Yup.object().shape({
-  name: Yup.string().required("El nombre es requerido"),
-  description: Yup.string().required("La descripción es requerida"),
-  punctuation: Yup.number().min(0).max(10),
-  all_months: Yup.array().of(Yup.number()).min(1, "Selecciona al menos un mes"),
+  locationInfo: Yup.string()
+    .required("La información de la ubicación es requerida")
+    .max(1100, "La información de la ubicación no puede superar los 1030 caracteres"),
+  historyInfo: Yup.string()
+    .required("La información de la historia es requerida")
+    .max(1100, "La información de la historia no puede superar los 1030 caracteres"),
+  activityInfo: Yup.string()
+    .required("La información de las actividades es requerida")
+    .max(970, "La información de las actividades no puede superar los 1030 caracteres"),
 });
 
 export const CreateEditPackageDestination = () => {
-  const [disabledButton, setDisabledButton] = useState(false);
-  const [imagenes, setImagenes] = useState([]);
-  const [package_, setPackage] = useState(null);
-  const [imagePreview, setImagePreview] = useState("");
-  const [packageValues, setPackageValues] = useState({
-    name: "",
-    description: "",
-    punctuation: "",
-    duration: "",
-    itinerary: "",
-    physical_level: "",
-    technical_level: "",
-    included_services: "",
-    all_months: [],
-    state: "",
-    region: "",
-  });
-
+  const location = useLocation();
+  const isNewPackage = location.state ? location.state?.isNewPackage : false;
   const params = useParams();
   const navigate = useNavigate();
+  
+  const [disabledButton, setDisabledButton] = useState(false);
+  const [imagenes, setImagenes] = useState([...new Array(3)]);
+  const [imagePreview, setImagePreview] = useState([...new Array(3)]);
+  const [package_, setPackage] = useState(null);
+  const [packageValues, setPackageValues] = useState({
+    locationInfo: "",
+    historyInfo: "",
+    activityInfo: "",
+  });
+  const [formModified, setFormModified] = useState(false);
+  const [initialValues, setInitialValues] = useState({});
 
-  const getPackById = useCallback(
-    async (id) => {
-      try {
-        const { data: dataPackages } = await getPackageById(id);
-        setPackage(dataPackages.data);
-        setPackageValues({
-          name: dataPackages.data.name,
-          description: dataPackages.data.description,
-          punctuation: dataPackages.data.punctuation,
-          duration: dataPackages.data.duration,
-          itinerary: dataPackages.data.itinerary,
-          physical_level: dataPackages.data.physical_level,
-          technical_level: dataPackages.data.technical_level,
-          included_services: dataPackages.data.included_services,
-          all_months: dataPackages.data.months.map((month) => month.name),
-          state: dataPackages.data.state || "Activo",
-          region: dataPackages.data.region || "Costa",
-        });
-      } catch (error) {
-        console.error("Error al obtener los departures: ", error);
-      }
-    },
-    [setPackage, setPackageValues]
-  );
-
-  const requestPackages = useCallback(
-    async (values) => {
-      console.log("Valores del formulario: ", values);
-      setDisabledButton(true);
-
-      const formData = new FormData();
-      formData.append(
-        "packageData",
-        new Blob([JSON.stringify(values)], { type: "application/json" })
-      );
-      imagenes.forEach((imagen) => {
-        formData.append("filesImages", imagen, imagen.name);
+  const getPackById = useCallback(async (id) => {
+    try {
+      const { data: dataPackages } = await getPackageById(id);
+      console.log('dataPackages', dataPackages.data)
+      setPackage(dataPackages.data);
+      setPackageValues({
+        locationInfo: dataPackages.data.locationInfo,
+        historyInfo: dataPackages.data.historyInfo,
+        activityInfo: dataPackages.data.activityInfo,
       });
-
-      if (imagenes.length === 0)
-        formData.append(
-          "filesImages",
-          new Blob([JSON.stringify([])], { type: "application/json" }),
-          "[]"
-        );
-
-      for (let [key, value] of formData.entries()) {
-        console.log(key, value);
-      }
-
-      try {
-        const { data: dataPackage } = params.id
-          ? await updatePackage(formData)
-          : await createPackage(formData);
-
-        console.log("Respuesta del backend: ", dataPackage);
-        NotificationService.success(
-          params.id
-            ? "Paquete actualizado exitosamente"
-            : "Paquete creado exitosamente",
-          1000
-        );
-        navigate("/admin/paquetes");
-      } catch (error) {
-        console.error(
-          params.id
-            ? "Error al actualizar el paquete"
-            : "Error al crear el paquete",
-          error.response
-        );
-        NotificationService.error(
-          params.id
-            ? "Error al actualizar el paquete"
-            : "Error al crear el paquete",
-          2200
-        );
-      } finally {
-        setDisabledButton(false);
-      }
-    },
-    [imagenes]
-  );
+      // setInitialValues({
+      //   locationInfo: dataPackages.data.locationInfo,
+      //   historyInfo: dataPackages.data.historyInfo,
+      //   activityInfo: dataPackages.data.activityInfo,
+      // });
+      formik.setValues({
+        locationInfo: dataPackages.data.locationInfo,
+        historyInfo: dataPackages.data.historyInfo,
+        activityInfo: dataPackages.data.activityInfo,
+      });
+    } catch (error) {
+      console.error("Error al obtener los departures: ", error);
+    }
+  },
+  [setPackage, setPackageValues]
+);
 
   const formik = useFormik({
     initialValues: {
-      name: packageValues.name,
-      description: packageValues.description,
-      punctuation: packageValues.punctuation,
-      duration: packageValues.duration,
-      itinerary: packageValues.itinerary,
-      physical_level: packageValues.physical_level,
-      technical_level: packageValues.technical_level,
-      included_services: packageValues.included_services,
-      state: packageValues.state || "Activo",
-      region: packageValues.region || "",
+      locationInfo: "",
+      historyInfo: "",
+      activityInfo: "",
     },
     enableReinitialize: true,
     validationSchema: paqueteSchema,
     onSubmit: (values) => {
-      requestPackages(values);
+      sendPackages(values);
     },
   });
 
-  const handleImageTitle = (event) => {
+  const handleChangeImage = (event, position) => {
+    console.log('event', event);
     const file = event.target.files[0];
-
     if (file) {
-      const previewUrl = URL.createObjectURL(file);
-      setImagePreview(previewUrl);
+      setImagenes((prevImagenes) => {
+        const newImagenes = [...prevImagenes];
+        newImagenes[position] = file;
+        return newImagenes;
+      });
+      setImagePreview((prevImags) => {
+        const newImags = [...prevImags];
+        newImags[position] = URL.createObjectURL(file);
+        return newImags;
+      });
     }
+  };
 
-    if (imagenes.length > 0) {
-      const newImagenes = [...imagenes];
-      newImagenes[0] = file;
-      setImagenes(newImagenes);
+  const handleSiguiente = async (e, moveForward = false) => {
+    e.preventDefault();
+    console.log('click')
+    try {
+      await sendPackages(formik.values);
+      if (moveForward) {
+					navigate(`/admin/paquetes/`); 
+				}
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const sendPackages = async (values) => {
+    try {
+      setDisabledButton(true);
+      
+      // Validar el formulario
+      const errors = await formik.validateForm();
+      if (Object.keys(errors).length > 0) {
+        console.error('Errores de validación:', errors);
+        return;
+      }
+
+      // Siempre enviamos los cambios del formulario si hay package_
+      if (package_) {
+        await sendEditPackages(values);
+      }
+
+      // Manejar las imágenes
+      if (package_.destinyPhotos.length === 0) {
+        if (imagenes.some(imagen => imagen !== undefined)) {
+          await postImages(imagenes);
+        }
+      } else {
+        await Promise.all(
+          imagenes.map((imagen, index) => {
+            if (imagen !== undefined && package_?.destinyPhotos[index]?.id) {
+              return putImageById(package_.destinyPhotos[index].id, imagen);
+            }
+            return Promise.resolve();
+          })
+        );
+      }
+
+      NotificationService.success('Cambios guardados exitosamente');
+    } catch (error) {
+      console.error('Error al guardar los cambios:', error);
+      NotificationService.error('Error al guardar los cambios');
+    } finally {
+      setDisabledButton(false);
+    }
+  };
+
+  const sendEditPackages = async (values) => {
+    if (!package_?.category?.id) {
+      console.error('No se encontró la categoría del paquete');
       return;
     }
 
-    setImagenes([file]);
+    const dataToSend = {
+      id: +params.id,
+      idCategory: package_.category.id,
+      locationInfo: values.locationInfo,
+      historyInfo: values.historyInfo,
+      activityInfo: values.activityInfo,
+    };
+
+    try {
+      const { data: dataPackage } = await updatePackage(dataToSend);
+      
+      // Actualizar los valores iniciales después de una actualización exitosa
+      setInitialValues({
+        locationInfo: values.locationInfo,
+        historyInfo: values.historyInfo,
+        activityInfo: values.activityInfo,
+      });
+      
+      return dataPackage;
+    } catch (error) {
+      console.error('Error al actualizar el paquete:', error);
+      throw error; // Propagar el error para manejarlo en sendPackages
+    }
   };
 
-  const handleClearForm = () => {
-    formik.resetForm();
-    setImagenes([]);
-  };
+  const postImages = useCallback( async (imgsFiles) => {
+    const formData = new FormData();
+    formData.append("imageType", "destinyPhotos");
+    imgsFiles.forEach((imagen) => {
+      formData.append("file", imagen);
+    });
+    try {
+      // Pasar el packageId y formData
+      const response = await postImagesPackages(params.id, formData); // Axios devuelve 'data' directamente
+        NotificationService.success(`Las imágenes fueron cargadas con éxito`);
+    } catch (error) {
+        console.error(error);
+        NotificationService.error('Error al cargar las imágenes');
+    }
+  }, [])
+
+  const putImageById = useCallback( async (idImg, imgFile) => {
+    const formData = new FormData();
+    formData.append("imageId", idImg);
+    formData.append("image", imgFile); // Archivo
+    try {
+      // Pasar el packageId y formData
+      const response = await putImagePackagesById(idImg, formData); // Axios devuelve 'data' directamente
+        console.log(`La imagen con Id #${idImg} fue cargada con éxito`);
+    } catch (error) {
+        console.error(error);
+        console.log(`Error al cargar la imagen con Id #${idImg}`);
+    }
+  }, [])
 
   useEffect(() => {
-    if (params.id) {
+    if (!isNewPackage) {
       getPackById(params.id);
     }
-  }, [params.id, getPackById]);
+  }, [params.id]);
 
-  useEffect(() => {
-    if (imagenes.length > 0) {
-      const previewUrl = URL.createObjectURL(imagenes[0]);
-      setImagePreview(previewUrl);
-    }
-  }, [imagenes]);
+    useEffect(() => {
+      // Verifica si algún campo ha cambiado comparando con los valores iniciales
+      const isModified = hasChanges(formik.values, initialValues);
+      setFormModified(isModified);
+      if(imagenes.some(imagen => imagen !== undefined)) setFormModified(true);
+    }, [formik.values, imagenes]);
 
   return (
     <Container
@@ -235,21 +277,22 @@ export const CreateEditPackageDestination = () => {
                   </Typography>
                   <TextField
                     fullWidth
-                    id="description"
-                    name="description"
+                    id="locationInfo"
+                    name="locationInfo"
                     label="Descripción de donde se encuentra"
                     multiline
                     rows={5}
-                    value={formik.values.description}
+                    value={formik.values.locationInfo}
                     onChange={formik.handleChange}
                     onBlur={formik.handleBlur}
                     error={
-                      formik.touched.description &&
-                      Boolean(formik.errors.description)
+                      formik.touched.locationInfo &&
+                      Boolean(formik.errors.locationInfo)
                     }
                     helperText={
-                      formik.touched.description && formik.errors.description
-                    }
+											(formik.errors.locationInfo ? formik.touched.locationInfo && formik.errors.locationInfo :
+											`${formik.values.locationInfo.length} / 1100 caracteres`)
+										}
                   />
                 </Paper>
                 <Paper
@@ -264,21 +307,22 @@ export const CreateEditPackageDestination = () => {
                   </Typography>
                   <TextField
                     fullWidth
-                    id="itinerary"
-                    name="itinerary"
+                    id="historyInfo"
+                    name="historyInfo"
                     label="Su historia y lo que lo hace atractivo"
                     multiline
                     rows={5}
-                    value={formik.values.itinerary}
+                    value={formik.values.historyInfo}
                     onChange={formik.handleChange}
                     onBlur={formik.handleBlur}
                     error={
-                      formik.touched.itinerary &&
-                      Boolean(formik.errors.itinerary)
+                      formik.touched.historyInfo &&
+                      Boolean(formik.errors.historyInfo)
                     }
                     helperText={
-                      formik.touched.itinerary && formik.errors.itinerary
-                    }
+											(formik.errors.historyInfo ? formik.touched.historyInfo && formik.errors.historyInfo :
+											`${formik.values.historyInfo.length} / 1100 caracteres`)
+										}
                   />
                 </Paper>
                 <Paper
@@ -293,21 +337,22 @@ export const CreateEditPackageDestination = () => {
                   </Typography>
                   <TextField
                     fullWidth
-                    id="itinerary"
-                    name="itinerary"
+                    id="activityInfo"
+                    name="activityInfo"
                     label="Cómo es la propuesta de excursión"
                     multiline
                     rows={5}
-                    value={formik.values.itinerary}
+                    value={formik.values.activityInfo}
                     onChange={formik.handleChange}
                     onBlur={formik.handleBlur}
                     error={
-                      formik.touched.itinerary &&
-                      Boolean(formik.errors.itinerary)
+                      formik.touched.activityInfo &&
+                      Boolean(formik.errors.activityInfo)
                     }
                     helperText={
-                      formik.touched.itinerary && formik.errors.itinerary
-                    }
+											(formik.errors.activityInfo ? formik.touched.activityInfo && formik.errors.activityInfo :
+											`${formik.values.activityInfo.length} / 970 caracteres`)
+										}
                   />
                 </Paper>
               </Box>
@@ -327,7 +372,7 @@ export const CreateEditPackageDestination = () => {
                     justifyContent: 'center',
                     alignItems: 'center',
                     position: 'relative',
-                    backgroundImage: `url(${imagePreview || (package_ && package_.images.length > 0 ? package_.images[0].url : '')})`,
+                    backgroundImage: `url(${(package_ && package_.destinyPhotos.length > 0 ? package_.destinyPhotos[0].url : imagePreview[0] ? imagePreview[0] : "" )})`,
                     backgroundSize: 'cover',
                     backgroundPosition: 'center',
                     backgroundRepeat: 'no-repeat',
@@ -336,12 +381,12 @@ export const CreateEditPackageDestination = () => {
                   <input
                     accept="image/*"
                     style={{ display: 'none' }}
-                    id="raised-button-file"
+                    id="raised-button-file1"
                     type="file"
-                    onChange={handleImageTitle}
+                    onChange={(e) => handleChangeImage(e, 0)}
                   />
                   <label
-                    htmlFor="raised-button-file"
+                    htmlFor="raised-button-file1"
                     style={{ position: 'absolute', left: 20, top: 20 }}
                   >
                     <Button
@@ -372,7 +417,7 @@ export const CreateEditPackageDestination = () => {
                     justifyContent: 'center',
                     alignItems: 'center',
                     position: 'relative',
-                    backgroundImage: `url(${imagePreview || (package_ && package_.images.length > 0 ? package_.images[0].url : '')})`,
+                    backgroundImage: `url(${(package_ && package_.destinyPhotos.length > 0 ? package_.destinyPhotos[1].url : imagePreview[1] ? imagePreview[1] : "" )})`,
                     backgroundSize: 'cover',
                     backgroundPosition: 'center',
                     backgroundRepeat: 'no-repeat',
@@ -381,12 +426,12 @@ export const CreateEditPackageDestination = () => {
                   <input
                     accept="image/*"
                     style={{ display: 'none' }}
-                    id="raised-button-file"
+                    id="raised-button-file2"
                     type="file"
-                    onChange={handleImageTitle}
+                    onChange={(e) => handleChangeImage(e, 1)}
                   />
                   <label
-                    htmlFor="raised-button-file"
+                    htmlFor="raised-button-file2"
                     style={{ position: 'absolute', left: 20, top: 20 }}
                   >
                     <Button
@@ -417,7 +462,7 @@ export const CreateEditPackageDestination = () => {
                     justifyContent: 'center',
                     alignItems: 'center',
                     position: 'relative',
-                    backgroundImage: `url(${imagePreview || (package_ && package_.images.length > 0 ? package_.images[0].url : '')})`,
+                    backgroundImage: `url(${(package_ && package_.destinyPhotos.length > 0 ? package_.destinyPhotos[2].url : imagePreview[2] ? imagePreview[2] : "" )})`,
                     backgroundSize: 'cover',
                     backgroundPosition: 'center',
                     backgroundRepeat: 'no-repeat',
@@ -426,12 +471,12 @@ export const CreateEditPackageDestination = () => {
                   <input
                     accept="image/*"
                     style={{ display: 'none' }}
-                    id="raised-button-file"
+                    id="raised-button-file3"
                     type="file"
-                    onChange={handleImageTitle}
+                    onChange={(e) => handleChangeImage(e, 2)}
                   />
                   <label
-                    htmlFor="raised-button-file"
+                    htmlFor="raised-button-file3"
                     style={{ position: 'absolute', left: 20, top: 20 }}
                   >
                     <Button
@@ -456,7 +501,7 @@ export const CreateEditPackageDestination = () => {
               <Button
                 type="button"
                 variant="contained"
-                onClick={handleClearForm}
+								onClick={(e) => handleSiguiente(e, false)}
                 sx={{
                   backgroundColor: "#fff",
                   width: "100%",
@@ -470,7 +515,7 @@ export const CreateEditPackageDestination = () => {
                 disabled={disabledButton}
                 // type="submit"
                 type="button"
-                onClick={() => navigate("/admin/paquetes/destinos")}
+								onClick={(e) => handleSiguiente(e, true)}
                 sx={{
                   backgroundColor: "#72CCA0",
                   width: "100%",
@@ -480,7 +525,6 @@ export const CreateEditPackageDestination = () => {
                 {params.id ? "Actualizar Paquete" : "Publicar"}
               </Button>
             </Box>
-
           </Box>
         </Box>
       </Box>
