@@ -39,57 +39,45 @@ export const CreateEditPackageDetails = () => {
   const location = useLocation();
   const isNewPackage = location.state ? location.state?.isNewPackage : false;
 	
-	const paqueteSchema = () =>
-		Yup.object().shape({
-			description: Yup.string().when([], {
-				is: isNewPackage,
-				then: (schema) => 
-					schema
-						.required("La descripción es requerida")
-						.max(1030, "La descripción no puede superar los 255 caracteres"),
-				otherwise: (schema) => 
-					schema.max(1030, "La descripción no puede superar los 255 caracteres"),
-			}),
-			itinerary: Yup.string().when([], {
-				is: isNewPackage,
-				then: (schema) => 
-					schema
-						.required("El itinerario es requerido")
-						.max(10000, "El itinerario no puede superar los 255 caracteres"),
-				otherwise: (schema) => 
-					schema.max(10000, "El i	tinerario no puede superar los 255 caracteres"),
-			}),
-			duration: Yup.string().when([], {
-				is: isNewPackage,
-				then: (schema) => schema.required("La duración es requerida"),
-			}),
-			physical_level: Yup.string().when([], {
-				is: isNewPackage,
-				then: (schema) => schema.required("El nivel físico es requerido"),
-			}),
-			technical_level: Yup.string().when([], {
-				is: isNewPackage,
-				then: (schema) => schema.required("El nivel técnico es requerido"),
-			}),
-			included_services: Yup.string().when([], {
-				is: isNewPackage,
-				then: (schema) => 
-					schema
-						.required("Los servicios incluidos son requeridos")
-						.max(320, "Los servicios incluidos no pueden superar los 255 caracteres"),
-				otherwise: (schema) => 
-					schema.max(320, "Los servicios incluidos no pueden superar los 255 caracteres"),
-			}),
-			itineraryImg: Yup.mixed().when([], {
-				is: isNewPackage,
-				then: (schema) => schema.required("La imagen del itinerario es requerida"),
-				otherwise: (schema) => schema.notRequired(),
-			})
-		});
+  const paqueteSchema = () =>
+    Yup.object().shape({
+      description: Yup.string()
+        .required("La descripción es requerida")
+        .max(1030, "La descripción no puede superar los 1030 caracteres"),
+  
+      itinerary: Yup.string()
+        .required("El itinerario es requerido")
+        .max(10000, "El itinerario no puede superar los 10000 caracteres"),
+  
+      duration: Yup.string().required("La duración es requerida"),
+  
+      physical_level: Yup.string().required("El nivel físico es requerido"),
+  
+      technical_level: Yup.string().required("El nivel técnico es requerido"),
+  
+      included_services: Yup.string()
+        .required("Los servicios incluidos son requeridos")
+        .max(320, "Los servicios incluidos no pueden superar los 320 caracteres"),
+      itineraryPhoto: Yup.mixed().when([], {
+        is: () => isNewPackage, // Si params.id NO existe (es creación)
+        then: (schema) =>
+          schema
+            .required('La imagen de itinerario es requerida')
+            .test('fileType', 'Solo se permiten archivos JPG, PNG y WebP', (value) => {
+              if (!value) return false;
+              return ['image/jpeg', 'image/png', 'image/webp'].includes(value.type);
+            })
+            .test('fileSize', 'La imagen no debe superar los 5MB', (value) => {
+              if (!value) return false;
+              return value.size <= 5 * 1024 * 1024;
+            }),
+        otherwise: (schema) => schema.nullable(), 
+      }),
+    });
 	
 
   const [disabledButton, setDisabledButton] = useState(false);
-  const [itineraryImg, setItineraryImg] = useState(null);
+  const [itineraryPhoto, setItineraryPhoto] = useState(null);
   const [package_, setPackage] = useState(null);
   const [imagePreview, setImagePreview] = useState("");
   const [initialValues, setInitialValues] = useState({});
@@ -158,8 +146,8 @@ export const CreateEditPackageDetails = () => {
         if(!formik.validateForm()) return
         sendEditPackages(values)
       }
-      // funcion para enviar img itineraryImg
-      if(itineraryImg){postItineraryImage(itineraryImg)}
+      // funcion para enviar img itineraryPhoto
+      if(itineraryPhoto){postItineraryImage(itineraryPhoto, params.id)}
 
 			setDisabledButton(false);
   };
@@ -179,6 +167,17 @@ export const CreateEditPackageDetails = () => {
     try {
       const { data: dataPackage } = await updatePackage(dataToSend)
       NotificationService.success(`Paquete actualizado exitosamente`, 1000);
+      setInitialValues({
+        id: +params.id,
+        idCategory: values.idCategory,
+        description: values.description,
+        itinerary: values.itinerary,
+        duration: values.duration,
+        physical_level: values.physical_level,
+        technical_level: values.technical_level,
+        included_services: values.included_services,
+        itineraryPhoto: values.itineraryPhoto,
+      });
     } catch (error) {
       console.error(`Error al actualizar el paquete:`, error);
       NotificationService.error(`Error al actualizar el paquete`, 2200);
@@ -201,14 +200,14 @@ export const CreateEditPackageDetails = () => {
     }
   };
 
-  const postItineraryImage = useCallback( async (imgFile) => {
+  const postItineraryImage = useCallback( async (imgFile, packID) => {
     const formData = new FormData();
     formData.append("imageType", "itinerary");
     formData.append("file", imgFile); // Archivo
   
     try {
       // Pasar el packageId y formData
-      const response = await postSimpleImagePackages(params.id, formData); // Axios devuelve 'data' directamente
+      const response = await postSimpleImagePackages(packID, formData); // Axios devuelve 'data' directamente
         console.log('response', response);
         NotificationService.success('La imagen fue cargada con éxito');
     } catch (error) {
@@ -218,10 +217,9 @@ export const CreateEditPackageDetails = () => {
   }, [])
 
   const handleImageChange = (event) => {
-    //cambia la imagen para que el useEffect muestre el preview de la imagen
-    setItineraryImg(event.target.files);
-    //envia la imagen al backend
-    formik.setValues({itineraryPhoto: event.target.files[0]});
+    const file = event.target.files[0];
+    setItineraryPhoto(file);
+    formik.setFieldValue("itineraryPhoto", file);
   };
 
   useEffect(() => {
@@ -231,25 +229,17 @@ export const CreateEditPackageDetails = () => {
   }, [params.id, getPackById]);
 
   useEffect(() => {
-    if (itineraryImg && itineraryImg.length > 0) {
-      const previewUrl = URL.createObjectURL(itineraryImg[0]);
-      setImagePreview(previewUrl);
+    if (itineraryPhoto) {
+        const previewUrl = URL.createObjectURL(itineraryPhoto);
+        setImagePreview(previewUrl);
     }
-  }, [itineraryImg]);
+  }, [itineraryPhoto]);
 
   useEffect(() => {
     // Verifica si algún campo ha cambiado comparando con los valores iniciales
     const isModified = hasChanges(initialValues, formik.values);
     setFormModified(isModified);
-		if (itineraryImg) setFormModified(true);
-		console.log('disabledButton', disabledButton);
-		console.log('!formik.isValid', !formik.isValid);
-		console.log('formik.errors', formik.errors);
-    console.log('isNewPackage', isNewPackage);
-		console.log('!formik.dirty', !formik.dirty);
-		console.log('itineraryImg', itineraryImg);
-
-
+		if (itineraryPhoto) setFormModified(true);
   }, [formik.values]);
 
   return (
@@ -265,12 +255,8 @@ export const CreateEditPackageDetails = () => {
         sx={{ mt: 2 }}
       >
         {/*Box container principal*/}
-        <Box 
-          sx={{display: 'flex', gap: '1rem'}}
-        >
-
+        <Box sx={{display: 'flex', gap: '1rem'}}>
           <Box sx={{flex:2}}>
-
               {/*IZQ: De que se trata e itinerario*/}
               <Box
                 sx={{ display: "flex", flexDirection: "column", gap: 2 }}
