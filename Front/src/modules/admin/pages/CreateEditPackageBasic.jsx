@@ -13,6 +13,7 @@ import {
   Typography,
   Paper,
   styled,
+  CircularProgress,
 } from "@mui/material";
 import {
   createPackage,
@@ -122,13 +123,13 @@ export const CreateEditPackageBasic = () => {
       // Update formik values
       formik.setValues({
         name: packageInfo.name || "",
-        active: packageInfo.active || "",
+        active: params.id ? !!packageInfo.active : null,
         category: packageInfo.category.name || "",
         bannerPhoto: {},
       });
       setInitialValues({
         name: packageInfo.name || "",
-        active: packageInfo.active || "",
+        active: params.id ? !!packageInfo.active : null,
         category: packageInfo.category.name || "",
         // bannerPhoto: packageInfo.bannerPhoto || null,
         // images: packageInfo.images || [],
@@ -193,6 +194,7 @@ export const CreateEditPackageBasic = () => {
       const { data: dataPackage } = await updatePackage(dataToSend)
       
       NotificationService.success(`Paquete actualizado exitosamente`, 1000);
+      setFormModified(false);
     } catch (error) {
       console.error(`Error al actualizar el paquete:`, error);
       NotificationService.error(`Error al actualizar el paquete`, 2200);
@@ -221,13 +223,14 @@ export const CreateEditPackageBasic = () => {
 
   const handleSiguiente = async (e, moveForward = false) => {
     e.preventDefault();
+    const selectedCategory = categories.find((c) => c.value === formik.values.category);
     try {
       const newId = await sendPackages(formik.values);
       if (moveForward) {
         if (params.id) {
-        navigate(`/admin/paquetes/detalles/${params.id}`, {state: {isNewPackage: false}});
+        navigate(`/admin/paquetes/detalles/${params.id}`, {state: {isNewPackage: {}}});
       } else {
-        navigate(`/admin/paquetes/detalles/${newId}`, {state: {isNewPackage: true}}); 
+        navigate(`/admin/paquetes/detalles/${newId}`, {state: {isNewPackage: {id: newId, categoryId: selectedCategory?.id}}}); 
       }
       }
     } catch (error) {
@@ -653,7 +656,9 @@ export const CreateEditPackageBasic = () => {
               transition: "transform 0.3s ease-in-out",
             }}
           >
-            Guardar
+            {disabledButton 
+            ? <CircularProgress size={20} color="inherit" /> 
+            : params.id ? "Guardar" : "Crear"}
           </Button>
           <Button
             variant="contained"
@@ -670,7 +675,9 @@ export const CreateEditPackageBasic = () => {
               transition: "transform 0.3s ease-in-out",
             }}
           >
-            {params.id ? "Actualizar Paquete" : "Siguiente"}
+            {disabledButton 
+            ? <CircularProgress size={20} color="inherit" /> 
+            : params.id ? "Actualizar Paquete" : "Siguiente"}
           </Button>
         </Box>
         </Box>
