@@ -52,7 +52,7 @@ export const postSimpleImagePackages = (packageId, formData) => {
 
 // Enviar una imagen para Banner o Itinerary de un paquete.       POST /packages/{packageId}/update-image
 export const postImagesPackages = (packageId, formData) => {
-    return apiClient.post(`${PACKAGES_ENDPOINT}/${packageId}/add-image`, formData, {
+    return apiClient.post(`${PACKAGES_ENDPOINT}/${packageId}/add-images`, formData, {
       headers: {
         "Content-Type": "multipart/form-data",
       },
@@ -61,7 +61,7 @@ export const postImagesPackages = (packageId, formData) => {
 
 // Actualizar una imagen de un paquete por ID.       PUT /packages/{packageId}/update-image
 export const putImagePackagesById = (packageId, formData) => {
-  return apiClient.post(`${PACKAGES_ENDPOINT}/update-image/${packageId}`, formData, {
+  return apiClient.put(`${PACKAGES_ENDPOINT}/update-image/${packageId}`, formData, {
     headers: {
       "Content-Type": "multipart/form-data",
     },
