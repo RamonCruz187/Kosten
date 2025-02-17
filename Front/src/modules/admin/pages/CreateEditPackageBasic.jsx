@@ -13,6 +13,7 @@ import {
   Typography,
   Paper,
   styled,
+  CircularProgress,
 } from "@mui/material";
 import {
   createPackage,
@@ -122,13 +123,13 @@ export const CreateEditPackageBasic = () => {
       // Update formik values
       formik.setValues({
         name: packageInfo.name || "",
-        active: packageInfo.active || "",
+        active: params.id ? !!packageInfo.active : null,
         category: packageInfo.category.name || "",
         bannerPhoto: {},
       });
       setInitialValues({
         name: packageInfo.name || "",
-        active: packageInfo.active || "",
+        active: params.id ? !!packageInfo.active : null,
         category: packageInfo.category.name || "",
         // bannerPhoto: packageInfo.bannerPhoto || null,
         // images: packageInfo.images || [],
@@ -193,6 +194,7 @@ export const CreateEditPackageBasic = () => {
       const { data: dataPackage } = await updatePackage(dataToSend)
       
       NotificationService.success(`Paquete actualizado exitosamente`, 1000);
+      setFormModified(false);
     } catch (error) {
       console.error(`Error al actualizar el paquete:`, error);
       NotificationService.error(`Error al actualizar el paquete`, 2200);
@@ -204,15 +206,13 @@ export const CreateEditPackageBasic = () => {
   const sendPackages = (values) => {
     if(params.id){
       // funcion para enviar formulario de texto
-      console.log("formModified", formModified)
       if(formModified){
         if(!formik.validateForm()) return
         sendEditPackages(values)
       }
       // funcion para enviar img bannerPhoto
-      if(bannerPhoto){postBannerPhotoImage(values.bannerPhoto)}
+      if(bannerPhoto){postBannerPhotoImage(values.bannerPhoto, params.id)}
       // funcion para enviar imgs images
-      console.log("filesImages", filesImages)
       if(filesImages.length > 0){postImages(filesImages)}
       return params.id
     } else{ 
@@ -223,13 +223,14 @@ export const CreateEditPackageBasic = () => {
 
   const handleSiguiente = async (e, moveForward = false) => {
     e.preventDefault();
+    const selectedCategory = categories.find((c) => c.value === formik.values.category);
     try {
       const newId = await sendPackages(formik.values);
       if (moveForward) {
         if (params.id) {
-        navigate(`/admin/paquetes/detalles/${params.id}`, {state: {isNewPackage: false}});
+        navigate(`/admin/paquetes/detalles/${params.id}`, {state: {isNewPackage: {}}});
       } else {
-        navigate(`/admin/paquetes/detalles/${newId}`, {state: {isNewPackage: true}}); 
+        navigate(`/admin/paquetes/detalles/${newId}`, {state: {isNewPackage: {id: newId, categoryId: selectedCategory?.id}}}); 
       }
       }
     } catch (error) {
@@ -252,15 +253,14 @@ export const CreateEditPackageBasic = () => {
     }
   };
 
-  const postBannerPhotoImage = useCallback( async (imgFile) => {
+  const postBannerPhotoImage = useCallback( async (imgFile, packID) => {
     const formData = new FormData();
     formData.append("imageType", "banner");
     formData.append("file", imgFile); // Archivo
   
     try {
       // Pasar el packageId y formData
-      const response = await postSimpleImagePackages(params.id, formData); // Axios devuelve 'data' directamente
-        console.log('response', response);
+      const response = await postSimpleImagePackages(packID, formData); // Axios devuelve 'data' directamente
         NotificationService.success('La imagen fue cargada con éxito');
     } catch (error) {
         console.error(error);
@@ -279,7 +279,6 @@ export const CreateEditPackageBasic = () => {
     try {
       // Pasar el packageId y formData
       const response = await postImagesPackages(params.id, formData); // Axios devuelve 'data' directamente
-        console.log('response', response);
         NotificationService.success(isManyImgs ? `Las imágenes fueron cargadas con éxito` : `La imagen fue cargada con éxito`);
     } catch (error) {
         console.error(error);
@@ -358,6 +357,7 @@ export const CreateEditPackageBasic = () => {
                     <Typography variant="caption" color="error">
                       {formik.errors.category}
                     </Typography>
+                    
                   )}
                 </FormControl>
               </Box>
@@ -464,7 +464,10 @@ export const CreateEditPackageBasic = () => {
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
                   error={formik.touched.name && Boolean(formik.errors.name)}
-                  helperText={formik.touched.name && formik.errors.name}
+                  helperText={
+										(formik.errors.name ? formik.touched.name && formik.errors.name :
+										`${formik.values.name.length} / 55 caracteres`)
+									}
                 />
               </Box>
             </Box>
@@ -494,6 +497,28 @@ export const CreateEditPackageBasic = () => {
                   type="file"
                   onChange={handleImageChange}
                 />
+              {/* boton de nueva imagen */}
+                <label htmlFor="multiple-images-input">
+                  <Button 
+                    variant="contained"
+                    component="span"
+                    sx={{
+                      width: {xs: '100px', md: '150px', xl: '180px'},
+                      height: {xs: '100px', md: '150px', xl: '180px'},
+                      backgroundColor: '#C9C9C9',
+                      display: 'flex',
+                      flexDirection: 'column',
+                      justifyContent: 'center',
+                      alignItems: 'center',
+                      gap: '8px',
+                    }}
+                  >
+                    <RiAddBoxLine size={50} color= "#323232"/>
+                    <Typography sx={{ color: "#323232", fontSize: '14px', width: '50%', textAlign: 'center'}}>
+                      Agregar imágenes
+                    </Typography>
+                  </Button>
+                </label>
 
               {/* Mostrar las fotos del paquete */}
               {packageData &&
@@ -554,28 +579,6 @@ export const CreateEditPackageBasic = () => {
                   </Box>
                 )}
               )}
-              {/* boton de nueva imagen */}
-                <label htmlFor="multiple-images-input">
-                  <Button 
-                    variant="contained"
-                    component="span"
-                    sx={{
-                      width: {xs: '100px', md: '150px', xl: '180px'},
-                      height: {xs: '100px', md: '150px', xl: '180px'},
-                      backgroundColor: '#C9C9C9',
-                      display: 'flex',
-                      flexDirection: 'column',
-                      justifyContent: 'center',
-                      alignItems: 'center',
-                      gap: '8px',
-                    }}
-                  >
-                    <RiAddBoxLine size={50} color= "#323232"/>
-                    <Typography sx={{ color: "#323232", fontSize: '14px', width: '50%', textAlign: 'center'}}>
-                      Agregar imágenes
-                    </Typography>
-                  </Button>
-                </label>
 
               {/* Mostrar las fotos que se agregan */}
               {filesImages &&
@@ -653,7 +656,9 @@ export const CreateEditPackageBasic = () => {
               transition: "transform 0.3s ease-in-out",
             }}
           >
-            Guardar
+            {disabledButton 
+            ? <CircularProgress size={20} color="inherit" /> 
+            : params.id ? "Guardar" : "Crear"}
           </Button>
           <Button
             variant="contained"
@@ -670,7 +675,9 @@ export const CreateEditPackageBasic = () => {
               transition: "transform 0.3s ease-in-out",
             }}
           >
-            {params.id ? "Actualizar Paquete" : "Siguiente"}
+            {disabledButton 
+            ? <CircularProgress size={20} color="inherit" /> 
+            : params.id ? "Actualizar Paquete" : "Siguiente"}
           </Button>
         </Box>
         </Box>

@@ -1,4 +1,4 @@
-// @modules/admin/components/CreateEditPackage.jsx
+// @modules/admin/components/CreateEditPackageDetails.jsx
 import { useState, useCallback, useEffect } from "react";
 import { useFormik } from "formik";
 import * as Yup from "yup";
@@ -13,18 +13,19 @@ import {
   Typography,
   Paper,
   styled,
+  CircularProgress,
 } from "@mui/material";
 import {
-  createPackage,
   getPackageById,
   postSimpleImagePackages,
   updatePackage,
 } from "@api/packageApi.js";
 import Container from "@mui/material/Container";
-import { useNavigate, useParams } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { NotificationService } from "@shared/services/notistack.service.jsx";
 import { RiEditLine } from 'react-icons/ri';
 import { PackagesBreadCrumbs } from "../components/PackagesBreadCrumbs";
+import { hasChanges } from "@/shared/utils/compareObj";
 
 const niveles = [
   "Principiante",
@@ -33,61 +34,83 @@ const niveles = [
   "Avanzado",
 ];
 
-const paqueteSchema = Yup.object().shape({
-  description: Yup.string().required("La descripción es requerida"),
-  itinerary: Yup.string(),
-  duration: Yup.string(),
-  physical_level: Yup.string(),
-  technical_level: Yup.string(),
-  included_services: Yup.string(),
-  // itineraryPhoto: Yup.string(),
-  // all_months: Yup.array().of(Yup.number()).min(1, "Selecciona al menos un mes"),
-});
-
 export const CreateEditPackageDetails = () => {
+	const params = useParams();
+  const navigate = useNavigate();
+  const location = useLocation();
+  const isNewPackage = location.state ? location.state?.isNewPackage : {};
+
+  const paqueteSchema = () =>
+    Yup.object().shape({
+      description: Yup.string()
+        .required("La descripción es requerida")
+        .max(1030, "La descripción no puede superar los 1030 caracteres"),
+  
+      itinerary: Yup.string()
+        .required("El itinerario es requerido")
+        .max(10000, "El itinerario no puede superar los 10000 caracteres"),
+  
+      duration: Yup.string().required("La duración es requerida"),
+  
+      physical_level: Yup.string().required("El nivel físico es requerido"),
+  
+      technical_level: Yup.string().required("El nivel técnico es requerido"),
+  
+      included_services: Yup.string()
+        .required("Los servicios incluidos son requeridos")
+        .max(320, "Los servicios incluidos no pueden superar los 320 caracteres"),
+      itineraryPhoto: Yup.mixed().when([], {
+        is: () => isNewPackage && Object.keys(isNewPackage).length !== 0, // Si params.id NO existe (es creación)
+        then: (schema) =>
+          schema
+            .required('La imagen de itinerario es requerida')
+            .test('fileType', 'Solo se permiten archivos JPG, PNG y WebP', (value) => {
+              if (!value) return false;
+              return ['image/jpeg', 'image/png', 'image/webp'].includes(value.type);
+            })
+            .test('fileSize', 'La imagen no debe superar los 5MB', (value) => {
+              if (!value) return false;
+              return value.size <= 5 * 1024 * 1024;
+            }),
+        otherwise: (schema) => schema.nullable(), 
+      }),
+    });
+	
+
   const [disabledButton, setDisabledButton] = useState(false);
-  const [imagenes, setImagenes] = useState([]);
+  const [itineraryPhoto, setItineraryPhoto] = useState(null);
   const [package_, setPackage] = useState(null);
   const [imagePreview, setImagePreview] = useState("");
-  const [initialValues, setInitialValues] = useState({
-  // const [packageValues, setPackageValues] = useState({
-    description: "",
-    itinerary: "",
-    duration: "",
-    physical_level: "",
-    technical_level: "",
-    included_services: "",
-    // itineraryPhoto: "",
-    // all_months: [],
-  });
-
-  const params = useParams();
-  const navigate = useNavigate();
+  const [initialValues, setInitialValues] = useState({});
+  const [formModified, setFormModified] = useState(false);
 
   const getPackById = useCallback(
-    async (id) => {
+		async (id) => {
+			if (isNewPackage && Object.keys(isNewPackage).length !== 0) return;
       try {
         const { data: dataPackages } = await getPackageById(id);
         setPackage(dataPackages.data);
         formik.setValues({
+					id: +params.id,
+					idCategory: dataPackages.data.category.id,
           description: dataPackages.data.description,
           itinerary: dataPackages.data.itinerary,
           duration: dataPackages.data.duration,
           physical_level: dataPackages.data.physical_level,
           technical_level: dataPackages.data.technical_level,
           included_services: dataPackages.data.included_services,
-          // itineraryPhoto: dataPackages.data.itineraryPhoto,
-          // all_months: dataPackages.data.months.map((month) => month.name),
+					itineraryPhoto: {},
         });
         setInitialValues({
+					id: +params.id,
+					idCategory: dataPackages.data.category.id,
           description: dataPackages.data.description,
           itinerary: dataPackages.data.itinerary,
           duration: dataPackages.data.duration,
           physical_level: dataPackages.data.physical_level,
           technical_level: dataPackages.data.technical_level,
           included_services: dataPackages.data.included_services,
-          // itineraryPhoto: dataPackages.data.itineraryPhoto,
-          // all_months: dataPackages.data.months.map((month) => month.name),
+					itineraryPhoto: {},
         });
       } catch (error) {
         console.error("Error al obtener los departures: ", error);
@@ -96,112 +119,106 @@ export const CreateEditPackageDetails = () => {
     [setPackage, setInitialValues]
   );
 
-  const requestPackages = useCallback(
-    async (values) => {
-      setDisabledButton(true);
-
-      const formData = new FormData();
-      formData.append(
-        "packageData",
-        new Blob([JSON.stringify(values)], { type: "application/json" })
-      );
-
-      try {
-        const { data: dataPackage } = params.id
-          ? await updatePackage(formData)
-          : await createPackage(formData);
-
-        console.log("Respuesta del backend: ", dataPackage);
-        NotificationService.success(
-          params.id
-            ? "Paquete actualizado exitosamente"
-            : "Paquete creado exitosamente",
-          1000
-        );
-        navigate("/admin/paquetes");
-      } catch (error) {
-        console.error(
-          params.id
-            ? "Error al actualizar el paquete"
-            : "Error al crear el paquete",
-          error.response
-        );
-        NotificationService.error(
-          params.id
-            ? "Error al actualizar el paquete"
-            : "Error al crear el paquete",
-          2200
-        );
-      } finally {
-        setDisabledButton(false);
-      }
-    },
-    [imagenes]
-  );
-
   const formik = useFormik({
     initialValues: {
+			id: +params.id,
+			idCategory: isNewPackage?.categoryId || "",
       description: "",
       itinerary: "",
       duration: "",
       physical_level: "",
       technical_level: "",
       included_services: "",
-      itineraryPhoto: "",
+      itineraryPhoto: {},
     },
     enableReinitialize: true,
     validationSchema: paqueteSchema,
     onSubmit: (values) => {
-      requestPackages(values);
+      sendPackages(values);
     },
   });
 
-  const handleGuardar = async (e) => {
+	const sendPackages = (values) => {
+      // funcion para enviar formulario de texto
+			setDisabledButton(true);
+      if(formModified){
+        if(!formik.validateForm()) return
+        sendEditPackages(values)
+      }
+      // funcion para enviar img itineraryPhoto
+      if(itineraryPhoto){postItineraryImage(itineraryPhoto, params.id)}
+
+			setDisabledButton(false);
+  };
+
+	const sendEditPackages = useCallback(async (values) => {
+		const dataToSend = {
+			id: +params.id,
+			idCategory: values.idCategory,
+			description: values.description,
+			itinerary: values.itinerary,
+			duration: values.duration,
+			physical_level: values.physical_level,
+			technical_level: values.technical_level,
+			included_services: values.included_services,
+		}
+    try {
+      const { data: dataPackage } = await updatePackage(dataToSend)
+      NotificationService.success(`Paquete actualizado exitosamente`, 1000);
+      setInitialValues({
+        id: +params.id,
+        idCategory: values.idCategory,
+        description: values.description,
+        itinerary: values.itinerary,
+        duration: values.duration,
+        physical_level: values.physical_level,
+        technical_level: values.technical_level,
+        included_services: values.included_services,
+        itineraryPhoto: values.itineraryPhoto,
+      });
+      setFormModified(false);
+    } catch (error) {
+      console.error(`Error al actualizar el paquete:`, error);
+      NotificationService.error(`Error al actualizar el paquete`, 2200);
+    }
+  }, [params.id]);
+
+	const handleSiguiente = async (e, moveForward = false) => {
     e.preventDefault();
-    try { 
-      await formik.handleSubmit();
-      navigate("/admin/paquetes");
+    try {
+      await sendPackages(formik.values);
+      if (moveForward) {
+        if (isNewPackage && Object.keys(isNewPackage).length === 0) {
+					navigate(params.id && `/admin/paquetes/destinos/${params.id}`, {state: {isNewPackage: {}}});
+				} else {
+					navigate(`/admin/paquetes/destinos/${params.id}`, {state: {isNewPackage: {id: isNewPackage.id, categoryId: isNewPackage.categoryId}}}); 
+				}
+      }
     } catch (error) {
       console.error(error);
-      NotificationService.error('Error al guardar el paquete', 2500);
     }
   };
 
-  const handleSiguiente = async(e) => {
-    e.preventDefault();
-    try { 
-      await formik.handleSubmit();
-      navigate(params.id ? `/admin/paquetes/destinos/${params.id}` : "/admin/paquetes/destinos");
-    } catch (error) {
-      console.error(error);
-      NotificationService.error('Error al guardar el paquete', 2500);
-    }
-  };
-
-  const postItineraryImage = useCallback( async (imgFile) => {
-    setDisabledButton(true);
+  const postItineraryImage = useCallback( async (imgFile, packID) => {
     const formData = new FormData();
     formData.append("imageType", "itinerary");
     formData.append("file", imgFile); // Archivo
   
     try {
       // Pasar el packageId y formData
-      const response = await postSimpleImagePackages(params.id, formData); // Axios devuelve 'data' directamente
-        console.log('response', response);
+      const response = await postSimpleImagePackages(packID, formData); // Axios devuelve 'data' directamente
+        console.log('La imagen fue cargada con éxito');
         NotificationService.success('La imagen fue cargada con éxito');
     } catch (error) {
         console.error(error);
         NotificationService.error('Error al cargar la imagen');
-    } finally {
-      setDisabledButton(false);
-    }
-    }, [])
+		}
+  }, [])
+
   const handleImageChange = (event) => {
-    console.log('event', event);
-    //muestra el preview de la imagen
-    setImagenes(event.target.files);
-    //envia la imagen al backend
-    postItineraryImage(event.target.files[0]);
+    const file = event.target.files[0];
+    setItineraryPhoto(file);
+    formik.setFieldValue("itineraryPhoto", file);
   };
 
   useEffect(() => {
@@ -211,11 +228,18 @@ export const CreateEditPackageDetails = () => {
   }, [params.id, getPackById]);
 
   useEffect(() => {
-    if (imagenes.length > 0) {
-      const previewUrl = URL.createObjectURL(imagenes[0]);
-      setImagePreview(previewUrl);
+    if (itineraryPhoto) {
+        const previewUrl = URL.createObjectURL(itineraryPhoto);
+        setImagePreview(previewUrl);
     }
-  }, [imagenes]);
+  }, [itineraryPhoto]);
+
+  useEffect(() => {
+    // Verifica si algún campo ha cambiado comparando con los valores iniciales
+    const isModified = hasChanges(initialValues, formik.values);
+    setFormModified(isModified);
+		if (itineraryPhoto) setFormModified(true);
+  }, [formik.values]);
 
   return (
     <Container
@@ -230,17 +254,11 @@ export const CreateEditPackageDetails = () => {
         sx={{ mt: 2 }}
       >
         {/*Box container principal*/}
-        <Box 
-          sx={{display: 'flex', gap: '1rem'}}
-        >
-
+        <Box sx={{display: 'flex', gap: '1rem'}}>
           <Box sx={{flex:2}}>
-
               {/*IZQ: De que se trata e itinerario*/}
               <Box
                 sx={{ display: "flex", flexDirection: "column", gap: 2 }}
-                item
-                xs={8}
               >
                 <Paper
                   elevation={3}
@@ -266,9 +284,10 @@ export const CreateEditPackageDetails = () => {
                       formik.touched.description &&
                       Boolean(formik.errors.description)
                     }
-                    helperText={
-                      formik.touched.description && formik.errors.description
-                    }
+										helperText={
+											(formik.errors.description ? formik.touched.description && formik.errors.description :
+											`${formik.values.description.length} / 1030 caracteres`)
+										}
                   />
                 </Paper>
                 <Paper
@@ -295,10 +314,11 @@ export const CreateEditPackageDetails = () => {
                       formik.touched.itinerary &&
                       Boolean(formik.errors.itinerary)
                     }
-                    helperText={
-                      formik.touched.itinerary && formik.errors.itinerary
-                    }
-                  />
+										helperText={
+											(formik.errors.itinerary ? formik.touched.itinerary && formik.errors.itinerary :
+											`${formik.values.itinerary.length} / 10000 caracteres`)
+										}
+									/>
                 </Paper>
               </Box>
               
@@ -412,10 +432,10 @@ export const CreateEditPackageDetails = () => {
                     formik.touched.included_services &&
                     Boolean(formik.errors.included_services)
                   }
-                  helperText={
-                    formik.touched.included_services &&
-                    formik.errors.included_services
-                  }
+									helperText={
+										(formik.errors.included_services ? formik.touched.included_services && formik.errors.included_services :
+										`${formik.values.included_services.length} / 320 caracteres`)
+									}
                 />
               </Paper>
             </Box>
@@ -467,27 +487,42 @@ export const CreateEditPackageDetails = () => {
               <Button
                 type="button"
                 variant="contained"
-                onClick={handleGuardar}
+								disabled={
+                  disabledButton ||  // Si el fetch está en progreso 
+                  !formik.isValid ||  // Si el formulario no es válido
+                  !formModified ||
+                  (isNewPackage && Object.keys(isNewPackage).length !== 0 && !formik.dirty)  // Si el formulario es nuevo paquete debe estar completo
+                }
+								onClick={(e) => handleSiguiente(e, false)}
                 sx={{
                   backgroundColor: "#fff",
                   width: "100%",
                   transition: "transform 0.3s ease-in-out",
                 }}
               >
-                Guardar
+                {disabledButton 
+                ? <CircularProgress size={20} color="inherit" /> 
+                : "Actualizar Paquete"}
               </Button>
               <Button
                 variant="contained"
-                disabled={disabledButton}
+                disabled={
+                  disabledButton ||  // Si el fetch está en progreso 
+                  !formik.isValid ||  // Si el formulario no es válido
+                  !formModified ||
+                  (isNewPackage && Object.keys(isNewPackage).length !== 0 && !formik.dirty)  // Si el formulario es nuevo paquete debe estar completo
+                }
                 type="button"
-                onClick={handleSiguiente}
+								onClick={(e) => handleSiguiente(e, true)}
                 sx={{
                   backgroundColor: "#72CCA0",
                   width: "100%",
                   transition: "transform 0.3s ease-in-out",
                 }}
               >
-                {params.id ? "Actualizar Paquete" : "Siguiente"}
+                {disabledButton 
+                ? <CircularProgress size={20} color="inherit" /> 
+                : "Guardar y Siguiente"}
               </Button>
             </Box>
 
