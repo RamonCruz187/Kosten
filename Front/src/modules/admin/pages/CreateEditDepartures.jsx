@@ -130,8 +130,9 @@ export const CreateEditDepartures = () => {
         {/* Formulario para crear nueva salida */}
         {(showCreateForm || packageData?.departures?.length === 0) && (
           <DepartureForm
+            departureData={{startDate: "", endDate: "" }}
             package_Id={packageData.id}
-            setOpenModal={()=>handleOpenModal(departure, index)}
+            // setOpenModal={()=>handleOpenModal(departure, index)}
             isCreate={true}
             onActionComplete={fetchPackageById} // Refetch tras completar la acción
           />
