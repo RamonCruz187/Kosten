@@ -52,7 +52,7 @@ const AppRoutes = () => (
           <Route path="/contacto" element={<ContactView />} />
           <Route path="/perfil" element={<Perfil />} />
           <Route path="/admin" element={<UserAdminPrivateRoutes><AdminLayout /></UserAdminPrivateRoutes>}>
-            <Route index element={<Navigate to="usuarios" replace />} />
+            <Route index element={<Navigate to="paquetes" replace />} />
             <Route path="usuarios" element={<AdminDashboard />} />
             <Route path="paquetes" element={<AdminPackages />} />
             <Route path="paquetes/nuevo" element={<CreateEditPackageBasic />} />
