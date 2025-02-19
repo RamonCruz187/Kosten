@@ -14,10 +14,10 @@ export const ModalWarning = ({openDialog = false, setOpenDialog = () => {}, idTo
         const res = await deleteImage(idToDelete);
 				setIdToDelete(null);
         setOpenDialog(false);
-				NotificationService.success('Imagen eliminada correctamente', 1200);
+				NotificationService.success('Imagen eliminada correctamente', 2000);
 			} catch (error) {
 				console.error(error);
-				NotificationService.error('No se pudo eliminar la Imagen. Intente nuevamente', 1200);
+				NotificationService.error('No se pudo eliminar la Imagen. Intente nuevamente', 2000);
 		}
 		setDisabled(false);
   }
