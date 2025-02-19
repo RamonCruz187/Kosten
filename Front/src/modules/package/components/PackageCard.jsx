@@ -1,3 +1,4 @@
+// src/modules/package/components/PackageCard.jsx
 import { useState } from "react";
 import {Delete, Edit, Label} from "@mui/icons-material";
 import Box from "@mui/material/Box";
@@ -25,7 +26,7 @@ export const PackageCard = ({ package_, setIsFetching }) => {
     const handleDelete = async ( id ) => {
         try {
             const res = await deletePackage( id );
-            NotificationService.success('Paquete eliminado correctamente', 1200);
+            NotificationService.success('Paquete eliminado correctamente', 2000);
             setIsFetching(true);
         } catch (error) {
             console.error(error);

@@ -1,5 +1,5 @@
 // @components/TourDestination/TourDestinationCard.jsx
-import { Box, Typography } from "@mui/material";
+import { Box, Typography, useMediaQuery, useTheme } from "@mui/material";
 import { RiImage2Line } from 'react-icons/ri';
 
 import { useNavigate } from "react-router-dom";
@@ -12,6 +12,8 @@ export default function TourDestinationCard({
   route = '/destinos/' 
 }) {
   const navigate = useNavigate();
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
   const handleClick = (id = null, destination = {}) => {
     if (id) {
       navigate(`${route}${id}`, { state: { category, destination }});
@@ -52,8 +54,8 @@ export default function TourDestinationCard({
       src={destination?.bannerPhoto.url}
       alt={destination?.name}
       sx={{
-        width: "100%",
-        height: "100%",
+        minWidth: "100%",
+        height: "85%",
         objectFit: "cover",
       }}
     />}
@@ -61,15 +63,20 @@ export default function TourDestinationCard({
     <Box
       sx={{
         width: "100%",
+        height: "15%",
         backgroundColor: "#f3f3f3",
-        padding: "1rem",
-        textAlign: "center",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
       }}
     >
       <Typography
         variant="titleH2"
+        sx={{
+          fontSize: {xs: "1rem", sm: "1.2rem", md: "1.3rem", xl: "1.4rem"},
+        }}
       >
-        {blank ? "Nuevo Paquete / Destino" : destination?.name}
+        {blank ? isMobile ? "Nuevo Paquete" : "Nuevo Paquete / Destino" : destination?.name}
       </Typography>
     </Box>
   </Box>

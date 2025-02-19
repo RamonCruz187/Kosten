@@ -73,7 +73,7 @@ export const AdminPackages = () => {
   return (
     <Box
       component="main"
-      sx={{ display: "flex", flexDirection: "column", gap: 2, padding: '2rem 3rem', minHeight: '100vh' }}
+      sx={{ display: "flex", flexDirection: "column", gap: 2, padding: {xs: '1rem 2dvw', sm: '2rem 3rem'}, minHeight: '100vh' }}
     >
       {allCategories ? (
 				<Box sx={{ 

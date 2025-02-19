@@ -1,9 +1,14 @@
+// src/modules/admin/components/ModalInscripts.jsx
+import { deleteUserFromDeparture } from "@/api/departureUserApi"
+import { NotificationService } from "@/shared/services/notistack.service"
 import { Box, FormControl, IconButton, MenuItem, Modal, Select, Typography } from "@mui/material"
 import dayjs from "dayjs"
+import { useState } from "react"
 import { RiCloseLargeLine, RiDeleteBin6Line } from "react-icons/ri"
 
 export const ModalInscripts = ({openModal, setOpenModal, indexDepartures = null}) => {
   console.log('openModal', openModal)
+  const [isFetching, setFetching] = useState(false);
 	const handleChange = (event, user) => {
 		// setIsPaidValue(event.target.value);
     // falta funcionalidad con el endpoint user
@@ -13,6 +18,18 @@ export const ModalInscripts = ({openModal, setOpenModal, indexDepartures = null}
     // }
     console.log('user', user)
 	}
+
+  const handleDelete = async(user) => {
+    setFetching(true)
+    try {
+    await deleteUserFromDeparture(indexDepartures.id, user.id)
+    NotificationService.success('Reserva eliminada correctamente', 2000);
+    } catch (error) {
+      console.log(error)
+    } finally {
+      setFetching(false)
+    }
+  }
   return (
     <Modal open={Boolean(openModal)} onClose={() => setOpenModal(null)}>
     <Box sx={{
@@ -36,7 +53,7 @@ export const ModalInscripts = ({openModal, setOpenModal, indexDepartures = null}
       <Box sx={{display: 'flex', alignItems: 'center',}}>
         <Typography variant="titleH3" sx={{textAlign: 'center', fontWeight: '600', mb: '1rem'}}>
           Salida {indexDepartures + 1} - 
-          {openModal ? `${dayjs(openModal.startDate, "DD-MM-YYYY").format("DD-MM-YYYY")} al ${dayjs(openModal.endDate, "DD-MM-YYYY").format("DD-MM-YYYY")}` : ''}
+          {openModal ? `${dayjs(openModal.startDate, "YYYY-MM-DD").format("DD-MM-YYYY")} al ${dayjs(openModal.endDate, "YYYY-MM-DD").format("DD-MM-YYYY")}` : ''}
         </Typography>
       </Box>
       <Box sx={{display: 'flex', alignItems: 'center', gap: '2rem'}}>
