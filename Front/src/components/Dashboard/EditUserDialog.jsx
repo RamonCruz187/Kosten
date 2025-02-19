@@ -13,12 +13,10 @@ import {
   InputLabel,
   Grid,
 } from "@mui/material";
-import { NotificationService } from "../../shared/services/notistack.service.jsx";
+import { NotificationService } from "@shared/services/notistack.service.jsx";
 
-import axios from "axios";
-
-import { getActiveUsers, updateUserStatus } from "../../api/userApi.js";
-import { useCallback, useEffect, useState } from "react";
+import { updateUser, updateUserRoleById, updateUserStatus } from "@api/userApi.js";
+import { useCallback, useState } from "react";
 
 const EditUserDialog = ({
   open,
@@ -27,59 +25,38 @@ const EditUserDialog = ({
   setUserForm,
   fetchUsers,
 }) => {
+  const [isFetching, setIsFetching] = useState(false);
+  
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setUserForm((prev) => ({ ...prev, [name]: value }));
   };
 
-  const API_URL = "https://kosten.up.railway.app";
-  const [isFetching, setIsFetching] = useState(false);
+  // Handle local state change for form control
 
-  const handleSubmitEdit = async () => {
+  const handleSubmitEdit = useCallback(async () => {
     if (!validateContact(userForm.contact)) {
-      NotificationService.info(
-        "El teléfono debe tener entre 8-14 caracteres y '+' al inicio es opcional.",
-        5000
-      );
+      NotificationService.info("El teléfono debe tener entre 8-14 caracteres y '+' al inicio es opcional.", 5000);
       return;
     }
+    setIsFetching(true);
     try {
-      await axios.put(`${API_URL}/user/update`, userForm);
+      const response = await updateUser(userForm);
       NotificationService.success("Usuario guardado exitosamente", 2000);
       handleSubmitStatusChange();
-
       fetchUsers();
       onClose();
-    } catch (error) {
-      console.error("Error editando usuario:", error);
-    }
-  };
 
-  // Handle local state change for form control
-  const handleStatusChange = (newStatus) => {
-    const isActive = newStatus === "Activo";
-    setUserForm((prev) => ({ ...prev, isActive }));
-  };
+    } catch (error) {
+      console.error(error);
+      NotificationService.error("Error al editar el Usuario");
+    } finally {
+      setIsFetching(false);
+    }
+  }, []);
+
 
   // Handle submit action to save changes
-  // const handleSubmitStatusChange = async () => {
-  //   try {
-  //     const payload = {
-  //       userId: userForm.id,
-  //       isActive: userForm.isActive,
-  //     };
-
-  //     await axios.put(`${API_URL}/user/isActive`, payload);
-  //     //   await updateUserStatus(payload);
-
-  //     NotificationService.success(
-  //       `Estado actualizado: ${userForm.isActive ? "Activo" : "Inactivo"}`,
-  //       2000
-  //     );
-  //   } catch (error) {
-  //     console.error("Error updating user status:", error);
-  //   }
-  // };
   const handleSubmitStatusChange = useCallback(async () => {
     setIsFetching(true);
     try {
@@ -87,12 +64,9 @@ const EditUserDialog = ({
         userId: userForm.id,
         isActive: userForm.isActive,
       };
-      const response = await updateUserStatus(body); // Axios devuelve 'data' directamente
+      const response = await updateUserStatus(body);
       console.log("response", response);
-      NotificationService.success(
-        `Estado actualizado: ${userForm.isActive ? "Activo" : "Inactivo"}`,
-        2000
-      );
+      NotificationService.success(`Estado actualizado: ${userForm.isActive ? "Activo" : "Inactivo"}`, 2000 );
     } catch (error) {
       console.error(error);
       NotificationService.error("Error al actualizar el estado del Usuario");
@@ -101,28 +75,32 @@ const EditUserDialog = ({
     }
   }, []);
 
-  const handleRoleChange = async (newRole) => {
+  const handleRoleChange = useCallback(async (newRole) => {
+    setIsFetching(true);
     try {
-      await axios.put(`${API_URL}/user/${userForm.id}/role`, { role: newRole });
+      const body = {
+        role: newRole,
+      };
+      const response = await updateUserRoleById(userForm.id, body);
       setUserForm((prev) => ({ ...prev, role: newRole }));
-      NotificationService.success("Rol: " + newRole, 2000);
+      NotificationService.success("Actualización de Rol: " + newRole, 2000);
     } catch (error) {
-      console.error("Error cargando roles:", error);
+      console.error(error);
+      NotificationService.error("Error al actualizar el rol del Usuario");
+    } finally {
+      setIsFetching(false);
     }
-  };
+  }, []);
 
-  const toggleShowPassword = () => setShowPassword(!showPassword);
-  const toggleShowConfirmPassword = () =>
-    setShowConfirmPassword(!showConfirmPassword);
 
   // Validate contact (min 8, max 14 numbers, '+' optional)
   const validateContact = (contact) => /^\+?[1-9]\d{8,14}$/.test(contact);
 
   // Validate password (min 6, max 12 characters, letters & numbers, at least 1 uppercase)
-  const validatePassword = (password) =>
-    /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=])(?=\S+$).{8,}$/.test(
-      password
-    );
+  // const validatePassword = (password) =>
+  //   /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=])(?=\S+$).{8,}$/.test(
+  //     password
+  //   );
 
   return (
     <Dialog open={open} onClose={onClose}>
@@ -168,12 +146,12 @@ const EditUserDialog = ({
               <InputLabel>Estado</InputLabel>
               <Select
                 name="isActive"
-                value={userForm.isActive ? "Activo" : "Inactivo"}
-                onChange={(e) => handleStatusChange(e.target.value)}
+                value={userForm.isActive}
+                onChange={handleInputChange}
                 label="Estado"
               >
-                <MenuItem value="Activo">Activo</MenuItem>
-                <MenuItem value="Inactivo">Inactivo</MenuItem>
+                <MenuItem value={true}>Activo</MenuItem>
+                <MenuItem value={false}>Inactivo</MenuItem>
               </Select>
             </FormControl>
           </Grid>
@@ -195,6 +173,7 @@ const EditUserDialog = ({
       </DialogContent>
       <DialogActions>
         <Button
+          disabled={isFetching}
           onClick={onClose}
           color="transparent"
           sx={{ boxShadow: "none" }}
@@ -202,6 +181,7 @@ const EditUserDialog = ({
           Cerrar
         </Button>
         <Button
+          disabled={isFetching}
           onClick={handleSubmitEdit}
           color="transparent"
           sx={{ boxShadow: "none" }}
