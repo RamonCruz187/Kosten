@@ -27,22 +27,23 @@ export const OnlyTextButton = ({
       sx={{
         display: "flex",
         alignItems: "center",
+        boxShadow: "none",
+        color: palette.tertiary[900],
+        "&:hover": {
+          boxShadow: "none",
+          color: type === "green" ? palette.accent.darkest2 : palette.error.main,
+        },
         ...sx,
       }}
     >
       {icon && (
-        <Box
-          sx={{
+        <Box sx={{
             marginRight: "0.5rem",
             display: "flex",
             justifyContent: "center",
             alignItems: "center",
-            color: palette.tertiary[900],
-            "&-hover": {
-              color: type === "green" ? palette.accent.darkest2 : palette.error.main,
-            },
-          }}
-        >
+            color: "inherit",
+        }}>
           {icon}
         </Box>
       )}
