@@ -1,15 +1,19 @@
-import { Box, Typography, Button, Link, useMediaQuery, useTheme } from "@mui/material";
-import kosten from "../../assets/kosten.png";
-import DepartureGrid from "../../modules/Departures/components/DepartureGrid.jsx";
+// src/components/Home/LandingPage.jsx
+import { Box, Typography, useMediaQuery, useTheme } from "@mui/material";
+import kosten from "@/assets/kosten.png";
+import DepartureGrid from "@modules/Departures/components/DepartureGrid.jsx";
 import Carousel from "./Carousel.jsx";
-import CommentsBox from "../../modules/Departures/components/CommentsBox.jsx";
+import CommentsBox from "@modules/Departures/components/CommentsBox.jsx";
 import { useEffect, useState } from "react";
-import {getVisibleAndFavoriteComments} from '../../api/commentApi.js';
+import { getVisibleAndFavoriteComments } from '@api/commentApi.js';
+import { CallToActionButton } from "@/shared/components/buttons/CallToActionButton";
+import { useNavigate } from "react-router-dom";
 
 const LandingPage = () => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
   const isTablet = useMediaQuery(theme.breakpoints.down('md'));
+  const navigate = useNavigate();
   const [comments, setComments] = useState();
   useEffect(()=>{
     const fetchComments = async ()=>{
@@ -18,7 +22,6 @@ const LandingPage = () => {
         setComments(response.data.data);
       }catch(err){
         console.error("Error fetching comments:", err);
-
       }
     }
     fetchComments();
@@ -36,21 +39,6 @@ const LandingPage = () => {
         }}
       >
         <h1 style={{ position: "absolute", top: "-50px", color: "transparent", userSelect: "none" }}>Kosten Trekking & Montañismo - Somos Guías de Montaña. Veni con nosotros a disfrutar tu próxima Aventura</h1>
-        <style>
-          {`
-            @keyframes zoom {
-              0% {
-                transform: scale(1);
-              }
-              50% {
-                transform: scale(1.1);
-              }
-              100% {
-                transform: scale(1);
-              }
-            }
-          `}
-        </style>
         <Carousel />
         <Box
           sx={{
@@ -101,20 +89,10 @@ const LandingPage = () => {
               VIENTO DE AVENTURA
             </Typography>
           </Box>
-          <Link href="/salidas">
-          <Button
-            variant="contained"
-            color="primary"
-            size="large"
-            sx={{
-              marginTop: "3rem",
-              paddingX: {xs: "2rem", sm: "5rem"},
-              fontSize: {xs: "20px", sm: "20px"},
-            }}
-          >
-            VER NUESTRAS SALIDAS
-          </Button>
-          </Link>
+          <CallToActionButton
+            onClick={() => navigate("/salidas")}
+            sx={{ marginTop: "3rem" }}
+          />
         </Box>
       </Box>
       <Box
