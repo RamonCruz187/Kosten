@@ -1,3 +1,4 @@
+// src/theme.js
 import createTheme from "@mui/material/styles/createTheme";
 import {
   customPalette,
@@ -20,15 +21,15 @@ const theme = createTheme({
   },
   palette: {
     // generales
-    primary: {
-      main: customPalette.primary.main,
-    },
-    secondary: {
-      main: customPalette.secondary.main,
-    },
-    accent: {
-      main: customPalette.accent.main,
-    },
+    // primary: {
+    //   main: customPalette.primary.main,
+    // },
+    // secondary: {
+    //   main: customPalette.secondary.main,
+    // },
+    // accent: {
+    //   main: customPalette.accent.main,
+    // },
     // botones
     yellowButton: {
       main: customPalette.primary.main,
@@ -54,6 +55,7 @@ const theme = createTheme({
       light: "rgba(200, 200, 200, 0.25)",
       contrastText: customPalette.accent.darkest
     },
+    ...customPalette,
   },
   typography: {
     htmlFontSize: 16, // Asigna 16px a 1rem por defecto
