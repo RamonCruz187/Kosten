@@ -5,10 +5,9 @@ import { useNavigate } from "react-router-dom";
 import { iconsCardPackages } from "@/modules/Departures/utils/utils";
 import { fCurrency } from "@/shared/utils/formatNumber";
 import { RiAddLargeLine, RiEditLine } from "react-icons/ri";
-import dayjs from "dayjs";
+import { formatDepartureDate } from "@/shared/utils/formatDeparture";
 
 export const AdminDepartureCard = ({ departure }) => {
-  console.log("departure", departure);
   const navigate = useNavigate();
 
   const goToPackage = () =>
@@ -80,26 +79,13 @@ export const AdminDepartureCard = ({ departure }) => {
                 </Typography>
               ) : (
                 <Box>
-                  {departure?.departures?.map((departure, index) => {
-                    const startDateMonth = dayjs(departure?.startDate).format('MM');
-                    const startDateYear = dayjs(departure?.startDate).format('YYYY');
-                    const endDateMonth = dayjs(departure?.endDate).format('MM');
-                    const endDateYear = dayjs(departure?.endDate).format('YYYY');
-                    const departureDates = dayjs(departure?.startDate).format('DD-MM-YYYY') === dayjs(departure?.endDate).format('DD-MM-YYYY')
-                    ? `${dayjs(departure?.startDate).format('DD-MM-YYYY')}`
-                    : startDateYear !== endDateYear
-                      ? `${dayjs(departure?.startDate).format('DD-MM-YYYY')} al ${dayjs(departure?.endDate).format('DD/MM/YYYY')}`
-                      : startDateMonth === endDateMonth
-                        ? `${dayjs(departure?.startDate).format('DD')} al ${dayjs(departure?.endDate).format('DD/MM/YYYY')}`
-                        : `${dayjs(departure?.startDate).format('DD-MM')} al ${dayjs(departure?.endDate).format('DD/MM/YYYY')}`
-
-                    return (
-                    <Box key={index}>
-                      <Typography variant="caption">
-                        {departureDates}{' - '}{fCurrency(departure?.price)}
-                      </Typography>
-                    </Box>
-                  )})}
+                  {departure?.departures?.map((departure) => (
+                      <Box key={`departure-${departure.id}`}>
+                          <Typography variant="caption">
+                              {formatDepartureDate(departure)}{' - '}{fCurrency(departure?.price)}
+                          </Typography>
+                      </Box>
+                  ))}
                 </Box>
               )}
             </Box>
