@@ -1,61 +1,31 @@
-import { Label } from "@mui/icons-material";
-import CloseIcon from '@mui/icons-material/Close';
-import { Button, Card, Stack, Typography, Box, IconButton} from "@mui/material";
+// src/modules/Departures/components/DepartureCard.jsx
+import { Button, Card, Stack, Typography, Box, Modal, useTheme, useMediaQuery} from "@mui/material";
 import { fCurrency } from "../../../shared/utils/formatNumber.js";
 import { iconsCardPackages } from "../utils/utils.jsx";
-import { processDepartures, useSharedPack } from "../utils/utils.jsx";
 import { useState, useContext } from "react";
-import {GlobalContext} from '../../../shared/context/GlobalContext.jsx';
+import { GlobalContext } from '../../../shared/context/GlobalContext.jsx';
 import SessionRequestModal from './SessionRequestModal.jsx';
 import { useNavigate } from "react-router-dom";
 import { formatPriceRange } from '../utils/utils.jsx';
 import dayjs from 'dayjs';
 import 'dayjs/locale/es';
-import { ConfirmationModal } from "./ConfirmationModal.jsx";
-
 dayjs.locale('es');
 
-export const DepartureCard = ({ pack, isAdmin = false }) => {
-  const processedDeparturesToShowInCard = processDepartures([pack],3);
-  const processedDeparturesToShowModal = processDepartures([pack]);
+import { formatDepartureDate } from "@/shared/utils/formatDeparture.js";
+import ReservationModal from "./ReservationModal.jsx";
+
+export const DepartureCard = ({ pack }) => {
   const [openModal, setOpenModal] = useState(false);
-  const [openConfirmationModal, setOpenConfirmationModal] = useState(false);
-  const [, updatePack] = useSharedPack();
   const { state } = useContext(GlobalContext);
   const [openSessionRequestModal, setOpenSessionRequestModal] = useState(false);
-  const [departureSelected, setDepartureSelected] = useState();
+  const [departureSelected, setDepartureSelected] = useState("");
   const navigate = useNavigate();
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
 
   const handleCardClick = () => {
-    updatePack(pack);  
-    navigate(`/salidas/${pack.id}`);  
-  };  
-
-  // Helper para construir el texto de `selectedInfo`
-  const getDepartureInfo = (departure) => {
-    if (departure.message) return departure.message;
-
-    return (departure.endDate)
-        ? `${departure.startDateFormatted} - ${departure.endDateFormatted} - Precio: ${fCurrency(departure.price, { minimumFractionDigits: 0 })}`
-        : `${departure.startDateFormatted} - Precio: ${fCurrency(departure.price, { minimumFractionDigits: 0 })}`;
-};
-
-  // el estatus para el admin
-  const renderStatus = (
-    <Label
-      variant="inverted"
-      color={(pack.active === "sale" && "error") || "info"}
-      sx={{
-        zIndex: 9,
-        top: 16,
-        right: 16,
-        position: "absolute",
-        textTransform: "uppercase",
-      }}
-    >
-      {pack.active}
-    </Label>
-  );
+    navigate(`/salidas/${pack?.id}`);  
+  };
 
   return (
     <>
@@ -70,9 +40,7 @@ export const DepartureCard = ({ pack, isAdmin = false }) => {
           position: "relative",
         }}
       >
-        {isAdmin 
-        ? renderStatus 
-        : 
+        {isMobile &&
         <Box
           sx={{
             position: "absolute", 
@@ -128,16 +96,20 @@ export const DepartureCard = ({ pack, isAdmin = false }) => {
                 {/* Salidas  dentro de cada paquete*/}
                 <Box sx={{ display: "flex", pt:"5px" }}>{iconsCardPackages[1]}</Box>
                 <Box sx={{width:"100%"}}>
-                  {processedDeparturesToShowInCard.map((departure,index) =>
-                    departure.message ? (
-                      <div key={index}>{departure.message}</div>
-                    ) : (
-                      <div key={index}>
-                        {departure.startDateFormatted} - Precio: {fCurrency(departure.price, { minimumFractionDigits: 0 })}
-                        
-                      </div>
-                    )
-                  )}
+                  {pack?.departures.length === 0 
+                  ? <Box>
+                      <Typography variant="caption">
+                        Aún no hay salidas establecidas, ¡sé el primero en acordar una!
+                      </Typography>
+                    </Box>
+                  : pack?.departures?.map((departure, index) => (
+                      <Box key={index}>
+                        <Typography variant="caption">
+                          {formatDepartureDate(departure)}{' - '}{fCurrency(departure?.price)}
+                        </Typography>
+                      </Box>
+                    ))
+                  }
                 </Box>
               </Box>
               <Box
@@ -189,24 +161,26 @@ export const DepartureCard = ({ pack, isAdmin = false }) => {
               }}
             >
               <Typography variant="titleH3" textAlign={'center'}>
-
-                { 
-                  formatPriceRange(pack.departures) 
-                  }
+                {formatPriceRange(pack.departures)}
               </Typography>
 
-              <Button variant="contained" size="small" color="brownButton" onClick={ ()=>{
-                state.user_auth.token ? 
-                  (
-                    setOpenModal(true)
-                  ) :
-                  (
-                    setOpenSessionRequestModal(true)
-                  )
-                }}
-                >
+              { pack?.departures?.length > 0
+              ? <Button variant="contained" size="small" color="brownButton" onClick={ ()=>{
+                state.user_auth.token
+                ? (setOpenModal(true)) 
+                : (setOpenSessionRequestModal(true))
+              }}
+              >
                 Reservar
               </Button>
+              : <Button 
+                  variant="contained" 
+                  size="small" 
+                  // color="brownButton" 
+                  onClick={() => navigate('/contacto')}
+              >
+                Sé primero
+              </Button>}
             </Box>
           </Box>
         </Stack>
@@ -231,143 +205,17 @@ export const DepartureCard = ({ pack, isAdmin = false }) => {
       />
 
       {openModal && (
-          <Box
-            sx={{
-              position: 'fixed',
-              top: '50%',
-              left: '50%',
-              transform: 'translate(-50%, -50%)',
-              zIndex: 1300,
-              backgroundColor: 'white',
-              boxShadow: 14,
-              p: 4,
-              width: '90%',
-              maxWidth: '500px',
-              borderRadius: '4px',
-              textAlign:'center'
-            }}
-          >
-            <Typography variant="h6" sx={{ mb: 2, fontFamily:'Oswald' }}>Reservar salida</Typography>
-            <IconButton
-            aria-label="close"
-            onClick={()=>{setOpenModal(false), setDepartureSelected()} }
-            sx={{
-              position: 'absolute',
-              top: 8,
-              right: 8,
-            }}
-          >
-            <CloseIcon fontSize="small" sx={{ color: '#080808' }}  />
-          </IconButton>
-            
-            <Typography variant="body1" sx={{ mb: 2, fontFamily:'Catamaran', fontSize:'14px', fontWeight:'400', lineHeight:'15px' }}>
-              La reserva <b>quedará confirmada una vez realizado el pago.</b> Desde Kosten nos estaremos comunicando contigo a la brevedad por Whatsapp para pasarte la información necesaria para realizar el pago.
-            </Typography>
-            
-            <Typography variant="body1" sx={{ mb: 3, fontFamily:'Catamaran', fontSize:'14px', fontWeight:'400', lineHeight:'15px'}}>
-              Seleccione la fecha de la salida que quiere reservar.
-            </Typography>
-
-            <Box component="form" sx={{ mb: 3 }}>
-              <select
-                style={{
-                  width: '100%',
-                  padding: '8px',
-                  marginBottom: '16px',
-                  borderRadius: '4px',
-                  border: '1px solid #ccc'
-                }}
-                onChange={(e) => setDepartureSelected(e.target.value)}
-              >
-                <option value=""> </option>
-                {processedDeparturesToShowModal.map((departure, index) => (
-                  !departure.message && (
-                    <option key={index} value={getDepartureInfo(departure)}>
-                      {getDepartureInfo(departure)}
-                    </option>
-                  )
-                ))}
-              </select>
-            </Box>
-
-            <Box sx={{ 
-              display: 'flex', 
-              alignItems: 'center', 
-              gap: 2, 
-              mb: 3 
-            }}>
-              <Typography variant="body2" sx={{fontFamily:'Catamaran'}} >¿Buscas otra fecha?</Typography>
-              <Typography
-                component="span"
-                onClick={() => navigate('/contacto')}
-                sx={{
-                  fontFamily: 'Catamaran',
-                  color: '#005538',
-                  textTransform: 'uppercase',
-                  cursor: 'pointer',
-                  '&:hover': {
-                    color: '#00291b', // Cambia según tu diseño.
-                  },
-                }}
-              >
-                Consultar otras fechas
-              </Typography>
-
-
-            </Box>
-
-            <Box sx={{ 
-              display: 'flex', 
-              justifyContent: 'flex-end', 
-              gap: 2 
-            }}>
-              <Button
-                onClick={() => {setOpenModal(false), setDepartureSelected(null)}}
-                sx={{
-                  color: "#323232",
-                  backgroundColor: '#fff',
-                  fontSize:'14px', fontWeight:'400', lineHeight:'20px',
-                  '&:hover': {
-                    color: '#630000',
-                  },
-                  '&:active': {
-                    color: '#4C0000',
-                  },
-                  boxShadow: 'none',
-                }}
-                disableElevation
-                disableRipple
-              >
-                Cancelar
-              </Button>
-              <Button
-                variant="contained"
-                color="brownButton"
-                onClick={() => setOpenConfirmationModal(departureSelected)}
-                disabled={!departureSelected}
-                sx={{
-                  color: "#323232",
-                  backgroundColor: '#fff',
-                  fontSize:'14px', fontWeight:'400', lineHeight:'20px',
-                  '&:hover': {
-                    color: '#630000',
-                  },
-                  '&:active': {
-                    color: '#4C0000',
-                  },
-                  boxShadow: 'none',
-                }}
-                disableElevation
-                disableRipple
-              >
-                Reservar
-              </Button>
-            </Box>
-          </Box>
-        )}
-
-        {openConfirmationModal && (
-          <ConfirmationModal setOpenConfirmationModal={setOpenConfirmationModal}/>
+        <Modal
+          open={openModal}
+          onClose={() => setOpenModal(false)}
+        >
+          <ReservationModal
+            setOpenModal={setOpenModal}
+            departures={pack?.departures}
+            departureSelected={departureSelected}
+            setDepartureSelected={setDepartureSelected}
+          />
+        </Modal>
         )}
     </>
 
