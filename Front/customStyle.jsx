@@ -103,6 +103,7 @@ export const customPalette = {
   },
   tertiary: {
     // gray
+    light: grayColor[50], // gray 50 figma
     main: grayColor[300], // gray 300 figma
     dark: grayColor[500], // gray 500 figma
     darkest: grayColor[850], // gray 850 figma
