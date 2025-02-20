@@ -56,10 +56,8 @@ const AdminDashboard = () => {
     setIsFetching(true);
     try {
       const response = await getAllUsers(); // Axios devuelve 'data' directamente
-      console.log("data", response?.data);
       setUsers(response.data.data);
       NotificationService.success("Los usuarios fueron cargados con éxito");
-      console.log("Los usuarios fueron cargados con éxito");
     } catch (error) {
       console.error(error);
       NotificationService.error("Error al cargar los usuarios");
@@ -72,10 +70,8 @@ const AdminDashboard = () => {
     setIsFetching(true);
     try {
       const response = await getAllStaff(); // Axios devuelve 'data' directamente
-      console.log("data", response?.data);
       setStaff(response.data);
       NotificationService.success("El staff fue cargado con éxito");
-      console.log("El staff fue cargado con éxito");
     } catch (error) {
       console.error(error);
       NotificationService.error("Error al cargar al staff");
@@ -107,12 +103,17 @@ const AdminDashboard = () => {
     setIsFetching(true);
     try {
         const response = await getUserById(id); // Axios devuelve 'data' directamente
-        console.log('data', response?.data);
-        const { username, email, contact, role, isActive } = response.data.data;
-        setUserForm({ id, username, email, contact, role, isActive });
+        setUserForm({ 
+          id: id, 
+          username: response.data.data.username, 
+          email: response.data.data.email, 
+          contact: response.data.data.contact, 
+          role: response.data.data.role, 
+          isActive: response.data.data.isActive, 
+        });
         setOpenEdit(true);
         // NotificationService.success('Las salidas fueron cargadas con éxito');
-        console.log('El usuario fue cargadas con éxito');
+        console.log('El usuario fue cargado con éxito');
     } catch (error) {
         console.error(error);
         NotificationService.error('Error en la carga de usuario');
@@ -127,7 +128,6 @@ const AdminDashboard = () => {
         const response = await deleteUserById(id); // Axios devuelve 'data' directamente
         fetchUsers();
         NotificationService.success('El ususario fuer borrado con éxito');
-        console.log('El usuario fue borrado con éxito');
     } catch (error) {
         console.error('Error al eliminar el usuario: ', error);
         NotificationService.error('Error en el borrado de usuario');
