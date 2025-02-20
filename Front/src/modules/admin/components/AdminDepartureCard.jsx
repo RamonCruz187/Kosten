@@ -1,11 +1,12 @@
 // src/modules/admin/components/AdminDepartureCard.jsx
 import Box from "@mui/material/Box";
-import { Button, Card, Stack, Typography } from "@mui/material";
+import { Card, Stack, Typography } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import { iconsCardPackages } from "@/modules/Departures/utils/utils";
 import { fCurrency } from "@/shared/utils/formatNumber";
 import { RiAddLargeLine, RiEditLine } from "react-icons/ri";
 import { formatDepartureDate } from "@/shared/utils/formatDeparture";
+import { WhiteButton } from "@/shared/components/buttons/WhiteButton";
 
 export const AdminDepartureCard = ({ departure }) => {
   const navigate = useNavigate();
@@ -74,7 +75,7 @@ export const AdminDepartureCard = ({ departure }) => {
             >
               <Box sx={{ display: "flex" }}>{iconsCardPackages[1]}</Box>
               {departure?.departures?.length === 0 ? (
-                <Typography variant="caption" sx={{ color: "red" }}>
+                <Typography variant="caption" sx={{ color: "error.main" }}>
                   SIN SALIDAS DISPONIBLES
                 </Typography>
               ) : (
@@ -101,7 +102,7 @@ export const AdminDepartureCard = ({ departure }) => {
               <Box sx={{ display: "flex" }}>{iconsCardPackages[2]}</Box>
               <Typography
                 variant="caption"
-                sx={{ color: !departure.duration && "red" }}
+                sx={{ color: !departure.duration && "error.main" }}
               >
                 {departure?.duration
                   ? departure.duration
@@ -118,41 +119,15 @@ export const AdminDepartureCard = ({ departure }) => {
           }}
         >
           {departure?.departures?.length === 0 ? (
-            <Button
-              variant="contained"
-              size="small"
-              color="brownButton"
-              sx={{
-                display: "flex",
-                justifyContent: "center",
-                alignItems: "center",
-                gap: "0.5rem",
-                boxShadow: "0px 4px 4px rgba(0, 0, 0, 0.25)",
-              }}
-            >
-              <RiAddLargeLine />
-              <Typography sx={{ fontSize: { xs: "0.8rem", sm: "1rem" } }}>
-                AGREGAR SALIDAS
-              </Typography>
-            </Button>
+            <WhiteButton
+              title="AGREGAR SALIDAS"
+              icon={<RiAddLargeLine />}
+            />
           ) : (
-            <Button
-              variant="contained"
-              size="small"
-              sx={{
-                display: "flex",
-                justifyContent: "center",
-                alignItems: "center",
-                gap: "0.5rem",
-                backgroundColor: "#D9D9D9",
-                boxShadow: "0px 4px 4px rgba(0, 0, 0, 0.25)",
-              }}
-            >
-              <RiEditLine />
-              <Typography sx={{ fontSize: { xs: "0.8rem", sm: "1rem" } }}>
-                EDITAR
-              </Typography>
-            </Button>
+            <WhiteButton
+              title="EDITAR"
+              icon={<RiEditLine size={18} />}
+            />
           )}
         </Box>
       </Stack>
