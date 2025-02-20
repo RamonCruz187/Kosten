@@ -1,4 +1,4 @@
-const DEFAULT_LOCALE = { code: 'en-US', currency: 'USD' };
+const DEFAULT_LOCALE = { code: 'es-AR', currency: 'ARS' };
 
 function processInput( inputValue ) {
     if (inputValue == null || Number.isNaN(inputValue)) return null;
@@ -14,8 +14,8 @@ export function fCurrency( inputValue, options ) {
     const fm = new Intl.NumberFormat(locale.code, {
         style: 'currency',
         currency: locale.currency,
-        minimumFractionDigits: 2,
-        maximumFractionDigits: 2,
+        minimumFractionDigits: 0,
+        maximumFractionDigits: 0,
         ...options,
     }).format(number);
 
