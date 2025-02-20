@@ -15,7 +15,7 @@ public class WebConfig implements WebMvcConfigurer {
     public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/**")
           .allowedOrigins("*") // Can be restricted to specific origins in a production environment
-          .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
+          .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS","PATCH")
           .allowedHeaders("*") // Needed for PUT, POST, DELETE and OPTIONS
           .exposedHeaders("Authorization", "Content-Type") // If you are using a custom header
           .allowCredentials(false) // Enable if you are using cookie-based authentication
