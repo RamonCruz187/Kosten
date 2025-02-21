@@ -161,7 +161,7 @@ public class PackageServiceImpl implements PackageService {
 
     public ExtendedBaseResponse<PackageResponseDTO> update(PackageToUpdateDTO packageToUpdateDTO) {
 
-        Package packageEntity = packageRepository.findByIdAndActiveIsTrue(packageToUpdateDTO.id());
+        Package packageEntity = packageRepository.findById(packageToUpdateDTO.id()).orElse(null);
         Category category = categoryRepository.findById(packageToUpdateDTO.idCategory())
                 .orElseThrow(() -> new PackageNotFoundException("Categoría no encontrada."));
 
