@@ -46,6 +46,8 @@ public class SecurityConfiguration {
                             .hasAnyAuthority(Role.ADMIN.name(), Role.USER.name())
                         .requestMatchers(HttpMethod.GET, "/packages")
                         .permitAll()
+                        .requestMatchers(HttpMethod.GET, "/packages/{id}")
+                        .permitAll()
                         .requestMatchers(HttpMethod.GET, "/packages/actives")
                         .permitAll()
                         .requestMatchers("/test")
