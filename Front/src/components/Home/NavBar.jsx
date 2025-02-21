@@ -1,14 +1,15 @@
 /* eslint-disable react/prop-types */
-import { AppBar, Toolbar, Button, Box, Typography, useMediaQuery, useTheme } from "@mui/material";
-import logo from "../../assets/logo.png";
+import { AppBar, Toolbar, Box, Typography, useMediaQuery, useTheme } from "@mui/material";
+import logo from "@/assets/logo.png";
 import { RiMenuLine, RiCloseLargeLine } from 'react-icons/ri';
 
 import { useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 
-import { useAuth } from "../../shared/hooks/useAuth.jsx";
-import { UserPopover } from "../../shared/components/UserPopover.jsx";
-import PopoverLogin from "../Auth/PopoverLogin.jsx";
+import { useAuth } from "@shared/hooks/useAuth.jsx";
+import { UserPopover } from "@shared/components/UserPopover.jsx";
+import PopoverLogin from "@/components/Auth/PopoverLogin.jsx";
+import { WhiteButton } from "@/shared/components/buttons/WhiteButton";
 
 const NavBar = ({ isAdmin = false, setIsOpenDrawer, isOpenDrawer = false, isDrawer = false, sx = {} }) => {
   const { isAuthenticated } = useAuth();
@@ -16,6 +17,7 @@ const NavBar = ({ isAdmin = false, setIsOpenDrawer, isOpenDrawer = false, isDraw
   const navigate = useNavigate();
 
   const theme = useTheme();
+  const { palette } = theme;
   const isMobileTablet = useMediaQuery(theme.breakpoints.down('md'));
   const isLargeScreen = useMediaQuery(theme.breakpoints.up('xl'));
 
@@ -42,7 +44,7 @@ const NavBar = ({ isAdmin = false, setIsOpenDrawer, isOpenDrawer = false, isDraw
       fontSize: {xs: "1.25rem", md: "1rem", lg: "1.25rem"},
       fontFamily: "Oswald",
       "&:hover": {
-        color: "#9E9E9E",
+        color: palette.primary.dark,
       },
   };
 
@@ -53,7 +55,7 @@ const NavBar = ({ isAdmin = false, setIsOpenDrawer, isOpenDrawer = false, isDraw
         width: "100%",
         display: "flex",
         justifyContent: "space-between",
-        background: "#080808",
+        background: palette.tertiary[950],
         height: isDrawer ? "auto" : {xs: "80px", md: "100px", xl: "120px" },
         paddingTop: isDrawer ? "1rem" : "0",
         ...sx,
@@ -65,21 +67,18 @@ const NavBar = ({ isAdmin = false, setIsOpenDrawer, isOpenDrawer = false, isDraw
           position: "absolute",
           top: "2rem",
           left: {xs: "1rem", sm:"2rem"},
-          color: "white",
+          color: palette.tertiary.light,
         }}
         onClick={setIsOpenDrawer}>
         {isOpenDrawer ? <RiCloseLargeLine size={24} /> : <RiMenuLine size={24} />}
       </Box>}
       {isDrawer && isMobileTablet && (
         !isAuthenticated ?
-          <Button
-            variant="contained"
-            color="grayButton"
+          <WhiteButton
+            title="LOGIN"
             onClick={() => setIsOpenLogin(true)}
-            sx={{ color: "black", position: "absolute", top: "1.5rem", right: "1rem" }}
-          >
-            LOGIN
-          </Button>
+            sx={{ position: "absolute", top: "1.5rem", right: "1rem" }}
+          />
         :
           <Box
             sx={{
@@ -118,11 +117,11 @@ const NavBar = ({ isAdmin = false, setIsOpenDrawer, isOpenDrawer = false, isDraw
           }}
           style={{ textDecoration: "none" }}
         >
-          <Typography variant="paragraphLight" onClick={()=>navigate("/salidas")} sx={{...styledMenuItem, color: location.split('/')[1] === "salidas" ? '#FFC800' : 'fff',}}>Salidas</Typography>
-          <Typography variant="paragraphLight" onClick={()=>navigate("/about")} sx={{...styledMenuItem, color: location.split('/')[1] === "about" ? '#FFC800' : 'fff',}}>Quienes somos</Typography>
-          <Typography variant="paragraphLight" onClick={()=>navigate("/destinos")} sx={{...styledMenuItem, color : location.split('/')[1] === "destinos" ? '#FFC800' : 'fff',}}>Destinos</Typography>
-          {/* <Typography variant="paragraphLight" onClick={()=>navigate("/gallery")} sx={{...styledMenuItem, color: location.split('/')[1] === "gallery" ? '#FFC800' : 'fff',}}>Galería</Typography> */}
-          <Typography variant="paragraphLight" onClick={()=>navigate("/contacto")} sx={{...styledMenuItem, color : location.split('/')[1] === "contacto" ? '#FFC800' : 'fff',}}>Contacto</Typography>
+          <Typography variant="paragraphLight" onClick={()=>navigate("/salidas")} sx={{...styledMenuItem, color: location.split('/')[1] === "salidas" ? palette.primary.main : palette.tertiary[50] ,}}>Salidas</Typography>
+          <Typography variant="paragraphLight" onClick={()=>navigate("/about")} sx={{...styledMenuItem, color: location.split('/')[1] === "about" ? palette.primary.main : palette.tertiary[50] ,}}>Quienes somos</Typography>
+          <Typography variant="paragraphLight" onClick={()=>navigate("/destinos")} sx={{...styledMenuItem, color : location.split('/')[1] === "destinos" ? palette.primary.main : palette.tertiary[50] ,}}>Destinos</Typography>
+          {/* <Typography variant="paragraphLight" onClick={()=>navigate("/gallery")} sx={{...styledMenuItem, color: location.split('/')[1] === "gallery" ? palette.primary.main : palette.tertiary[50] ,}}>Galería</Typography> */}
+          <Typography variant="paragraphLight" onClick={()=>navigate("/contacto")} sx={{...styledMenuItem, color : location.split('/')[1] === "contacto" ? palette.primary.main : palette.tertiary[50] ,}}>Contacto</Typography>
 
           {isAdmin && (
             <Typography
@@ -150,11 +149,11 @@ const NavBar = ({ isAdmin = false, setIsOpenDrawer, isOpenDrawer = false, isDraw
           }}
           style={{ textDecoration: "none" }}
         >
-          <Typography onClick={()=>handleNavigation("/salidas")} variant="paragraphLight" sx={{...styledMenuItem, color: location.split('/')[1] === "salidas" ? '#FFC800' : 'fff',}}>Salidas</Typography>
-          <Typography onClick={()=>handleNavigation("/about")} variant="paragraphLight" sx={{...styledMenuItem, color: location.split('/')[1] === "about" ? '#FFC800' : 'fff',}}>Quienes somos</Typography>
-          <Typography onClick={()=>handleNavigation("/destinos")} variant="paragraphLight" sx={{...styledMenuItem, color : location.split('/')[1] === "destinos" ? '#FFC800' : 'fff',}}>Destinos</Typography>
-          {/* <Typography onClick={()=>handleNavigation("/gallery")} variant="paragraphLight" sx={{...styledMenuItem, color: location.split('/')[1] === "gallery" ? '#FFC800' : 'fff',}}>Galería</Typography> */}
-          <Typography onClick={()=>handleNavigation("/contacto")} variant="paragraphLight" sx={{...styledMenuItem, color : location.split('/')[1] === "contacto" ? '#FFC800' : 'fff',}}>Contacto</Typography>
+          <Typography onClick={()=>handleNavigation("/salidas")} variant="paragraphLight" sx={{...styledMenuItem, color: location.split('/')[1] === "salidas" ? palette.primary.main : palette.tertiary[50],}}>Salidas</Typography>
+          <Typography onClick={()=>handleNavigation("/about")} variant="paragraphLight" sx={{...styledMenuItem, color: location.split('/')[1] === "about" ? palette.primary.main : palette.tertiary[50],}}>Quienes somos</Typography>
+          <Typography onClick={()=>handleNavigation("/destinos")} variant="paragraphLight" sx={{...styledMenuItem, color : location.split('/')[1] === "destinos" ? palette.primary.main : palette.tertiary[50],}}>Destinos</Typography>
+          {/* <Typography onClick={()=>handleNavigation("/gallery")} variant="paragraphLight" sx={{...styledMenuItem, color: location.split('/')[1] === "gallery" ? palette.primary.main : palette.tertiary[50],}}>Galería</Typography> */}
+          <Typography onClick={()=>handleNavigation("/contacto")} variant="paragraphLight" sx={{...styledMenuItem, color : location.split('/')[1] === "contacto" ? palette.primary.main : palette.tertiary[50],}}>Contacto</Typography>
 
           {isAdmin && (
             <Typography
@@ -171,20 +170,15 @@ const NavBar = ({ isAdmin = false, setIsOpenDrawer, isOpenDrawer = false, isDraw
         </Box>}
         {!isMobileTablet && 
         (!isAuthenticated ? (
-          // <Link to="/login">
           <>
-            <Button
-              variant="contained"
-              color="grayButton"
-              onClick={handleClick}
-              sx={{ color: "black" }}
-            >
-              LOGIN
-            </Button>
+            <WhiteButton
+              title="LOGIN"
+              onClick={() => setIsOpenLogin(true)}
+              sx={{ position: "absolute", top: "1.5rem", right: "1rem" }}
+            />
             <PopoverLogin isOpenLogin={isOpenLogin} handleClose={handleClose} />
           </>
         ) : (
-          // </Link>
           <Box sx={{ display: "flex", justifyContent: "center", alignItems: "center" }}>
             <UserPopover setIsOpenDrawer={setIsOpenDrawer}/>
           </Box>

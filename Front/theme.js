@@ -1,3 +1,4 @@
+// src/theme.js
 import createTheme from "@mui/material/styles/createTheme";
 import {
   customPalette,
@@ -20,19 +21,20 @@ const theme = createTheme({
   },
   palette: {
     // generales
-    primary: {
-      main: customPalette.primary.main,
-    },
-    secondary: {
-      main: customPalette.secondary.main,
-    },
-    accent: {
-      main: customPalette.accent.main,
-    },
+    // primary: {
+    //   main: customPalette.primary.main,
+    // },
+    // secondary: {
+    //   main: customPalette.secondary.main,
+    // },
+    // accent: {
+    //   main: customPalette.accent.main,
+    // },
     // botones
     yellowButton: {
       main: customPalette.primary.main,
       dark: customPalette.primary.dark,
+      contrastText: customPalette.tertiary[950],
     },
     brownButton: {
       main: customPalette.secondary.main,
@@ -48,12 +50,23 @@ const theme = createTheme({
       dark: customPalette.accent.darkest2,
       contrastText: customPalette.accent.light,
     },
+    lightGreenButton: {
+      main: customPalette.accent.main,
+      dark: customPalette.accent.dark,
+      contrastText: customPalette.tertiary[950],
+    },
     transparentButton: {
-      main: "rgba(0, 0, 0, 0)",
+      main: customPalette.tertiary[50],
       dark: "rgba(100, 100, 100, 0.1)",
       light: "rgba(200, 200, 200, 0.25)",
-      contrastText: customPalette.accent.darkest
+      contrastText: customPalette.tertiary[950]
     },
+    whiteButton: {
+      main: customPalette.tertiary[50],
+      dark: customPalette.tertiary[300],
+      contrastText: customPalette.tertiary[950],
+    },
+    ...customPalette,
   },
   typography: {
     htmlFontSize: 16, // Asigna 16px a 1rem por defecto

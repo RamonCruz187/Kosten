@@ -1,5 +1,5 @@
 // src/modules/Departures/components/DepartureCard.jsx
-import { Button, Card, Stack, Typography, Box, Modal, useTheme, useMediaQuery} from "@mui/material";
+import { Card, Stack, Typography, Box, Modal, useTheme, useMediaQuery} from "@mui/material";
 import { fCurrency } from "../../../shared/utils/formatNumber.js";
 import { iconsCardPackages } from "../utils/utils.jsx";
 import { useState, useContext } from "react";
@@ -13,6 +13,8 @@ dayjs.locale('es');
 
 import { formatDepartureDate } from "@/shared/utils/formatDeparture.js";
 import ReservationModal from "./ReservationModal.jsx";
+import { ColorButton } from "@/shared/components/buttons/ColorButton.jsx";
+import { OnlyTextButton } from "@/shared/components/buttons/OnlyTextButton.jsx";
 
 export const DepartureCard = ({ pack }) => {
   const [openModal, setOpenModal] = useState(false);
@@ -21,6 +23,7 @@ export const DepartureCard = ({ pack }) => {
   const [departureSelected, setDepartureSelected] = useState("");
   const navigate = useNavigate();
   const theme = useTheme();
+  const { palette } = theme;
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
 
   const handleCardClick = () => {
@@ -48,7 +51,7 @@ export const DepartureCard = ({ pack }) => {
             right: '16px', 
             display: "grid",
             placeItems: "center",
-            backgroundColor: "white", 
+            backgroundColor: palette.tertiary.light, 
             fontSize: "1.5rem", 
             cursor: "pointer", 
             zIndex: 10,
@@ -165,39 +168,32 @@ export const DepartureCard = ({ pack }) => {
               </Typography>
 
               { pack?.departures?.length > 0
-              ? <Button variant="contained" size="small" color="brownButton" onClick={ ()=>{
-                state.user_auth.token
-                ? (setOpenModal(true)) 
-                : (setOpenSessionRequestModal(true))
-              }}
-              >
-                Reservar
-              </Button>
-              : <Button 
-                  variant="contained" 
-                  size="small" 
-                  // color="brownButton" 
+              ? <ColorButton
+                type="brownButton"
+                title="Reservar"
+                onClick={ ()=>{
+                  state.user_auth.token
+                  ? (setOpenModal(true)) 
+                  : (setOpenSessionRequestModal(true))
+                }}
+              />
+              : <ColorButton 
+                  type="lightGreenButton" 
                   onClick={() => navigate('/contacto')}
-              >
-                Sé primero
-              </Button>}
+                  title="Consultar"
+                />
+              }
             </Box>
           </Box>
         </Stack>
-        <Button
-          variant="contained"
-          size="large"
-          color=""
+        <OnlyTextButton
           sx={{
             width: "100%",
-            borderRadius: 0, 
-            marginTop: "auto", 
+            marginBottom: "1rem",
           }}
           onClick={handleCardClick} 
-        >
-          Ver más
-        </Button>
-
+          title="Ver más"
+        />
       </Card>
       <SessionRequestModal
         openSessionRequestModal={openSessionRequestModal}

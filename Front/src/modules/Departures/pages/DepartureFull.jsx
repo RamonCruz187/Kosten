@@ -1,8 +1,8 @@
+// src/modules/Departures/pages/DepartureFull.jsx
 import { useEffect, useState, useContext } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { 
   Box,
-  Button, 
   Typography,
   Alert,
   CircularProgress
@@ -16,6 +16,7 @@ import { GlobalContext } from '../../../shared/context/GlobalContext';
 import CommentModal from '../components/CommentModal';
 import { getPackageCommentsById } from "../../../api/commentApi";
 import  CommentsBox  from '../components/CommentsBox';
+import { CallToActionButton } from "@/shared/components/buttons/CallToActionButton";
 
 const styles = {
   mainContainer: {
@@ -113,8 +114,6 @@ const DepartureFull = () => {
     );
   }
 
-  
-
   if (!packToUse) {
     navigate("/salidas");
     return null;
@@ -128,30 +127,38 @@ const DepartureFull = () => {
           ...styles.mainContainer,
           height: styles.heightResponsive,
           backgroundImage: `url(${packToUse.bannerPhoto.url})`,
+          position: 'relative'
         }}
       >
-        <Box sx={{ textAlign: "center", color: "white", display: "flex", flexDirection: "column", justifyContent: "center" }}>
+        <Box sx={{
+          backgroundColor: 'rgba(0, 0, 0, 0.5)',
+          width: '100%',
+          height: '100%',
+          position: 'absolute'
+        }}
+        />
+        <Box sx={{ 
+          textAlign: "center", 
+          color: "white", 
+          display: "flex", 
+          flexDirection: "column", 
+          justifyContent: "center", 
+          alignItems: "center",
+          zIndex: 5
+        }}>
           <Typography
             fontWeight="700"
-            variant="h2"
-            sx={{ mb: 2, fontSize: { xs: "1rem", sm: "1.5rem", md: "2rem" }}}
+            variant="titleH1"
+            color="text.light"
+            sx={{ mb: 2, fontSize: { xs: "1.8rem", sm: "2.2rem", md: "2.5", lg: "2.8rem", xl: "3rem" }}}
           >
             Trekking en {packToUse.name}
           </Typography>
-          <Button 
-            variant="contained" 
-            sx={{ bgcolor: "#72CCA0", alignSelf: "center", height: "25px", fontSize: "small",
-              '&:hover': {
-                backgroundColor: '#00BD7E',
-              },
-              '&:active': {
-                backgroundColor: '#00BD7E',
-              },
-            }}
+          <CallToActionButton
+            text="Comenta tu experiencia"
             onClick={handleCommentClick}
-          >
-            Comenta tu experiencia
-          </Button>
+            islarge={false}
+          />
         </Box>
       </Box>
 

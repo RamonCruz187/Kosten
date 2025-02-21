@@ -30,7 +30,7 @@ import { CreateEditPackageDestination } from "@/modules/admin/pages/CreateEditPa
 import { CreateEditDepartures } from "@/modules/admin/pages/CreateEditDepartures.jsx";
 const About = lazy(() => import("../components/Home/About"));
 const TourDestinationView = lazy(() => import("../components/TourDestination/TourDestinationView.jsx"));
-const TourDestinationDetail = lazy(() => import("../components/TourDestination/TourDestinationDetail.jsx"));
+// const TourDestinationDetail = lazy(() => import("../components/TourDestination/TourDestinationDetail.jsx"));
 const ContactView = lazy(() => import("../components/Contact/ContactView.jsx"));
 
 const AppRoutes = () => (
@@ -48,7 +48,7 @@ const AppRoutes = () => (
           <Route path="/about" element={<About />} />
           <Route path="/salidas/:id" element={<DepartureFull />} />
           <Route path="/destinos" element={<TourDestinationView />} />
-          <Route path="/destinos/:id" element={<TourDestinationDetail />} />
+          <Route path="/destinos/:id" element={<DepartureFull />} />
           <Route path="/contacto" element={<ContactView />} />
           <Route path="/perfil" element={<Perfil />} />
           <Route path="/admin" element={<UserAdminPrivateRoutes><AdminLayout /></UserAdminPrivateRoutes>}>
