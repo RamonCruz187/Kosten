@@ -31,6 +31,7 @@ import { GlobalContext } from "@/shared/context/GlobalContext";
 import { PackagesBreadCrumbs } from "../components/PackagesBreadCrumbs";
 import { hasChanges } from "@/shared/utils/compareObj";
 import { ModalWarning } from "../components/ModalWarning";
+import { checkSteps } from "@/shared/utils/checkStepsPackage";
 
 export const CreateEditPackageBasic = () => {
   const { state: stateContext } = useContext(GlobalContext);
@@ -58,14 +59,15 @@ export const CreateEditPackageBasic = () => {
   const [newIdPackage, setNewIdPackage] = useState(null);
   const [openDialog, setOpenDialog] = useState(false);
   const [idToDelete, setIdToDelete] = useState(null);
+  const [completeSteps, setCompleteSteps] = useState({});
 
   const params = useParams();
   const navigate = useNavigate();
 
   // el estado de Incompleto lo va a tomar si el package tiene vacia los campos del destino
   const states = [
-    { value: true, label: "Activo" },
-    { value: false, label: "Inactivo" },
+    { value: true, label: "Disponible" },
+    { value: false, label: "No disponible" },
   ];
 
   const paqueteSchema = Yup.object().shape({
@@ -119,6 +121,7 @@ export const CreateEditPackageBasic = () => {
       // Update all states in one place
       setPackageData(packageInfo);
       setImagePreview(packageInfo.bannerPhoto?.url || "");
+      setCompleteSteps(checkSteps(packageInfo));
       
       // Update formik values
       formik.setValues({
@@ -313,7 +316,7 @@ export const CreateEditPackageBasic = () => {
       component="main"
       sx={{ display: "flex", flexDirection: "column", gap: 2 }}
     >
-			<PackagesBreadCrumbs step={1} />
+			<PackagesBreadCrumbs step={1} completeSteps={completeSteps} />
       <Box
         component="form"
         onSubmit={formik.handleSubmit}

@@ -9,10 +9,12 @@ import {
 
 export const OnlyTextButton = ({
   onClick = () => {},
-  title = "Reservar",
 	type = "green",
+  text = "",
+  fetchingText = "",
   isFetching = false,
   icon = null,
+  disabled = false,
   sx = {},
 }) => {
   const theme = useTheme();
@@ -24,9 +26,11 @@ export const OnlyTextButton = ({
       size="small"
       color=""
       onClick={onClick}
+      disabled={disabled || isFetching}
       sx={{
         display: "flex",
         alignItems: "center",
+        gap: "0.5rem",
         boxShadow: "none",
         color: palette.tertiary[900],
         "&:hover": {
@@ -38,7 +42,6 @@ export const OnlyTextButton = ({
     >
       {icon && (
         <Box sx={{
-            marginRight: "0.5rem",
             display: "flex",
             justifyContent: "center",
             alignItems: "center",
@@ -50,7 +53,7 @@ export const OnlyTextButton = ({
       <Typography
         sx={{ fontSize: { xs: "0.8rem", sm: "0.9rem" }, color: "inherit" }}
       >
-        {title}
+        {isFetching && fetchingText ? fetchingText : text}
       </Typography>
       {isFetching && <CircularProgress size={20} sx={{ color: "inherit" }} />}
     </Button>

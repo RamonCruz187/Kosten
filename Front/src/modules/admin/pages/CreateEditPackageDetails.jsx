@@ -26,6 +26,7 @@ import { NotificationService } from "@shared/services/notistack.service.jsx";
 import { RiEditLine } from 'react-icons/ri';
 import { PackagesBreadCrumbs } from "../components/PackagesBreadCrumbs";
 import { hasChanges } from "@/shared/utils/compareObj";
+import { checkSteps } from "@/shared/utils/checkStepsPackage";
 
 const niveles = [
   "Principiante",
@@ -83,6 +84,7 @@ export const CreateEditPackageDetails = () => {
   const [imagePreview, setImagePreview] = useState("");
   const [initialValues, setInitialValues] = useState({});
   const [formModified, setFormModified] = useState(false);
+  const [completeSteps, setCompleteSteps] = useState({});
 
   const getPackById = useCallback(
 		async (id) => {
@@ -90,6 +92,8 @@ export const CreateEditPackageDetails = () => {
       try {
         const { data: dataPackages } = await getPackageById(id);
         setPackage(dataPackages.data);
+        setCompleteSteps(checkSteps(dataPackages.data));
+
         formik.setValues({
 					id: +params.id,
 					idCategory: dataPackages.data.category.id,
@@ -246,7 +250,7 @@ export const CreateEditPackageDetails = () => {
       component="main"
       sx={{ display: "flex", flexDirection: "column", gap: 2 }}
     >
-			<PackagesBreadCrumbs step={2} />
+			<PackagesBreadCrumbs step={2} completeSteps={completeSteps}/>
       <Box
         component="form"
         onSubmit={formik.handleSubmit}

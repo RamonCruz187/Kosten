@@ -1,5 +1,5 @@
 // Front/src/modules/admin/components/DepartureForm.jsx
-import { Box, Button, CircularProgress, TextField, Typography } from "@mui/material";
+import { Box, TextField, Typography, useTheme } from "@mui/material";
 import { RiDeleteBin6Line } from "react-icons/ri";
 
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
@@ -20,8 +20,9 @@ import {
   updateDeparture,
 } from "@/api/departuresApi";
 import { NotificationService } from "@/shared/services/notistack.service";
-import { useNavigate } from "react-router-dom";
 import { hasChanges } from "@/shared/utils/compareObj";
+import { WhiteButton } from "@/shared/components/buttons/WhiteButton";
+import { ColorButton } from "@/shared/components/buttons/ColorButton";
 
 const DepartureSchema = Yup.object().shape({
   startDate: Yup.string()
@@ -36,15 +37,15 @@ const DepartureSchema = Yup.object().shape({
 export const DepartureForm = ({
   departureData = {},
   package_Id = "",
-  // allStaff = [],
   setOpenModal = () => {},
-  // onActionComplete = () => {},
+  refetch = () => {},
   isCreate = false,
   index = "",
 }) => {
   const { startDate, endDate } = departureData;
 
-  const navigate = useNavigate();
+  const theme = useTheme();
+  const { palette } = theme;
 
   // const [formData, setFormData] = useState({
     const formik = useFormik({
@@ -58,8 +59,6 @@ export const DepartureForm = ({
           ? typeof endDate === "string" ? dayjs(departureData.endDate, "YYYY-MM-DD").format("DD-MM-YYYY") : `${endDate[2]}-${startDate[1] < 10 ? "0" : ""}${endDate[1]}-${endDate[0]}`
           : "",
         price: departureData?.price || "",
-        // quota: departureData?.quota || '',
-        // guide: departureData?.guide || '',
         meetingPlace: "string",
         finishPlace: "string",
         isActive: departureData?.isActive || true,
@@ -78,9 +77,6 @@ export const DepartureForm = ({
   const [isFetching, setIsFetching] = useState(false);
   const [responseData, setResponseData] = useState(null);
 
-  const refreshPage = () => {
-    navigate(`/admin/salidas/${package_Id}`, { replace: true, state: { refresh: Date.now() } });
-  }
   const handleDateChange = (event, field) => {
     formik.setFieldValue(field, dayjs(event.$d).format("DD-MM-YYYY"));
   };
@@ -97,10 +93,10 @@ export const DepartureForm = ({
     setIsFetching(true);
     try {
       const response = await createDeparture(body); // Axios devuelve 'data' directamente
+      refetch();
       setResponseData(response);
       NotificationService.success("Las salidas fueron cargadas con éxito");
       console.log("Las salidas fueron cargadas con éxito");
-      refreshPage();
     } catch (error) {
       console.error(error);
       NotificationService.error("Error al cargar las salidas");
@@ -116,10 +112,9 @@ export const DepartureForm = ({
     setIsFetching(true);
     try {
       const response = await updateDeparture(body); // Axios devuelve 'data' directamente
-      console.log("data", response?.data?.data?.content);
       setResponseData(response);
       NotificationService.success("La salida fueron actualizada con éxito");
-      refreshPage();
+      refetch();
     } catch (error) {
       console.error(error);
       NotificationService.error("Error al cargar la salida");
@@ -132,10 +127,9 @@ export const DepartureForm = ({
     setIsFetching(true);
     try {
       const response = await deleteDeparture(body); // Axios devuelve 'data' directamente
-      console.log("data", response?.data?.data?.content);
       setResponseData(response);
       NotificationService.success("La salida fueron borrada con éxito");
-      refreshPage();
+      refetch();
     } catch (error) {
       console.error(error);
       NotificationService.error("Error al borrar la salida");
@@ -146,8 +140,6 @@ export const DepartureForm = ({
 
   const handleDelete = () => {
     fetchDeleteDepartures(formik.values?.id);
-    // window.location.reload(); // No funciona
-    navigate(`/admin/salidas/${package_Id}`);
   };
 
   useEffect(() => {
@@ -157,9 +149,9 @@ export const DepartureForm = ({
   }, [formik.values]);
 
   return (
-    <Box component="form" sx={{ backgroundColor: "#F3F3F3", padding: "20px" }}>
-      <Box sx={{ marginBottom: "20px" }}>
-        <Typography variant="titleH3" sx={{ color: "#000" }}>
+    <Box component="form" sx={{ backgroundColor: palette.tertiary.light, padding: "20px", marginBottom: "2rem" }}>
+      <Box sx={{ marginBottom: "10px" }}>
+        <Typography variant="titleH3" sx={{ color: palette.text.main }}>
           {!isCreate ? `Salida ${index + 1}` : "Nueva Salida"}
         </Typography>
       </Box>
@@ -198,7 +190,7 @@ export const DepartureForm = ({
           </LocalizationProvider>
           <Typography
             variant="titleH3"
-            sx={{ display: { xs: "none", sm: "block" }, color: "#000" }}
+            sx={{ display: { xs: "none", sm: "block" }, color: palette.text.main }}
           >
             -
           </Typography>
@@ -252,69 +244,33 @@ export const DepartureForm = ({
           }}
         >
           {!isCreate && (
-            <Button
-              type="button"
+            <>
+            <WhiteButton
+              onClick={handleDelete}
+              isFetching={isFetching}
+              icon={<RiDeleteBin6Line size={20} />}
+            />
+            <WhiteButton
               onClick={() => setOpenModal(departureData)}
-              fullWidth
-              variant="contained"
-              disabled={isFetching}
-              sx={{
-                mt: 3,
-                mb: 2,
-                backgroundColor: "#9E9E9E",
-                boxShadow: "0px 4px 4px rgba(0, 0, 0, 0.25)",
-                cursor: "pointer",
-              }}
-            >
-              Ver inscriptos
-            </Button>
+              isFetching={isFetching}
+              text="Ver inscriptos"
+              fetchingText="Inscriptos"
+            />
+            </>
           )}
-          <Button
-            // type="submit"
-            type="button"
+          <ColorButton
+            type="greenButton"
             onClick={formik.handleSubmit}
-            variant="contained"
-            color="green"
+            text= {isCreate ? "Crear" : "Guardar"}
+            isFetching={isFetching}
             disabled={
               !formModified ||
-              isFetching ||
               !formik.isValid
             }
             sx={{
-              mt: 3,
-              mb: 2,
               width: isCreate ? "70%" : "30%",
-              backgroundColor: formModified ? "#72CCA0" : "#E0E0E0",
-              cursor: formModified ? "pointer" : "not-allowed",
-              boxShadow: "0px 4px 4px rgba(0, 0, 0, 0.25)",
             }}
-          >
-              {isFetching ? (
-                <>
-                  <CircularProgress size={24} color="inherit" />
-                  {isCreate ? "Creando..." : "Guardando..."}
-                </>
-              ) : (
-                isCreate ? "Crear" : "Guardar"
-              )}
-          </Button>
-          {!isCreate && (
-            <Button
-              type="button"
-              onClick={handleDelete}
-              fullWidth
-              variant="contained"
-              color="transparent"
-              disabled={isFetching}
-              sx={{
-                mt: 3,
-                mb: 2,
-                boxShadow: "0px 4px 4px rgba(0, 0, 0, 0.25)",
-              }}
-            >
-              <RiDeleteBin6Line size={24} />
-            </Button>
-          )}
+          />
         </Box>
       </Box>
     </Box>

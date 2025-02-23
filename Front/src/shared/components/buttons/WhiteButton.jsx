@@ -3,9 +3,11 @@ import { Box, Button, CircularProgress, Typography, useTheme } from "@mui/materi
 
 export const WhiteButton = ({
   onClick = () => {},
-  title = "Reservar",
+  text = "",
+  fetchingText = "",
   isFetching = false,
 	icon = null,
+  disabled = false,
   sx = {},
 }) => {
 	const theme = useTheme();
@@ -17,9 +19,11 @@ export const WhiteButton = ({
       size="small"
       color="whiteButton"
       onClick={onClick}
+      disabled={disabled || isFetching}
       sx={{
 				display: "flex",
 				alignItems: "center",
+        gap: "0.5rem",
 				border: `1px solid ${palette.tertiary[700]}`,
 				boxShadow: "0px 4px 4px rgba(0, 0, 0, 0.25)",
         ...sx,
@@ -28,7 +32,6 @@ export const WhiteButton = ({
       {icon && (
         <Box
           sx={{
-            marginRight: "0.5rem",
             display: "flex",
             justifyContent: "center",
             alignItems: "center",
@@ -37,7 +40,9 @@ export const WhiteButton = ({
           {icon}
         </Box>
       )}
-      <Typography sx={{fontSize: { xs: "0.8rem", sm: "0.9rem" },}}>{title}</Typography>
+      <Typography sx={{fontSize: { xs: "0.8rem", sm: "0.9rem" },}}>
+        {isFetching && fetchingText ? fetchingText : text }
+      </Typography>
       {isFetching && <CircularProgress size={20} sx={{ color: palette.tertiary[700] }} />}
     </Button>
   );

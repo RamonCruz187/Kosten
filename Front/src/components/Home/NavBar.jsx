@@ -75,7 +75,7 @@ const NavBar = ({ isAdmin = false, setIsOpenDrawer, isOpenDrawer = false, isDraw
       {isDrawer && isMobileTablet && (
         !isAuthenticated ?
           <WhiteButton
-            title="LOGIN"
+            text="LOGIN"
             onClick={() => setIsOpenLogin(true)}
             sx={{ position: "absolute", top: "1.5rem", right: "1rem" }}
           />
@@ -172,7 +172,7 @@ const NavBar = ({ isAdmin = false, setIsOpenDrawer, isOpenDrawer = false, isDraw
         (!isAuthenticated ? (
           <>
             <WhiteButton
-              title="LOGIN"
+              text="LOGIN"
               onClick={() => setIsOpenLogin(true)}
               sx={{ position: "absolute", top: "1.5rem", right: "1rem" }}
             />
