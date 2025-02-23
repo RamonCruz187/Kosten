@@ -170,7 +170,7 @@ export const DepartureCard = ({ pack }) => {
               { pack?.departures?.length > 0
               ? <ColorButton
                 type="brownButton"
-                title="Reservar"
+                text="Reservar"
                 onClick={ ()=>{
                   state.user_auth.token
                   ? (setOpenModal(true)) 
@@ -178,9 +178,9 @@ export const DepartureCard = ({ pack }) => {
                 }}
               />
               : <ColorButton 
-                  type="lightGreenButton" 
+                  type="greenButton" 
                   onClick={() => navigate('/contacto')}
-                  title="Consultar"
+                  text="Consultar"
                 />
               }
             </Box>
@@ -192,7 +192,7 @@ export const DepartureCard = ({ pack }) => {
             marginBottom: "1rem",
           }}
           onClick={handleCardClick} 
-          title="Ver más"
+          text="Ver más"
         />
       </Card>
       <SessionRequestModal

@@ -120,12 +120,12 @@ export const AdminDepartureCard = ({ departure }) => {
         >
           {departure?.departures?.length === 0 ? (
             <WhiteButton
-              title="AGREGAR SALIDAS"
+              text="AGREGAR SALIDAS"
               icon={<RiAddLargeLine />}
             />
           ) : (
             <WhiteButton
-              title="EDITAR"
+              text="EDITAR"
               icon={<RiEditLine size={18} />}
             />
           )}
