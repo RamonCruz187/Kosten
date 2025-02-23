@@ -4,8 +4,10 @@ import { Button, CircularProgress } from "@mui/material";
 export const ColorButton = ({
   type = "brownButton", //lightGreenButton, greenButton, yellowButton, brownButton
   onClick = () => {},
-  title = "Reservar",
+  text = "",
+  fetchingText = "",
   isFetching = false,
+  disabled = false,
   sx = {},
 }) => {
   return (
@@ -14,11 +16,15 @@ export const ColorButton = ({
       size="small"
       color={type}
       onClick={onClick}
+      disabled={disabled || isFetching}
       sx={{
+        display: "flex",
+        alignItems: "center",
+        gap: "0.5rem",
         ...sx,
       }}
     >
-      {title}
+      {isFetching && fetchingText ? fetchingText : text }
       {isFetching && <CircularProgress size={20} sx={{ color: "white" }} />}
     </Button>
   );
