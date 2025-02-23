@@ -46,8 +46,8 @@ const theme = createTheme({
       dark: customPalette.tertiary.dark,
     },
     greenButton: {
-      main: customPalette.accent.darkest,
-      dark: customPalette.accent.darkest2,
+      main: customPalette.accent.darkest2,
+      dark: customPalette.accent.darkest3,
       contrastText: customPalette.accent.light,
     },
     lightGreenButton: {
