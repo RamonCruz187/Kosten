@@ -3,7 +3,7 @@ import { Box, Divider, styled, Typography, useTheme } from "@mui/material";
 import { LuCheck } from "react-icons/lu";
 import { useNavigate, useParams } from "react-router-dom";
 
-export const PackagesBreadCrumbs = ({ step = 1 }) => {
+export const PackagesBreadCrumbs = ({ step = 1, completeSteps = { isCompleteTwo: false, isCompleteThree: false} }) => {
   const theme = useTheme();
   const { palette } = theme;
   const params = useParams();
@@ -32,13 +32,13 @@ export const PackagesBreadCrumbs = ({ step = 1 }) => {
         <StyledPoint
           sx={{
             color: step >= 1 ? palette.primary.main : palette.grey[50],
-            backgroundColor: step === 1 ? "var(--bg-hover-links)" : step > 1 ? "#72CCA0" : palette.grey[300],
+            backgroundColor: step === 1 ? palette.primary.main : step > 1 ? palette.accent.main : palette.grey[300],
             justifyContent: 'center',
             alignItems: 'center'
           }}
         >
-          {step > 1 
-            ? <LuCheck size={24} color="#080808"/> 
+          {step > 1 || params?.id
+            ? <LuCheck size={step > 1 ? 24 : 20} color={palette.text.main}/> 
             : <Typography variant="titleH3">1</Typography>
           }
           
@@ -62,10 +62,10 @@ export const PackagesBreadCrumbs = ({ step = 1 }) => {
         <StyledPoint
           sx={{
             color: step >= 2 ? palette.primary.main : palette.grey[50],
-            backgroundColor: step === 2 ? "var(--bg-hover-links)" : step > 2 ? "#72CCA0" : palette.grey[300],
+            backgroundColor: step === 2 ? palette.primary.main : step > 2 && completeSteps.isCompleteTwo ? palette.accent.main : palette.grey[300],
           }}
         >
-          <Typography variant="titleH3">{step > 2 ? <LuCheck /> : 2}</Typography>
+          <Typography variant="titleH3">{completeSteps.isCompleteTwo ? <LuCheck size={step > 2 ? 24 : 20}/> : 2}</Typography>
         </StyledPoint>
         <Typography variant="callToAction" sx={{ color: palette.grey[50] }}>
           Paquete
@@ -86,10 +86,10 @@ export const PackagesBreadCrumbs = ({ step = 1 }) => {
         <StyledPoint
           sx={{
             color: step >= 3 ? palette.primary.main : palette.grey[50],
-            backgroundColor: step === 3 ? "var(--bg-hover-links)" : step > 3 ? "#72CCA0" : palette.grey[300],
+            backgroundColor: step === 3 ? palette.primary.main : step > 3 ? palette.accent.main : palette.grey[300],
           }}
         >
-          <Typography variant="titleH3">{step > 3 ? <LuCheck /> : 3}</Typography>
+          <Typography variant="titleH3">{completeSteps.isCompleteThree ? <LuCheck size={step > 3 ? 24 : 20}/> : 3}</Typography>
         </StyledPoint>
         <Typography variant="callToAction" sx={{ color: palette.grey[50] }}>
           Destino
