@@ -91,7 +91,8 @@ export const AdminPackages = () => {
                 category={categories[index]} 
                 destination={item} 
                 key={item.id} 
-                route='/admin/paquetes/basico/' 
+                route='/admin/paquetes/basico/'
+                isAdmin={true}
               />
             ))
           ))}
