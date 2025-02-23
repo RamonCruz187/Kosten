@@ -25,6 +25,7 @@ import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { NotificationService } from "@shared/services/notistack.service.jsx";
 import { PackagesBreadCrumbs } from "../components/PackagesBreadCrumbs";
 import { hasChanges } from "@/shared/utils/compareObj";
+import { checkSteps } from "@/shared/utils/checkStepsPackage";
 
 const paqueteSchema = Yup.object().shape({
   locationInfo: Yup.string()
@@ -55,12 +56,14 @@ export const CreateEditPackageDestination = () => {
   });
   const [formModified, setFormModified] = useState(false);
   const [initialValues, setInitialValues] = useState({});
+  const [completeSteps, setCompleteSteps] = useState({});
 
   // traer info del paquete
   const getPackById = useCallback(async (id) => {
     try {
       const { data: dataPackages } = await getPackageById(id);
       setPackage(dataPackages.data);
+      setCompleteSteps(checkSteps(dataPackages.data));
       setPackageValues({
         locationInfo: dataPackages.data.locationInfo,
         historyInfo: dataPackages.data.historyInfo,
@@ -252,7 +255,7 @@ export const CreateEditPackageDestination = () => {
       component="main"
       sx={{ display: "flex", flexDirection: "column", gap: 2 }}
     >
-			<PackagesBreadCrumbs step={3} />
+			<PackagesBreadCrumbs step={3} completeSteps={completeSteps}/>
       <Box
         component="form"
         onSubmit={formik.handleSubmit}
