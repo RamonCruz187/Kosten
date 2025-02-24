@@ -156,8 +156,9 @@ const theme = createTheme({
       styleOverrides: {
         // sobreescribe estilos de botones
         root: {
-          borderRadius: 8,
-          padding: ".5rem 1rem",
+          // height: '30px',
+          borderRadius: '8px',
+          // padding: ".5rem .7rem",
           letterSpacing: customFonts.letter.wide,
           width: "fit-content",
           fontFamily: customFonts.family.catamaran,
