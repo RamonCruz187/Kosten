@@ -27,7 +27,7 @@ const AdminComments = () => {
 
   const [isFetching, setIsFetching] = useState(false);
   const [tabValue, setTabValue] = useState("Todos");
-  const [isVisibleSelected, setIsVisibleSelected] = useState(false);
+  const [isVisibleSelected, setIsVisibleSelected] = useState({});
   const [allComments, setAllComments] = useState([]);
   const [filteredComments, setFilteredComments] = useState([]);
 
@@ -250,14 +250,14 @@ const AdminComments = () => {
               </Box>
               <Typography variant="textBoxFill"
                 sx={{fontWeight: 600}}
-              >Nombre de #id{comment?.userId}</Typography>
+              >{comment?.username}</Typography>
               <Typography variant="textBoxFill">
                 {dayjs(comment?.dateCreation).format("D")}{' de '}
                 {dayjs(comment?.dateCreation).format("MMMM")}{' de '}
                 {dayjs(comment?.dateCreation).format("YYYY")}
               </Typography>
             </Box>
-              <Typography variant="textBoxFill" sx={{fontWeight: 600}}>comment?.packageName entre corchetes</Typography>
+              <Typography variant="textBoxFill" sx={{fontWeight: 600}}>{comment?.packageName}</Typography>
               <Typography variant="textBoxFill">{comment?.content}</Typography>
             </Box>
           {/* boton y select */}
@@ -298,7 +298,7 @@ const AdminComments = () => {
                 labelId="isVisible-label"
                 id="isVisible"
                 name="isVisible"
-                value={isVisibleSelected[comment.id] ?? false}
+                value={comment.isVisible ? true : false}
                 onChange={(event) => handleChangeVisible(event, comment)}
                 variant="outlined"
                 displayEmpty // Esto asegura que el marcador de posición sea visible
