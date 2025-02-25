@@ -4,13 +4,13 @@ import {
   Box,
   Tabs,
   Tab,
-  Button,
   Paper,
   Table,
   TableBody,
   TableCell,
   TableRow,
   TablePagination,
+  useTheme,
 } from "@mui/material";
 import { RiEditLine, RiDeleteBin6Line } from "react-icons/ri";
 
@@ -23,8 +23,12 @@ import { getAllStaff } from "@/api/staffApi.js";
 // import { getAllStaff, getStaffById } from "@/api/staffApi.js";
 import { NotificationService } from "@/shared/services/notistack.service.jsx";
 import { deleteUserById, getAllUsers, getUserById } from "@/api/userApi.js";
+import { WhiteButton } from "@/shared/components/buttons/WhiteButton.jsx";
 
 const AdminDashboard = () => {
+  const theme = useTheme();
+  const { palette } = theme;
+
   const [users, setUsers] = useState([]);
   const [userForm, setUserForm] = useState({
     id: null,
@@ -184,9 +188,17 @@ const AdminDashboard = () => {
         <Tabs
           value={filter}
           onChange={handleTabChange}
-          textColor="primary"
-          indicatorColor="primary"
+          textColor= {palette.primary.light}
+          indicatorColor= {palette.primary.light}
           aria-label="filter tabs"
+          sx={{
+            "& .MuiTabs-indicator": {
+              backgroundColor: palette.primary.light,
+            },
+            "& .Mui-selected": {
+              color: palette.primary.light,
+            },
+          }}
         >
           {["Todos", "Activos", "Inactivos", "Staff"].map((tab) => (
             <Tab
@@ -194,30 +206,27 @@ const AdminDashboard = () => {
               label={tab}
               value={tab}
               sx={{
-                color: "grey.300",
+                fontFamily: "Oswald, sans-serif",
+                fontSize: "1.1rem",
+                color: palette.tertiary.light,
                 textTransform: "none",
-                fontWeight: "bold",
               }}
             />
           ))}
         </Tabs>
-        <Box>
-          <Button
-            variant="contained"
-            disabled={isFetching}
-            sx={{ backgroundColor: "grey.200", color: "black", mr: 1 }}
+        <Box display="flex" gap={2}>
+          <WhiteButton
             onClick={handleOpenAddStaff}
-          >
-            Nuevo Staff
-          </Button>
-          <Button
-            variant="contained"
-            disabled={isFetching}
-            sx={{ backgroundColor: "grey.200", color: "black" }}
+            text="Nuevo Staff"
+            isFetching={isFetching}
+            sx={{ borderRadius: "4px" }}
+            />
+          <WhiteButton
             onClick={handleOpenAddUser}
-          >
-            Nuevo Usuario
-          </Button>
+            text="Nuevo Usuario"
+            isFetching={isFetching}
+            sx={{ borderRadius: "4px" }}
+          />
         </Box>
       </Box>
 
@@ -280,31 +289,19 @@ const AdminDashboard = () => {
                       {user.role === "ADMIN" ? "ADMINISTRADOR" : "USUARIO"}
                     </TableCell>
                     <TableCell
-                      sx={{ border: 0, textAlign: "left", flexBasis: "20%" }}
+                      sx={{ border: 0, textAlign: "left", flexBasis: "20%", display: "flex", justifyContent: "flex-end", gap: "0.5rem" }}
                     >
-                      <Button
-                        onClick={() => handleOpenEditUser(user.id)}
-                        disabled={isFetching}
-                        sx={{
-                          backgroundColor: "grey.300",
-                          mr: 1,
-                          "&:hover": { backgroundColor: "grey.400" },
-                        }}
-                      >
-                        <RiEditLine /> EDITAR
-                      </Button>
-                      <Button
+                      <WhiteButton
                         onClick={() => handleDelete(user.id)}
-                        disabled={isFetching}
-                        sx={{
-                          minWidth: "auto",
-                          backgroundColor: "red.500",
-                          color: "white",
-                          "&:hover": { backgroundColor: "red.400" },
-                        }}
-                      >
-                        <RiDeleteBin6Line />
-                      </Button>
+                        isFetching={isFetching}
+                        icon={<RiDeleteBin6Line size={20} />}
+                      />
+                      <WhiteButton
+                        onClick={() => handleOpenEditUser(user.id)}
+                        isFetching={isFetching}
+                        icon={<RiEditLine size={20} />}
+                        text="EDITAR"
+                      />
                     </TableCell>
                   </TableRow>
                 ))}
