@@ -10,7 +10,9 @@ public record CommentDto(
         Boolean isFavorite,
         LocalDateTime dateCreation,
         Long userId,
-        Long packageId
+        String username,
+        Long packageId,
+        String packageName
 ) implements Serializable {
 }
 

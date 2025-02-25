@@ -20,12 +20,15 @@ public interface CommentMapper {
     Comment toEntity(CommentRequestDto commentRequestDto);
 
     @Mapping(source = "user.id", target = "userId")
+    @Mapping(source = "user.name", target = "username")
     @Mapping(source = "packageRef.id", target = "packageId")
+    @Mapping(source = "packageRef.name", target = "packageName")
     CommentDto toDto(Comment comment);
 
     @Mapping(source = "user.id", target = "userId")
     @Mapping(target = "username", expression = "java(comment.getUser() != null ? comment.getUser().getName() : null)")
     @Mapping(source = "packageRef.id", target = "packageId")
+    @Mapping(source = "packageRef.name", target = "packageName")
     CommentDtoResponse toDto1(Comment comment);
 
     @Mapping(source = "user.id", target = "userId")
