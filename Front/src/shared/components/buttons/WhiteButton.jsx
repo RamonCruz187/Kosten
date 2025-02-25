@@ -21,9 +21,9 @@ export const WhiteButton = ({
       onClick={onClick}
       disabled={disabled || isFetching}
       sx={{
+        minWidth: (fetchingText !== "" || text !== "") ? "60px" : "30px",
 				display: "flex",
 				alignItems: "center",
-        gap: "0.5rem",
 				border: `1px solid ${palette.tertiary[700]}`,
 				boxShadow: "0px 4px 4px rgba(0, 0, 0, 0.25)",
         ...sx,
@@ -35,14 +35,16 @@ export const WhiteButton = ({
             display: "flex",
             justifyContent: "center",
             alignItems: "center",
+            marginRight: (fetchingText !== "" || text !== "") ? "0.5rem" : "0",
           }}
         >
           {icon}
         </Box>
       )}
+      {(fetchingText !== "" || text !== "") && 
       <Typography sx={{fontSize: { xs: "0.8rem", sm: "0.9rem" },}}>
         {isFetching && fetchingText ? fetchingText : text }
-      </Typography>
+      </Typography>}
       {isFetching && <CircularProgress size={20} sx={{ color: palette.tertiary[700] }} />}
     </Button>
   );
