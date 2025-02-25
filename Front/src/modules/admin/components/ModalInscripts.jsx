@@ -1,27 +1,51 @@
 // src/modules/admin/components/ModalInscripts.jsx
 import { deleteUserFromDeparture } from "@/api/departureUserApi"
+import { updateUser } from "@/api/userApi"
+import { WhiteButton } from "@/shared/components/buttons/WhiteButton"
 import { NotificationService } from "@/shared/services/notistack.service"
-import { Box, Button, FormControl, IconButton, MenuItem, Modal, Select, Typography } from "@mui/material"
+import { Box, FormControl, IconButton, MenuItem, Modal, Select, Typography, useTheme } from "@mui/material"
 import dayjs from "dayjs"
-import { useState } from "react"
+import { useCallback, useEffect, useState } from "react"
 import { RiCloseLargeLine, RiDeleteBin6Line } from "react-icons/ri"
 
 export const ModalInscripts = ({openModal, setOpenModal, indexDepartures = null}) => {
-  console.log('openModal', openModal)
-  const [isFetching, setFetching] = useState(false);
-  const [payment, setPayment] = useState('');
-	const handleChange = (event, user) => {
-		setPayment(event.target.value);
-    // falta funcionalidad con el endpoint user
-    // {
-    //   "id": 1,
-    //   "payment": true
-    // }
-    console.log('user ID', user.id)
-	}
+  const theme = useTheme();
+  const { palette } = theme;
+
+  const [isFetching, setIsFetching] = useState(false);
+  const [payment, setPayment] = useState({});
+
+  const handleChange = (event, user) => {
+    const newPaymentValue = event.target.value;
+  
+    // Actualizar solo el usuario correspondiente
+    setPayment((prev) => ({
+      ...prev,
+      [user.id]: newPaymentValue,
+    }));
+  
+    handleSubmitEdit(user, newPaymentValue);
+  };
+
+  const handleSubmitEdit = useCallback(async (user, payment) => {
+    setIsFetching(true);
+    const userData = {
+      id: user.id,
+      payment: payment,
+    }
+    try {
+      const response = await updateUser(userData);
+      NotificationService.success("Pago guardado exitosamente", 2000);
+    } catch (error) {
+      console.error(error);
+      NotificationService.error("Error al editar el pago");
+    } finally {
+      setIsFetching(false);
+    }
+  }, []); 
 
   const handleDelete = async(user) => {
-    setFetching(true)
+    setIsFetching(true)
     try {
     await deleteUserFromDeparture(openModal.id, user)
     NotificationService.success('Reserva eliminada correctamente', 2000);
@@ -29,9 +53,20 @@ export const ModalInscripts = ({openModal, setOpenModal, indexDepartures = null}
       console.log(error)
       NotificationService.error('Error al eliminar la reserva', 2000);
     } finally {
-      setFetching(false)
+      setIsFetching(false)
     }
   }
+
+  useEffect(() => {
+    if (openModal && openModal.usersList) {
+      const initialPayments = openModal.usersList.reduce((acc, user) => {
+        acc[user.id] = user.payment ? true : false; // Guardar el estado de pago inicial por ID de usuario
+        return acc;
+      }, {});
+      setPayment(initialPayments);
+    }
+  }, [openModal]);
+  
   return (
     <Modal open={Boolean(openModal)} onClose={() => setOpenModal(null)}>
     <Box sx={{
@@ -65,34 +100,21 @@ export const ModalInscripts = ({openModal, setOpenModal, indexDepartures = null}
       <Box sx={{display: 'flex', alignItems: 'center', gap: '2rem'}}>
         { openModal && openModal.usersList?.length > 0 
         ? 
-         openModal.usersList.map((user, index) => {
-            console.log('user', user)
-            console.log('openModal', openModal)
-          return (
+          openModal.usersList.map((user, index) => (
           <>
           <Box 
             key={`user-${user.id}`}
             sx={{display: 'flex', alignItems: 'center', gap: '2rem'}}
           >
-            <Button 
-              sx={{
-                // width: '40px',
-                // height: '40px',
-                display: 'flex', 
-                justifyContent: 'center', 
-                alignItems: 'center', 
-                cursor: 'pointer', 
-                backgroundColor: '#D9D9D9',
-                border: '1px solid #5C5C5C',
-                boxShadow: '0px 4px 4px rgba(0, 0, 0, 0.25)',
-                padding: '10px',
-              }}
+            <WhiteButton
               onClick={() => handleDelete(user.id)}
-              disabled={isFetching}
-            >
-              <RiDeleteBin6Line size={20}/>
-            </Button>
-  
+              isFetching={isFetching}
+              icon={<RiDeleteBin6Line size={20} />}
+              sx={{
+                backgroundColor: palette.tertiary[200],
+                height: '42px',
+              }}
+            />
   
             <Typography variant="subtitle" sx={{fontWeight: '600'}}>
               {index + 1}
@@ -120,16 +142,30 @@ export const ModalInscripts = ({openModal, setOpenModal, indexDepartures = null}
               id="guide"
               name="guide"
               labelId="guide-label"
-              value={payment}
+              value={payment[user.id] ?? false}
               onChange={(event) => handleChange(event, user)}
-              sx={{backgroundColor: payment ? '#A1DABD' : '' , width: '170px', borderRadius: '8px', borderColor: '#5C5C5C'}}
+              sx={{
+                backgroundColor: payment[user.id] ? palette.accent[200] : '' , 
+                width: '170px', 
+                borderRadius: '8px', 
+                color: palette.text.primary, // Cambia el color del texto
+                '.MuiOutlinedInput-notchedOutline': {
+                  borderColor: palette.text.primary, // Cambia el color del borde
+                },
+                '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
+                  borderColor: palette.text.primary, // Mantiene el color cuando está enfocado
+                },
+                '& .MuiSelect-icon': {
+                  color: palette.text.primary, // Cambia el color del icono del select
+                },
+              }}
             >
               <MenuItem value={true}>Pagó</MenuItem>
               <MenuItem value={false}>No pagó</MenuItem>
             </Select>
           </FormControl>
           </>
-         )})
+         ))
         :
         <Typography variant="titleH3" sx={{textAlign: 'center', fontWeight: '600'}}>
           No hay inscriptos
