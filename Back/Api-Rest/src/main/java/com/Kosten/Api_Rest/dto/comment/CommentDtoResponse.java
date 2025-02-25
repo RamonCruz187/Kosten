@@ -11,6 +11,7 @@ public record CommentDtoResponse(
         LocalDateTime dateCreation,
         Long userId,
         String username,
-        Long packageId
+        Long packageId,
+        String packageName
 ) implements Serializable {
 }
