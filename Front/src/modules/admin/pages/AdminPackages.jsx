@@ -61,8 +61,8 @@ export const AdminPackages = () => {
         sx={{
           display: "flex",
           justifyContent: "center",
-          alignItems: "center",
-          height: "50dvh",
+          marginTop: "2rem",
+
         }}
       >
         <CircularProgress />
