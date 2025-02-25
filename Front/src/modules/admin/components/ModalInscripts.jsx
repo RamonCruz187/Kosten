@@ -147,7 +147,7 @@ export const ModalInscripts = ({openModal, setOpenModal, indexDepartures = null}
               sx={{
                 backgroundColor: payment[user.id] ? palette.accent[200] : '' , 
                 width: '170px', 
-                borderRadius: '8px', 
+                borderRadius: '4px', 
                 color: palette.text.primary, // Cambia el color del texto
                 '.MuiOutlinedInput-notchedOutline': {
                   borderColor: palette.text.primary, // Cambia el color del borde

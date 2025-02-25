@@ -208,6 +208,7 @@ const AdminDashboard = () => {
               sx={{
                 fontFamily: "Oswald, sans-serif",
                 fontSize: "1.1rem",
+                fontWeight: 400,
                 color: palette.tertiary.light,
                 textTransform: "none",
               }}
