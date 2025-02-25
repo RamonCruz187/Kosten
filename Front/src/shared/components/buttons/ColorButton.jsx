@@ -21,6 +21,7 @@ export const ColorButton = ({
         display: "flex",
         alignItems: "center",
         gap: "0.5rem",
+        borderRadius: "4px",
         ...sx,
       }}
     >
