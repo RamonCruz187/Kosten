@@ -25,6 +25,7 @@ export const WhiteButton = ({
 				display: "flex",
 				alignItems: "center",
 				border: `1px solid ${palette.tertiary[700]}`,
+        borderRadius: "4px",
 				boxShadow: "0px 4px 4px rgba(0, 0, 0, 0.25)",
         ...sx,
       }}
