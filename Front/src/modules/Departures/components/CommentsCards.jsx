@@ -18,7 +18,7 @@ export default function CommentsCards({ user, text, date, packageName }) {
       sx={{
         padding: "1rem",
         backgroundColor: "#F3F3F3",
-        borderRadius: "8px",
+        borderRadius: "4px",
         width: "95%",
         height: "fit-content",
         maxWidth: "400px",
