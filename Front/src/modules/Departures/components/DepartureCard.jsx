@@ -11,7 +11,7 @@ import dayjs from 'dayjs';
 import 'dayjs/locale/es';
 dayjs.locale('es');
 
-import { formatDepartureDate } from "@/shared/utils/formatDeparture.js";
+import { formatDepartureDate, setDepartureDuration } from "@/shared/utils/formatDeparture.js";
 import ReservationModal from "./ReservationModal.jsx";
 import { ColorButton } from "@/shared/components/buttons/ColorButton.jsx";
 import { OnlyTextButton } from "@/shared/components/buttons/OnlyTextButton.jsx";
@@ -41,6 +41,7 @@ export const DepartureCard = ({ pack }) => {
           flexDirection: "column", 
           marginX: "auto", 
           position: "relative",
+          borderRadius: "4px",
         }}
       >
         {isMobile &&
@@ -79,12 +80,12 @@ export const DepartureCard = ({ pack }) => {
               {pack.name}
             </Typography>
             <Box display="flex" alignItems="center" justifyContent="space-between">
-              <Stack
-                spacing={1}
+              <Box
                 sx={{
                   display: "flex",
                   flexDirection: "column",
                   flexGrow: 1,
+                  gap: 1,
                   overflow: "hidden",
                 }}
               >
@@ -101,17 +102,16 @@ export const DepartureCard = ({ pack }) => {
                 <Box sx={{width:"100%"}}>
                   {pack?.departures.length === 0 
                   ? <Box>
-                      <Typography variant="caption">
-                        Aún no hay salidas establecidas, ¡sé el primero en acordar una!
+                      <Typography variant="textBox">
+                        Aún no hay salidas establecidas.
                       </Typography>
                     </Box>
-                  : pack?.departures?.map((departure, index) => (
-                      <Box key={index}>
-                        <Typography variant="caption">
-                          {formatDepartureDate(departure)}{' - '}{fCurrency(departure?.price)}
+                  : 
+                      <Box >
+                        <Typography variant="textBox">
+                          {formatDepartureDate(pack?.departures?.[0])}
                         </Typography>
                       </Box>
-                    ))
                   }
                 </Box>
               </Box>
@@ -124,7 +124,10 @@ export const DepartureCard = ({ pack }) => {
                 }}
               >
                 <Box sx={{ display: "flex" }}>{iconsCardPackages[2]}</Box>
-                <Typography variant="caption">{pack.duration || "Duracion no establecida"}</Typography>
+                <Typography variant="textBox">{pack.duration ? pack.duration : pack?.departures.length !== 0 
+                  ? setDepartureDuration(pack?.departures?.[0]) 
+                  : "No establecido"}
+                </Typography>
               </Box>
               <Box
                 sx={{
@@ -135,7 +138,7 @@ export const DepartureCard = ({ pack }) => {
                 }}
               >
                 <Box sx={{ display: "flex" }}>{iconsCardPackages[3]}</Box>
-                <Typography variant="caption">
+                <Typography variant="textBox">
                 Nivel físico: {pack.physical_level || "no establecido"}
                 </Typography>
               </Box>
@@ -149,11 +152,11 @@ export const DepartureCard = ({ pack }) => {
                 }}
               >
                 <Box sx={{ display: "flex" }}>{iconsCardPackages[4]}</Box>
-                <Typography variant="caption" noWrap>
+                <Typography variant="textBox" noWrap>
                 Nivel técnico: {pack.technical_level || "no establecido"}
                 </Typography>
             </Box>
-            </Stack>
+            </Box>
             <Box
               sx={{
                 display: "flex",
@@ -163,8 +166,13 @@ export const DepartureCard = ({ pack }) => {
                 height: "100%",
               }}
             >
-              <Typography variant="titleH3" textAlign={'center'}>
-                {formatPriceRange(pack.departures)}
+              <Typography variant="titleH3"
+                sx={{
+                  textAlign: "end",
+
+                }}
+              >
+                {pack.departures?.[0] && fCurrency(pack.departures?.[0]?.price)}
               </Typography>
 
               { pack?.departures?.length > 0
