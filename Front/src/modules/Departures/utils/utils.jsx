@@ -214,7 +214,7 @@ export const formatPriceRange = (data) => {
 
 };
 
-export const formatDateAndHour = (date) =>{
+export const formatDateAndHourArray = (date) =>{
   const dateFormatless = new Date(
     date[0], // Año
     date[1] - 1, // Mes (ajustar 0-indexado)
@@ -232,6 +232,12 @@ const options = {
   second: '2-digit',
 };
 const dateFormat = dateFormatless.toLocaleString('es-ES', options);
+return dateFormat;
+};
+
+export const formatDateAndHour = (date) =>{
+  const dateFormat = dayjs(date).format("D") + " de " + dayjs(date).format("MMMM") + " de " + dayjs(date).format("YYYY")
+
 return dateFormat;
 };
 
