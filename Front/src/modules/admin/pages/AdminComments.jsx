@@ -1,3 +1,4 @@
+// src/modules/admin/pages/AdminComments.jsx
 import { deleteCommentById, getAllComments, updateCommentFavorite, updateCommentVisibility } from "@/api/commentApi";
 import { WhiteButton } from "@/shared/components/buttons/WhiteButton";
 import { NotificationService } from "@/shared/services/notistack.service";
@@ -41,7 +42,6 @@ const AdminComments = () => {
       [comment.id]: newVisibleValue,
     }));
     fetchUpdateVisible(comment.id, newVisibleValue);
-    
   };
 
   const handleChangeTabs = (event, newValue) => {
@@ -51,7 +51,8 @@ const AdminComments = () => {
 
   const handleChangeFavorite = (comment) => {
     if(isFetching) return
-    if(countFavorites(allComments) >= 6) {
+    // en caso que se vaya a tildar y no destildar, se fija si ya hay 6 favoritos o más
+    if(!comment.isFavorite && countFavorites(allComments) >= 6){
       NotificationService.error("No puedes tener más de 6 comentarios favoritos", 2000);
       return
     }
