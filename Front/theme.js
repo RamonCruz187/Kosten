@@ -176,8 +176,22 @@ const theme = createTheme({
     MuiTextField: {
       styleOverrides: {
         root: {
-          fontFamily: "Roboto, sans-serif",
+          fontFamily: customFonts.family.catamaran,
           fontSize: "1rem", // 16px
+        },
+      },
+    },
+    MuiInputBase: {
+      styleOverrides: {
+        root: {
+          fontFamily: customFonts.family.catamaran, // Aplica a los inputs
+        },
+      },
+    },
+    MuiFormLabel: {
+      styleOverrides: {
+        root: {
+          fontFamily: customFonts.family.catamaran, // Aplica a los labels
         },
       },
     },
