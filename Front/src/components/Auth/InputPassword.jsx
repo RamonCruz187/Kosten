@@ -1,4 +1,4 @@
-import { Visibility, VisibilityOff } from "@mui/icons-material";
+import { RiEyeLine, RiEyeOffLine } from "react-icons/ri";
 import { IconButton, InputAdornment, TextField } from "@mui/material";
 import PropTypes from "prop-types";
 export default function InputPassword({ label, value, fx, toggleVar, fxIcon }) {
@@ -6,7 +6,7 @@ export default function InputPassword({ label, value, fx, toggleVar, fxIcon }) {
     <TextField
       variant="outlined"
       color="palette.grayButton.main"
-      sx={{ width: "100%" }}
+      sx={{ width: "100%", maxWidth: {xs: "300px", md:"400px", lg: "500px"} }}
       label={label}
       type={toggleVar ? "text" : "password"}
       value={value}
@@ -21,7 +21,7 @@ export default function InputPassword({ label, value, fx, toggleVar, fxIcon }) {
                 onClick={fxIcon}
                 edge="end"
               >
-                {toggleVar ? <Visibility /> : <VisibilityOff />}
+                {toggleVar ? <RiEyeOffLine /> :  <RiEyeLine />}
               </IconButton>
             </InputAdornment>
           ),
