@@ -145,6 +145,11 @@ const theme = createTheme({
     inputAdvice: {
       ...inputAdvice,
     },
+    inputError: {
+      ...inputAdvice,
+      color: customPalette.error.main,
+    },
+
   },
   components: {
     MuiButton: {
