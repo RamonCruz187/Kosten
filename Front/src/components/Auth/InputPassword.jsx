@@ -5,7 +5,6 @@ export default function InputPassword({ label, value, fx, toggleVar, fxIcon }) {
   return (
     <TextField
       variant="outlined"
-      color="palette.grayButton.main"
       sx={{ width: "100%", maxWidth: {xs: "300px", md:"400px", lg: "500px"} }}
       label={label}
       type={toggleVar ? "text" : "password"}
