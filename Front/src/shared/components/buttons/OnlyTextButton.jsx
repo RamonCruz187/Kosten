@@ -51,7 +51,7 @@ export const OnlyTextButton = ({
         </Box>
       )}
       <Typography
-        sx={{ fontSize: { xs: "0.8rem", sm: "0.9rem" }, color: "inherit" }}
+        sx={{ fontFamily: "Catamaran, sans-serif", fontSize: { xs: "0.8rem", sm: "0.9rem" }, color: "inherit" }}
       >
         {isFetching && fetchingText ? fetchingText : text}
       </Typography>

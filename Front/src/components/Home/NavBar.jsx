@@ -24,8 +24,8 @@ const NavBar = ({ isAdmin = false, setIsOpenDrawer, isOpenDrawer = false, isDraw
   // popover login
   const [isOpenLogin, setIsOpenLogin] = useState(false);
 
-  const handleClick = () => {
-    setIsOpenLogin(true);
+  const handleToogleOpen = () => {
+    setIsOpenDrawer(!isOpenDrawer);
   };
 
   const handleClose = () => {
@@ -62,16 +62,19 @@ const NavBar = ({ isAdmin = false, setIsOpenDrawer, isOpenDrawer = false, isDraw
       }}
     >
       {/* menu retraible cuando es mobile y tablet */}
-      {isMobileTablet && <Box
-        sx={{
-          position: "absolute",
-          top: "2rem",
-          left: {xs: "1rem", sm:"2rem"},
-          color: palette.tertiary.light,
-        }}
-        onClick={setIsOpenDrawer}>
-        {isOpenDrawer ? <RiCloseLargeLine size={24} /> : <RiMenuLine size={24} />}
-      </Box>}
+      {isMobileTablet && 
+        <Box
+          sx={{
+            position: "absolute",
+            top: "2rem",
+            left: {xs: "1rem", sm:"2rem"},
+            color: palette.tertiary.light,
+          }}
+          onClick={handleToogleOpen}>
+          {isOpenDrawer ? <RiCloseLargeLine size={24} /> : <RiMenuLine size={24} />}
+        </Box>
+      }
+      {/* boton de login o user logo */}
       {isDrawer && isMobileTablet && (
         !isAuthenticated ?
           <WhiteButton
@@ -136,7 +139,8 @@ const NavBar = ({ isAdmin = false, setIsOpenDrawer, isOpenDrawer = false, isDraw
             </Typography>
           )}
         </Box>}
-        {isDrawer && isMobileTablet && <Box
+        {isDrawer && isMobileTablet && 
+        <Box
           sx={{
             display: "flex",
             justifyContent: "center",
@@ -144,7 +148,7 @@ const NavBar = ({ isAdmin = false, setIsOpenDrawer, isOpenDrawer = false, isDraw
             flexGrow: 1,
             gap: "1rem",
             cursor: "pointer",
-            flexDirection: "column",
+            flexDirection: {xs: "column", sm: "row"},
             paddingBottom: "2rem",
           }}
           style={{ textDecoration: "none" }}
@@ -170,19 +174,17 @@ const NavBar = ({ isAdmin = false, setIsOpenDrawer, isOpenDrawer = false, isDraw
         </Box>}
         {!isMobileTablet && 
         (!isAuthenticated ? (
-          <>
-            <WhiteButton
-              text="LOGIN"
-              onClick={() => setIsOpenLogin(true)}
-              sx={{ position: "absolute", top: "1.5rem", right: "1rem" }}
-            />
-            <PopoverLogin isOpenLogin={isOpenLogin} handleClose={handleClose} />
-          </>
+          <WhiteButton
+            text="LOGIN"
+            onClick={() => setIsOpenLogin(true)}
+            sx={{ position: "absolute", top: "1.5rem", right: "1rem" }}
+          />
         ) : (
           <Box sx={{ display: "flex", justifyContent: "center", alignItems: "center" }}>
             <UserPopover setIsOpenDrawer={setIsOpenDrawer}/>
           </Box>
         ))}
+        <PopoverLogin isOpenLogin={isOpenLogin} handleClose={handleClose} />
       </Toolbar>
     </AppBar>
   );

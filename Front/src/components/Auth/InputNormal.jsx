@@ -4,9 +4,8 @@ import PropTypes from "prop-types";
 export default function InputNormal({ type, value, label, fx, inputName = '', isObject = false, placeholder = '' }) {
   return (
     <TextField
-      sx={{ width: "100%" }}
+      sx={{ width: "100%", maxWidth: {xs: "300px", md:"400px", lg: "500px"} }}
       variant="outlined"
-      color="palette.grayButton.main"
       type={type}
       label={label}
       value={value}

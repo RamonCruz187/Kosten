@@ -26,7 +26,7 @@ const currentYear = new Date().getFullYear();
             flexDirection: {xs: "column", sm: "row"},
             alignItems: "center",
             justifyContent: "center",
-            gap: {xs: "2rem", lg: "60px", xl: "80px"},
+            gap: {xs: "2rem", sm: "3rem", md: "4rem", xl: "80px"},
             paddingX: "1rem",
             paddingY: "2rem",
           }}
@@ -65,37 +65,43 @@ const currentYear = new Date().getFullYear();
               info@kostentrek.com
             </Typography>
           </Grid2>
-          <Grid2 xs={12} sm={6} md={4}>
-            <Box
-              sx={{
-                display: "flex",
-                justifyContent: "center",
-                gap: "1rem",
-                marginBottom: "2rem",
-              }}
+
+          <Box
+            sx={{
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              gap: "1rem",
+              height: "100%",
+            }}
+          >
+            <Link
+              href="https://wa.me/5491162984904"
+              target="_blank"
+              rel="noreferrer"
             >
-              <Link
-                href="https://wa.me/5491162984904"
-                target="_blank"
-                rel="noreferrer"
-              >
-                <RiWhatsappFill color="#F3F3F3" size={24} />
-              </Link>
-              <Link
-                href="https://www.instagram.com/kostentrek/"
-                target="_blank"
-                rel="noreferrer"
-              >
-                <RiInstagramFill color="#F3F3F3" size={24} />
-              </Link>
+              <RiWhatsappFill color="#F3F3F3" size={24} />
+            </Link>
+            <Link
+              href="https://www.instagram.com/kostentrek/"
+              target="_blank"
+              rel="noreferrer"
+            >
+              <RiInstagramFill color="#F3F3F3" size={24} />
+            </Link>
+            <Link
+              // href="https://www.tiktok.com/kostentrek/"
+              // target="_blank"
+              // rel="noreferrer"
+            >
               <RiTiktokFill color="#F3F3F3" size={24} />
-            </Box>
+            </Link>
+          </Box>
             {/* <Typography variant="paragraphLight" align="center" color="#F3F3F3">
               TÉRMINOS Y CONDICIONES
               <br />
               POLÍTICAS DE PRIVACIDAD
             </Typography> */}
-          </Grid2>
         </Box>
         <Divider
           orientation="horizontal"
@@ -107,7 +113,7 @@ const currentYear = new Date().getFullYear();
             margin: "1rem 3.75rem",
           }}
         />
-        <Typography variant="body2" align="center" color="#F3F3F3" sx={{ fontSize: "10px", marginBottom: "2rem" }}>
+        <Typography variant="textBox" align="center" color="#F3F3F3" sx={{ fontSize: "10px", marginBottom: "2rem" }}>
           {currentYear} | Todos los derechos reservados.
         </Typography>
       </Box>

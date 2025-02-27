@@ -145,6 +145,11 @@ const theme = createTheme({
     inputAdvice: {
       ...inputAdvice,
     },
+    inputError: {
+      ...inputAdvice,
+      color: customPalette.error.main,
+    },
+
   },
   components: {
     MuiButton: {
@@ -169,10 +174,41 @@ const theme = createTheme({
       },
     },
     MuiTextField: {
+      defaultProps: {
+        variant: "outlined",
+      },
+    },
+    MuiOutlinedInput: {
       styleOverrides: {
         root: {
-          fontFamily: "Roboto, sans-serif",
-          fontSize: "1rem", // 16px
+          fontFamily: customFonts.family.catamaran,
+          color: customPalette.text.main,
+          "& .MuiOutlinedInput-notchedOutline": {
+            borderColor: customPalette.text.mid, // Color del borde
+          },
+          "&:hover .MuiOutlinedInput-notchedOutline": {
+            borderColor: customPalette.text.mid, // Color del borde al hacer hover
+          },
+          "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
+            borderColor: customPalette.text.mid, // Color del borde cuando está enfocado
+          },
+        },
+      },
+    },
+    MuiInputLabel: {
+      styleOverrides: {
+        root: {
+          fontFamily: customFonts.family.catamaran,
+          color: customPalette.text.mid,
+          "&.Mui-focused": {
+            color: customPalette.text.mid,
+          },
+          "&.MuiInputLabel-shrink": {
+            color: customPalette.text.mid,
+          },
+          "&.MuiFormLabel-filled": {
+            color: customPalette.text.mid,
+          },
         },
       },
     },
