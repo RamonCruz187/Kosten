@@ -1,11 +1,13 @@
+// Front/src/components/Auth/.jsx
 import { useEffect, useState } from "react";
-import { Button, Stack, Typography } from "@mui/material";
+import { Box, Stack, Typography } from "@mui/material";
 import { register } from "../../api/authApi.js";
 import { NotificationService } from "../../shared/services/notistack.service.jsx";
 import imageReg from "../../assets/registro.webp";
 import InputNormal from "./InputNormal.jsx";
 import InputPassword from "./InputPassword.jsx";
 import useAutoLogin from "../../shared/hooks/useAutoLogin.jsx";
+import { ColorButton } from "@/shared/components/buttons/ColorButton.jsx";
 
 const Register = () => {
   const autologin = useAutoLogin();
@@ -54,9 +56,7 @@ const Register = () => {
 
       NotificationService.success(
         " Usuario registrado exitosamente. Iniciando sesión... ",
-        1500
-      );
-      console.log(response);
+      2000);
       response.status == 200 && autologin(email, password);
     } catch (error) {
       setIsFetching(false);
@@ -69,21 +69,30 @@ const Register = () => {
 
   return (
     <>
-      <Stack direction={{ xs: "column", md: "row" }}>
-        <Stack
-          sx={{
-            objectFit: "cover",
-            alignItems: "center",
-            width: "100%",
-            height: "100%",
+      <Stack direction={{ xs: "column-reverse", md: "row" }} >
+        <Box sx={{ 
+          flex: {xs: "", md: 1},
+          width: { xs: "100%", md: "50%" },
+          height: { xs: "70dvh", md: "calc(100vh - 64px)" },
+        }}>
+          <Box sx={{
+              width: "100%", 
+              height: "100%", 
+              backgroundImage: `url(${imageReg})`,
+              backgroundSize: "cover",
+              backgroundPosition: "center",
+              backgroundRepeat: "no-repeat",
+          }}/>
+        </Box>
+
+        <form onSubmit={handleSubmit} 
+          style={{ 
+            background: "white", 
+            flex: 1,
           }}
         >
-          <img src={imageReg} alt="register" width="150%" />
-        </Stack>
-
-        <form onSubmit={handleSubmit} style={{ width: "100%", background: "white" }}>
-          <Stack sx={{ padding: "20%", gap: "1.25rem", alignItems: "center" }}>
-            <Typography variant="titleH2">REGISTRO</Typography>
+          <Stack sx={{ gap: "1.25rem", alignItems: "center" }}>
+            <Typography variant="titleH2" sx={{ marginTop: {xs: "2rem", md:"4rem" }}}>REGISTRO</Typography>
             <InputNormal
               type="text"
               value={username}
@@ -92,50 +101,54 @@ const Register = () => {
             />
             <InputNormal type="number" value={contact} label="Teléfono" fx={setContact} />
             <InputNormal type="email" value={email} label="Email" fx={setEmail} />
-            <InputPassword
-              label="Contraseña"
-              value={password}
-              fx={setPassword}
-              toggleVar={showPassword}
-              fxIcon={handleClickShowPassword}
-            />
-            {advicePassword && (
-              <Typography variant="inputAdvice">
-                Debe tener 8 caracteres, sin espacios, uno o más números, minúsculas,
-                mayúsculas, y carácteres especiales (@#$%^&+=)
-              </Typography>
-            )}
-            <InputPassword
-              label="Confirme contraseña"
-              value={confirmPassword}
-              fx={setConfirmPassword}
-              toggleVar={showPassword}
-              fxIcon={handleClickShowPassword}
-            />
-            <Typography variant="inputAdvice">
+            <Box sx={{ width: "100%", display: "flex", justifyContent: "center" }}>
+              <InputPassword
+                label="Contraseña"
+                value={password}
+                fx={setPassword}
+                toggleVar={showPassword}
+                fxIcon={handleClickShowPassword}
+              />
+              {advicePassword && (
+                <Typography variant="inputError"
+                  sx={{marginLeft: "1rem"}}
+                >
+                  Debe tener 8 caracteres, sin espacios, uno o más números, minúsculas,
+                  mayúsculas, y carácteres especiales (@#$%^&+=)
+                </Typography>
+              )}
+            </Box>
+            <Box sx={{ width: "100%", display: "flex", justifyContent: "center" }}>
+              <InputPassword
+                label="Confirme contraseña"
+                value={confirmPassword}
+                fx={setConfirmPassword}
+                toggleVar={showPassword}
+                fxIcon={handleClickShowPassword}
+              />
               {confirmPassword.length > 4
                 ? adviceConfirmPassword
-                  ? "Las contraseñas coinciden"
-                  : "No coinciden"
+                  ?
+                  <Typography variant="inputAdvice"
+                    sx={{marginLeft: "1rem"}}
+                    >
+                    Las contraseñas coinciden
+                  </Typography>
+                  : 
+                  <Typography variant="inputError"
+                    sx={{marginLeft: "1rem"}}
+                  >
+                    No coinciden
+                  </Typography>
                 : null}
-            </Typography>
-            {isFetching ? (
-              <Button
-                color="grayButton"
-                type="submit"
-                sx={{ padding: ".75rem 3rem", marginTop: "1rem" }}
-              >
-                LOADING...
-              </Button>
-            ) : (
-              <Button
-                color="greenButton"
-                type="submit"
-                sx={{ padding: ".75rem 3rem", marginTop: "1rem" }}
-              >
-                REGISTRARME
-              </Button>
-            )}{" "}
+            </Box>
+            <ColorButton
+              type="greenButton"
+              onClick={handleSubmit}
+              text="REGISTRARME"
+              isFetching={isFetching}
+              sx={{ width: "200px", marginY: "1rem" }}
+            />
           </Stack>
         </form>
       </Stack>
