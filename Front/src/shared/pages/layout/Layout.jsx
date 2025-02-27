@@ -8,7 +8,7 @@ import { Outlet } from "react-router-dom";
 
 const Layout = () => {
   const theme = useTheme();
-  const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
+  const isMobile = useMediaQuery(theme.breakpoints.down("md"));
   const isLargeScreen = useMediaQuery(theme.breakpoints.up("xl"));
 
   const [isNearFooter, setIsNearFooter] = useState(false);
