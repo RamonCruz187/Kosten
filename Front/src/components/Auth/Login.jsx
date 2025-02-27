@@ -1,14 +1,15 @@
 import { useState } from "react";
-import { Button, Typography, Stack, CircularProgress } from "@mui/material";
-import { login } from "../../api/authApi.js";
-import { NotificationService } from "../../shared/services/notistack.service.jsx";
-import { useAuth } from "../../shared/hooks/useAuth.jsx";
+import { Typography, Stack } from "@mui/material";
+import { login } from "@api/authApi.js";
+import { NotificationService } from "@shared/services/notistack.service.jsx";
+import { useAuth } from "@shared/hooks/useAuth.jsx";
 import { useNavigate } from "react-router-dom";
 import InputNormal from "./InputNormal.jsx";
 import InputPassword from "./InputPassword.jsx";
-import {getUserById} from "../../api/userApi.js";
-import {useUserData} from "../../shared/hooks/useUserData.jsx";
-import Box from "@mui/material/Box";
+import {getUserById} from "@api/userApi.js";
+import {useUserData} from "@shared/hooks/useUserData.jsx";
+import { ColorButton } from "@shared/components/buttons/ColorButton.jsx";
+import { OnlyTextButton } from "@shared/components/buttons/OnlyTextButton.jsx";
 
 const Login = ({handleClose=() => {}, isModal=false}) => {
   const navigate = useNavigate();
@@ -55,7 +56,7 @@ const Login = ({handleClose=() => {}, isModal=false}) => {
         sx={{
           justifyContent: "center",
           alignItems: "center",
-          width: !isModal ? "100%" : 400,
+          width: !isModal ? "100%" : {xs: "100%", sm: 400},
           minHeight: !isModal ?  "55dvh" : "auto" ,
           padding: !isModal ? "1rem 35dvw": "1rem 2rem",
           background: "white",
@@ -70,31 +71,33 @@ const Login = ({handleClose=() => {}, isModal=false}) => {
           fx={setPassword}
           toggleVar={showPassword}
           fxIcon={handleClickShowPassword} 
-        
         />
-{/* 
-        <Typography variant="buttonMini">
-          olvidé mi contraseña
-        </Typography> */}
 
-        {
-          isFetching ? (
-              <Box sx={{ display: 'flex', flexDirection: 'column', width: "50%", textAlign: 'center', alignItems: 'center', p: 1, gap: 1 }}>
-                <CircularProgress size={20}/>
-                <Typography variant="caption">Cargando...</Typography>
-              </Box>
-          ) : (
-              <Button color="greenButton" type="submit" sx={{ width: "50%" }}>
-                Login
-              </Button>
-          )
-        }
+        <OnlyTextButton
+          text="OLVIDÉ MI CONTRASEÑA" 
+          isFetching={isFetching} 
+          sx={{
+            width:'50%',
+            "& p" : {fontSize: "0.80rem", padding: 0, marginBottom: "2rem"}, 
+          }}
+          onClick={() => console.log("abrir modal recuperar contraseña")}
+        />
+        <ColorButton
+          text="Login" 
+          fetchingText="Cargando..."
+          type="greenButton" 
+          isFetching={isFetching}
+          onClick={handleSubmit}
+          sx={{ width: "50%" }}
+        />
 
-        <Button color="transparentButton" disableElevation sx={{width:'50%'}}
+        <OnlyTextButton
+          text="Registrarme" 
+          isFetching={isFetching} 
+          sx={{width:'50%'}}
           onClick={handleGoToRegister}
-        >
-          Registrarse
-        </Button>
+        />
+
       </Stack>
     </form>
   );
