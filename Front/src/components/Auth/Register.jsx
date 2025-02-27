@@ -147,7 +147,7 @@ const Register = () => {
               onClick={handleSubmit}
               text="REGISTRARME"
               isFetching={isFetching}
-              sx={{ width: "200px", marginY: "1rem" }}
+              sx={{ width: "200px", marginTop: "1rem", marginBottom: {xs: "2rem", md:"1rem"} }}
             />
           </Stack>
         </form>
