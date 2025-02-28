@@ -28,7 +28,4 @@ public interface IDepartureService {
     void addUserToDeparture(Long userId, Integer departureId);
     void removeUserFromDeparture(Integer departureId, Long userId);
 
-
-
-
 }
