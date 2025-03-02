@@ -4,7 +4,7 @@ import iconWathsapp from "../../assets/Contact/icon_whatsapp.svg";
 import iconMail from "../../assets/Contact/icon_email.svg";
 import iconInstagram from "../../assets/Contact/icon_instagram.svg";
 import logo from "../../assets/Contact/logo_kosten.svg";
-import { Grid2, Typography } from "@mui/material";
+import { Box, Grid2, Typography } from "@mui/material";
 import { customPalette } from "../../../customStyle";
 import { Link } from "react-router-dom";
 
@@ -15,7 +15,11 @@ export default function ContactLeftside({ size }) {
       icon: iconWathsapp,
       text: "+54 9 11 6298 4904",
     },
-    { link: "mailto:info@kostentrek.com", icon: iconMail, text: "info@kostentrek.com" },
+    { 
+      link: "mailto:info@kostentrek.com", 
+      icon: iconMail, 
+      text: "info@kostentrek.com",
+    },
     {
       link: "https://www.instagram.com/kostentrek/",
       icon: iconInstagram,
@@ -55,16 +59,17 @@ export default function ContactLeftside({ size }) {
         />
       </Grid2>
 
-      <Grid2
-        container
-        size={responsiveContainer}
+      <Box
+        
         sx={{
           display: "flex",
           justifyContent: "space-around",
           alignItems: "start",
-          flexDirection: "row",
+          flexDirection: {xs: "column", sm: "row"},
+          gap: "3rem",
         }}
       >
+        {/* direccion */}
         <Grid2
           item
           size={responsiveInfo}
@@ -85,6 +90,7 @@ export default function ContactLeftside({ size }) {
           ))}
         </Grid2>
 
+        {/* redes sociales */}
         <Grid2
           item
           size={responsiveInfo}
@@ -92,7 +98,6 @@ export default function ContactLeftside({ size }) {
             display: "flex",
             flexDirection: "column",
             gap: "0.5rem",
-            marginTop: { xs: "1rem", lg: 0 },
           }}
         >
           {contactInformation.map((key, index) => (
@@ -119,7 +124,7 @@ export default function ContactLeftside({ size }) {
             </Link>
           ))}
         </Grid2>
-      </Grid2>
+      </Box>
     </Grid2>
   );
 }
