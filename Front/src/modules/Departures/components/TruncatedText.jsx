@@ -1,112 +1,117 @@
 import { useState, useRef, useEffect } from "react";
-import { Box, Typography, IconButton, Button, Modal } from "@mui/material";
+import { Box, Typography, IconButton, Button, Modal, useTheme } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
+import { RiAddLine } from "react-icons/ri";
+import { WhiteButton } from "@/shared/components/buttons/WhiteButton";
 const TruncatedText = ({ text }) => {
-    const [isTruncated, setIsTruncated] = useState(false);
-    const [openModal, setOpenModal] = useState(false);
-    const textRef = useRef(null);
+	const theme = useTheme();
+	const { palette } = theme;
+  const [isTruncated, setIsTruncated] = useState(false);
+  const [openModal, setOpenModal] = useState(false);
+  const textRef = useRef(null);
 
-    useEffect(() => {
-        if (textRef.current) {
-            const isOverflowing =
-                textRef.current.scrollHeight > textRef.current.clientHeight;
-            setIsTruncated(isOverflowing);
-        }
-    }, [text]);
+  useEffect(() => {
+    if (textRef.current) {
+      const isOverflowing =
+        textRef.current.scrollHeight > textRef.current.clientHeight;
+      setIsTruncated(isOverflowing);
+    }
+  }, [text]);
 
-    const toggleModal = () => {
-        setOpenModal((prev) => !prev);
-    };
+  const toggleModal = () => {
+    setOpenModal((prev) => !prev);
+  };
 
-    return (
-        <>
-            <Box
-                sx={{
-                    textAlign: "center",
-                    padding: "16px",
-                    bgcolor: "#F3F3F3",
-                    overflow: "hidden",
-                }}
-            >
-                <Typography
-                    ref={textRef}
-                    variant="body1"
-                    sx={{
-                        display: "-webkit-box",
-                        WebkitBoxOrient: "vertical",
-                        overflow: "hidden",
-                        textOverflow: "ellipsis",
-                        WebkitLineClamp: { xs: 3, sm: 5, md: 6, lg: 7 },
-                    }}
-                >
-                    {text}
-                </Typography>
-                {isTruncated && (
-                    <Button
-                        onClick={toggleModal}
-                        variant="contained"
-                        sx={{ marginTop: "8px",
-                            bgcolor:'#D9D9D9',
-                            borderRadius:'4px',
-                            height:'2.5rem',
-                            
-                         }}
-                    >
-                        <Typography sx={{fontSize:'2rem', fontWeight:'200'}}>+  </Typography>
-                        Ver más
-                    </Button>
-                )}
-            </Box>
+  return (
+    <>
+      <Box
+        sx={{
 
-            <Modal
-                open={openModal}
-                onClose={toggleModal}
-                aria-labelledby="modal-title"
-                aria-describedby="modal-description"
-            >
-                <Box
-                    sx={{
-                        textAlign: "center",
-                        top: "10%",
-                        left: "50%",
-                        transform: "translate(-50%, 0)",
-                        width: {xs:'90%',sm:'80%',md:'70%', lg:'60%', xl:'50%'},
-                        height:'auto',
-                        bgcolor: "background.paper",
-                        boxShadow: 24,
-                        p: 7,
-                        overflowY: "auto",
-                        position: "relative",
-                    }}
-                >
-                    <IconButton
-                        onClick={toggleModal}
-                        sx={{
-                            position: "absolute",
-                            top: 26,
-                            right: 26,
-                            color: "grey.600",
-                            fontSize:'1.5rem',
+          overflow: "hidden",
+        }}
+      >
+        <Typography
+          ref={textRef}
+          variant="p"
+          sx={{
+            display: "-webkit-box",
+            WebkitBoxOrient: "vertical",
+            overflow: "hidden",
+						fontSize: { xs: "12px", sm: "12px", md: "14px", xl: "18px" },  // mismo de que se trata
+            WebkitLineClamp: { xs: 10, sm: 10, md: 10, lg: 10 },
+          }}
+        >
+          {text}
+        </Typography>
+        {isTruncated && (
+          <WhiteButton
+            onClick={toggleModal}
+						text="Ver más"
+            icon={<RiAddLine size={24} />} 
+						sx={{ margin: "1rem auto 0 auto" }}
+          />
+        )}
+      </Box>
 
-                        }}
-                    >
-                        <CloseIcon  sx={{ fontSize: "2.5rem" }} />
-                    </IconButton>
+      <Modal
+        open={openModal}
+        onClose={toggleModal}
+        aria-labelledby="modal-title"
+        aria-describedby="modal-description"
+      >
+        <Box
+          sx={{
+						display: "flex",
+						flexDirection: "column",
+            textAlign: "center",
+            top: "10%",
+            left: "50%",
+            transform: "translate(-50%, 0)",
+            width: { xs: "95%", sm: "80%", md: "70%", lg: "60%" },
+            height: "auto",
+						maxHeight: "85vh",
+            backgroundColor: palette.tertiary.light,
+            padding: {xs: '1rem 0.5rem', sm: '2rem 1rem', md: '2rem', lg: '2rem 2rem', xl: '2rem 3rem'},
+            overflowY: "auto",
+            position: "relative",
+          }}
+        >
+          <IconButton
+            onClick={toggleModal}
+            sx={{
+              position: "absolute",
+              top: {xs: "0.5rem", sm: "1rem", md: "1rem", lg: "1rem", xl: "1rem"},
+              right: {xs: "0.5rem", sm: "1rem", md: "1rem", lg: "1rem", xl: "1rem"},
+              color: "grey.600",
+              fontSize: {xs: "1.5rem", md: "2rem", xl: "2.5rem"},
+            }}
+          >
+            <CloseIcon sx={{ fontSize: 'inherit' }}/>
+          </IconButton>
 
-                    <Typography
-                        id="modal-title"
-                        variant="h6"
-                        sx={{ marginBottom: "16px", fontWeight: "bold" }}
-                    >
-                        Itinerario
-                    </Typography>
-                    <Typography id="modal-description" variant="body1" sx={{fontFamily:'catamaran'}}>
-                        {text}
-                    </Typography>
-                </Box>
-            </Modal>
-        </>
-    );
+          <Typography
+            id="modal-title"
+            variant="titleH2"
+            sx={{ 
+							fontSize: { xs: "20px", sm: "22px", md: "24px", xl: "28px" },
+							marginBottom: "16px", 
+							fontWeight: "bold" 
+
+						}}
+          >
+            Itinerario
+          </Typography>
+          <Typography
+            id="modal-description"
+            variant="p"
+            sx={{ fontSize: { xs: "12px", sm: "12px", md: "14px", xl: "18px" },  }}
+          >
+            {text}
+          </Typography>
+        </Box>
+      </Modal>
+    </>
+  );
 };
 
 export default TruncatedText;
