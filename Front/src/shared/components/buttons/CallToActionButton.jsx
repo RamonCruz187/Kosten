@@ -20,6 +20,7 @@ sx,
 			sx={{
 				paddingX: {xs: islarge ? "2rem" : "1rem", sm: islarge ? "5rem" : "1rem"},
 				fontSize: {xs: islarge ? "18px" : "14px", sm: islarge ? "20px" : "16px"},
+				borderRadius: "4px",
 				...sx
     	}}
     >
