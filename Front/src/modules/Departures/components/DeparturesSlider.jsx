@@ -1,4 +1,4 @@
-import React, { useState, useMemo, useContext } from 'react';
+import { useState, useMemo, useContext } from 'react';
 import { 
   Box, IconButton, Typography, Card, CardContent,useMediaQuery,useTheme,Button} from '@mui/material';
 import { ChevronLeft as PrevIcon, ChevronRight as NextIcon, Close as CloseIcon } from '@mui/icons-material';
@@ -10,11 +10,12 @@ import { fCurrency } from "../../../shared/utils/formatNumber.js";
 import { useNavigate } from "react-router-dom";
 import { iconsCardPackages } from "../utils/utils.jsx";
 import { ConfirmationModal } from "./ConfirmationModal.jsx";
+import { ColorButton } from '@/shared/components/buttons/ColorButton.jsx';
+import { WhiteButton } from '@/shared/components/buttons/WhiteButton.jsx';
 
 const DepartureSlider = ({ sharedPack }) => {
-  const [currentDepartureIndex, setCurrentDepartureIndex] = useState(0);
   const [currentImagePage, setCurrentImagePage] = useState(0);
-  const [slides, setSlides] = useState(processDepartures([sharedPack]));
+  const slides = processDepartures([sharedPack]);
   const { state } = useContext(GlobalContext);
   const [openSessionRequestModal, setOpenSessionRequestModal] = useState(false);
   const images = sharedPack?.images || [];
@@ -86,7 +87,7 @@ const DepartureSlider = ({ sharedPack }) => {
    // Estilo común para los contenedores de slides
    const sliderContainerStyle = {
     position: 'relative',
-    width: "98%",
+    width: "100%",
     margin: "0 auto",
     paddingLeft: { xs: "16px", sm: "50px" }, // Hacer responsive el padding
     paddingRight: { xs: "16px", sm: "50px" },
@@ -133,141 +134,143 @@ const DepartureSlider = ({ sharedPack }) => {
         <Box sx={{ 
             display: 'flex',
             justifyContent: slides.length > 1 ? 'flex-start' : 'center',
-            width: '90%',
-            marginX:'5%',
+            width: {xs:'100%'},
             gap: { xs: 0, sm: 2, md: 3 },
-            
+
           }}>
             {slides.length > 1 ? (
               visibleSlides.map((departure, index) => (
-                <Card 
+                <Box 
                   key={`${currentPage}-${index}`}
                   sx={{ 
                     width: {
-                      xs: 'calc(100% - 16px)',    // 1 card
+                      xs: 'calc(95% - 16px)',    // 1 card
                       sm: 'calc(50% - 16px)',     // 2 cards
                       md: 'calc(33.333% - 16px)', // 3 cards
                       lg: 'calc(25% - 16px)'      // 4 cards
                     },
+                    maxWidth: {xs: '300px', md:'360px',},
                     display:'flex',
+                    flexDirection:'column',
                     justifyContent:'center',
                     flexShrink: 0,
                     flexGrow: 0,
                     boxShadow: 2,
                     backgroundColor: "#fff",
                     margin: '0 auto',
-                    height:'200px'
+                    height:'200px',
+                    paddingX:'0',
+                    borderRadius:'4px',
+                    position: 'relative',
                   }}
                 >
-              <CardContent sx={{width:'200px', display:'flex',flexDirection:'column', justifyContent:'space-between', alignItems:'center'}} >
-              <Typography variant="h6" component="div" sx={{fontFamily:'Oswald',  fontWeight:'600', fontSize:'20px'}}>
-                {departure.startDateFormatted
-                  ? `${departure.startDateFormatted} - ${departure.endDateFormatted || ''}`
-                  : departure.message 
-                  }
-              </Typography>
-              { departure.message && 
-              <Typography sx={{fontFamily:'Oswald', fontSize:'16px', fontWeight:'400'}}>Consultanos por otras opciones</Typography>}
-              <Typography sx={{fontFamily:'Oswald', fontWeight:'600', fontSize:'24px'}}>
-                {typeof departure.price === "number" ? fCurrency(departure.price, { minimumFractionDigits: 0 }) : departure.price}
-              </Typography>
+                  <Box sx={{
+                    display:'flex', 
+                    flexDirection:'column', 
+                    justifyContent:'center', 
+                    alignItems:'center', 
+                    gap:'10px',
+                    transform:'translateY(-10%)',
+                  }}>
+                    <Typography variant="titleH3" sx={{fontSize:'20px', fontWeight:'600'}}>
+                      {departure.startDateFormatted
+                        ? `${departure.startDateFormatted}`
+                        // ? `${departure.startDateFormatted} - ${departure.endDateFormatted || ''}`
+                        : departure.message 
+                        }
+                    </Typography>
+                    { departure.message && 
+                    <Typography variant="titleH3" sx={{fontSize:'16px', fontWeight:'400'}}>Consultanos por otras opciones</Typography>}
+                    <Typography variant="titleH3" sx={{fontWeight:'600', fontSize:'24px'}}>
+                      {typeof departure.price === "number" ? fCurrency(departure.price, { minimumFractionDigits: 0 }) : departure.price}
+                    </Typography>
+                  </Box>
+                    
                 
-              { !departure.price ? 
-              (<Button
+              { !departure.price 
+              ? (
+                <ColorButton
                 onClick={() => {
                   navigate('/contacto')
                   }}
-                style={{
-                  backgroundColor: typeof departure.price !== "number" ? "green" : "#73400C",
-                  color:"white",
-                  fontFamily:'Catamaran',
-                  fontWeight:'400',
-                  fontSize:'14px',
-                  height:'30px',
-                }}
-              >
-                CONTACTANOS
-              </Button>) :
-              (
-                <Box sx={{ display:'flex', alignItems:'center' }}>
-                <Box 
+                text='CONTACTANOS'
+                type='greenButton'
                 sx={{
-                  bgcolor:'#F3F3F3',
-                  width:'30px',
-                  height:'30px',
-                  color:'#000',
-                  paddingX:'0',
-                  display:'flex',
-                  alignItems:'center',
-                  justifyContent:'center',
-                  borderRadius:'4px',
-                  boxShadow: `
-                  0px 2px 1px -1px #00000033,
-                  0px 1px 1px 0px #00000024,
-                  0px 1px 3px 0px #0000001F
-                `,
-
-                  
-                  
-                }}>
-                  {iconsCardPackages[0]}
-                </Box>
-                <Button
-                onClick={ ()=>{
-                  state.user_auth.token ? 
-                    (
-                      setOpenBookModal(true)
-                    ) :
-                    (
-                      setOpenSessionRequestModal(true)
-                    )
-                  }}
-                  sx={{
-                    backgroundColor: typeof departure.price !== "number" ? "green" : "#73400C",
-                    color: "white",
-                    fontFamily: "Catamaran",
-                    fontWeight: "400",
-                    fontSize: "14px",
-                    height:'30px',
-                  }}
-              >
-                RESERVAR
-              </Button>
+                  position:'absolute',
+                  bottom:'1rem',
+                  left:'50%',
+                  transform:'translateX(-50%)',
+                }}
+              />
+              ) : (
+                <Box sx={{ 
+                  display:'flex', 
+                  alignItems:'center', 
+                  gap:"2px",
+                  position:'absolute',
+                  bottom:'1rem',
+                  left:'50%',
+                  transform:'translateX(-50%)',
+                 }}>
+                  <WhiteButton
+                    onClick={() => {
+                      console.log("compartir")
+                    }}
+                    icon={iconsCardPackages[0]}
+                  />
+                  <ColorButton
+                    onClick={ ()=>{state.user_auth.token 
+                      ? setOpenBookModal(true)
+                      : setOpenSessionRequestModal(true)
+                    }}
+                    text='RESERVAR'
+                    type='brownButton'
+                  />
               </Box>
               )
               }
-              
-
-              </CardContent>
-            </Card>
+            </Box>
           ))) : (
-            <Card  
+            <Box  
               sx={{ 
-                minWidth:'272px',
+                width:'95%',
                 maxWidth: '370px',
                 height:'200px', 
                 flexShrink: 0,
                 boxShadow: 2,
-                
-                backgroundColor: "#f3f3f3",
+                borderRadius:'4px',
+                backgroundColor: "text.light",
+                position:'relative',
+                display:'flex',
+                flexDirection:'column',
+                justifyContent:'center',
               }}
             >
-              <CardContent>
-                <Typography component="div" sx={{fontWeight:'600',paddingTop:'15%',paddingX:'16px', fontSize:'20px'}}>
-                Aún no hay salidas disponibles
-                </Typography>
-                <Button 
-                  color="brownButton" 
-                  sx={{marginTop:'12%'}}
-                  onClick={ ()=>{
-                    state.user_auth.token &&
-                        setOpenSessionRequestModal(true)
-                  }}
-                >
-                  CONSULTAR POR SALIDAS FUTURAS
-                </Button>
-              </CardContent>
-            </Card>
+              <Typography component="div" variant="titleH3" sx={{
+                fontWeight:'600', 
+                paddingX:'16px', 
+                fontSize:'20px',
+                transform:'translateY(-10px)',
+              }}>
+              Aún no hay salidas disponibles
+              </Typography>
+              <ColorButton
+                type="greenButton" 
+                onClick={ ()=>{
+                  state.user_auth.token &&
+                      setOpenSessionRequestModal(true)
+                }}
+                text= "CONSULTA SALIDAS FUTURAS"
+                sx={{
+                  position:'absolute',
+                  bottom:'1rem',
+                  left:'50%',
+                  transform:'translateX(-50%)',
+                  minWidth:'250px',
+
+                }}
+              />
+            </Box>
           )
         }
         </Box>
@@ -282,14 +285,14 @@ const DepartureSlider = ({ sharedPack }) => {
             backgroundColor: 'white',
             boxShadow: 14,
             p: 4,
-            width: '80%',
+            width: '95%',
             maxWidth: '500px',
             borderRadius: '4px',
             textAlign: 'center',
           }}
         >
           <Box sx={{ position: 'relative' }}>
-            <Typography variant="h6" sx={{ fontFamily: 'Oswald' }}>
+            <Typography variant="titleH3">
               RESERVAR SALIDA
             </Typography>
             <IconButton
