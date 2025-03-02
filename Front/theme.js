@@ -161,7 +161,7 @@ const theme = createTheme({
       styleOverrides: {
         // sobreescribe estilos de botones
         root: {
-          // height: '30px',
+          minHeight: '30px',
           borderRadius: '8px',
           // padding: ".5rem .7rem",
           letterSpacing: customFonts.letter.wide,
