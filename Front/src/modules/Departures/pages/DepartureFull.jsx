@@ -5,7 +5,8 @@ import {
   Box,
   Typography,
   Alert,
-  CircularProgress
+  CircularProgress,
+  useTheme
 } from "@mui/material";
 import { iconsCardDepartures } from "../utils/utils";
 import { usePackageById } from "../utils/utils";
@@ -45,16 +46,19 @@ const styles = {
 };
 
 const InfoItem = ({ icon, text }) => (
-  <Box sx={{ display: "flex", gap: 1,  }}>
-    <Box sx={{ display: "flex", pt:'5px' }}>{icon}</Box>
+  <Box sx={{ display: "flex", alignItems: "center", gap: 1, paddingY: 1 }}>
+    {icon}
     <Typography sx={styles.infoText}>{text}</Typography>
   </Box>
 );
 
 const DepartureFull = () => {
   const { id } = useParams();
-  const navigate = useNavigate();
   const { state } = useContext(GlobalContext);
+  
+  const navigate = useNavigate();
+  const theme = useTheme();
+  const { palette } = theme;
   const [img, setImg] = useState(null);
   const [openSessionRequestModal, setOpenSessionRequestModal] = useState(false);
   const [openCommentModal, setOpenCommentModal] = useState(false);
@@ -181,36 +185,63 @@ const DepartureFull = () => {
           maxWidth: '100vw'
         }}>
         {/* Description Box */}
-        <Box sx={{ ...styles.contentBox, textAlign: "center", paddingTop: "5%", bgcolor: "#F3F3F3" }}>
-          <Typography variant="h5">¿De qué se trata?</Typography>
-          <Typography variant="body1"
-          sx={{ padding:'10px'}}
+        <Box sx={{
+          display: "flex",
+          flexDirection: "column",
+          justifyContent: "center",
+          padding: {xs: "2rem 1rem", sm: "2rem", md: "3rem", lg: "3rem 2rem 3rem 3rem", xl: "3rem 2rem 3rem 4rem"}, 
+          backgroundColor: palette.tertiary.light, 
+
+        }}>
+          <Typography variant="titleH2"
+            sx={{
+              textAlign: "center",
+              fontSize: { xs: "20px", sm: "22px", md: "24px", xl: "28px" },
+              marginBottom: "1rem"
+            }}
+          >
+            ¿De qué se trata?
+          </Typography>
+          <Typography variant="p"
+          sx={{ 
+            // padding:'10px'
+						fontSize: { xs: "12px", sm: "12px", md: "14px", xl: "18px" }, // mismo que itinerario
+          }}
           >{packToUse.description || 'Sin descripción disponible'}</Typography>
         </Box>
 
         {/* Info Box */}
         <Box sx={{ 
-          ...styles.contentBox, 
           display: "flex", 
           flexDirection: "column", 
-          justifyContent: "center", 
-          marginLeft: { xs: "16px", sm: "25%" }, // Hacer responsive el margen
-          color: '#fff',
-          pr: 2 // Añadir padding right para evitar desbordamiento
+          justifyContent: "center",
+          fontSize: { xs: "20px", sm: "22px", md: "24px", xl: "28px" },
+          paddingLeft: {xs: "unset", sm: "25%"},
+          marginX: {xs: "auto", sm: "unset"},
+          paddingY: {xs: "2rem", sm: "2rem", md: "3rem", lg: "3rem", xl: "4rem"},
+          color: palette.text.light,
         }}>
-          <InfoItem sx={{ padding:'10px'}} icon={iconsCardDepartures[1]} text={packToUse.duration || "duración no establecida"}/>
+          <InfoItem icon={iconsCardDepartures[1]} text={packToUse.duration || "duración no establecida"}/>
           <InfoItem icon={iconsCardDepartures[2]} text={packToUse.physical_level || "dificultad no establecida"} />
           <InfoItem icon={iconsCardDepartures[3]} text={packToUse.technical_level || "nivel técnico no establecido"} />
-          <InfoItem sx={{ padding:'10px'}} icon={iconsCardDepartures[4]} text={packToUse.included_services || "servicios no establecidos"} />
+          <InfoItem icon={iconsCardDepartures[4]} text={packToUse.included_services || "servicios no establecidos"} />
         </Box>
 
         {/* Image Box */}
-       <Box sx={{ ...styles.contentBox, display: "flex", justifyContent: "center", alignItems: "center", overflow: "hidden" }}>
+       <Box sx={{display: "flex", justifyContent: "center", alignItems: "center", overflow: "hidden" }}>
         {packToUse?.itineraryPhoto?.url ? (
-          <img
-            src={packToUse.itineraryPhoto.url}
+          <Box
+            // component="img"
+            // src={packToUse.itineraryPhoto.url}
             alt={`Imagen de ${packToUse.name}`}
-            style={{ width: "100%", height: "100%", objectFit: "cover" }}
+            sx={{ 
+              width: "100%", 
+              height: "100%", 
+              backgroundImage: `url(${packToUse.itineraryPhoto.url})`,
+              backgroundSize: "cover",
+              backgroundRepeat: "no-repeat",
+              backgroundPosition: "center",
+            }}
           />
         ) : (
           // Puedes mostrar una imagen por defecto o un mensaje
@@ -221,22 +252,29 @@ const DepartureFull = () => {
       </Box>
 
         {/* Itinerary Box */}
-        <Box sx={{ ...styles.contentBox, textAlign: "center", paddingTop: "5%", bgcolor: "#F3F3F3", paddingX: "70px" }}>
-          <Typography variant="h5">Itinerario</Typography>
+        <Box sx={{
+          display: "flex",
+          flexDirection: "column",
+          justifyContent: "center",
+          padding: {xs: "2rem 1rem", sm: "2rem", md: "3rem", lg: "3rem 2rem", xl: "3rem 4rem 3rem 2rem"}, 
+          backgroundColor: palette.tertiary.light, 
+
+        }}>
+          <Typography variant="titleH2" sx={{textAlign: "center", fontSize: { xs: "20px", sm: "22px", md: "24px", xl: "28px" }, marginBottom: "1rem"}}>Itinerario</Typography>
           <TruncatedText text={packToUse.itinerary || "Itinerario no disponible"} />
         </Box>
       </Box>
 
        {/* slider salidas: */}
       
-        <div style={{ 
+        <Box sx={{ 
           display: 'flex', 
           flexDirection: 'column',
           width: '100%',
           overflow: 'hidden'
         }}>
           <DeparturesSlider sharedPack={packToUse}></DeparturesSlider>
-        </div>
+        </Box>
 
       {isLoadingComments ? (
         <Box sx={{ display: 'flex', justifyContent: 'center', p: 3 }}>
@@ -244,7 +282,7 @@ const DepartureFull = () => {
         </Box>
       ) 
       : (
-        <CommentsBox comments={packageComments} packageName={packToUse.name} />
+        <CommentsBox comments={packageComments} packageName={packToUse.name} handleCommentClick={handleCommentClick} />
       )}
       </Box>
     </>
