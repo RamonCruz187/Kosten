@@ -44,7 +44,7 @@ const AppRoutes = () => (
           <Route path="/register" element={<UserGuestRoutes><Register /></UserGuestRoutes>} />
           <Route path="/gallery" element={<Gallery />} />
           <Route path="/muestras" element={<Muestras />} />
-          <Route path="/salidas" element={<DepartureGrid />} />
+          <Route path="/salidas" element={<DepartureGrid title="" />} />
           <Route path="/about" element={<About />} />
           <Route path="/salidas/:id" element={<DepartureFull />} />
           <Route path="/destinos" element={<TourDestinationView />} />
