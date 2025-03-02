@@ -46,11 +46,11 @@ export default function TourDestinationView() {
     );
   }
   return (
-    <Box sx={{ padding: '2rem 3rem'  }}>
+    <Box sx={{ padding: {xs: '2rem 3rem', lg: '2rem 5rem'}  }}>
       {packages ? (
         <Box sx={{ 
           display: 'grid', 
-          gridTemplateColumns: {sx: 'repeat(1, 1fr)', md: 'repeat(2, 1fr)', lg: 'repeat(3, 1fr)'}, 
+          gridTemplateColumns: {sx: 'repeat(1, 1fr)', sm: 'repeat(2, 1fr)', md: 'repeat(3, 1fr)', lg: 'repeat(4, 1fr)'}, 
           gap: '2rem' 
 
         }}>

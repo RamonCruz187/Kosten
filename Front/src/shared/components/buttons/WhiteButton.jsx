@@ -22,6 +22,7 @@ export const WhiteButton = ({
       disabled={disabled || isFetching}
       sx={{
         minWidth: (fetchingText !== "" || text !== "") ? "60px" : "30px",
+        width: (fetchingText !== "" || text !== "") ? "unset" : "30px",
 				display: "flex",
 				alignItems: "center",
 				border: `1px solid ${palette.tertiary[700]}`,

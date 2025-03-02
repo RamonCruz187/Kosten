@@ -1,11 +1,12 @@
 /* eslint-disable react/prop-types */
-import { Alert, AlertTitle, Box, Typography } from "@mui/material";
-import { customPalette } from "../../../../customStyle";
+import { Box, Typography, useTheme } from "@mui/material";
 // import avatarImage from "../../../assets/avatar.svg";
 import CommentsCards from "./CommentsCards";
+import { CallToActionButton } from "@/shared/components/buttons/CallToActionButton";
 
-export default function CommentsBox({ comments, packageName }) { 
-
+export default function CommentsBox({ comments, packageName, handleCommentClick }) { 
+  const theme = useTheme();
+  const { palette } = theme;
 
   return (
     <Box sx={{ 
@@ -23,7 +24,7 @@ export default function CommentsBox({ comments, packageName }) {
         variant="titleH1"
         sx={{
           textAlign: "center",
-          color: customPalette.text.light,
+          color: palette.text.light,
         }}
       >
         OPINIONES DE QUIENES PARTICIPARON
@@ -34,15 +35,21 @@ export default function CommentsBox({ comments, packageName }) {
           <Box
             sx={{
               display: "flex",
-              justifyContent: "center",
+              flexDirection: "column",
               alignItems: "center",
               height: "30dvh",
+              gap: "1rem",
+              marginTop: "2rem",
             }}
           >
-            <Alert severity="info" sx={{ width: "90dvw" }}>
-              <AlertTitle>Sin comentarios</AlertTitle>
-              No hay comentarios disponibles aún.
-              </Alert>
+            <Typography variant="subtitle" sx={{ color: palette.text.light }}>
+            Aún no se han realizado comentarios. Puedes ser el primero!
+            </Typography>
+            <CallToActionButton
+              text="Comenta tu experiencia"
+              onClick={handleCommentClick}
+              islarge={false}
+            />
           </Box>
         ) : (
           <Box sx={{ 

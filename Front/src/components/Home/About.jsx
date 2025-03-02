@@ -3,193 +3,251 @@ import {
   Card,
   CardContent,
   CardMedia,
-  Grid2,
+  Divider,
   Typography,
+  useTheme,
 } from "@mui/material";
-import img from "../../assets/about.jpg";
-import imgquienessomos from "../../assets/quienes-somos.jpg";
+import imgpaisaje from "../../assets/quienes-somos-paisaje.webp";
+import imgquienessomos from "../../assets/quienes-somos.webp";
 import staffalejandro from "../../assets/staff-alejandro.jpg";
 import staffpablo from "../../assets/staff-pablo.jpg";
 import staffmariano from "../../assets/staf-mariano.jpg";
 
 const staffMembers = [
   {
-    name: 'Pablo Haedo',
+    name: "Pablo Haedo",
     image: staffpablo,
-    alt: 'Pablo Haedo',
+    alt: "Pablo Haedo",
   },
   {
-    name: 'Mariano Vaucheret',
+    name: "Mariano Vaucheret",
     image: staffmariano,
-    alt: 'Mariano Vaucheret',
+    alt: "Mariano Vaucheret",
   },
   {
-    name: 'Alejandro Tomassino',
+    name: "Alejandro Tomassino",
     image: staffalejandro,
-    alt: 'Alejandro Tomassino',
+    alt: "Alejandro Tomassino",
   },
 ];
 
-
 const About = () => {
+  const theme = useTheme();
+  const { palette } = theme;
+
   return (
     <>
-      <Box>
-        <Box>
-          <img
-            src={img}
-            alt="Imagen Fondo"
-            style={{
-              width: "100%",
-              height: "auto",
-              margin: "0",
-              padding: "0",
-              objectFit: "cover",
-              display: "block",
-            }}
+      {/* contenedor de las 2 columnas */}
+      <Box
+        sx={{
+          background: palette.tertiary[900],
+          padding: "0",
+          display: "grid",
+          gridTemplateColumns: { xs: "1fr", md: "1fr 1fr" },
+        }}
+      >
+        {/* imagen paisaje */}
+        <Box
+          alt="Imagen Fondo"
+          sx={{
+            backgroundImage: `url(${imgpaisaje})`,
+            backgroundSize: "cover",
+            backgroundPosition: "center",
+            minHeight: {xs: "25vh", sm: "40vh"},
+          }}
+        />
+
+        <Box
+          sx={{
+            flex: 1,
+            minWidth: { xs: "100%", md: "50%" },
+            display: "flex",
+            flexDirection: "column",
+            alignContent: "center",
+            justifyContent: "center",
+            gap: { xs: "1rem", md: "2rem" },
+            padding: { xs: "2rem", sm: "2rem 5rem", md: "0 6rem 0 4rem" },
+          }}
+        >
+          <Typography
+            variant="titleH1"
+            color="#F3F3F3"
+            sx={{ textAlign: "center" }}
+          >
+            QUÉ SIGNIFICA KOSTEN
+          </Typography>
+          <Typography
+            variant="paragraphLight"
+            sx={{ textAlign: "center", fontSize: { xs: "14px", md: "16px" } }}
+          >
+            Es una palabra que pueblo Aonikenk utilizaba para llamar al "VIENTO".
+          </Typography>
+          <Typography
+            variant="paragraphLight"
+            sx={{ textAlign: "center", fontSize: { xs: "14px", md: "16px" } }}
+          >
+            Así como el fuerte Zonda caracteriza a Cuyo y el Pampero a
+            la zona central de nuestro país. Las montañas patagónicas son
+            recorridas por un viento indomable: el Kosten, que las abraza y se
+            funde con sus paisajes, esculpiendo sus siluetas.
+          </Typography>
+        </Box>
+        <Box
+          sx={{
+            flex: 1,
+            minWidth: { xs: "100%", md: "50%" },
+            display: "flex",
+            flexDirection: "column",
+            alignContent: "center",
+            justifyContent: "center",
+            gap: { xs: "1rem", md: "2rem" },
+            padding: { xs: "2rem", sm: "2rem 5rem", md: "0 4rem 0 6rem" },
+          }}
+        >
+          <Typography
+            variant="titleH1"
+            color={palette.text.light}
+            sx={{ textAlign: "center" }}
+          >
+            QUIÉNES SOMOS
+          </Typography>
+          <Typography
+            variant="paragraphLight"
+            sx={{ textAlign: "center", fontSize: { xs: "14px", md: "16px" } }}
+          >
+            Somos un grupo de amigos del sur que disfrutamos de la naturaleza
+            desde nuestra infancia. Caminando distintos senderos y paisajes, la
+            montaña nos reunió y unió. Ganamos experiencia, autonomía y nos
+            formamos profesionalmente para dar un paso más.
+          </Typography>
+          <Typography
+            variant="paragraphLight"
+            sx={{ textAlign: "center", fontSize: { xs: "14px", md: "16px" } }}
+          >
+            Así fue que, unidos por nuestra pasión, creamos Kosten.
+          </Typography>
+        </Box>
+
+        <Box
+          alt="Imagen Fondo"
+          sx={{
+            minHeight: {xs: "25vh", sm: "40vh"},
+            backgroundImage: `url(${imgquienessomos})`,
+            backgroundSize: "cover",
+            backgroundPosition: "center",
+            flex: 1,
+          }}
+        />
+      </Box>
+      <Box
+        sx={{
+          display: "flex",
+          flexDirection: "column",
+          justifyContent: "center",
+          alignContent: "center",
+        }}
+      >
+        <Box
+          sx={{
+            flex: 1,
+            display: "flex",
+            flexDirection: "column",
+            gap: "1rem",
+            paddingTop: "50px",
+            paddingBottom: "50px",
+            width: { xs: "100%", md: "60%" },
+            paddingX: { xs: "2rem", sm: "5rem", md: "unset" },
+            marginX: "auto",
+          }}
+        >
+          <Typography
+            variant="titleH1"
+            color="#F3F3F3"
+            sx={{ textAlign: "center", marginTop: "2rem" }}
+          >
+            NUESTRA PROPUESTA
+          </Typography>
+          <Typography
+            variant="paragraphLight"
+            sx={{ textAlign: "center", marginTop: "1rem", fontSize: "14px" }}
+          >
+            Queremos invitarte a recorrer esas montañas tal como lo hace el
+            viento y a que, durante el proceso, moldees tu espíritu aventurero
+            en los magníficos paisajes y recorridos que nuestra tierra ofrece.
+            Te proponemos experiencias donde podrás vivir la naturaleza de
+            manera única y enriquecerte por las tradiciones y encanto de los
+            pobladores de los lugares que visitaremos.
+          </Typography>
+          <Typography
+            variant="paragraphLight"
+            sx={{ textAlign: "center", marginTop: "1rem", fontSize: "14px" }}
+          >
+            También te brindamos la posibilidad de desarrollar mayor autonomía,
+            aprendiendo a moverte con confianza en la montaña, sin olvidar el
+            respeto y cuidado por nuestra tierra. Buscamos el mínimo impacto
+            ambiental y priorizamos la seguridad en cada paso.
+          </Typography>
+          <Typography
+            variant="paragraphLight"
+            sx={{ textAlign: "center", marginTop: "1rem", fontSize: "14px" }}
+          >
+            Queremos que vivas momentos inolvidables, donde la cercanía y trato
+            directo con nosotros te animen a sumarte a las experiencias KOSTEN,
+            donde soplan VIENTOS DE AVENTURAS.
+          </Typography>
+          <Divider
+            color={palette.tertiary[400]}
+            sx={{ marginTop: "3rem"}} 
           />
         </Box>
         <Box
           sx={{
-            background: "#080808",
-            padding: "0",
             display: "flex",
-            
-            objectFit: "cover",
-            flexDirection: { xs: "column", md: "column", lg: "row", xl: "row", sm: "column" },
+            flexDirection: "column",
+            justifyContent: "center",
+            alignContent: "center",
+            paddingTop: "3rem",
+            paddingBottom: "10rem",
+            marginLeft: "60px",
+            marginRight: "60px",
           }}
         >
-          <Box
+          <Typography
+            variant="titleH1"
+            color="#F3F3F3"
+            sx={{ textAlign: "center", marginBottom: "2rem" }}
+          >
+            STAFF
+          </Typography>
+          <Box 
             sx={{
-              flex: 1,
-              padding: "4rem",
-              textAlign: "center",
-              alignContent: "center",
-              marginRight: {xl:"120px", lg:"120px", md:"120px", sm:"0px", xs:"0px"},
-              marginLeft: {xl:"120px", lg:"120px", md:"120px", sm:"0px", xs:"0px"},
-             
-              
+              display: "grid",
+              gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))",
+              maxWidth: "75%",
+              margin: "0 auto",
+              gap: "2rem",
             }}
           >
-            <Typography variant="titleH1" color="#F3F3F3">
-              QUIÉNES SOMOS <br />
-              <br />
-            </Typography>
-            <Typography
-              variant="paragraphLight"
-              color="#F3F3F3"
-              sx={{ marginTop: "1rem", fontSize: "20px" }}
-            >
-              Somos un grupo de amigos del sur que disfrutamos de la naturaleza
-              desde nuestra infancia. Caminando distintos senderos y paisajes,
-              la montaña nos reunió y unió. Ganamos experiencia, autonomía y nos
-              formamos profesionalmente para dar un paso más. Así fue que,
-              unidos por nuestra pasión, creamos Kosten.
-              <br />
-              <br />
-            </Typography>
-            <Typography
-              variant="titleH1"
-              color="#F3F3F3"
-              sx={{ textAlign: "center", marginTop: "2rem" }}
-            >
-              QUÉ SIGNIFICA KOSTEN <br />
-              <br />
-            </Typography>
-            <Typography
-              variant="paragraphLight"
-              color="#F3F3F3"
-              sx={{ marginTop: "1rem", fontSize: "20px" }}
-            >
-              Es una palabra que pueblo Aonikenk utilizaba para llamar al
-              &quot;VIENTO&quot;. <br /><br /> Así como el fuerte Zonda caracteriza a Cuyo y
-              el Pampero a la zona central de nuestro país. Las montañas
-              patagónicas son recorridas por un viento indomable: el Kosten, que
-              las abraza y se funde con sus paisajes, esculpiendo sus siluetas.
-              <br />
-            </Typography>
-          </Box>
-
-          <Box
-            component="img"
-            src={imgquienessomos}
-            alt="Imagen Fondo"
-            sx={{
-              width: { xs: "100%", md: "100%", lg: "100%", xl: "50vw", sm: "100%" },
-              objectFit: "cover",
-              padding: "0",
-              margin: "0",
-            }}
-          ></Box>
-        </Box>
-        <Box sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', alignContent: "center", backgroundColor: "grey.800", paddingTop: '3rem' }}>
-          <Box
-            sx={{
-              flex: 1,
-              paddingTop: "50px",
-              paddingBottom: "50px",
-              paddingLeft: "5rem",
-              paddingRight: "5rem",
-              marginLeft: {xl:"350px", lg:"350px", md:"350px", sm:"0px", xs:"0px"},
-              marginRight: {xl:"350px", lg:"350px", md:"350px", sm:"0px", xs:"0px"},
-              textAlign: "center",
-              alignContent: "center",
-              gap: "0",
-             
-              
-            }}
-          >
-            <Typography
-              variant="titleH1"
-              color="#F3F3F3"
-              sx={{ textAlign: "center", marginTop: "2rem" }}
-            >
-              NUESTRA PROPUESTA <br />
-              <br />
-            </Typography>
-            <Typography
-              variant="paragraphLight"
-              color="#F3F3F3"
-              sx={{ marginTop: "1rem", fontSize: "20px" }}
-            >
-              Queremos invitarte a recorrer esas montañas tal como lo hace el
-              viento y a que, durante el proceso, moldees tu espíritu aventurero
-              en los magníficos paisajes y recorridos que nuestra tierra ofrece.
-              Te proponemos experiencias donde podrás vivir la naturaleza de
-              manera única y enriquecerte por las tradiciones y encanto de los
-              pobladores de los lugares que visitaremos. <br /><br />
-              También te brindamos la posibilidad de desarrollar mayor autonomía, aprendiendo a moverte
-              con confianza en la montaña, sin olvidar el respeto y cuidado por
-              nuestra tierra. Buscamos el mínimo impacto ambiental y priorizamos
-              la seguridad en cada paso. <br /><br />
-              Queremos que vivas momentos
-              inolvidables, donde la cercanía y trato directo con nosotros te
-              animen a sumarte a las experiencias KOSTEN, donde soplan VIENTOS
-              DE AVENTURAS.
-              <br />
-            </Typography>
-          </Box>
-          <Box sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', alignContent: "center", paddingTop: '3rem', paddingBottom: '10rem', marginLeft: '60px', marginRight: '60px' }}>
-        <Typography variant="titleH1" color="#F3F3F3" sx={{ textAlign: 'center', marginBottom: '2rem' }}>STAFF</Typography>
-        <Grid2 container spacing={2} justifyContent="center" gap="24px">
-          {staffMembers.map((member, index) => (
-            <Grid2 item="true" xs={12} sm={4} key={index}>
-              <Card>
+            {staffMembers.map((member, index) => (
+              <Card key={index}>
                 <CardMedia
                   component="img"
                   alt={member.alt}
-                  height={550}
-                  width={400}
+                  height={400}
+                  width={300}
                   image={member.image}
                 />
-                <CardContent align="center" sx={{ backgroundColor: 'grey.50' }}>
-                  <Typography variant="titleH2" sx={{ fontWeight: '900' }}>{member.name}</Typography>
+                <CardContent
+                  align="center"
+                  sx={{ backgroundColor: "grey.50" }}
+                >
+                  <Typography variant="titleH2" sx={{ fontWeight: "900" }}>
+                    {member.name}
+                  </Typography>
                 </CardContent>
               </Card>
-            </Grid2>
-          ))}
-        </Grid2>
-      </Box>
+            ))}
+          </Box>
         </Box>
       </Box>
     </>

@@ -13,7 +13,6 @@ export default function TourDestinationCard({
   route = '/destinos/',
   isAdmin = false,
 }) {
-  // console.log('destination', destination);
   const navigate = useNavigate();
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
@@ -33,16 +32,16 @@ export default function TourDestinationCard({
       position: "relative",
       width: "100%",
       aspectRatio: "10 / 9",
-      borderRadius: "10px",
+      borderRadius: "4px",
       overflow: "hidden",
       boxShadow: "0px 4px 4px rgba(0, 0, 0, 0.25)",
       display: "flex",
       flexDirection: "column",
-      backgroundColor: "#c9c9c9",
     }}
     onClick={() => handleClick(blank ? null : destination?.id, destination)}
   >
     {/* Imagen */}
+    {/* blank es el caso de agregar uno nuevo y no tiene imagen */}
     {blank 
     ? <Box
       sx={{
@@ -56,6 +55,7 @@ export default function TourDestinationCard({
         <RiImage2Line size={50} color="#333"/>
       </Box>
     : <>
+      {/* imagen del paquete */}
       <Box
         component="img"
         src={destination?.bannerPhoto.url}
@@ -66,6 +66,7 @@ export default function TourDestinationCard({
           objectFit: "cover",
         }}
       />
+      {/* informacion para el admin Completo (vacio), Incompleto y No disponible */}
       {isAdmin && (destination?.active === false || !packCompleted ) && <Box
         sx={{
           position: "absolute",
@@ -95,9 +96,10 @@ export default function TourDestinationCard({
     <Box
       sx={{
         width: "100%",
-        height: "15%",
+        height: blank ? "15%" : "22%",
         backgroundColor: "#f3f3f3",
         display: "flex",
+        flexDirection: "column",
         alignItems: "center",
         justifyContent: "center",
       }}
@@ -110,6 +112,14 @@ export default function TourDestinationCard({
       >
         {blank ? isMobile ? "Nuevo Paquete" : "Nuevo Paquete / Destino" : destination?.name}
       </Typography>
+      {!blank && <Typography
+        variant="text2"
+        sx={{
+          fontSize: {xs: "0.85rem", sm: "0.9rem", md: "1rem", xl: "1.1rem"},
+        }}
+      >
+        {destination?.category?.name}
+      </Typography>}
     </Box>
   </Box>
   );

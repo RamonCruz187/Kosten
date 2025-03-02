@@ -1,7 +1,8 @@
 /* eslint-disable react/prop-types */
-import { Button, Grid2, Stack, Typography } from "@mui/material";
+import { Grid2, Stack, Typography } from "@mui/material";
 import InputNormal from "../Auth/InputNormal";
 import { useState } from "react";
+import { ColorButton } from "@/shared/components/buttons/ColorButton";
 
 export default function ContactForm({ size }) {
   const [formState, setFormState] = useState({
@@ -11,6 +12,7 @@ export default function ContactForm({ size }) {
     message: "",
     send: false,
   });
+  const [isFetching, setIsFetching] = useState(false);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -20,31 +22,22 @@ export default function ContactForm({ size }) {
     }));
   };
 
-  const sendChange = (bool, time) => {
-    setTimeout(() => {
-      setFormState((prevState) => ({
-        ...prevState,
-        send: bool,
-      }));
-    }, time);
-  };
-
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      sendChange(true, 0);
+      setIsFetching(true);
       console.log(formState);
-      sendChange(false, 3000);
     } catch (error) {
       console.error("error:", error);
-      sendChange(false, 0);
+    } finally {
+      setIsFetching(false);
     }
   };
 
   return (
     <Grid2 item size={size} sx={{}}>
-      <form onSubmit={handleSubmit} style={{ width: "100%", background: "white" }}>
-        <Stack sx={{ padding: "20%", gap: "1.25rem", alignItems: "center" }}>
+      <form onSubmit={handleSubmit} style={{ width: "100%", height: "100%", background: "white" }}>
+        <Stack sx={{ padding: {xs:"2rem", md:"20%"}, gap: "1.25rem", alignItems: "center" }}>
           <Typography variant="titleH1">CONTÁCTANOS</Typography>
 
           <InputNormal
@@ -79,24 +72,15 @@ export default function ContactForm({ size }) {
             label="Mensaje"
             fx={handleChange}
             placeholder="Escribe lo que quieras consultarnos aquí."
+            rows={4}
           />
-          {formState.send ? (
-            <Button
-              color="grayButton"
-              type="submit"
-              sx={{ padding: ".75rem 3rem", marginTop: "1rem" }}
-            >
-              LOADING...
-            </Button>
-          ) : (
-            <Button
-              color="greenButton"
-              type="submit"
-              sx={{ padding: ".75rem 3rem", marginTop: "1rem" }}
-            >
-              ENVIAR CONSULTA
-            </Button>
-          )}
+          <ColorButton
+            type="greenButton"
+            text="ENVIAR CONSULTA"
+            fetchingText="ENVIANDO..."
+            onClick={handleSubmit}
+            isFetching={isFetching}
+          />
         </Stack>
       </form>
     </Grid2>

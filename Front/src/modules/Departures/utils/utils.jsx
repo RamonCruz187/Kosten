@@ -5,6 +5,7 @@ import dayjs from 'dayjs';
 import { getPackageById } from '../../../api/packageApi';
 import 'dayjs/locale/es'; 
 import { useEffect } from "react";
+import { formatDepartureDate } from "@/shared/utils/formatDeparture";
 
 dayjs.locale('es');
 export const iconsCardDepartures = [
@@ -43,7 +44,10 @@ export const processDepartures = (data, limit = null) => {
           return null;
         }
 
-        const startDate = dayjs(`${
+        const startDate = typeof(departure?.startDate) === 'string'
+        ? dayjs(departure?.startDate)
+        :
+          dayjs(`${
           [
             departure.startDate[0] || '2000',
             departure.startDate[1] || '01',
@@ -55,8 +59,9 @@ export const processDepartures = (data, limit = null) => {
           ].join(':')}`
         );
 
-        const endDate = departure.endDate?.length
-          ? dayjs(`${
+        const endDate = typeof(departure?.endDate) === 'string'
+          ? dayjs(departure?.endDate)
+          : dayjs(`${
               [
                 departure.endDate[0] || '2000',
                 departure.endDate[1] || '01',
@@ -66,15 +71,15 @@ export const processDepartures = (data, limit = null) => {
                 departure.endDate[4] || '00',
                 departure.endDate[5] || '00'
               ].join(':')}`
-            )
-          : null;
+            );
 
         return {
           ...departure,
           startDate,
           endDate,
-          startDateFormatted: startDate.format("D [de] MMMM [de] YYYY"),
-          endDateFormatted: endDate ? endDate.format("D [de] MMMM [de] YYYY") : null,
+          startDateFormatted: formatDepartureDate(departure),
+          endDateFormatted: null,
+          // endDateFormatted: endDate ? endDate.format("D [de] MMMM [de] YYYY") : null,
           dataIndex,
           departureIndex,
         };
@@ -95,8 +100,8 @@ export const processDepartures = (data, limit = null) => {
 
   const processedDepartures = limit ? departures.slice(0, limit) : departures;
   return [
-    { message: "¿Buscás otra fecha?" },
-    ...processedDepartures
+    ...processedDepartures,
+    { message: "¿Buscás otra fecha?" }
   ];
   
 };
