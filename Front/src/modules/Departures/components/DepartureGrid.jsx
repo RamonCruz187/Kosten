@@ -36,13 +36,15 @@ const DepartureGrid = ({ title="PRÓXIMAS SALIDAS", sx={}}) => {
       alignItems: 'center', 
       justifyContent: 'center', 
       width: '100dvw',
-      paddingY: '5rem',
+      paddingY: {xs: '2rem', md: '4rem'},
       ...sx,
     }}>
       <Box sx={{maxWidth: '1200px', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '1.5rem'}}>
+        {title !== '' && 
         <Typography variant='titleH1' gutterBottom sx={{ textAlign: 'center', color: customPalette.text.light }}>
           {title}
         </Typography>
+        }
         {isFetching ? <CircularProgress />
         :
           allPackages ?
