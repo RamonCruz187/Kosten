@@ -45,7 +45,7 @@ public class DepartureServiceImpl implements IDepartureService {
     @Override
     @Transactional(readOnly = true)
     public ExtendedBaseResponse<List<DepartureToBeListed>> findAll() {
-        List<Departure> departuresList = departureRepository.findAll();
+        List<Departure> departuresList = departureRepository.findByIsActiveTrueOrderByStartDate();
         List<DepartureToBeListed> departureToBeListedList = departuresList.stream()
                 .map(departureMapper::departureToDepartureToBeListed)
                 .collect(Collectors.toList());
