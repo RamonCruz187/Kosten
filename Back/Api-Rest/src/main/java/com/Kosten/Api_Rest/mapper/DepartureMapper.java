@@ -13,6 +13,7 @@ import java.util.stream.Collectors;
 @Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.IGNORE)
 public interface DepartureMapper {
 
+    DepartureToBeListed toDepartureToBeListed(Departure departure);
     Departure toEntity(DepartureRequestDto departureRequestDto);
     DepartureRequestDto departureToDepartureRequestDto(Departure departure_);
 
@@ -48,6 +49,17 @@ public interface DepartureMapper {
                         user.getIsActive(),
                         user.getPayment()
                 ))
+                .collect(Collectors.toList());
+    }
+
+    @Named("filterActiveDepartures")
+    default List<DepartureToBeListed> mapActiveDepartures(List<Departure> departures) {
+        if (departures == null) {
+            return List.of();
+        }
+        return departures.stream()
+                .filter(Departure::getIsActive)
+                .map(this::toDepartureToBeListed)
                 .collect(Collectors.toList());
     }
 

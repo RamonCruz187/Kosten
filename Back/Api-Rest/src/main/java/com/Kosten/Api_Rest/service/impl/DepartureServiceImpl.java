@@ -30,7 +30,6 @@ import java.util.stream.Collectors;
 
 @Service
 public class DepartureServiceImpl implements IDepartureService {
-
     @Autowired
     private IDepartureRepository departureRepository;
     @Autowired
@@ -46,6 +45,19 @@ public class DepartureServiceImpl implements IDepartureService {
     @Transactional(readOnly = true)
     public ExtendedBaseResponse<List<DepartureToBeListed>> findAll() {
         List<Departure> departuresList = departureRepository.findByIsActiveTrueOrderByStartDate();
+        List<DepartureToBeListed> departureToBeListedList = departuresList.stream()
+                .map(departureMapper::departureToDepartureToBeListed)
+                .collect(Collectors.toList());
+        return ExtendedBaseResponse.of(
+                BaseResponse.ok("Lista de salidas obtenida."),
+                departureToBeListedList
+        );
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public ExtendedBaseResponse<List<DepartureToBeListed>> findall2() {
+        List<Departure> departuresList = departureRepository.findAll();
         List<DepartureToBeListed> departureToBeListedList = departuresList.stream()
                 .map(departureMapper::departureToDepartureToBeListed)
                 .collect(Collectors.toList());

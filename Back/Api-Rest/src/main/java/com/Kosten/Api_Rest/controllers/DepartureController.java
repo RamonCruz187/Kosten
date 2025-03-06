@@ -16,6 +16,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
@@ -88,8 +89,8 @@ public class DepartureController {
     }
 
     @Operation(
-            summary = "Obtiene todas las salidas.",
-            description = "Permite obtener todas las Salidas existentes de todos los Paquetes."
+            summary = "Obtiene todas las salidas activas.",
+            description = "Permite obtener todas las Salidas Activas existentes de todos los Paquetes."
     )
     @ApiResponses(value = {
             @ApiResponse(
@@ -107,6 +108,28 @@ public class DepartureController {
         return ResponseEntity
                 .status(200)
                 .body(departureService.findAll());
+    }
+
+    @Operation(
+            summary = "Obtiene todas las salidas.",
+            description = "Permite obtener todas las Salidas existentes de todos los Paquetes."
+    )
+    @ApiResponses(value = {
+            @ApiResponse(
+                    responseCode = "201", description = "Salidas obtenidas exitosamente.",
+                    content = {
+                            @Content(mediaType = "application/json",
+                                    schema = @Schema(implementation = ExtendedBaseResponse.class))
+                    }),
+            @ApiResponse(responseCode = "403", description = "Forbidden access to this resource", content = {@Content}),
+            @ApiResponse(responseCode = "404", description = "Departures not found", content = {@Content}),
+            @ApiResponse(responseCode = "500", description = "Internal Server Error", content = {@Content})
+    })
+    @GetMapping("/all")
+    public ResponseEntity<ExtendedBaseResponse<List<DepartureToBeListed>>> getAllDepartures2() {
+        return ResponseEntity
+                .status(200)
+                .body(departureService.findall2());
     }
 
     @Operation(
