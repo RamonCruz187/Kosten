@@ -1,6 +1,5 @@
 import { useState, useMemo, useContext } from 'react';
-import { 
-  Box, IconButton, Typography, Card, CardContent,useMediaQuery,useTheme,Button} from '@mui/material';
+import { Box, IconButton, Typography, Card, useMediaQuery, useTheme, Button} from '@mui/material';
 import { ChevronLeft as PrevIcon, ChevronRight as NextIcon, Close as CloseIcon } from '@mui/icons-material';
 import { processDepartures } from "../utils/utils.jsx";
 import {GlobalContext} from '../../../shared/context/GlobalContext.jsx';
@@ -74,6 +73,17 @@ const DepartureSlider = ({ sharedPack }) => {
     setModalOpen(false);
   };
   
+  // const handleReservation = async (departureSelected) => {
+  //   try {
+  //     const response = await fetchReservation(departureSelected);
+  //     // Si la respuesta es exitosa, abre el modal
+      
+  //     setOpenConfirmationModal(true);
+  //   } catch (error) {
+  //     console.error("Error al procesar la reserva:", error);
+  //   }
+  // };
+
   const visibleSlides = useMemo(() => {
     const startIndex = currentPage * getVisibleItems;
     return slides.slice(startIndex, startIndex + getVisibleItems);
@@ -257,8 +267,7 @@ const DepartureSlider = ({ sharedPack }) => {
               <ColorButton
                 type="greenButton" 
                 onClick={ ()=>{
-                  state.user_auth.token &&
-                      setOpenSessionRequestModal(true)
+                  navigate('/contacto')
                 }}
                 text= "CONSULTA SALIDAS FUTURAS"
                 sx={{
@@ -354,6 +363,7 @@ const DepartureSlider = ({ sharedPack }) => {
                             disableElevation
                             disableRipple
                             onClick={()=>{setOpenConfirmationModal(true)}}
+                            // onClick={handleReservation}
                             >
                               RESERVAR
                             </Button>
@@ -366,6 +376,8 @@ const DepartureSlider = ({ sharedPack }) => {
         <SessionRequestModal
           openSessionRequestModal={openSessionRequestModal}
           onClose={() => setOpenSessionRequestModal(false)}
+          title="RESERVAR SALIDA"
+          action="reservar"
       />
       </Box>
 
@@ -396,7 +408,7 @@ const DepartureSlider = ({ sharedPack }) => {
         <Box sx={{ 
           display: 'flex',
           justifyContent: visibleImages.length > 1 ? 'flex-start' : 'center',
-          width: '95%',
+          width: '100%',
           gap: { xs: 2, sm: 2, md: 3 },
           
         }}>

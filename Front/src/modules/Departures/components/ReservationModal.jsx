@@ -1,5 +1,5 @@
 // src/modules/Departures/components/ReservationModal.jsx
-import { Modal, Box, Typography, IconButton, Button, Select, MenuItem, FormControl } from '@mui/material';
+import { Modal, Box, Typography, IconButton, Select, MenuItem, FormControl } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 import { useNavigate } from 'react-router-dom';
 import { ConfirmationModal } from './ConfirmationModal';
@@ -9,6 +9,7 @@ import { fCurrency } from '@/shared/utils/formatNumber';
 import { StyledLabel } from '@/modules/admin/components/styles';
 import { addUserToDeparture } from '@/api/departureUserApi';
 import { NotificationService } from '@/shared/services/notistack.service';
+import { OnlyTextButton } from '@/shared/components/buttons/OnlyTextButton';
 
 const ReservationModal = ({ 
     setOpenModal, 
@@ -26,9 +27,8 @@ const ReservationModal = ({
     try {
       const response = await fetchReservation(departureSelected);
       // Si la respuesta es exitosa, abre el modal
-      if (response && response.success) {
-        setOpenConfirmationModal(true);
-      } 
+      
+      setOpenConfirmationModal(true);
     } catch (error) {
       console.error("Error al procesar la reserva:", error);
     }
@@ -118,21 +118,19 @@ const ReservationModal = ({
           </Typography>
         </Box>
         <Box sx={{ display: 'flex', justifyContent: 'flex-end', gap: 2 }}>
-          <Button
-            disabled={isFetching}
+          <OnlyTextButton
+            isFetching={isFetching}
             onClick={() => setOpenModal(false)} 
-            sx={{ color: '#323232', backgroundColor: '#fff' }}
-          >
-            Cancelar
-          </Button>
-          <Button
-            variant="contained"
-            color="primary"
+            text="Cancelar"
+            type="red"
+          />
+          <OnlyTextButton
+            type="green"
+            text="Reservar"
             onClick={handleReservation}
-            disabled={!departureSelected || isFetching}
-          >
-            Reservar
-          </Button>
+            disabled={!departureSelected}
+            isFetching={isFetching}
+          />
         </Box>
       </Box>
  

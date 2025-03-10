@@ -11,7 +11,6 @@ import {
   Paper,
   styled,
   Container,
-  CircularProgress,
 } from "@mui/material";
 import {
   getPackageById,
@@ -26,6 +25,8 @@ import { NotificationService } from "@shared/services/notistack.service.jsx";
 import { PackagesBreadCrumbs } from "../components/PackagesBreadCrumbs";
 import { hasChanges } from "@/shared/utils/compareObj";
 import { checkSteps } from "@/shared/utils/checkStepsPackage";
+import { WhiteButton } from "@/shared/components/buttons/WhiteButton";
+import { ColorButton } from "@/shared/components/buttons/ColorButton";
 
 const paqueteSchema = Yup.object().shape({
   locationInfo: Yup.string()
@@ -46,6 +47,7 @@ export const CreateEditPackageDestination = () => {
   const navigate = useNavigate();
   
   const [disabledButton, setDisabledButton] = useState(false);
+  const [isFetching, setIsFetching] = useState(false);
   const [imagenes, setImagenes] = useState([...new Array(3)]);
   const [imagePreview, setImagePreview] = useState([...new Array(3)]);
   const [package_, setPackage] = useState(null);
@@ -140,7 +142,7 @@ export const CreateEditPackageDestination = () => {
   const sendPackages = async (values) => {
     try {
       setDisabledButton(true);
-      
+      setIsFetching(true);
       // Validar el formulario
       const errors = await formik.validateForm();
       if (Object.keys(errors).length > 0) {
@@ -173,6 +175,7 @@ export const CreateEditPackageDestination = () => {
       NotificationService.error('Error al guardar los cambios');
     } finally {
       setDisabledButton(false);
+      setIsFetching(false);
     }
   };
 
@@ -191,6 +194,7 @@ export const CreateEditPackageDestination = () => {
     };
 
     try {
+      setIsFetching(true);
       const { data: dataPackage } = await updatePackage(dataToSend);
       
       // Actualizar los valores iniciales después de una actualización exitosa
@@ -204,6 +208,8 @@ export const CreateEditPackageDestination = () => {
     } catch (error) {
       console.error('Error al actualizar el paquete:', error);
       throw error; // Propagar el error para manejarlo en sendPackages
+    } finally {
+      setIsFetching(false);
     }
   };
 
@@ -215,12 +221,15 @@ export const CreateEditPackageDestination = () => {
       formData.append("files", imagen);
     });
     try {
+      setIsFetching(true);
       // Pasar el packageId y formData
       const response = await postImagesPackages(params.id, formData); // Axios devuelve 'data' directamente
         NotificationService.success(`Las imágenes fueron cargadas con éxito`);
     } catch (error) {
         console.error(error);
         NotificationService.error('Error al cargar las imágenes');
+    } finally {
+      setIsFetching(false);
     }
   }, [])
 
@@ -229,6 +238,7 @@ export const CreateEditPackageDestination = () => {
     formData.append("imageId", idImg);
     formData.append("image", imgFile); // Archivo
     try {
+      setIsFetching(true);
       // Pasar el packageId y formData
       const response = await putImagePackagesById(idImg, formData); // Axios devuelve 'data' directamente
       NotificationService.success(`La imagen con Id #${idImg} fue cargada con éxito`);
@@ -236,6 +246,8 @@ export const CreateEditPackageDestination = () => {
     } catch (error) {
         console.error(error);
         console.log(`Error al cargar la imagen con Id #${idImg}`);
+    } finally {
+      setIsFetching(false);
     }
   }, [])
 
@@ -407,6 +419,7 @@ export const CreateEditPackageDestination = () => {
                       sx={{
                         transition: 'transform 0.3s ease-in-out',
                         bgcolor: 'var(--color-links)',
+                        borderRadius: "4px",
                       }}
                     >
                       Modificar imagen
@@ -452,6 +465,7 @@ export const CreateEditPackageDestination = () => {
                       sx={{
                         transition: 'transform 0.3s ease-in-out',
                         bgcolor: 'var(--color-links)',
+                        borderRadius: "4px",
                       }}
                     >
                       Modificar imagen
@@ -497,6 +511,7 @@ export const CreateEditPackageDestination = () => {
                       sx={{
                         transition: 'transform 0.3s ease-in-out',
                         bgcolor: 'var(--color-links)',
+                        borderRadius: "4px",
                       }}
                     >
                       Modificar imagen
@@ -508,7 +523,8 @@ export const CreateEditPackageDestination = () => {
 
             {/* Botones */}
             <Box sx={{display:"flex", justifyContent:"space-between", gap:'1rem'}} >
-              <Button
+              <WhiteButton
+                isFetching={isFetching}
                 disabled={
                   disabledButton ||
                   !formik.isValid ||
@@ -518,17 +534,12 @@ export const CreateEditPackageDestination = () => {
                 type="button"
                 variant="contained"
 								onClick={(e) => handleSiguiente(e, false)}
-                sx={{
-                  backgroundColor: "#fff",
-                  width: "100%",
-                  transition: "transform 0.3s ease-in-out",
-                }}
-              >
-                {disabledButton 
-                ? <CircularProgress size={20} color="inherit" /> 
-                : "Actualizar Paquete"}
-              </Button>
-              <Button
+                sx={{width: "100%",}}
+                text="Actualizar Paquete"
+                fetchingText="Actualizando..."
+              />
+              <ColorButton
+                isFetching={isFetching}
                 disabled={
                   disabledButton ||
                   !formik.isValid ||
@@ -543,11 +554,8 @@ export const CreateEditPackageDestination = () => {
                   width: "100%",
                   transition: "transform 0.3s ease-in-out",
                 }}
-              >
-                {disabledButton 
-                ? <CircularProgress size={20} color="inherit" /> 
-                : (isNewPackage && Object.keys(isNewPackage).length === 0) ? "Actualizar Paquete" : "Publicar"}
-              </Button>
+                text={(isNewPackage && Object.keys(isNewPackage).length === 0) ? "Actualizar Paquete" : "Publicar"}
+              />
             </Box>
           </Box>
         </Box>

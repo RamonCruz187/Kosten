@@ -6,7 +6,7 @@ import { useState, useContext } from "react";
 import { GlobalContext } from '../../../shared/context/GlobalContext.jsx';
 import SessionRequestModal from './SessionRequestModal.jsx';
 import { useNavigate } from "react-router-dom";
-import { formatPriceRange } from '../utils/utils.jsx';
+// import { formatPriceRange } from '../utils/utils.jsx';
 import dayjs from 'dayjs';
 import 'dayjs/locale/es';
 dayjs.locale('es');
@@ -206,6 +206,8 @@ export const DepartureCard = ({ pack }) => {
       <SessionRequestModal
         openSessionRequestModal={openSessionRequestModal}
         onClose={() => setOpenSessionRequestModal(false)}
+        title="RESERVAR SALIDA"
+        action="reservar"
       />
 
       {openModal && (

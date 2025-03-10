@@ -101,7 +101,7 @@ const Register = () => {
             />
             <InputNormal type="number" value={contact} label="Teléfono" fx={setContact} />
             <InputNormal type="email" value={email} label="Email" fx={setEmail} />
-            <Box sx={{ width: "100%", display: "flex", justifyContent: "center" }}>
+            <Box sx={{ width: "100%", display: "flex", flexDirection: "column", alignItems: "center" }}>
               <InputPassword
                 label="Contraseña"
                 value={password}
@@ -111,14 +111,17 @@ const Register = () => {
               />
               {advicePassword && (
                 <Typography variant="inputError"
-                  sx={{marginLeft: "1rem"}}
+                  sx={{
+                    marginLeft: "1rem",
+                    width: "100%", maxWidth: {xs: "300px", md:"400px", lg: "500px"}
+                  }}
                 >
                   Debe tener 8 caracteres, sin espacios, uno o más números, minúsculas,
                   mayúsculas, y carácteres especiales (@#$%^&+=)
                 </Typography>
               )}
             </Box>
-            <Box sx={{ width: "100%", display: "flex", justifyContent: "center" }}>
+            <Box sx={{ width: "100%", display: "flex", flexDirection: "column", alignItems: "center" }}>
               <InputPassword
                 label="Confirme contraseña"
                 value={confirmPassword}
@@ -130,13 +133,19 @@ const Register = () => {
                 ? adviceConfirmPassword
                   ?
                   <Typography variant="inputAdvice"
-                    sx={{marginLeft: "1rem"}}
-                    >
+                    sx={{
+                      marginLeft: "1rem",
+                      width: "100%", maxWidth: {xs: "300px", md:"400px", lg: "500px"}
+                    }}
+                  >
                     Las contraseñas coinciden
                   </Typography>
                   : 
                   <Typography variant="inputError"
-                    sx={{marginLeft: "1rem"}}
+                    sx={{
+                      marginLeft: "1rem",
+                      width: "100%", maxWidth: {xs: "300px", md:"400px", lg: "500px"}
+                    }}
                   >
                     No coinciden
                   </Typography>

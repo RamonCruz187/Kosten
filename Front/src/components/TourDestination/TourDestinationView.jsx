@@ -14,9 +14,6 @@ export default function TourDestinationView() {
     setIsFetching(true);
     try {
       const response = await getAllActivesPackages();
-      console.log("data", response);
-      // const response = await getAllCategories();
-      // setPackages(response?.data?.data?);
       setPackages(response?.data?.data?.content);
       console.log("Las salidas fueron cargadas con éxito");
     } catch (error) {
