@@ -2,7 +2,7 @@
 import { Box, Modal } from "@mui/material";
 import Login from "./Login";
 
-const PopoverLogin = ({ isOpenLogin=false, handleClose }) => {
+const PopoverLogin = ({ isOpenLogin=false, handleClose, setIsOpenDrawer }) => {
   return (
 
       <Modal
@@ -17,7 +17,7 @@ const PopoverLogin = ({ isOpenLogin=false, handleClose }) => {
           width: {xs: "97dvw", sm: "unset"},
           transform: {sm: "translate(50%, 50%)", md: "unset"},
         }}>
-          <Login handleClose={handleClose} isModal={true} />
+          <Login handleClose={handleClose} isModal={true} setIsOpenDrawer={setIsOpenDrawer}/>
         </Box>
       </Modal>
     
