@@ -11,7 +11,7 @@ import {useUserData} from "@shared/hooks/useUserData.jsx";
 import { ColorButton } from "@shared/components/buttons/ColorButton.jsx";
 import { OnlyTextButton } from "@shared/components/buttons/OnlyTextButton.jsx";
 
-const Login = ({handleClose=() => {}, isModal=false}) => {
+const Login = ({handleClose=() => {}, isModal=false, setIsOpenDrawer}) => {
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -22,6 +22,7 @@ const Login = ({handleClose=() => {}, isModal=false}) => {
   const handleClickShowPassword = () => setShowPassword((show) => !show);
   const handleGoToRegister = () => {
     handleClose();
+    setIsOpenDrawer(false);
     navigate("/register");
   };
   const { handleLogin } = useAuth();
@@ -38,7 +39,8 @@ const Login = ({handleClose=() => {}, isModal=false}) => {
 
       const { data: dataUser } = await getUserById(dataAuth.data.id);
       setUserData(dataUser.data);
-
+      setIsOpenDrawer(false);
+      handleClose();
       NotificationService.success(`Bienvenido nuevamente`, 3000);
 
     } catch (error) {
@@ -57,12 +59,12 @@ const Login = ({handleClose=() => {}, isModal=false}) => {
           justifyContent: "center",
           alignItems: "center",
           width: !isModal ? "100%" : {xs: "100%", sm: 400},
-          minHeight: !isModal ?  "55dvh" : "auto" ,
-          padding: !isModal ? "1rem 35dvw": "1rem 2rem",
+          minHeight: !isModal ?  "80dvh" : "auto" ,
+          padding: !isModal ? {xs: "1rem 2rem", md: "1rem 35dvw"}: "1rem 2rem",
           background: "white",
         }}
       >
-        <Typography variant="titleH2">LOGIN</Typography>
+        <Typography variant="titleH2">Iniciar Sesión</Typography>
 
         <InputNormal value={email} label="Email" type='email' fx={setEmail} />
         <InputPassword
@@ -77,7 +79,7 @@ const Login = ({handleClose=() => {}, isModal=false}) => {
           text="OLVIDÉ MI CONTRASEÑA" 
           isFetching={isFetching} 
           sx={{
-            width:'50%',
+            minWidth:'50%',
             "& p" : {fontSize: "0.80rem", padding: 0, marginBottom: "2rem"}, 
           }}
           onClick={() => console.log("abrir modal recuperar contraseña")}
