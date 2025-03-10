@@ -28,6 +28,7 @@ import { CreateEditPackageBasic } from "@/modules/admin/pages/CreateEditPackageB
 import { CreateEditPackageDetails } from "@/modules/admin/pages/CreateEditPackageDetails.jsx";
 import { CreateEditPackageDestination } from "@/modules/admin/pages/CreateEditPackageDestination.jsx";
 import { CreateEditDepartures } from "@/modules/admin/pages/CreateEditDepartures.jsx";
+import ScrollToTop from "./ScrollTotop.jsx";
 const About = lazy(() => import("../components/Home/About"));
 const TourDestinationView = lazy(() => import("../components/TourDestination/TourDestinationView.jsx"));
 // const TourDestinationDetail = lazy(() => import("../components/TourDestination/TourDestinationDetail.jsx"));
@@ -36,6 +37,7 @@ const ContactView = lazy(() => import("../components/Contact/ContactView.jsx"));
 const AppRoutes = () => (
   <Router>
     <Suspense fallback={<Loading />}>
+    <ScrollToTop />
       <Routes>
         {/* Routes with Layout */}
         <Route element={<Layout></Layout>}>
