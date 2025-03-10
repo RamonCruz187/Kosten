@@ -37,6 +37,7 @@ export default function TourDestinationCard({
       boxShadow: "0px 4px 4px rgba(0, 0, 0, 0.25)",
       display: "flex",
       flexDirection: "column",
+      backgroundColor: "#c9c9c9",
     }}
     onClick={() => handleClick(blank ? null : destination?.id, destination)}
   >
@@ -46,7 +47,7 @@ export default function TourDestinationCard({
     ? <Box
       sx={{
         width: "100%",
-        height: "100%",
+        height: "78%",
         display: "flex",
         justifyContent: "center",
         alignItems: "center",
@@ -62,7 +63,7 @@ export default function TourDestinationCard({
         alt={destination?.name}
         sx={{
           minWidth: "100%",
-          height: "85%",
+          height: "78%",
           objectFit: "cover",
         }}
       />
@@ -96,7 +97,7 @@ export default function TourDestinationCard({
     <Box
       sx={{
         width: "100%",
-        height: blank ? "15%" : "22%",
+        height: "22%",
         backgroundColor: "#f3f3f3",
         display: "flex",
         flexDirection: "column",

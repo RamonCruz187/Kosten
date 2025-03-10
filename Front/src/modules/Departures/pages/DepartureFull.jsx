@@ -175,7 +175,8 @@ const DepartureFull = () => {
       <SessionRequestModal
         openSessionRequestModal={openSessionRequestModal}
         onClose={() => setOpenSessionRequestModal(false)}
-        text="Para dejar un comentario inicia sesion."
+        action="comentar"
+        title="COMENTAR SALIDA"
       />
 
         <Box sx={{ 

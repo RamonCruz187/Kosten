@@ -13,7 +13,6 @@ import {
   Typography,
   Paper,
   styled,
-  CircularProgress,
 } from "@mui/material";
 import {
   getPackageById,
@@ -27,6 +26,8 @@ import { RiEditLine } from 'react-icons/ri';
 import { PackagesBreadCrumbs } from "../components/PackagesBreadCrumbs";
 import { hasChanges } from "@/shared/utils/compareObj";
 import { checkSteps } from "@/shared/utils/checkStepsPackage";
+import { WhiteButton } from "@/shared/components/buttons/WhiteButton";
+import { ColorButton } from "@/shared/components/buttons/ColorButton";
 
 const niveles = [
   "Principiante",
@@ -79,6 +80,7 @@ export const CreateEditPackageDetails = () => {
 	
 
   const [disabledButton, setDisabledButton] = useState(false);
+  const [isFetching, setIsFetching] = useState(false);
   const [itineraryPhoto, setItineraryPhoto] = useState(null);
   const [package_, setPackage] = useState(null);
   const [imagePreview, setImagePreview] = useState("");
@@ -167,6 +169,7 @@ export const CreateEditPackageDetails = () => {
 			included_services: values.included_services,
 		}
     try {
+      setIsFetching(true);
       const { data: dataPackage } = await updatePackage(dataToSend)
       NotificationService.success(`Paquete actualizado exitosamente`, 1000);
       setInitialValues({
@@ -184,6 +187,8 @@ export const CreateEditPackageDetails = () => {
     } catch (error) {
       console.error(`Error al actualizar el paquete:`, error);
       NotificationService.error(`Error al actualizar el paquete`, 2200);
+    } finally {
+      setIsFetching(false);
     }
   }, [params.id]);
 
@@ -210,13 +215,16 @@ export const CreateEditPackageDetails = () => {
   
     try {
       // Pasar el packageId y formData
+      setIsFetching(true);
       const response = await postSimpleImagePackages(packID, formData); // Axios devuelve 'data' directamente
         console.log('La imagen fue cargada con éxito');
         NotificationService.success('La imagen fue cargada con éxito');
     } catch (error) {
         console.error(error);
         NotificationService.error('Error al cargar la imagen');
-		}
+		} finally {
+      setIsFetching(false);
+    }
   }, [])
 
   const handleImageChange = (event) => {
@@ -479,6 +487,7 @@ export const CreateEditPackageDetails = () => {
                     sx={{
                       transition: 'transform 0.3s ease-in-out',
                       bgcolor: 'var(--color-links)',
+                      borderRadius: '4px',
                     }}
                   >
                     Modificar imagen
@@ -488,9 +497,8 @@ export const CreateEditPackageDetails = () => {
             </Paper>
             {/* Botones */}
             <Box sx={{display:"flex", justifyContent:"space-between", gap:'1rem'}} >
-              <Button
-                type="button"
-                variant="contained"
+              <WhiteButton
+                setIsFetching={setIsFetching}
 								disabled={
                   disabledButton ||  // Si el fetch está en progreso 
                   !formik.isValid ||  // Si el formulario no es válido
@@ -499,17 +507,13 @@ export const CreateEditPackageDetails = () => {
                 }
 								onClick={(e) => handleSiguiente(e, false)}
                 sx={{
-                  backgroundColor: "#fff",
                   width: "100%",
-                  transition: "transform 0.3s ease-in-out",
                 }}
-              >
-                {disabledButton 
-                ? <CircularProgress size={20} color="inherit" /> 
-                : "Actualizar Paquete"}
-              </Button>
-              <Button
-                variant="contained"
+                text= "Actualizar Paquete"
+                fetchingText="Actualizando..."
+              />
+              <ColorButton
+                isFetching={isFetching}
                 disabled={
                   disabledButton ||  // Si el fetch está en progreso 
                   !formik.isValid ||  // Si el formulario no es válido
@@ -523,11 +527,9 @@ export const CreateEditPackageDetails = () => {
                   width: "100%",
                   transition: "transform 0.3s ease-in-out",
                 }}
-              >
-                {disabledButton 
-                ? <CircularProgress size={20} color="inherit" /> 
-                : "Guardar y Siguiente"}
-              </Button>
+              
+                text= "Guardar y Siguiente"
+              />
             </Box>
 
           </Box>

@@ -114,7 +114,7 @@ export function UserPopover({ setIsOpenDrawer = () => {} }) {
             },
         }}
       >
-          <AccountCircle sx={{fontSize:{xs: "24px", md: "30px", lg: "40px", xl: "50px"} }} />
+          <AccountCircle sx={{fontSize:{xs:  "30px", lg: "40px", xl: "50px"} }} />
       </IconButton>
 
       <Popover

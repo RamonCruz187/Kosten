@@ -222,8 +222,7 @@ const About = () => {
           <Box 
             sx={{
               display: "grid",
-              gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))",
-              maxWidth: "75%",
+              gridTemplateColumns: {xs: "1fr", sm: "1fr 1fr", md: "1fr 1fr 1fr"},
               margin: "0 auto",
               gap: "2rem",
             }}

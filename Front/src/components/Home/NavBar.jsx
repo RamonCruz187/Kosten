@@ -1,5 +1,6 @@
+// Front/src/components/Home/NavBar.jsx
 /* eslint-disable react/prop-types */
-import { AppBar, Toolbar, Box, Typography, useMediaQuery, useTheme } from "@mui/material";
+import { AppBar, Toolbar, Box, Typography, useMediaQuery, useTheme, ListItem, List } from "@mui/material";
 import logo from "@/assets/logo.png";
 import { RiMenuLine, RiCloseLargeLine } from 'react-icons/ri';
 
@@ -24,6 +25,15 @@ const NavBar = ({ isAdmin = false, setIsOpenDrawer, isOpenDrawer = false, isDraw
   // popover login
   const [isOpenLogin, setIsOpenLogin] = useState(false);
 
+  const menuItems = [
+    { label: "Inicio", path: "/", isAdminNeeded: false },
+    { label: "Salidas", path: "/salidas", isAdminNeeded: false },
+    { label: "Quienes somos",  path: "/about", isAdminNeeded: false },
+    { label: "Destinos", path: "/destinos", isAdminNeeded: false },
+    { label: "Contacto", path: "/contacto", isAdminNeeded: false },
+    { label: "Admin", path: "/admin", isAdminNeeded: true },
+  ];
+
   const handleToogleOpen = () => {
     setIsOpenDrawer(!isOpenDrawer);
   };
@@ -34,14 +44,15 @@ const NavBar = ({ isAdmin = false, setIsOpenDrawer, isOpenDrawer = false, isDraw
 
   const handleNavigation = (path) => {
     setIsOpenDrawer(false);
-    navigate(path);
+    setTimeout(() => navigate(path), 100);
   };
+
   const styledMenuItem = {
       cursor: "pointer",
       height: "100%",
       width: "auto",
       fontWeight: "600",
-      fontSize: {xs: "1.25rem", md: "1rem", lg: "1.25rem"},
+      fontSize: {xs: "1.25rem", md: "1rem", xl: "1.25rem"},
       fontFamily: "Oswald",
       "&:hover": {
         color: palette.primary.dark,
@@ -63,6 +74,7 @@ const NavBar = ({ isAdmin = false, setIsOpenDrawer, isOpenDrawer = false, isDraw
     >
       {/* menu retraible cuando es mobile y tablet */}
       {isMobileTablet && 
+      <>
         <Box
           sx={{
             position: "absolute",
@@ -73,27 +85,20 @@ const NavBar = ({ isAdmin = false, setIsOpenDrawer, isOpenDrawer = false, isDraw
           onClick={handleToogleOpen}>
           {isOpenDrawer ? <RiCloseLargeLine size={24} /> : <RiMenuLine size={24} />}
         </Box>
-      }
-      {/* boton de login o user logo */}
-      {isDrawer && isMobileTablet && (
-        !isAuthenticated ?
-          <WhiteButton
-            text="LOGIN"
-            onClick={() => setIsOpenLogin(true)}
-            sx={{ position: "absolute", top: "1.5rem", right: "1rem" }}
-          />
-        :
+        {isAuthenticated &&
           <Box
             sx={{
               position: "absolute",
               top: "1.5rem",
-              right: "1rem",
+              right: "1.5rem",
             }}
           >
             <UserPopover setIsOpenDrawer={setIsOpenDrawer} />
           </Box>
-        )
+        }
+      </>
       }
+
       <Toolbar
         sx={{
           display: "flex",
@@ -115,29 +120,39 @@ const NavBar = ({ isAdmin = false, setIsOpenDrawer, isOpenDrawer = false, isDraw
             justifyContent: "center",
             alignItems: "center",
             flexGrow: 1,
-            gap: {xs: "0.5rem", sm:"1rem", md:"2rem", lg:"3rem", xl:"4rem"},
-            flexDirection: {xs:"column", sm: "row"},
+            gap: {xs: "0.5rem", sm:"1rem", md:"1rem", lg:"3rem", xl:"4rem"},
+            flexDirection: {xs:"column", md: "row"},
           }}
           style={{ textDecoration: "none" }}
         >
-          <Typography variant="paragraphLight" onClick={()=>navigate("/salidas")} sx={{...styledMenuItem, color: location.split('/')[1] === "salidas" ? palette.primary.main : palette.tertiary[50] ,}}>Salidas</Typography>
-          <Typography variant="paragraphLight" onClick={()=>navigate("/about")} sx={{...styledMenuItem, color: location.split('/')[1] === "about" ? palette.primary.main : palette.tertiary[50] ,}}>Quienes somos</Typography>
-          <Typography variant="paragraphLight" onClick={()=>navigate("/destinos")} sx={{...styledMenuItem, color : location.split('/')[1] === "destinos" ? palette.primary.main : palette.tertiary[50] ,}}>Destinos</Typography>
-          {/* <Typography variant="paragraphLight" onClick={()=>navigate("/gallery")} sx={{...styledMenuItem, color: location.split('/')[1] === "gallery" ? palette.primary.main : palette.tertiary[50] ,}}>Galería</Typography> */}
-          <Typography variant="paragraphLight" onClick={()=>navigate("/contacto")} sx={{...styledMenuItem, color : location.split('/')[1] === "contacto" ? palette.primary.main : palette.tertiary[50] ,}}>Contacto</Typography>
-
-          {isAdmin && (
-            <Typography
-              variant="paragraphLight"
-              onClick={()=>navigate("/admin")}
-              sx={{
-                ...styledMenuItem,
-
-              }}
-            >
-              Admin
-            </Typography>
-          )}
+          <List sx={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            width: "100%",
+            gap: {xs: "1.5rem", md:"2rem", lg:"3rem", xl:"4rem"},
+            flexDirection: {xs:"column", md: "row"},
+          }}>
+            {menuItems.map((item) => {
+              if (item.isAdminNeeded && !isAdmin) return null;
+              return (
+              <ListItem component="div" key={item.path} onClick={() => handleNavigation(item.path)}
+                sx={{ 
+                  width: "auto",
+                  height: {xs: "2rem", md: "unset"},
+                 }}
+              >
+                <Typography
+                  variant="paragraphLight" 
+                  sx={{
+                    ...styledMenuItem, 
+                    color: location.split('/')[1] === item.path.split('/')[1] ? palette.primary.main : palette.tertiary[50] ,
+                  }}>
+                    {item.label}
+                </Typography>
+              </ListItem>
+            )})}
+          </List>
         </Box>}
         {isDrawer && isMobileTablet && 
         <Box
@@ -148,43 +163,62 @@ const NavBar = ({ isAdmin = false, setIsOpenDrawer, isOpenDrawer = false, isDraw
             flexGrow: 1,
             gap: "1rem",
             cursor: "pointer",
-            flexDirection: {xs: "column", sm: "row"},
+            flexDirection: {xs: "column", md: "row"},
             paddingBottom: "2rem",
           }}
           style={{ textDecoration: "none" }}
         >
-          <Typography onClick={()=>handleNavigation("/salidas")} variant="paragraphLight" sx={{...styledMenuItem, color: location.split('/')[1] === "salidas" ? palette.primary.main : palette.tertiary[50],}}>Salidas</Typography>
-          <Typography onClick={()=>handleNavigation("/about")} variant="paragraphLight" sx={{...styledMenuItem, color: location.split('/')[1] === "about" ? palette.primary.main : palette.tertiary[50],}}>Quienes somos</Typography>
-          <Typography onClick={()=>handleNavigation("/destinos")} variant="paragraphLight" sx={{...styledMenuItem, color : location.split('/')[1] === "destinos" ? palette.primary.main : palette.tertiary[50],}}>Destinos</Typography>
-          {/* <Typography onClick={()=>handleNavigation("/gallery")} variant="paragraphLight" sx={{...styledMenuItem, color: location.split('/')[1] === "gallery" ? palette.primary.main : palette.tertiary[50],}}>Galería</Typography> */}
-          <Typography onClick={()=>handleNavigation("/contacto")} variant="paragraphLight" sx={{...styledMenuItem, color : location.split('/')[1] === "contacto" ? palette.primary.main : palette.tertiary[50],}}>Contacto</Typography>
+          <List sx={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            width: "100%",
+            gap: {xs: "1.5rem", md:"2rem", lg:"3rem", xl:"4rem"},
+            flexDirection: {xs:"column", md: "row"},
+          }}>
+            {menuItems.map((item) => {
+              if (item.isAdminNeeded && !isAdmin) return null;
+              return (
+              <ListItem component="div" key={item.path} onClick={() => handleNavigation(item.path)}
+                sx={{ 
+                  width: "auto",
+                  height: {xs: "2rem", md: "unset"},
+                 }}
+              >
+                <Typography
+                  variant="paragraphLight" 
+                  sx={{
+                    ...styledMenuItem, 
+                    color: location.split('/')[1] === item.path.split('/')[1] ? palette.primary.main : palette.tertiary[50] ,
+                  }}>
+                    {item.label}
+                </Typography>
+              </ListItem>
+            )})}
+          </List>
 
-          {isAdmin && (
-            <Typography
-              variant="paragraphLight"
-              onClick={()=>handleNavigation("/admin")}
-              sx={{
-                ...styledMenuItem,
-
-              }}
-            >
-              Administrador
-            </Typography>
-          )}
+          {/* boton de login o user logo */}
+          {!isAuthenticated &&
+            <WhiteButton
+              text="Iniciar Sesión"
+              onClick={() => setIsOpenLogin(true)}
+              sx={{ marginTop: "2rem" }}
+            />
+          }
         </Box>}
         {!isMobileTablet && 
         (!isAuthenticated ? (
           <WhiteButton
-            text="LOGIN"
+            text="Iniciar sesión"
             onClick={() => setIsOpenLogin(true)}
-            sx={{ position: "absolute", top: "1.5rem", right: "1rem" }}
+            // sx={{ position: "absolute", top: "1.5rem", right: "1rem" }}
           />
         ) : (
           <Box sx={{ display: "flex", justifyContent: "center", alignItems: "center" }}>
             <UserPopover setIsOpenDrawer={setIsOpenDrawer}/>
           </Box>
         ))}
-        <PopoverLogin isOpenLogin={isOpenLogin} handleClose={handleClose} />
+        <PopoverLogin isOpenLogin={isOpenLogin} handleClose={handleClose} setIsOpenDrawer={setIsOpenDrawer}/>
       </Toolbar>
     </AppBar>
   );

@@ -13,7 +13,6 @@ import {
   Typography,
   Paper,
   styled,
-  CircularProgress,
 } from "@mui/material";
 import {
   createPackage,
@@ -32,12 +31,15 @@ import { PackagesBreadCrumbs } from "../components/PackagesBreadCrumbs";
 import { hasChanges } from "@/shared/utils/compareObj";
 import { ModalWarning } from "../components/ModalWarning";
 import { checkSteps } from "@/shared/utils/checkStepsPackage";
+import { WhiteButton } from "@/shared/components/buttons/WhiteButton";
+import { ColorButton } from "@/shared/components/buttons/ColorButton";
 
 export const CreateEditPackageBasic = () => {
   const { state: stateContext } = useContext(GlobalContext);
   const categories = stateContext.categories;
 
   const [disabledButton, setDisabledButton] = useState(false);
+  const [isFetching, setIsFetching] = useState(false);
   const [filesImages, setFilesImages] = useState([]);
   const [bannerPhoto, setBannerPhoto] = useState(null);
   const [imagePreview, setImagePreview] = useState("");
@@ -152,6 +154,7 @@ export const CreateEditPackageBasic = () => {
 
   const sendCreatePackages = useCallback(async (values) => {
     setDisabledButton(true);
+    setIsFetching(true);
     try {
       const formData = new FormData();
       
@@ -180,12 +183,14 @@ export const CreateEditPackageBasic = () => {
       return null;
     } finally {
       setDisabledButton(false);
+      setIsFetching(false);
     }
   }, [filesImages]);
 
   
   const sendEditPackages = useCallback(async (values) => {
     setDisabledButton(true);
+    setIsFetching(true);
     try {
       const selectedCategory = categories.find((c) => c.value === values.category);
       const dataToSend = {
@@ -203,6 +208,7 @@ export const CreateEditPackageBasic = () => {
       NotificationService.error(`Error al actualizar el paquete`, 2200);
     } finally {
       setDisabledButton(false);
+      setIsFetching(false);
     }
   }, [params.id]);
 
@@ -228,6 +234,7 @@ export const CreateEditPackageBasic = () => {
     e.preventDefault();
     const selectedCategory = categories.find((c) => c.value === formik.values.category);
     try {
+      setIsFetching(true);
       const newId = await sendPackages(formik.values);
       if (moveForward) {
         if (params.id) {
@@ -238,6 +245,8 @@ export const CreateEditPackageBasic = () => {
       }
     } catch (error) {
       console.error(error);
+    } finally {
+      setIsFetching(false);
     }
   };
 
@@ -263,11 +272,14 @@ export const CreateEditPackageBasic = () => {
   
     try {
       // Pasar el packageId y formData
+      setIsFetching(true);
       const response = await postSimpleImagePackages(packID, formData); // Axios devuelve 'data' directamente
         NotificationService.success('La imagen fue cargada con éxito');
     } catch (error) {
         console.error(error);
         NotificationService.error('Error al cargar la imagen');
+    } finally {
+      setIsFetching(false);
     }
   }, [])
 
@@ -280,12 +292,15 @@ export const CreateEditPackageBasic = () => {
     // });
     const isManyImgs = imgsFiles.length > 1
     try {
+      setIsFetching(true);
       // Pasar el packageId y formData
       const response = await postImagesPackages(params.id, formData); // Axios devuelve 'data' directamente
         NotificationService.success(isManyImgs ? `Las imágenes fueron cargadas con éxito` : `La imagen fue cargada con éxito`);
     } catch (error) {
         console.error(error);
         NotificationService.error(isManyImgs ? 'Error al cargar las imágenes' : 'Error al cargar la imagen');
+    } finally {
+      setIsFetching(false);
     }
   }, [])
 
@@ -446,6 +461,7 @@ export const CreateEditPackageBasic = () => {
                     sx={{
                       transition: 'transform 0.3s ease-in-out',
                       bgcolor: 'var(--color-links)',
+                      borderRadius: '4px',
                     }}
                   >
                     Modificar imagen
@@ -505,6 +521,7 @@ export const CreateEditPackageBasic = () => {
                   <Button 
                     variant="contained"
                     component="span"
+                    disabled={isFetching}
                     sx={{
                       width: {xs: '100px', md: '150px', xl: '180px'},
                       height: {xs: '100px', md: '150px', xl: '180px'},
@@ -643,9 +660,8 @@ export const CreateEditPackageBasic = () => {
 
         {/* Botones */}
         <Box sx={{mb:5, display:"flex", justifyContent:"end", gap:'1rem'}}>
-          <Button
-            type="button"
-            variant="contained"
+          <WhiteButton
+            isFetching={isFetching}
             disabled={
               !formik.isValid || // Si el formulario no es válido
               disabledButton ||  // Si el fetch está en progreso
@@ -654,34 +670,23 @@ export const CreateEditPackageBasic = () => {
             }
             onClick={(e) => handleSiguiente(e, false)}
             sx={{
-              backgroundColor: "#fff",
               width: {xs:'100%', md:'130px', xl:'150px'},
-              transition: "transform 0.3s ease-in-out",
             }}
-          >
-            {disabledButton 
-            ? <CircularProgress size={20} color="inherit" /> 
-            : params.id ? "Guardar" : "Crear"}
-          </Button>
-          <Button
-            variant="contained"
+            text={params.id ? "Guardar" : "Crear"}
+          />
+          <ColorButton
+            type="lightGreenButton"
+            isFetching={isFetching}
             disabled={
               !formik.isValid || // Si el formulario no es válido
               disabledButton ||  // Si el fetch está en progreso
               (Boolean(!params.id) && !formik.dirty) || // Si es nuevo pero no hubo cambios
               (Boolean(params.id) && !formModified && bannerPhoto === null && filesImages.length === 0) // Si está en modo edición pero no hubo cambios
-            }            type="button"
+            }
             onClick={(e) => handleSiguiente(e, true)}
-            sx={{
-              backgroundColor: "#72CCA0",
-              width: {xs:'100%', md:'130px', xl:'150px'},
-              transition: "transform 0.3s ease-in-out",
-            }}
-          >
-            {disabledButton 
-            ? <CircularProgress size={20} color="inherit" /> 
-            : params.id ? "Actualizar Paquete" : "Siguiente"}
-          </Button>
+            sx={{width: {xs:'100%', md:'130px', xl:'150px'},}}
+            text={params.id ? "Actualizar Paquete" : "Siguiente"}
+          />
         </Box>
         </Box>
         
