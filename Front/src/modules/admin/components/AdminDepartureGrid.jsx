@@ -1,12 +1,17 @@
 // Front/src/modules/Departures/components/DepartureGrid.jsx
-import { Alert, AlertTitle, CircularProgress, Typography } from "@mui/material";
+import { CircularProgress, Typography, useTheme } from "@mui/material";
 import Box from "@mui/material/Box";
 import { AdminDepartureCard } from "./AdminDepartureCard.jsx";
 import { useCallback, useEffect, useState } from "react";
 import { getAllPackages } from "@/api/packageApi.js";
 import { NotificationService } from "@/shared/services/notistack.service.jsx";
+import { CallToActionButton } from "@/shared/components/buttons/CallToActionButton.jsx";
+import { useNavigate } from "react-router-dom";
 
 export const AdminDepartureGrid = ({ title = "", sx = {} }) => {
+  const theme = useTheme();
+  const { palette } = theme;
+  const navigate = useNavigate();
   const [isFetching, setIsFetching] = useState(true);
   const [allPackages, setAllPackages] = useState(null);
   // const [filteredPackages, setFilteredPackages] = useState(null);
@@ -71,7 +76,32 @@ export const AdminDepartureGrid = ({ title = "", sx = {} }) => {
             {title}
           </Typography>
         )}
-        <Box
+
+          {!allPackages || allPackages.length === 0
+          ? (
+            <Box
+            sx={{
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+              height: "30dvh",
+              width: "100%",
+              gap: "1rem",
+              marginTop: "2rem",
+            }}
+            >
+              <Typography variant="subtitle" sx={{ color: palette.text.light }}>
+              Todavía no hay destinos publicados. Puedes publicar el primero!
+              </Typography>
+              <CallToActionButton
+                text="publica un destino"
+                onClick={() => navigate("/admin/paquetes")}
+                islarge={false}
+              />
+            </Box>
+          ) 
+          : 
+          <Box
           sx={{
             display: "grid",
             gridTemplateColumns: {
@@ -83,32 +113,20 @@ export const AdminDepartureGrid = ({ title = "", sx = {} }) => {
             gap: "2rem",
           }}
         >
-          {isFetching ?
-					  <CircularProgress />
-          : allPackages.length !== 0 ? (
+          {isFetching 
+            ? <CircularProgress />
+            : allPackages && allPackages.length !== 0 && (
 							allPackages?.map((departure) =>
 								departure?.active && (
 									<AdminDepartureCard
 										key={`departure-${departure.id}`}
 										departure={departure}
 									/>
-								)
-							)
-						) : (
-							<Box sx={{
-								display: "flex",
-								justifyContent: "center",
-								alignItems: "center",
-								height: "30dvh",
-							}}>
-								<Alert severity="info" sx={{ width: "100%" }}>
-									<AlertTitle>Sin paquetes</AlertTitle>
-										No hay paquetes para mostrar.
-								</Alert>
-							</Box>
-          	)
-					}
+							))
+						)}
         </Box>
+          }
+
       </Box>
     </Box>
   );
