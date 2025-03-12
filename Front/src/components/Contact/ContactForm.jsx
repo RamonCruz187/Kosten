@@ -3,6 +3,7 @@ import { Grid2, Stack, Typography } from "@mui/material";
 import InputNormal from "../Auth/InputNormal";
 import { useState } from "react";
 import { ColorButton } from "@/shared/components/buttons/ColorButton";
+import emailjs from '@emailjs/browser';
 
 export default function ContactForm({ size }) {
   const [formState, setFormState] = useState({
@@ -26,9 +27,24 @@ export default function ContactForm({ size }) {
     e.preventDefault();
     try {
       setIsFetching(true);
-      console.log(formState);
+      const templateParams = {
+        username: formState.username,
+        contact: formState.contact,
+        email: formState.email,
+        message: formState.message,
+      };
+      await emailjs.send('service_anpv0lt', 'template_wq1040s', templateParams, 'R8YlVEUFVcmwSsU8t');
+      alert('Mensaje enviado con éxito');
+      setFormState({
+        username: "",
+        contact: "",
+        email: "",
+        message: "",
+        send: false,
+      });
     } catch (error) {
       console.error("error:", error);
+      alert('Error al enviar el mensaje');
     } finally {
       setIsFetching(false);
     }
