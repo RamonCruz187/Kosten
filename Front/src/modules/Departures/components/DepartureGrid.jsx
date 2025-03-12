@@ -1,13 +1,19 @@
 // Front/src/modules/Departures/components/DepartureGrid.jsx
-import { Alert, AlertTitle, CircularProgress, Typography } from "@mui/material";
+import { CircularProgress, Typography, useTheme } from "@mui/material";
 import Box from "@mui/material/Box";
 import { DepartureCard } from "./DepartureCard.jsx";
 import { customPalette } from "../../../../customStyle.jsx";
 import { getAllActivesPackages } from "../../../api/packageApi.js";
 import { useCallback, useEffect, useState } from "react";
 import { NotificationService } from "../../../shared/services/notistack.service.jsx";
+import { CallToActionButton } from "@/shared/components/buttons/CallToActionButton.jsx";
+import { useNavigate } from "react-router-dom";
 
 const DepartureGrid = ({ title="PRÓXIMAS SALIDAS", sx={}}) => {
+
+  const theme = useTheme();
+  const { palette } = theme;
+  const navigate = useNavigate();
   const [isFetching, setIsFetching] = useState(true);
   const [allPackages, setAllPackages] = useState(null);
 
@@ -59,18 +65,24 @@ const DepartureGrid = ({ title="PRÓXIMAS SALIDAS", sx={}}) => {
             </Box>
           :
             <Box
-              sx={{
-                display: "flex",
-                justifyContent: "center",
-                alignItems: "center",
-                height: "30dvh",
-              }}
-            >
-              <Alert severity="info" sx={{ width: "90dvw" }}>
-                <AlertTitle>Sin salidas</AlertTitle>
-                No hay salidas para mostrar.
-              </Alert>
-            </Box>
+            sx={{
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+              height: "30dvh",
+              gap: "1rem",
+              marginTop: "2rem",
+            }}
+          >
+            <Typography variant="subtitle" sx={{ color: palette.text.light }}>
+            Por el momento no tenemos salidas programadas. Puedes sugerir la próxima!
+            </Typography>
+            <CallToActionButton
+              text="Sugiere una salida"
+              onClick={() => navigate("/contacto")}
+              islarge={false}
+            />
+          </Box>
         }
       </Box>
     </Box>

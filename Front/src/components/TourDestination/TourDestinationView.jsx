@@ -1,13 +1,18 @@
 // @components/TourDestination/TourDestinationView.jsx
-import { Alert, AlertTitle, Box, CircularProgress } from "@mui/material";
+import { Box, CircularProgress, Typography, useTheme } from "@mui/material";
 import TourDestinationCard from "./TourDestinationCard";
 
 import { useCallback, useEffect, useState } from "react";
 import { getAllActivesPackages } from "@/api/packageApi";
 import { NotificationService } from "@/shared/services/notistack.service";
+import { CallToActionButton } from "@/shared/components/buttons/CallToActionButton";
+import { useNavigate } from "react-router-dom";
 
 export default function TourDestinationView() {
 
+  const theme = useTheme();
+  const {palette} = theme;
+  const navigate = useNavigate();
   const [isFetching, setIsFetching] = useState(true);
   const [packages, setPackages] = useState();
   const fetchPackages = useCallback(async () => {
@@ -56,19 +61,25 @@ export default function TourDestinationView() {
           ))}
         </Box>
       ) : (
-        <Box
-          sx={{
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-            height: "30dvh",
-          }}
-        >
-          <Alert severity="info" sx={{ width: "100%" }}>
-            <AlertTitle>Sin paquetes</AlertTitle>
-            No hay paquetes para mostrar.
-          </Alert>
-        </Box>
+          <Box
+            sx={{
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+              height: "30dvh",
+              gap: "1rem",
+              marginTop: "2rem",
+            }}
+          >
+            <Typography variant="subtitle" sx={{ color: palette.text.light }}>
+            Por el momento no tenemos destinos publicados. Puedes sugerir el próximo!
+            </Typography>
+            <CallToActionButton
+              text="Sugiere un destino"
+              onClick={() => navigate("/contacto")}
+              islarge={false}
+            />
+          </Box>
       )}
     </Box>
   );

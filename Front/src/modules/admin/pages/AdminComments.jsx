@@ -170,6 +170,22 @@ const AdminComments = () => {
     );
   }
 
+  if (filteredComments.length === 0) {
+    return (
+      <Box
+        sx={{
+          display: "flex",
+          justifyContent: "center",
+          marginTop: "2rem",
+        }}
+      >
+        <Typography variant="subtitle" sx={{ color: palette.text.light }}>
+        Todavía no hay comentarios para mostrar.
+        </Typography>
+      </Box>
+    );
+  }
+
   return (
     <Box
       sx={{
