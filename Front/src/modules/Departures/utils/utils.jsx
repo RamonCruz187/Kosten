@@ -6,6 +6,7 @@ import { getPackageById } from '../../../api/packageApi';
 import 'dayjs/locale/es'; 
 import { useEffect } from "react";
 import { formatDepartureDate } from "@/shared/utils/formatDeparture";
+import ShareButton from "./ShareButton";
 
 dayjs.locale('es');
 export const iconsCardDepartures = [
@@ -17,7 +18,7 @@ export const iconsCardDepartures = [
 ];
 
 export const iconsCardPackages = [
-  <RiShareLine style={{ width: 20}}/>,
+  <ShareButton title="Compartir" text="Mira este contenido" url={window.location.href} />,
   <RiCalendar2Line style={{ fontSize: '1rem' }} />,
   <RiTimeLine style={{ fontSize: '1rem' }} />,
   <RiWalkLine style={{ fontSize: '1rem' }} />,
