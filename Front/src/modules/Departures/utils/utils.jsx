@@ -1,5 +1,5 @@
 import {Hotel} from "@mui/icons-material";
-import { RiShareLine, RiCalendar2Line, RiTimeLine, RiWalkLine, RiCompass3Line, RiHome4Line } from 'react-icons/ri';
+import { RiCalendar2Line, RiTimeLine, RiWalkLine, RiCompass3Line, RiHome4Line } from 'react-icons/ri';
 import { useState } from "react";
 import dayjs from 'dayjs';
 import { getPackageById } from '../../../api/packageApi';
