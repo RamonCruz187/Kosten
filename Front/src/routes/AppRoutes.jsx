@@ -2,37 +2,37 @@
 import { BrowserRouter as Router, Navigate, Route, Routes } from "react-router-dom";
 import { Suspense, lazy } from "react";
 
-import Layout from "../shared/pages/layout/Layout.jsx"
-import LandingPage from "../components/Home/LandingPage"
-import Loading from "../shared/components/Loading.jsx";
+import Layout from "@shared/pages/layout/Layout.jsx"
+import LandingPage from "@components/Home/LandingPage"
+import Loading from "@shared/components/Loading.jsx";
 
-import AdminDashboard from "../components/Dashboard/AdminDashboard";
-const Login = lazy(() => import("../components/Auth/Login"));
-const Register = lazy(() => import("../components/Auth/Register"));
+import AdminDashboard from "@components/Dashboard/AdminDashboard";
+const Login = lazy(() => import("@components/Auth/Login"));
+const Register = lazy(() => import("@components/Auth/Register"));
 
 import { UserAdminPrivateRoutes } from "./UserAdminPrivateRoutes.jsx";
 const UserGuestRoutes = lazy(() => import("./UserGuestRoutes.jsx"));
 const Muestras = lazy(() => import("../components/muestras"));
 
 
-const PageNotFound = lazy(() => import("../shared/pages/error/PageNotFound.jsx"));
-const DepartureGrid = lazy(() => import("../modules/Departures/components/DepartureGrid.jsx"));
-const DepartureFull = lazy(() => import("../modules/Departures/pages/DepartureFull.jsx"));
-const Gallery = lazy(() => import("../components/PhotosGallery/Gallery.jsx"));
-import { AdminPackages } from "../modules/admin/pages/AdminPackages.jsx";
-import { AdminLayout } from "../modules/admin/layout/AdminLayout.jsx";
-import AdminDepartures from "../modules/admin/pages/AdminDepartures.jsx";
-import AdminComments from "../modules/admin/pages/AdminComments.jsx";
-import Perfil from "../components/Auth/Perfil";
-import { CreateEditPackageBasic } from "@/modules/admin/pages/CreateEditPackageBasic.jsx";
-import { CreateEditPackageDetails } from "@/modules/admin/pages/CreateEditPackageDetails.jsx";
-import { CreateEditPackageDestination } from "@/modules/admin/pages/CreateEditPackageDestination.jsx";
-import { CreateEditDepartures } from "@/modules/admin/pages/CreateEditDepartures.jsx";
+const PageNotFound = lazy(() => import("@shared/pages/error/PageNotFound.jsx"));
+const DepartureGrid = lazy(() => import("@modules/Departures/components/DepartureGrid.jsx"));
+const DepartureFull = lazy(() => import("@modules/Departures/pages/DepartureFull.jsx"));
+const Gallery = lazy(() => import("@/components/PhotosGallery/Gallery.jsx"));
+import { AdminPackages } from "@modules/admin/pages/AdminPackages.jsx";
+import { AdminLayout } from "@modules/admin/layout/AdminLayout.jsx";
+import AdminDepartures from "@modules/admin/pages/AdminDepartures.jsx";
+import AdminComments from "@modules/admin/pages/AdminComments.jsx";
+import Perfil from "@components/Auth/Perfil";
+import { CreateEditPackageBasic } from "@modules/admin/pages/CreateEditPackageBasic.jsx";
+import { CreateEditPackageDetails } from "@modules/admin/pages/CreateEditPackageDetails.jsx";
+import { CreateEditPackageDestination } from "@modules/admin/pages/CreateEditPackageDestination.jsx";
+import { CreateEditDepartures } from "@modules/admin/pages/CreateEditDepartures.jsx";
 import ScrollToTop from "./ScrollTotop.jsx";
-const About = lazy(() => import("../components/Home/About"));
-const TourDestinationView = lazy(() => import("../components/TourDestination/TourDestinationView.jsx"));
-// const TourDestinationDetail = lazy(() => import("../components/TourDestination/TourDestinationDetail.jsx"));
-const ContactView = lazy(() => import("../components/Contact/ContactView.jsx"));
+const TourDestinationDetail = lazy(() => import("@components/TourDestination/TourDestinationDetail.jsx"));
+const About = lazy(() => import("@components/Home/About"));
+const TourDestinationView = lazy(() => import("@components/TourDestination/TourDestinationView.jsx"));
+const ContactView = lazy(() => import("@components/Contact/ContactView.jsx"));
 
 const AppRoutes = () => (
   <Router>
@@ -50,7 +50,7 @@ const AppRoutes = () => (
           <Route path="/about" element={<About />} />
           <Route path="/salidas/:id" element={<DepartureFull />} />
           <Route path="/destinos" element={<TourDestinationView />} />
-          <Route path="/destinos/:id" element={<DepartureFull />} />
+          <Route path="/destinos/:id" element={<TourDestinationDetail />} />
           <Route path="/contacto" element={<ContactView />} />
           <Route path="/perfil" element={<Perfil />} />
           <Route path="/admin" element={<UserAdminPrivateRoutes><AdminLayout /></UserAdminPrivateRoutes>}>
