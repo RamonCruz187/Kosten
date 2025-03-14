@@ -1,33 +1,31 @@
 import { useState, useMemo, useContext } from 'react';
-import { Box, IconButton, Typography, Card, useMediaQuery, useTheme, Button} from '@mui/material';
+import { Box, IconButton, Typography, useMediaQuery, useTheme, Button} from '@mui/material';
 import { ChevronLeft as PrevIcon, ChevronRight as NextIcon, Close as CloseIcon } from '@mui/icons-material';
 import { processDepartures } from "../utils/utils.jsx";
 import {GlobalContext} from '../../../shared/context/GlobalContext.jsx';
 import SessionRequestModal from './SessionRequestModal.jsx';
-import ImageModal from './ImageModal.jsx';
 import { fCurrency } from "../../../shared/utils/formatNumber.js";
 import { useNavigate } from "react-router-dom";
 import { iconsCardPackages } from "../utils/utils.jsx";
 import { ConfirmationModal } from "./ConfirmationModal.jsx";
 import { ColorButton } from '@/shared/components/buttons/ColorButton.jsx';
 import { WhiteButton } from '@/shared/components/buttons/WhiteButton.jsx';
+import PopoverLogin from '@/components/Auth/PopoverLogin.jsx';
 
 const DepartureSlider = ({ sharedPack }) => {
-  const [currentImagePage, setCurrentImagePage] = useState(0);
   const slides = processDepartures([sharedPack]);
   const { state } = useContext(GlobalContext);
   const [openSessionRequestModal, setOpenSessionRequestModal] = useState(false);
-  const images = sharedPack?.images || [];
   const theme = useTheme();
   const isXs = useMediaQuery(theme.breakpoints.down('sm'));
   const isSm = useMediaQuery(theme.breakpoints.between('sm', 'md'));
   const isMd = useMediaQuery(theme.breakpoints.between('md', 'lg'));
   const isLg = useMediaQuery(theme.breakpoints.up('lg'));
   const [currentPage, setCurrentPage] = useState(0);
-  const [modalOpen, setModalOpen] = useState(false);
   const [openBookModal, setOpenBookModal] = useState(false);
-  const [selectedImageIndex, setSelectedImageIndex] = useState(0);
   const [openConfirmationModal, setOpenConfirmationModal] = useState(false);
+  const [isOpenLogin, setIsOpenLogin] = useState(false);
+
   const navigate = useNavigate();
   const getVisibleItems = useMemo(() => {
     if (isXs) return 1;
@@ -38,8 +36,6 @@ const DepartureSlider = ({ sharedPack }) => {
   }, [isXs, isSm, isMd, isLg]);
 
   const totalDeparturePages = Math.ceil(slides.length / getVisibleItems);
-  const totalImagePages = Math.ceil(images.length / getVisibleItems);
-
 
   const nextDepartureSlide = () => {
     setCurrentPage((prevPage) => (prevPage + 1) % totalDeparturePages);
@@ -48,31 +44,10 @@ const DepartureSlider = ({ sharedPack }) => {
   const prevDepartureSlide = () => {
     setCurrentPage((prevPage) => (prevPage - 1 + totalDeparturePages) % totalDeparturePages);
   };
-
   
-  const nextImagePage = () => {
-    setCurrentImagePage((prevPage) => (prevPage + 1) % totalImagePages);
+  const handleCloseLogin = () => {
+    setIsOpenLogin(false);
   };
-
-  const prevImagePage = () => {
-    setCurrentImagePage((prevPage) => (prevPage - 1 + totalImagePages) % totalImagePages);
-  };
-  const handlePrevImage = () => {
-    setSelectedImageIndex((prevIndex) => (prevIndex === 0 ? images.length - 1 : prevIndex - 1));
-  };
-
-  const handleNextImage = () => {
-    setSelectedImageIndex((prevIndex) => (prevIndex + 1) % images.length);
-  };
-  const handleOpenModal = (index) => {
-    setSelectedImageIndex(index);
-    setModalOpen(true);
-  };
-
-  const handleCloseModal = () => {
-    setModalOpen(false);
-  };
-  
   // const handleReservation = async (departureSelected) => {
   //   try {
   //     const response = await fetchReservation(departureSelected);
@@ -88,11 +63,6 @@ const DepartureSlider = ({ sharedPack }) => {
     const startIndex = currentPage * getVisibleItems;
     return slides.slice(startIndex, startIndex + getVisibleItems);
   }, [currentPage, getVisibleItems, slides]);
-  const visibleImages = useMemo(() => {
-    const startIndex = currentImagePage * getVisibleItems;
-    return images.slice(startIndex, startIndex + getVisibleItems);
-  }, [currentImagePage, getVisibleItems, images]);
-
 
    // Estilo común para los contenedores de slides
    const sliderContainerStyle = {
@@ -376,91 +346,15 @@ const DepartureSlider = ({ sharedPack }) => {
         <SessionRequestModal
           openSessionRequestModal={openSessionRequestModal}
           onClose={() => setOpenSessionRequestModal(false)}
+          onClickStartSession={() => setIsOpenLogin(true)}
           title="RESERVAR SALIDA"
           action="reservar"
       />
       </Box>
 
-      {/* Carrusel de Imágenes */}
-      <Typography variant="h5" sx={{textAlign:"center", color:"#f3f3f3", mt:"40px", mb:'40px', fontWeight:"600"}} >
-        GALERÍA DE FOTOS
-      </Typography>
+      {/* Modal de Login */}
+      <PopoverLogin isOpenLogin={isOpenLogin} handleClose={handleCloseLogin} setIsOpenDrawer={setOpenSessionRequestModal}/>
       
-      <Box sx={sliderContainerStyle}>
-        {totalImagePages > 1 && (
-          <>
-            <IconButton 
-              onClick={prevImagePage}
-              sx={{ ...navigationButtonStyle, left: '0' }}
-            >
-              <PrevIcon />
-            </IconButton>
-
-            <IconButton 
-              onClick={nextImagePage}
-              sx={{ ...navigationButtonStyle, right: '0' }}
-            >
-              <NextIcon />
-            </IconButton>
-          </>
-        )}
-
-        <Box sx={{ 
-          display: 'flex',
-          justifyContent: visibleImages.length > 1 ? 'flex-start' : 'center',
-          width: '100%',
-          gap: { xs: 2, sm: 2, md: 3 },
-          
-        }}>
-          {visibleImages.map((image, index) => (
-            <Card
-              key={index}
-              onClick={() => handleOpenModal(currentImagePage * getVisibleItems + index)}
-              sx={{ 
-                width: {
-                  xs: 'calc(100% - 16px)',
-                  sm: 'calc(50% - 16px)',
-                  md: 'calc(33.333% - 16px)',
-                  lg: 'calc(25% - 16px)'
-                },
-                flexShrink: 0,
-                flexGrow: 0,
-                height: '272px',
-                boxShadow: 2,
-                borderRadius: 2,
-                overflow: 'hidden',
-                margin: '8px',
-                cursor: 'pointer',
-                '&:hover': {
-                  transform: 'scale(1.02)',
-                  transition: 'transform 0.2s ease-in-out',
-                }
-              }}
-            >
-              <Box
-                component="img"
-                src={image.url}
-                alt={`Imagen ${currentImagePage * getVisibleItems + index + 1}`}
-                sx={{
-                  width: '100%',
-                  height: '100%',
-                  objectFit: 'cover',
-                }}
-              />
-            </Card>
-          ))}
-        </Box>
-      </Box>
-
-      {/* Modal de imágenes */}
-      <ImageModal
-        open={modalOpen}
-        handleClose={handleCloseModal}
-        currentImage={images[selectedImageIndex]}
-        images={images}
-        onPrev={handlePrevImage}
-        onNext={handleNextImage}
-      />
     </Box>
   );
 };
