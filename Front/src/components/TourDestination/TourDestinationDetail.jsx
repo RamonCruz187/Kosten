@@ -12,6 +12,7 @@ import { usePackageById } from "@/modules/Departures/utils/utils";
 import SessionRequestModal from "@/modules/Departures/components/SessionRequestModal";
 import { ColorButton } from "@/shared/components/buttons/ColorButton";
 import GalleryComponent from "@components/PhotosGallery/GalleryComponent";
+import { formatLongTexts } from "@/shared/utils/formatLongTexts";
 
 const styles = {
   mainContainer: {
@@ -47,8 +48,6 @@ const TourDestinationDetail = () => {
   const { palette } = theme;
   const [openSessionRequestModal, setOpenSessionRequestModal] = useState(false);
   const { pack: packToUse, isLoading, error } = usePackageById(id);
-
-  console.log("packToUse", packToUse);
 
   if (isLoading) {
     return (
@@ -157,15 +156,23 @@ const TourDestinationDetail = () => {
             >
               UBICACIÓN
             </Typography>
-            <Typography
-              variant="p"
-              sx={{
-                fontSize: { xs: "12px", sm: "12px", md: "14px", xl: "18px" },
-              }}
-            >
-              {packToUse?.locationInfo ||
-                "Sin descripción de ubicación disponible"}
-            </Typography>
+            {packToUse?.historyInfo
+              ? 
+              formatLongTexts(packToUse?.locationInfo).map((info, index) => (
+                <Typography key={`locationInfo-${index}`} variant="p"
+                  sx={{fontSize: { xs: "12px", sm: "12px", md: "14px", xl: "18px" },}}
+                >
+                  {info.trim() === "" ? "\u00A0" : info}
+                </Typography>
+              ))
+              
+              :
+              <Typography variant="p"
+                sx={{fontSize: { xs: "12px", sm: "12px", md: "14px", xl: "18px" },}}
+              >
+                Sin descripción de ubicación disponible
+              </Typography>
+            }
           </Box>
 
           {/* Ubicacion Img */}
@@ -251,14 +258,23 @@ const TourDestinationDetail = () => {
             >
               HISTORIA
             </Typography>
-            <Typography
-              variant="p"
-              sx={{
-                fontSize: { xs: "12px", sm: "12px", md: "14px", xl: "18px" },
-              }}
-            >
-              {packToUse?.historyInfo || "Sin historia disponible"}
-            </Typography>
+            {packToUse?.historyInfo
+              ? 
+              formatLongTexts(packToUse?.historyInfo).map((info, index) => (
+                <Typography key={`historyInfo-${index}`} variant="p"
+                  sx={{fontSize: { xs: "12px", sm: "12px", md: "14px", xl: "18px" },}}
+                >
+                  {info.trim() === "" ? "\u00A0" : info}
+                </Typography>
+              ))
+              
+              :
+              <Typography variant="p"
+                sx={{fontSize: { xs: "12px", sm: "12px", md: "14px", xl: "18px" },}}
+              >
+                Sin historia disponible
+              </Typography>
+            }
           </Box>
 
           {/* Actividad Box */}
@@ -287,20 +303,30 @@ const TourDestinationDetail = () => {
             >
               QUÉ ACTIVIDAD PROPONEMOS?
             </Typography>
-            <Typography
-              variant="p"
-              sx={{
-                fontSize: { xs: "12px", sm: "12px", md: "14px", xl: "18px" },
-              }}
-            >
-              {packToUse?.activityInfo || "Sin actividad disponible"}
-            </Typography>
+            {packToUse?.activityInfo
+              ? 
+              formatLongTexts(packToUse?.activityInfo).map((activity, index) => (
+                <Typography key={`activityInfo-${index}`} variant="p"
+                  sx={{fontSize: { xs: "12px", sm: "12px", md: "14px", xl: "18px" },}}
+                >
+                  {activity.trim() === "" ? "\u00A0" : activity}
+                </Typography>
+              ))
+              
+              :
+              <Typography variant="p"
+                sx={{fontSize: { xs: "12px", sm: "12px", md: "14px", xl: "18px" },}}
+              >
+                Sin actividad disponible
+              </Typography>
+            }
             <ColorButton
             type="greenButton"
             text="VER SALIDAS DISPONIBLES"
             onClick={() => {
               navigate(`/salidas/${id}`);
             }}
+            sx={{ marginTop: "2rem", alignSelf: "center" }}
             />
           </Box>
 
