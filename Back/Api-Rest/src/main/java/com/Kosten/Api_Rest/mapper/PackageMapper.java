@@ -19,6 +19,7 @@ public interface PackageMapper {
 
     Package toEntity(PackageResponseDTO packageResponseDTO);
 
+    @Mapping(target = "departures", source = "departures", qualifiedByName = "filterActiveDepartures")
     PackageResponseDTO packageToPackageResponseDTO(Package package_);
 
     Package toEntity(PackageToUpdateDTO packageToUpdateDTO);

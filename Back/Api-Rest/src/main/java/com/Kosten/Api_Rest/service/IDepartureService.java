@@ -14,6 +14,7 @@ import java.util.List;
 
 public interface IDepartureService {
     ExtendedBaseResponse<List<DepartureToBeListed>> findAll();
+    ExtendedBaseResponse<List<DepartureToBeListed>> findall2();
     ExtendedBaseResponse<DepartureResponseDto> findById(Integer id);
     ExtendedBaseResponse<DepartureResponseDto> save(DepartureRequestDto departure);
     ExtendedBaseResponse<DepartureResponseDto> update(DepartureToUpdateDto departure);
