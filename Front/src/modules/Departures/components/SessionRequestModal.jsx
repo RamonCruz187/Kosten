@@ -2,7 +2,7 @@ import { Modal, Box, Typography, IconButton, useTheme } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 import { OnlyTextButton } from '@/shared/components/buttons/OnlyTextButton';
 
-const SessionRequestModal = ({ title = "", action = "", openSessionRequestModal, onClose }) => {
+const SessionRequestModal = ({ title = "", action = "", openSessionRequestModal, onClose, onClickStartSession }) => {
   const theme = useTheme();
 
   const modalStyle = {
@@ -73,7 +73,7 @@ const SessionRequestModal = ({ title = "", action = "", openSessionRequestModal,
             {/* falta el componente de pop up login y el manejo de estado para apertura y cierre */}
             <OnlyTextButton
               type='green'
-              onClick={()=>{}}
+              onClick={onClickStartSession}
               text="Iniciar sesion"
             />
           </Box>
