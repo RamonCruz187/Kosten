@@ -1,8 +1,9 @@
 import { useState, useRef, useEffect } from "react";
-import { Box, Typography, IconButton, Button, Modal, useTheme } from "@mui/material";
+import { Box, Typography, IconButton, Modal, useTheme } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 import { RiAddLine } from "react-icons/ri";
 import { WhiteButton } from "@/shared/components/buttons/WhiteButton";
+import { formatLongTexts } from "@/shared/utils/formatLongTexts";
 const TruncatedText = ({ text }) => {
 	const theme = useTheme();
 	const { palette } = theme;
@@ -26,7 +27,6 @@ const TruncatedText = ({ text }) => {
     <>
       <Box
         sx={{
-
           overflow: "hidden",
         }}
       >
@@ -41,9 +41,14 @@ const TruncatedText = ({ text }) => {
             WebkitLineClamp: { xs: 10, sm: 10, md: 10, lg: 10 },
           }}
         >
-          {text}
+              {formatLongTexts(text).map((info, index) => (
+                <Typography key={`itineraryInfoTruncated-${index}`} sx={{ fontSize: "inherit", fontFamily: "inherit" }}>
+                  {info.trim() === "" ? "\u00A0" : info}
+                </Typography>
+              ))
+            }
         </Typography>
-        {isTruncated && (
+        {isTruncated && text !== "Itinerario no disponible" && (
           <WhiteButton
             onClick={toggleModal}
 						text="Ver más"
@@ -101,13 +106,15 @@ const TruncatedText = ({ text }) => {
           >
             Itinerario
           </Typography>
-          <Typography
-            id="modal-description"
-            variant="p"
-            sx={{ fontSize: { xs: "12px", sm: "12px", md: "14px", xl: "18px" },  }}
-          >
-            {text}
-          </Typography>
+
+          {formatLongTexts(text).map((info, index) => (
+              <Typography key={`itineraryInfoComplete-${index}`} variant="p"
+                sx={{fontSize: { xs: "12px", sm: "12px", md: "14px", xl: "18px" },}}
+              >
+                {info.trim() === "" ? "\u00A0" : info}
+              </Typography>
+            ))
+          }
         </Box>
       </Modal>
     </>

@@ -19,6 +19,7 @@ import { getPackageCommentsById } from "../../../api/commentApi";
 import  CommentsBox  from '../components/CommentsBox';
 import { CallToActionButton } from "@/shared/components/buttons/CallToActionButton";
 import GalleryComponent from "@/components/PhotosGallery/GalleryComponent";
+import { formatLongTexts } from "@/shared/utils/formatLongTexts";
 
 const styles = {
   mainContainer: {
@@ -41,15 +42,29 @@ const styles = {
     height: { xs: "250px", sm: "250px", md: "300px", lg: "372px", xl: "450px" },
   },
   infoText: {
+    color: "text.light",
     fontSize: { xs: ".6rem", sm: ".8rem", md: "1rem" },
-    paddingRight:"20px"
-  }
+    maxWidth: {xs: "300px", md:"350px", lg: "400px"},
+  },
 };
 
-const InfoItem = ({ icon, text }) => (
-  <Box sx={{ display: "flex", alignItems: "center", gap: 1, paddingY: 1 }}>
-    {icon}
-    <Typography sx={styles.infoText}>{text}</Typography>
+const InfoItem = ({ icon, text, multiline = false}) => (
+  <Box sx={{ display: "flex", alignItems: "center", gap: 1, paddingY: 1, paddingX: {xs: 2, md: 0} }}>
+    <Box sx={{ display: "flex", alignItems: multiline ? "start": "center", width: "2rem", height: multiline ? "100%" : "2rem" }}>
+      {icon}
+    </Box>
+    <Box sx={{ display: "flex", flexDirection: "column" }}>
+      {!multiline 
+      ? <Typography variant="p" sx={styles.infoText}>{text}</Typography> 
+      : formatLongTexts(text).map((info, index) => (
+          <Typography key={`included_services-${index}`} variant="p"
+            sx={styles.infoText}
+          >
+            {info.trim() === "" ? "\u00A0" : info}
+          </Typography>
+        ))
+      }
+    </Box>
   </Box>
 );
 
@@ -204,12 +219,23 @@ const DepartureFull = () => {
           >
             ¿De qué se trata?
           </Typography>
-          <Typography variant="p"
-          sx={{ 
-            // padding:'10px'
-						fontSize: { xs: "12px", sm: "12px", md: "14px", xl: "18px" }, // mismo que itinerario
-          }}
-          >{packToUse.description || 'Sin descripción disponible'}</Typography>
+          {packToUse?.description
+            ? 
+            formatLongTexts(packToUse?.description).map((info, index) => (
+              <Typography key={`activityInfo${index}`} variant="p"
+                sx={{fontSize: { xs: "12px", sm: "12px", md: "14px", xl: "18px" },}}
+              >
+                {info.trim() === "" ? "\u00A0" : info}
+              </Typography>
+            ))
+            
+            :
+            <Typography variant="p"
+              sx={{fontSize: { xs: "12px", sm: "12px", md: "14px", xl: "18px" },}}
+            >
+              Sin descripción de ubicación disponible
+            </Typography>
+          }
         </Box>
 
         {/* Info Box */}
@@ -218,7 +244,7 @@ const DepartureFull = () => {
           flexDirection: "column", 
           justifyContent: "center",
           fontSize: { xs: "20px", sm: "22px", md: "24px", xl: "28px" },
-          paddingLeft: {xs: "unset", sm: "25%"},
+          paddingLeft: {xs: "unset", sm: "1rem", md: "15%", lg: "25%"},
           marginX: {xs: "auto", sm: "unset"},
           paddingY: {xs: "2rem", sm: "2rem", md: "3rem", lg: "3rem", xl: "4rem"},
           color: palette.text.light,
@@ -226,7 +252,7 @@ const DepartureFull = () => {
           <InfoItem icon={iconsCardDepartures[1]} text={packToUse.duration || "duración no establecida"}/>
           <InfoItem icon={iconsCardDepartures[2]} text={packToUse.physical_level || "dificultad no establecida"} />
           <InfoItem icon={iconsCardDepartures[3]} text={packToUse.technical_level || "nivel técnico no establecido"} />
-          <InfoItem icon={iconsCardDepartures[4]} text={packToUse.included_services || "servicios no establecidos"} />
+          <InfoItem icon={iconsCardDepartures[4]} text={packToUse.included_services || "servicios no establecidos"} multiline={true} />
         </Box>
 
         {/* Image Box */}
