@@ -15,12 +15,17 @@ import { formatDepartureDate, setDepartureDuration } from "@/shared/utils/format
 import ReservationModal from "./ReservationModal.jsx";
 import { ColorButton } from "@/shared/components/buttons/ColorButton.jsx";
 import { OnlyTextButton } from "@/shared/components/buttons/OnlyTextButton.jsx";
+import PopoverLogin from "@/components/Auth/PopoverLogin.jsx";
 
 export const DepartureCard = ({ pack }) => {
   const [openModal, setOpenModal] = useState(false);
   const { state } = useContext(GlobalContext);
+  
   const [openSessionRequestModal, setOpenSessionRequestModal] = useState(false);
   const [departureSelected, setDepartureSelected] = useState("");
+  const [isOpenLogin, setIsOpenLogin] = useState(false);
+
+  
   const navigate = useNavigate();
   const theme = useTheme();
   const { palette } = theme;
@@ -30,6 +35,9 @@ export const DepartureCard = ({ pack }) => {
     navigate(`/salidas/${pack?.id}`);  
   };
 
+  const handleCloseLogin = () => {
+    setIsOpenLogin(false);
+  };
   return (
     <>
       <Card
@@ -206,6 +214,7 @@ export const DepartureCard = ({ pack }) => {
       <SessionRequestModal
         openSessionRequestModal={openSessionRequestModal}
         onClose={() => setOpenSessionRequestModal(false)}
+        onClickStartSession={() => setIsOpenLogin(true)}
         title="RESERVAR SALIDA"
         action="reservar"
       />
@@ -222,7 +231,8 @@ export const DepartureCard = ({ pack }) => {
             setDepartureSelected={setDepartureSelected}
           />
         </Modal>
-        )}
+      )}
+      <PopoverLogin isOpenLogin={isOpenLogin} handleClose={handleCloseLogin} setIsOpenDrawer={setOpenSessionRequestModal}/>
     </>
 
   );

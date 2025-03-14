@@ -18,6 +18,7 @@ import CommentModal from '../components/CommentModal';
 import { getPackageCommentsById } from "../../../api/commentApi";
 import  CommentsBox  from '../components/CommentsBox';
 import { CallToActionButton } from "@/shared/components/buttons/CallToActionButton";
+import GalleryComponent from "@/components/PhotosGallery/GalleryComponent";
 
 const styles = {
   mainContainer: {
@@ -277,6 +278,9 @@ const DepartureFull = () => {
           <DeparturesSlider sharedPack={packToUse}></DeparturesSlider>
         </Box>
 
+        {/* galeria de fotos */}
+        <GalleryComponent images={packToUse?.images} />
+        
       {isLoadingComments ? (
         <Box sx={{ display: 'flex', justifyContent: 'center', p: 3 }}>
           <CircularProgress />

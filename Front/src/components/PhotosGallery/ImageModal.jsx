@@ -1,7 +1,6 @@
-import React from 'react';
 import { Box, IconButton, Modal } from '@mui/material';
 import { ChevronLeft as PrevIcon, ChevronRight as NextIcon, Close as CloseIcon } from '@mui/icons-material';
-import { iconsCardPackages } from "../utils/utils.jsx";
+import { iconsCardPackages } from '@/modules/Departures/utils/utils';
 
 const ImageModal = ({ open, handleClose, currentImage, images, onPrev, onNext }) => {
   return (
