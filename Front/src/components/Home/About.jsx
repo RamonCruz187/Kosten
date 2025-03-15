@@ -3,37 +3,45 @@ import {
   Card,
   CardContent,
   CardMedia,
+  CircularProgress,
   Divider,
   Typography,
   useTheme,
 } from "@mui/material";
 import imgpaisaje from "../../assets/quienes-somos-paisaje.webp";
 import imgquienessomos from "../../assets/quienes-somos.webp";
-import staffalejandro from "../../assets/staff-alejandro.jpg";
-import staffpablo from "../../assets/staff-pablo.jpg";
-import staffmariano from "../../assets/staf-mariano.jpg";
-
-const staffMembers = [
-  {
-    name: "Pablo Haedo",
-    image: staffpablo,
-    alt: "Pablo Haedo",
-  },
-  {
-    name: "Mariano Vaucheret",
-    image: staffmariano,
-    alt: "Mariano Vaucheret",
-  },
-  {
-    name: "Alejandro Tomassino",
-    image: staffalejandro,
-    alt: "Alejandro Tomassino",
-  },
-];
+import { useCallback, useEffect, useState } from "react";
+import { getAllStaff } from "@/api/staffApi";
+import { NotificationService } from "@/shared/services/notistack.service";
 
 const About = () => {
   const theme = useTheme();
   const { palette } = theme;
+
+  const [isFetching, setIsFetching] = useState(true);
+  const [allStaff, setAllStaff] = useState(null);
+
+  console.log("stafs", allStaff)
+  
+  const fetchStaff = useCallback( async () => {
+    setIsFetching(true);
+    try {
+        const response = await getAllStaff();
+        console.log('data', response?.data);
+        setAllStaff(response?.data?.data);
+        console.log('El staff fue cargado con éxito');
+    } catch (error) {
+        console.error(error);
+        NotificationService.error('Error al cargar las salidas');
+    } finally {
+        setIsFetching(false);
+    }
+  }, [])
+
+
+  useEffect(() => {
+    fetchStaff();
+  }, [fetchStaff]);
 
   return (
     <>
@@ -222,26 +230,32 @@ const About = () => {
           <Box 
             sx={{
               display: "grid",
-              gridTemplateColumns: {xs: "1fr", sm: "1fr 1fr", md: "1fr 1fr 1fr"},
-              margin: "0 auto",
+              gridTemplateColumns: allStaff?.length === 1 ? "1fr" : allStaff?.length === 2 ? {xs: "1fr", sm: "1fr 1fr"} : {xs: "1fr", sm: "1fr 1fr", md: "1fr 1fr 1fr"},
+              justifyContent: "center",
               gap: "2rem",
             }}
           >
-            {staffMembers.map((member, index) => (
-              <Card key={index}>
+            {isFetching 
+            ? <CircularProgress />
+            : allStaff?.length === 0 
+              ? <Typography variant="paragraphLight">Estamos actualizando el staff</Typography>
+              : allStaff?.map((member, index) => (
+              <Card key={`staffMembers-${index}`}
+              sx={{ maxWidth: "300px", margin: "0 auto" }}
+              >
                 <CardMedia
                   component="img"
                   alt={member.alt}
                   height={400}
                   width={300}
-                  image={member.image}
+                  image={member.photo}
                 />
                 <CardContent
                   align="center"
                   sx={{ backgroundColor: "grey.50" }}
                 >
                   <Typography variant="titleH2" sx={{ fontWeight: "900" }}>
-                    {member.name}
+                    {member.name} {member.lastName}
                   </Typography>
                 </CardContent>
               </Card>
