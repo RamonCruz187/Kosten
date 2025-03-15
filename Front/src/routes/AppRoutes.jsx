@@ -61,8 +61,6 @@ const AppRoutes = () => (
             <Route path="paquetes/basico/:id" element={<CreateEditPackageBasic />} />
             <Route path="paquetes/detalles/:id" element={<CreateEditPackageDetails />} />
             <Route path="paquetes/destinos/:id" element={<CreateEditPackageDestination />} />
-            {/* <Route path="paquetes/:id" element={<PackageFullView />} /> */}
-            {/* <Route path="paquetes/editar/:id" element={<CreateEditPackage />} /> */}
             <Route path="salidas" element={<AdminDepartures />} />
             <Route path="salidas/nueva" element={<CreateEditDepartures />} />
             <Route path="salidas/:id" element={<CreateEditDepartures />} />
