@@ -118,6 +118,7 @@ export const CreateEditDepartures = () => {
           icon={<RiAddLargeLine />}
           sx={{
             marginBottom: "1rem",
+            maxWidth: {xs:"100%", sm:"200px"},
           }}
         />
       }
