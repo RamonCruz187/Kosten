@@ -106,7 +106,7 @@ const LandingPage = () => {
           paddingX: {xs: "1.5rem", sm: 0},
         }}
       >
-        <DepartureGrid title="PRÓXIMAS SALIDAS" sx={{paddingBottom: "1rem"}} />
+        <DepartureGrid title="PRÓXIMAS SALIDAS" isLanding={true} sx={{paddingBottom: "1rem"}} />
 
         <CommentsBox comments={comments} />
       </Box>

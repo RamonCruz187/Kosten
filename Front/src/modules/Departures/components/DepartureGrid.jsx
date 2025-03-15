@@ -8,8 +8,9 @@ import { useCallback, useEffect, useState } from "react";
 import { NotificationService } from "../../../shared/services/notistack.service.jsx";
 import { CallToActionButton } from "@/shared/components/buttons/CallToActionButton.jsx";
 import { useNavigate } from "react-router-dom";
+import { checkIsComplete } from "@/shared/utils/checkStepsPackage.js";
 
-const DepartureGrid = ({ title="PRÓXIMAS SALIDAS", sx={}}) => {
+const DepartureGrid = ({ title="PRÓXIMAS SALIDAS", isLanding = false ,sx={}}) => {
 
   const theme = useTheme();
   const { palette } = theme;
@@ -17,6 +18,9 @@ const DepartureGrid = ({ title="PRÓXIMAS SALIDAS", sx={}}) => {
   const [isFetching, setIsFetching] = useState(true);
   const [allPackages, setAllPackages] = useState(null);
 
+  const numberOfPackages = isLanding ? 9 : allPackages?.length;
+
+  // checkIsComplete(dataPackages.data)
   const fetchDepartures = useCallback( async () => {
     setIsFetching(true);
     try {
@@ -54,15 +58,28 @@ const DepartureGrid = ({ title="PRÓXIMAS SALIDAS", sx={}}) => {
         {isFetching ? <CircularProgress />
         :
           allPackages ?
+          <>
             <Box sx={{ 
               display: 'grid', 
               gridTemplateColumns: {sx: 'repeat(1, 1fr)', md: 'repeat(2, 1fr)', lg: 'repeat(3, 1fr)'}, 
               gap: '2rem' 
             }}>
-              {allPackages.length !== 0 && allPackages?.map((pack) => (
-                pack?.active && <DepartureCard key={`departure-${pack.id}`} pack={pack} />
+            {allPackages.length !== 0 && allPackages
+              ?.filter(pack => pack?.active && checkIsComplete(pack)) 
+              .slice(0, numberOfPackages)
+              .map(pack => (    // Filtra los primeros 9 paquetes activos y completos
+                <DepartureCard key={`departure-${pack.id}`} pack={pack} />
               ))}
             </Box>
+            {allPackages?.filter(pack => pack?.active && checkIsComplete(pack)).length > 9 && 
+            <CallToActionButton
+              text="Ver todas las salidas"
+              onClick={() => navigate("/salidas")}
+              islarge={false}
+              sx={{ marginTop: "2rem" }}
+            />
+            }
+          </>
           :
             <Box
             sx={{

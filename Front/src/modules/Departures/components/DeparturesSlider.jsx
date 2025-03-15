@@ -86,9 +86,19 @@ const DepartureSlider = ({ sharedPack }) => {
 
 
   return (
-    <Box sx={{ width: '100%', textAlign: 'center', backgroundColor: 'inherit', py: 2 }}>
+    <Box sx={{ 
+      width: '100%', 
+      display: 'flex', 
+      flexDirection: 'column', 
+      textAlign: 'center', 
+      backgroundColor: 'inherit',
+      marginTop: {xs: 2, sm: 3},
+      paddingY: 2, 
+      gap:1 
+
+    }}>
       {/* Sección de Salidas */}
-      <Typography variant="h5" sx={{textAlign:"center", color:"#f3f3f3", mt:"40px", mb:'40px', fontWeight:"600"}} >
+      <Typography variant="titleH1" sx={{textAlign:"center", color:"#f3f3f3", marginY:'40px', fontWeight:"600"}} >
         SALIDAS DISPONIBLES
       </Typography>
       
@@ -112,8 +122,9 @@ const DepartureSlider = ({ sharedPack }) => {
         )}
 
         <Box sx={{ 
-            display: 'flex',
-            justifyContent: slides.length > 1 ? 'flex-start' : 'center',
+            display: 'grid',
+            gridTemplateColumns: { xs: '1fr', sm: '1fr 1fr', md: '1fr 1fr 1fr', lg: '1fr 1fr 1fr 1fr' },
+            justifyContent: 'center',
             width: {xs:'100%'},
             gap: { xs: 0, sm: 2, md: 3 },
 
@@ -123,12 +134,7 @@ const DepartureSlider = ({ sharedPack }) => {
                 <Box 
                   key={`${currentPage}-${index}`}
                   sx={{ 
-                    width: {
-                      xs: 'calc(95% - 16px)',    // 1 card
-                      sm: 'calc(50% - 16px)',     // 2 cards
-                      md: 'calc(33.333% - 16px)', // 3 cards
-                      lg: 'calc(25% - 16px)'      // 4 cards
-                    },
+                    width: 'calc(100% - 25px)',
                     maxWidth: {xs: '300px', md:'360px',},
                     display:'flex',
                     flexDirection:'column',

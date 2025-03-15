@@ -60,8 +60,8 @@ const CommentModal = ({ open, onClose, packageId }) => {
       return;
     }
 
-    if (comment.trim().length < 10) {
-      setError('El comentario debe tener al menos 10 caracteres');
+    if (comment.trim().length < 10 || comment.trim().length > 1000) {
+      setError('El comentario debe tener entre 10 caracteres y 1000 caracteres');
       return;
     }
 

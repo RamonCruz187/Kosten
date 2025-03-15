@@ -76,10 +76,19 @@ const GalleryComponent = ({ images = {} }) => {
 
 
   return (
-    <Box sx={{ width: '100%', textAlign: 'center', backgroundColor: 'inherit', py: 2 }}>
+    <Box sx={{ 
+      width: '100%', 
+      textAlign: 'center', 
+      backgroundColor: 'inherit', 
+      py: 2,
+      display: 'flex',
+      flexDirection: 'column',
+      gap: 1,
+
+    }}>
 
       {/* Carrusel de Imágenes */}
-      <Typography variant="h5" sx={{textAlign:"center", color:"#f3f3f3", mt:"40px", mb:'40px', fontWeight:"600"}} >
+      <Typography variant="titleH1" sx={{textAlign:"center", color:"#f3f3f3", mt:"40px", mb:'40px', fontWeight:"600"}} >
         GALERÍA DE FOTOS
       </Typography>
       
