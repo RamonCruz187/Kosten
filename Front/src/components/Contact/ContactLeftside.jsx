@@ -49,6 +49,7 @@ export default function ContactLeftside({ size }) {
         justifyContent: "space-around",
         gap: "2rem",
         padding: "2rem",
+        height: "100%",
       }}
     >
       <Grid2 item size={responsiveContainer}>

@@ -119,12 +119,12 @@ export default function ContactForm({ size }) {
   };
 
   return (
-    <Grid2 item size={size} sx={{}}>
+    <Grid2 item size={size} sx={{ height: "100%" }}>
       <form onSubmit={handleSubmit} style={{ width: "100%", height: "100%", background: "white" }}>
-        <Stack sx={{ padding: {xs:"2rem", md:"20%"}, gap: "1.25rem", alignItems: "center" }}>
+        <Stack sx={{ padding: {xs:"2rem", md:"10%"}, gap: "1.25rem", alignItems: "center" }}>
           <Typography variant="titleH1">CONTÁCTANOS</Typography>
 
-          <Box sx={{ marginX: 'auto', width: {xs: "300px", md:"400px", lg: "500px"} }}>
+          <Box sx={{ marginX: 'auto', width: {xs: "300px", md:"350px", lg: "400px"} }}>
             <InputNormal
               isObject={true}
               inputName="username"
@@ -137,7 +137,7 @@ export default function ContactForm({ size }) {
             {renderError("username")}
           </Box>
           
-          <Box sx={{ marginX: 'auto', width: {xs: "300px", md:"400px", lg: "500px"} }}>
+          <Box sx={{ marginX: 'auto', width: {xs: "300px", md:"350px", lg: "400px"} }}>
             <InputNormal
               isObject={true}
               inputName="contact"
@@ -150,7 +150,7 @@ export default function ContactForm({ size }) {
             {renderError("contact")}
           </Box>
           
-          <Box sx={{ marginX: 'auto', width: {xs: "300px", md:"400px", lg: "500px"} }}>
+          <Box sx={{ marginX: 'auto', width: {xs: "300px", md:"350px", lg: "400px"} }}>
             <InputNormal
               isObject={true}
               inputName="email"
@@ -163,7 +163,7 @@ export default function ContactForm({ size }) {
             {renderError("email")}
           </Box>
           
-          <Box sx={{ marginX: 'auto', width: {xs: "300px", md:"400px", lg: "500px"} }}>
+          <Box sx={{ marginX: 'auto', width: {xs: "300px", md:"350px", lg: "400px"} }}>
             <InputNormal
               isObject={true}
               inputName="message"
