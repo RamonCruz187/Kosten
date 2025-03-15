@@ -4,6 +4,7 @@ import InputNormal from "../Auth/InputNormal";
 import { useState } from "react";
 import { ColorButton } from "@/shared/components/buttons/ColorButton";
 import emailjs from '@emailjs/browser';
+import { NotificationService } from "@/shared/services/notistack.service";
 
 export default function ContactForm({ size }) {
   const [formState, setFormState] = useState({
@@ -22,9 +23,20 @@ export default function ContactForm({ size }) {
       [name]: value,
     }));
   };
+  const validateForm = () => {
+    const { username, contact, email, message } = formState;
+    if (!username || !contact || !email || !message) {
+      NotificationService.error('Por favor, completa todos los campos');
+      return false;
+    }
+    return true;
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (!validateForm()) {
+      return;
+    }
     try {
       setIsFetching(true);
       const templateParams = {
@@ -34,7 +46,7 @@ export default function ContactForm({ size }) {
         message: formState.message,
       };
       await emailjs.send('service_anpv0lt', 'template_wq1040s', templateParams, 'R8YlVEUFVcmwSsU8t');
-      alert('Mensaje enviado con éxito');
+      NotificationService.success('Mensaje enviado con éxito');
       setFormState({
         username: "",
         contact: "",
@@ -44,7 +56,7 @@ export default function ContactForm({ size }) {
       });
     } catch (error) {
       console.error("error:", error);
-      alert('Error al enviar el mensaje');
+      NotificationService.error('Error al enviar el mensaje');
     } finally {
       setIsFetching(false);
     }
