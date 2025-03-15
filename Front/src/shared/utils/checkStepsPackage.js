@@ -40,5 +40,11 @@ export const checkSteps = (packageData) => {
 
     return { isCompleteTwo: secondStep, isCompleteThree: thirdStep };
   };
-  
+
+export const checkIsComplete = (packageData) => {
+  const { isCompleteTwo, isCompleteThree } = checkSteps(packageData);
+
+  return isCompleteTwo && isCompleteThree;
+};
+
   
