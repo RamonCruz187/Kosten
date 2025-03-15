@@ -34,7 +34,7 @@ export default function CommentsCards({ user, text, date, packageName }) {
         
       </Box>
       
-          <Typography fontWeight={'bold'}> {packageName}</Typography>
+          <Typography variant="p" fontWeight={'bold'}> {packageName}</Typography>
       
       <Typography variant="p" >{text}</Typography>
 
