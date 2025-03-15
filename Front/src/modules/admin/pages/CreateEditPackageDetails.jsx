@@ -60,7 +60,7 @@ export const CreateEditPackageDetails = () => {
   
       included_services: Yup.string()
         .required("Los servicios incluidos son requeridos")
-        .max(320, "Los servicios incluidos no pueden superar los 320 caracteres"),
+        .max(1000, "Los servicios incluidos no pueden superar los 1000 caracteres"),
       itineraryPhoto: Yup.mixed().when([], {
         is: () => isNewPackage && Object.keys(isNewPackage).length !== 0, // Si params.id NO existe (es creación)
         then: (schema) =>
@@ -446,7 +446,7 @@ export const CreateEditPackageDetails = () => {
                   }
 									helperText={
 										(formik.errors.included_services ? formik.touched.included_services && formik.errors.included_services :
-										`${formik.values.included_services.length} / 320 caracteres`)
+										`${formik.values.included_services.length} / 1000 caracteres`)
 									}
                 />
               </Paper>
@@ -503,6 +503,7 @@ export const CreateEditPackageDetails = () => {
                   disabledButton ||  // Si el fetch está en progreso 
                   !formik.isValid ||  // Si el formulario no es válido
                   !formModified ||
+                  (!package_.itineraryPhoto && !itineraryPhoto) ||  //si no hay imagen ni en el paquete ni en el formulario
                   (isNewPackage && Object.keys(isNewPackage).length !== 0 && !formik.dirty)  // Si el formulario es nuevo paquete debe estar completo
                 }
 								onClick={(e) => handleSiguiente(e, false)}
@@ -518,6 +519,7 @@ export const CreateEditPackageDetails = () => {
                   disabledButton ||  // Si el fetch está en progreso 
                   !formik.isValid ||  // Si el formulario no es válido
                   !formModified ||
+                  (!package_.itineraryPhoto && !itineraryPhoto) ||  //si no hay imagen ni en el paquete ni en el formulario
                   (isNewPackage && Object.keys(isNewPackage).length !== 0 && !formik.dirty)  // Si el formulario es nuevo paquete debe estar completo
                 }
                 type="button"
