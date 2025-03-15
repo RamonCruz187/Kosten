@@ -133,6 +133,7 @@ const TourDestinationDetail = () => {
           {/* Ubicacion Box */}
           <Box
             sx={{
+              order: 1,
               display: "flex",
               flexDirection: "column",
               justifyContent: "center",
@@ -160,7 +161,7 @@ const TourDestinationDetail = () => {
               ? 
               formatLongTexts(packToUse?.locationInfo).map((info, index) => (
                 <Typography key={`locationInfo-${index}`} variant="p"
-                  sx={{fontSize: { xs: "12px", sm: "12px", md: "14px", xl: "18px" },}}
+                  sx={{fontSize: { xs: "14px", xl: "18px" },}}
                 >
                   {info.trim() === "" ? "\u00A0" : info}
                 </Typography>
@@ -168,7 +169,7 @@ const TourDestinationDetail = () => {
               
               :
               <Typography variant="p"
-                sx={{fontSize: { xs: "12px", sm: "12px", md: "14px", xl: "18px" },}}
+                sx={{fontSize: { xs: "14px", xl: "18px" },}}
               >
                 Sin descripción de ubicación disponible
               </Typography>
@@ -178,10 +179,12 @@ const TourDestinationDetail = () => {
           {/* Ubicacion Img */}
           <Box
             sx={{
+              order: 2,
               display: "flex",
               justifyContent: "center",
               alignItems: "center",
               overflow: "hidden",
+              minHeight: "30vh",
             }}
           >
             {packToUse?.destinyPhotos && packToUse?.destinyPhotos[0]?.url ? (
@@ -206,10 +209,12 @@ const TourDestinationDetail = () => {
           {/* Historia Img */}
           <Box
             sx={{
+              order: { xs: 4, sm: 3 },
               display: "flex",
               justifyContent: "center",
               alignItems: "center",
               overflow: "hidden",
+              minHeight: "30vh",
             }}
           >
             {packToUse?.destinyPhotos && packToUse?.destinyPhotos[1]?.url ? (
@@ -235,6 +240,7 @@ const TourDestinationDetail = () => {
           {/* Historia Box */}
           <Box
             sx={{
+              order: { xs: 3, sm: 4 },
               display: "flex",
               flexDirection: "column",
               justifyContent: "center",
@@ -262,7 +268,7 @@ const TourDestinationDetail = () => {
               ? 
               formatLongTexts(packToUse?.historyInfo).map((info, index) => (
                 <Typography key={`historyInfo-${index}`} variant="p"
-                  sx={{fontSize: { xs: "12px", sm: "12px", md: "14px", xl: "18px" },}}
+                  sx={{fontSize: { xs: "14px", xl: "18px" },}}
                 >
                   {info.trim() === "" ? "\u00A0" : info}
                 </Typography>
@@ -270,7 +276,7 @@ const TourDestinationDetail = () => {
               
               :
               <Typography variant="p"
-                sx={{fontSize: { xs: "12px", sm: "12px", md: "14px", xl: "18px" },}}
+                sx={{fontSize: { xs: "14px", xl: "18px" },}}
               >
                 Sin historia disponible
               </Typography>
@@ -280,6 +286,7 @@ const TourDestinationDetail = () => {
           {/* Actividad Box */}
           <Box
             sx={{
+              order: 5,
               display: "flex",
               flexDirection: "column",
               justifyContent: "center",
@@ -307,7 +314,7 @@ const TourDestinationDetail = () => {
               ? 
               formatLongTexts(packToUse?.activityInfo).map((activity, index) => (
                 <Typography key={`activityInfo-${index}`} variant="p"
-                  sx={{fontSize: { xs: "12px", sm: "12px", md: "14px", xl: "18px" },}}
+                  sx={{fontSize: { xs: "14px", xl: "18px" },}}
                 >
                   {activity.trim() === "" ? "\u00A0" : activity}
                 </Typography>
@@ -315,7 +322,7 @@ const TourDestinationDetail = () => {
               
               :
               <Typography variant="p"
-                sx={{fontSize: { xs: "12px", sm: "12px", md: "14px", xl: "18px" },}}
+                sx={{fontSize: { xs: "14px", xl: "18px" },}}
               >
                 Sin actividad disponible
               </Typography>
@@ -333,10 +340,12 @@ const TourDestinationDetail = () => {
           {/* ACividad Img */}
           <Box
             sx={{
+              order: 6,
               display: "flex",
               justifyContent: "center",
               alignItems: "center",
               overflow: "hidden",
+              minHeight: "30vh",
             }}
           >
             {packToUse?.destinyPhotos && packToUse?.destinyPhotos[2]?.url ? (
