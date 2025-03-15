@@ -9,7 +9,7 @@ export default function ContactView() {
     <Box sx={{ 
       display: "grid",
       gridTemplateColumns: { xs: "1fr", md: "1fr 1fr" },  
-      height: "calc(100vh-80px)",
+      minHeight: "90vh",
     }}>
       <ContactLeftside size={size} />
       <ContactForm size={size} />
