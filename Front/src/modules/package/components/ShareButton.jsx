@@ -5,16 +5,16 @@ const ShareButton = ({ title, text, url }) => {
     if (navigator.share) {
       try {
         await navigator.share({
-          title,
-          text,
-          url,
+          title:"Kosten - Aventuras Ilimitadas",
+          text: "Mira este contenido",
+          url: url,
         });
         console.log('Contenido compartido con éxito');
       } catch (error) {
         console.error('Error al compartir:', error);
       }
     } else {
-      alert('La API de Web Share no es compatible con este navegador.');
+      alert('El navegador no es compatible.');
     }
   };
 

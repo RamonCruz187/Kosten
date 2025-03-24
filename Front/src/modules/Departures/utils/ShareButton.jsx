@@ -14,7 +14,7 @@ const ShareButton = ({ title, text, url }) => {
         console.error('Error al compartir:', error);
       }
     } else {
-      alert('La API de Web Share no es compatible con este navegador.');
+      alert('El navegador no es compatible.');
     }
   };
 

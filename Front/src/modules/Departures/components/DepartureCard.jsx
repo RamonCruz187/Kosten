@@ -31,6 +31,8 @@ export const DepartureCard = ({ pack }) => {
   const { palette } = theme;
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
 
+  const shareUrl = `${window.location.origin}/salidas/${pack.id}`;
+
   const handleCardClick = () => {
     navigate(`/salidas/${pack?.id}`);  
   };
@@ -68,7 +70,7 @@ export const DepartureCard = ({ pack }) => {
             borderRadius: "5px"
           }}
         >
-          {iconsCardPackages[0]}
+          {iconsCardPackages(shareUrl)[0]}
         </Box>
         } 
         <Box
