@@ -32,7 +32,6 @@ export const DepartureCard = ({ pack }) => {
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
 
   const shareUrl = `${window.location.origin}/salidas/${pack.id}`;
-
   const handleCardClick = () => {
     navigate(`/salidas/${pack?.id}`);  
   };
@@ -108,7 +107,7 @@ export const DepartureCard = ({ pack }) => {
                 }}
               >
                 {/* Salidas  dentro de cada paquete*/}
-                <Box sx={{ display: "flex", pt:"5px" }}>{iconsCardPackages[1]}</Box>
+                <Box sx={{ display: "flex", pt:"5px" }}>{iconsCardPackages(shareUrl)[1]}</Box>
                 <Box sx={{width:"100%"}}>
                   {pack?.departures.length === 0 
                   ? <Box>
@@ -133,7 +132,7 @@ export const DepartureCard = ({ pack }) => {
                   gap: 1,
                 }}
               >
-                <Box sx={{ display: "flex" }}>{iconsCardPackages[2]}</Box>
+                <Box sx={{ display: "flex" }}>{iconsCardPackages(shareUrl)[2]}</Box>
                 <Typography variant="textBox">{pack.duration ? pack.duration : pack?.departures.length !== 0 
                   ? setDepartureDuration(pack?.departures?.[0]) 
                   : "No establecido"}
@@ -147,7 +146,7 @@ export const DepartureCard = ({ pack }) => {
                   gap: 1,
                 }}
               >
-                <Box sx={{ display: "flex" }}>{iconsCardPackages[3]}</Box>
+                <Box sx={{ display: "flex" }}>{iconsCardPackages(shareUrl)[3]}</Box>
                 <Typography variant="textBox">
                 Nivel físico: {pack.physical_level || "no establecido"}
                 </Typography>
@@ -161,7 +160,7 @@ export const DepartureCard = ({ pack }) => {
                   gap: 1,
                 }}
               >
-                <Box sx={{ display: "flex" }}>{iconsCardPackages[4]}</Box>
+                <Box sx={{ display: "flex" }}>{iconsCardPackages(shareUrl)[4]}</Box>
                 <Typography variant="textBox" noWrap>
                 Nivel técnico: {pack.technical_level || "no establecido"}
                 </Typography>
