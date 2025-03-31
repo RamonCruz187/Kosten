@@ -17,8 +17,8 @@ export const iconsCardDepartures = [
     <RiHome4Line sx={{ fontSize: '1rem' }}></RiHome4Line>
 ];
 
-export const iconsCardPackages = [
-  <ShareButton title="Compartir" text="Mira este contenido" url={window.location.href} />,
+export const iconsCardPackages = (shareUrl) => [
+  <ShareButton title="Compartir" text="Mira este contenido" url={shareUrl} />,
   <RiCalendar2Line style={{ fontSize: '1rem' }} />,
   <RiTimeLine style={{ fontSize: '1rem' }} />,
   <RiWalkLine style={{ fontSize: '1rem' }} />,
