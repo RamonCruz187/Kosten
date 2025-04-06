@@ -53,11 +53,11 @@ const EditUserDialog = ({
     } finally {
       setIsFetching(false);
     }
-  }, []);
+  }, [ userForm, fetchUsers, onClose ]);
 
 
   // Handle submit action to save changes
-  const handleSubmitStatusChange = useCallback(async () => {
+  const handleSubmitStatusChange = useCallback(async ( e ) => {
     setIsFetching(true);
     try {
       const body = {
@@ -66,6 +66,8 @@ const EditUserDialog = ({
       };
       const response = await updateUserStatus(body);
       console.log("response", response);
+      setUserForm((prev) => ({ ...prev, isActive: !userForm.isActive }));
+      fetchUsers();
       NotificationService.success(`Estado actualizado: ${userForm.isActive ? "Activo" : "Inactivo"}`, 2000 );
     } catch (error) {
       console.error(error);
@@ -73,7 +75,7 @@ const EditUserDialog = ({
     } finally {
       setIsFetching(false);
     }
-  }, []);
+  }, [ userForm.isActive, userForm.id ]);
 
   const handleRoleChange = useCallback(async (newRole) => {
     setIsFetching(true);
@@ -90,7 +92,7 @@ const EditUserDialog = ({
     } finally {
       setIsFetching(false);
     }
-  }, []);
+  }, [ userForm.id ]);
 
 
   // Validate contact (min 8, max 14 numbers, '+' optional)
