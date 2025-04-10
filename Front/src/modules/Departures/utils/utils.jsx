@@ -163,15 +163,13 @@ export const usePackageById = (packageId) => {
     return () => {
       isMounted = false;
     };
-  }, [packageId]); // updateSharedPack removido de las dependencias
+  }, [packageId, updateSharedPack]); // updateSharedPack removido de las dependencias
 
   return { pack, isLoading, error };
 };
 
 
 export const formatPriceRange = (data) => {
-
-  const now = dayjs();
 
   if (!Array.isArray(data)) {
     throw new Error("Los datos de entrada deben ser un array");
@@ -181,23 +179,8 @@ export const formatPriceRange = (data) => {
   const validDepartures = data
     .filter(
       (departure) =>
-        departure.startDate &&
-        dayjs(
-          `${[
-            departure.startDate[0] || "2000",
-            departure.startDate[1] || "01",
-            departure.startDate[2] || "01",
-          ].join("-")}T${[
-            departure.startDate[3] || "00",
-            departure.startDate[4] || "00",
-            departure.startDate[5] || "00",
-          ].join(":")}`
-        ).isAfter(now)
-    )
-    .map((departure) => ({
-      ...departure,
-      price: Number(departure.price), // Asegurarse de que el precio sea numérico
-    }));
+        departure.price && dayjs(departure.price).isValid() 
+    );
 
   // Si no hay salidas válidas, devolver mensaje
   if (validDepartures.length === 0) {
