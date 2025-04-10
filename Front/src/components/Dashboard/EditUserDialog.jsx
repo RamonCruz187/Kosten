@@ -57,7 +57,7 @@ const EditUserDialog = ({
 
 
   // Handle submit action to save changes
-  const handleSubmitStatusChange = useCallback(async ( e ) => {
+  const handleSubmitStatusChange = useCallback(async () => {
     setIsFetching(true);
     try {
       const body = {
