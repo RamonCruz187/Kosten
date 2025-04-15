@@ -28,6 +28,7 @@ const TruncatedText = ({ text }) => {
       <Box
         sx={{
           overflow: "hidden",
+          textAlign: "center",
         }}
       >
         <Typography

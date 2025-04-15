@@ -163,7 +163,7 @@ export const usePackageById = (packageId) => {
     return () => {
       isMounted = false;
     };
-  }, [packageId, updateSharedPack]); // updateSharedPack removido de las dependencias
+  }, [packageId]); // updateSharedPack removido de las dependencias
 
   return { pack, isLoading, error };
 };
