@@ -15,10 +15,19 @@ export const GlobalContextProvider = ({ children }) => {
 
     useEffect(() => {
         const userAuth = JSON.parse(localStorage.getItem("userAuth"));
+        const userData = JSON.parse(localStorage.getItem("userData"));
+        
         if( userAuth ) {
             dispatch({
                 type: "AUTH_LOGIN",
                 payload: userAuth
+            });
+        }
+        
+        if( userData ) {
+            dispatch({
+                type: "SET_USER_DATA",
+                payload: userData
             });
         }
     }, []);
