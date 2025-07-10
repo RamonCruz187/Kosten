@@ -59,6 +59,15 @@ export const postImagesPackages = (packageId, formData) => {
     });
   };
 
+// Enviar una imagen para galeria de un paquete.       POST /packages/{packageId}/update-image
+export const postImagesPackagesGallery = (packageId, formData) => {
+    return apiClient.post(`${PACKAGES_ENDPOINT}/${packageId}/add-images?imageType=packageImages`, formData, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    });
+  };
+
 // Actualizar una imagen de un paquete por ID.       PUT /packages/{packageId}/update-image
 export const putImagePackagesById = (packageId, formData) => {
   return apiClient.put(`${PACKAGES_ENDPOINT}/update-image/${packageId}`, formData, {
