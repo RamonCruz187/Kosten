@@ -17,7 +17,7 @@ import {
 import {
   createPackage,
   getPackageById,
-  postImagesPackages,
+  postImagesPackagesGallery,
   postSimpleImagePackages,
   updatePackage,
 } from "@api/packageApi.js";
@@ -285,16 +285,15 @@ export const CreateEditPackageBasic = () => {
 
   const postImages = useCallback( async (imgsFiles) => {
     const formData = new FormData();
-    formData.append("imageType", "packageImages");
-    formData.append("file", imgsFiles); // Archivo
-    // imgsFiles.forEach((imagen) => {
-    //   formData.append("file", imagen);
-    // });
+    // formData.append("files", imgsFiles); // Archivo
+    imgsFiles.forEach((imagen) => {
+      formData.append("files", imagen);
+    });
     const isManyImgs = imgsFiles.length > 1
     try {
       setIsFetching(true);
       // Pasar el packageId y formData
-      const response = await postImagesPackages(params.id, formData); // Axios devuelve 'data' directamente
+      const response = await postImagesPackagesGallery(params.id, formData); // Axios devuelve 'data' directamente
         NotificationService.success(isManyImgs ? `Las imágenes fueron cargadas con éxito` : `La imagen fue cargada con éxito`);
     } catch (error) {
         console.error(error);
