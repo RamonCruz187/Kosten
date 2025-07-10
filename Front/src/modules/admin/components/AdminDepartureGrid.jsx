@@ -45,6 +45,20 @@ export const AdminDepartureGrid = ({ title = "", sx = {} }) => {
   //   console.log('filteredResponse', filteredResponse);
   //   setFilteredPackages(filteredResponse)
   // }, [allPackages])
+  if (isFetching) {
+    return (
+      <Box
+        sx={{
+          display: "flex",
+          justifyContent: "center",
+          marginTop: "2rem",
+
+        }}
+      >
+        <CircularProgress />
+      </Box>
+    );
+  }
 
   return (
     <Box
