@@ -19,13 +19,18 @@ public class ImageServiceApi {
         this.cloudinary = new Cloudinary(ObjectUtils.asMap(
                 "cloud_name", cloudName,
                 "api_key", apiKey,
-                "api_secret", apiSecret));
+                "api_secret", apiSecret,
+                "secure", true
+        ));
     }
 
-    // Método para subir una imagen a Cloudinary
+    // Método para subir una imagen a Cloudinary en la carpeta 'Kosten'
     public String uploadImage(MultipartFile file) throws IOException {
-        Map uploadResult = cloudinary.uploader().upload(file.getBytes(), ObjectUtils.emptyMap());
-        return uploadResult.get("url").toString(); // Retorna la URL de la imagen subida
+        Map<String, Object> uploadOptions = ObjectUtils.asMap(
+                "folder", "Kosten"
+        );
+        Map uploadResult = cloudinary.uploader().upload(file.getBytes(), uploadOptions);
+        return uploadResult.get("secure_url").toString();
     }
 
     // Método para eliminar una imagen de Cloudinary
@@ -40,12 +45,10 @@ public class ImageServiceApi {
 
     // Método auxiliar para extraer el ID público de la URL de la imagen
     private String extractPublicId(String imageUrl) {
-        // La URL de la imagen de Cloudinary tiene un formato que incluye el public_id
-        // Por ejemplo: "http://res.cloudinary.com/demo/image/upload/v1600131200/sample.jpg"
-        // El public_id es "sample"
         String[] parts = imageUrl.split("/");
-        String lastPart = parts[parts.length - 1];
-        String[] fileNameParts = lastPart.split("\\.");
-        return fileNameParts[0];
+        int folderIndex = parts.length - 2;
+        String folder = parts[folderIndex];
+        String fileName = parts[parts.length - 1].split("\\.")[0];
+        return folder + "/" + fileName;
     }
 }
